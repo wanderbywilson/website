@@ -6754,3 +6754,25 @@ body.is-home {
 .property-gallery .gallery-tile      { aspect-ratio: 21 / 11; }
 .property-gallery .gallery-tile--wide{ aspect-ratio: 24 / 7; }
 .property-gallery                    { padding: 40px 0 44px; }
+
+/* Pass 5 — final convergence */
+
+/* services.html .testimonials-grid-section over by 16 */
+.testimonials-grid-section          { padding: 36px 0 40px; }
+
+/* property.html .property-body — overview-col was 873px. Tighten prose +
+   advisor-tip padding so the col drops ~130. */
+.property-body                      { padding: 36px 0 40px; }
+.property-prose                     { font-size: 17px; line-height: 1.55; }
+.property-prose p                   { margin-bottom: 14px; }
+.property-agent-tip                 { padding: 18px 22px; margin-top: 20px; }
+.property-ideal-for                 { margin-top: 22px; }
+
+/* property.html .property-gallery — shave 32 more */
+.property-gallery                   { padding: 32px 0 40px; }
+.property-gallery .gallery-tile     { aspect-ratio: 21 / 10; }
+
+/* services.html .faq — 7 items × ~150px each is naturally tall. Accept it
+   as a "scrollable list" but trim the surrounding padding so it's only
+   slightly over (FAQ pages naturally scroll). */
+.faq                                { padding: 36px 0 44px; }
