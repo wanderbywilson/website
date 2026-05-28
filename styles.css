@@ -6776,3 +6776,8 @@ body.is-home {
    as a "scrollable list" but trim the surrounding padding so it's only
    slightly over (FAQ pages naturally scroll). */
 .faq                                { padding: 36px 0 44px; }
+
+/* Pass 6 — gallery tile aspect math (5 tiles = 1 wide + 4 standards in 2x2).
+   Make tiles wider/shorter so the gallery grid fits within ~820px. */
+.property-gallery .gallery-tile         { aspect-ratio: 16 / 7; }
+.property-gallery .gallery-tile--wide   { aspect-ratio: 21 / 8; }
