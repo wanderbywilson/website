@@ -940,9 +940,9 @@ button {
     /* Tightened vertical padding so the section fits inside one viewport
        on standard laptops (was 80/100 = 180px total). */
     padding: 24px 0 28px;
-    /* Pad scroll-into-view by the fixed header height so the title doesn't
-       sit under it when this section is the scroll target. */
-    scroll-margin-top: 72px;
+    /* Pad scroll-into-view by the fixed header height (~94px) so the title
+       doesn't sit under it when this section is the scroll target. */
+    scroll-margin-top: 100px;
     overflow: hidden;
     isolation: isolate;
 }
