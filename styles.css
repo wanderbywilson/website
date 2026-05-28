@@ -6781,3 +6781,7 @@ body.is-home {
    Make tiles wider/shorter so the gallery grid fits within ~820px. */
 .property-gallery .gallery-tile         { aspect-ratio: 16 / 7; }
 .property-gallery .gallery-tile--wide   { aspect-ratio: 21 / 8; }
+
+/* Pass 7 — property gallery final 25px shave */
+.property-gallery                       { padding: 24px 0 32px; }
+.property-gallery .kicker               { margin-bottom: 18px; }
