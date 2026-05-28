@@ -6674,14 +6674,14 @@ body.is-home {
 ============================================================================ */
 
 /* -- Section vertical padding -- */
-.services,
-.journal,
-.founder,
-.testimonials                { padding: 56px 0 64px; }
+.services                    { padding: 44px 0 52px; }
+.journal                     { padding: 52px 0 60px; }
+.founder                     { padding: 40px 0 48px; }
+.testimonials                { padding: 48px 0 56px; }
 .testimonials-grid-section,
 .faq                         { padding: 52px 0; }
-.property-body               { padding: 56px 0 56px; }
-.property-gallery            { padding: 52px 0 56px; }
+.property-body               { padding: 52px 0 52px; }
+.property-gallery            { padding: 48px 0 52px; }
 
 /* -- Section title caps (was 64-72px max → 50-56px) -- */
 .services-title              { font-size: clamp(34px, 3.6vw, 52px); margin: 0 auto 20px; }
