@@ -192,8 +192,8 @@
         // Header scroll state
         const header = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
+            // White-bg page: keep `is-scrolled` ALWAYS so the nav stays visible.
             if (window.scrollY > 24) header.classList.add('is-scrolled');
-            else header.classList.remove('is-scrolled');
         }, { passive: true });
 
         // Reveal the "forward your confirmation" note when an existing booking is selected

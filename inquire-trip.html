@@ -228,8 +228,8 @@
         // Header scroll state
         const header = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
+            // White-bg page: keep `is-scrolled` ALWAYS so the nav stays visible.
             if (window.scrollY > 24) header.classList.add('is-scrolled');
-            else header.classList.remove('is-scrolled');
         }, { passive: true });
 
         // Formspree AJAX submit → inline thank-you (falls back to a normal POST if JS is off)

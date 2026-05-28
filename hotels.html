@@ -161,7 +161,8 @@
         // Header scroll state
         const header = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
-            header.classList.toggle('is-scrolled', window.scrollY > 24);
+            // White-bg page: keep `is-scrolled` ALWAYS so the nav stays visible.
+            if (window.scrollY > 24) header.classList.add('is-scrolled');
         }, { passive: true });
     </script>
     <!-- ================================================================
