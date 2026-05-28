@@ -6710,3 +6710,26 @@ body.is-home {
 .property-gallery .gallery-tile         { aspect-ratio: 16 / 9; }
 .property-gallery .gallery-tile--wide   { aspect-ratio: 21 / 8; }
 .property-gallery .kicker               { margin: 0 auto 24px; }
+
+/* Second pass — sections that needed more than padding/title trims */
+
+/* .services (homepage) — services-head is 295px (kicker + title + lede + margins).
+   Trim the bottom margin from the head + reduce row gap in grid. */
+.services .services-head     { margin-bottom: 48px; }
+.services .services-head .kicker { margin-bottom: 18px; }
+.services .services-lede     { font-size: 18px; }
+.services .services-grid     { gap: 36px 40px; }
+.services .service-card      { padding-top: 22px; }
+
+/* .founder — copy column was 992px (4 paragraphs at 18/1.65 with 20px between).
+   Tighten paragraph spacing + drop body font 18 → 17 + slightly tighter
+   line-height. Plus reduce portrait max-height. */
+.founder .founder-prose         { max-width: 540px; margin-bottom: 28px; }
+.founder .founder-prose p       { font-size: 17px; line-height: 1.55; }
+.founder .founder-prose p + p   { margin-top: 14px; }
+.founder .founder-portrait-frame { max-height: 460px; }
+.founder .founder-portrait      { max-width: 380px; }
+
+/* .testimonials — quote card padding trim so the carousel sits ~40px shorter */
+.testimonials .testimonials-head { margin-bottom: 28px; }
+.testimonials .testimonials-carousel { gap: 16px; }
