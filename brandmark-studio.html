@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandmark Studio — Wander by Wilson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#EDE6D6; --bone-warm:#E4DAC6; --paper:#F4EFE3; --ivory:#FBF7EE;
+    --ink:#0E0D0C; --umber:#2A2521; --olive:#43432F;
+    --gold:#B79770; --gold-soft:#C9B08B; --gold-bright:#E7D3AE; --gold-deep:#9C7E58;
+    --font-serif:'Fraunces','Times New Roman',serif;
+    --font-sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-sans);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;}
+
+  /* ---- Masthead ---- */
+  .masthead{background:var(--ink);color:var(--ivory);padding:84px 40px 76px;text-align:center;}
+  .kicker{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;}
+  .masthead h1{font-family:var(--font-serif);font-weight:300;font-variation-settings:"opsz" 144;font-size:clamp(40px,7vw,82px);line-height:1;margin:22px 0 18px;letter-spacing:-.01em;}
+  .masthead p{font-size:13px;letter-spacing:.04em;color:rgba(251,247,238,.62);max-width:520px;margin:0 auto;line-height:1.7;}
+
+  /* ---- Layout ---- */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  .section-rule{display:flex;align-items:center;gap:18px;margin:74px 0 38px;}
+  .section-rule .line{flex:1;height:1px;background:rgba(199,174,138,.45);}
+  .section-rule span{font-size:11px;letter-spacing:.36em;text-transform:uppercase;color:var(--gold-deep);font-weight:500;}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  @media(max-width:900px){.grid,.grid-3{grid-template-columns:1fr;}}
+
+  .tile{border:1px solid rgba(199,174,138,.4);border-radius:3px;overflow:hidden;background:#fff;}
+  .stage{display:flex;align-items:center;justify-content:center;min-height:300px;padding:48px;position:relative;}
+  .stage.paper{background:var(--paper);}
+  .stage.bone{background:var(--bone-warm);}
+  .stage.ink{background:radial-gradient(120% 120% at 50% 30%,#1a1714 0%,var(--ink) 70%);}
+  .stage.olive{background:linear-gradient(150deg,#4e4e36,#393928);}
+  .stage.tall{min-height:380px;}
+  .caption{padding:18px 22px 20px;border-top:1px solid rgba(199,174,138,.4);background:var(--ivory);}
+  .caption .no{font-size:10px;letter-spacing:.32em;color:var(--gold-deep);font-weight:600;}
+  .caption .name{font-family:var(--font-serif);font-size:20px;font-weight:400;margin:5px 0 6px;}
+  .caption .use{font-size:11.5px;letter-spacing:.02em;color:rgba(14,13,12,.55);line-height:1.55;}
+
+  /* =========================================================
+     THE CIPHER — overlapping Fraunces W's
+     ========================================================= */
+  .cipher{display:inline-flex;align-items:baseline;line-height:1;font-family:var(--font-serif);font-weight:400;font-variation-settings:"opsz" 144;}
+  .cipher .w{display:block;}
+  .cipher .w + .w{margin-left:var(--overlap,-0.40em);}
+
+  /* Debossed into paper (letterpress) */
+  .deboss .w{color:rgba(14,13,12,.085);
+    text-shadow:0 1px 0 rgba(255,255,255,.92), 0 -1px 1px rgba(14,13,12,.13);}
+
+  /* Gold foil, raised, on ink */
+  .foil .w{
+    background:linear-gradient(128deg,var(--gold-deep) 0%,var(--gold) 22%,var(--gold-bright) 46%,var(--gold-soft) 62%,var(--gold-deep) 92%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.45));}
+  .foil .w:first-child{opacity:.55;}
+
+  .size-xl{font-size:248px;}
+  .size-lg{font-size:188px;}
+  .size-md{font-size:120px;}
+
+  /* =========================================================
+     THE HAIRLINE — drawn monoline WW
+     ========================================================= */
+  .hair-svg{width:300px;height:auto;display:block;}
+  .hair-svg .stroke{fill:none;stroke:var(--ink);stroke-width:4.4;stroke-linejoin:miter;stroke-linecap:butt;stroke-miterlimit:14;}
+  .hair-svg.on-ink .stroke{stroke:url(#foilStroke);stroke-width:4.4;}
+
+  /* =========================================================
+     THE SEAL — stadium crest
+     ========================================================= */
+  .seal{width:208px;height:286px;border:1.4px solid var(--gold);border-radius:140px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;position:relative;}
+  .seal .seal-cipher{margin-bottom:18px;}
+  .seal .seal-rule{width:34px;height:1px;background:var(--gold);opacity:.8;margin-bottom:14px;}
+  .seal .seal-wm{font-size:9px;letter-spacing:.30em;text-transform:uppercase;color:var(--gold-deep);font-weight:500;}
+  .seal.on-ink{border-color:var(--gold-soft);}
+  .seal.on-ink .seal-rule{background:var(--gold-soft);}
+  .seal.on-ink .seal-wm{color:var(--gold-soft);}
+
+  /* =========================================================
+     LOCKUPS
+     ========================================================= */
+  .lockup-h{display:flex;align-items:center;gap:26px;}
+  .lockup-h .div{width:1px;height:64px;background:rgba(14,13,12,.22);}
+  .lockup-h .wm{font-family:var(--font-serif);font-weight:400;font-size:30px;letter-spacing:.30em;text-transform:uppercase;padding-left:.30em;}
+  .lockup-v{display:flex;flex-direction:column;align-items:center;gap:18px;}
+  .lockup-v .wm{font-family:var(--font-serif);font-weight:400;font-size:18px;letter-spacing:.40em;text-transform:uppercase;padding-left:.40em;color:rgba(14,13,12,.78);}
+
+  /* In-situ mocks */
+  .mock-header{height:78px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 40px;}
+  .mock-header .nav{display:flex;gap:30px;}
+  .mock-header .nav span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(251,247,238,.7);}
+  .mock-header .mh-brand{display:flex;align-items:center;gap:14px;}
+  .mock-header .mh-wm{font-family:var(--font-serif);color:var(--ivory);font-size:17px;letter-spacing:.32em;text-transform:uppercase;padding-left:.32em;}
+  .mock-footer{background:var(--paper);padding:70px 0 80px;text-align:center;border-top:1px solid rgba(199,174,138,.32);}
+  .mock-footer .insc{margin-top:24px;font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:rgba(14,13,12,.42);}
+
+  .foot{padding:60px 40px 90px;text-align:center;color:rgba(14,13,12,.4);font-size:11px;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="kicker">Brandmark Studio · V.I</div>
+    <h1>Wander by Wilson</h1>
+    <p>A WW monogram system drawn in Fraunces &amp; gold — built for paper, screen, and foil, in the spirit of an engraved seal.</p>
+  </header>
+
+  <div class="wrap">
+
+    <!-- THE CIPHER -->
+    <div class="section-rule"><span>The Cipher</span><div class="line"></div></div>
+    <div class="grid">
+      <div class="tile">
+        <div class="stage paper">
+          <div class="cipher deboss size-xl"><span class="w">W</span><span class="w">W</span></div>
+        </div>
+        <div class="caption">
+          <div class="no">01</div>
+          <div class="name">The Cipher — Letterpress</div>
+          <div class="use">Two Fraunces W's interlocked and pressed into paper. The primary mark for footers, stationery and the closing page.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="stage ink">
+          <div class="cipher foil size-xl"><span class="w">W</span><span class="w">W</span></div>
+        </div>
+        <div class="caption">
+          <div class="no">02</div>
+          <div class="name">The Cipher — Gold Foil</div>
+          <div class="use">The same cipher reversed in gold on ink. For the dark header, the favicon, and any foil-stamp application.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE HAIRLINE -->
+    <div class="section-rule"><span>The Hairline</span><div class="line"></div></div>
+    <div class="grid">
+      <div class="tile">
+        <div class="stage paper">
+          <svg class="hair-svg" viewBox="0 0 248 132" aria-label="WW monogram">
+            <polyline class="stroke" points="14,20 51,110 88,20 124,110 161,20 197,110 234,20"/>
+          </svg>
+        </div>
+        <div class="caption">
+          <div class="no">03</div>
+          <div class="name">The Hairline — Drawn</div>
+          <div class="use">A bespoke single-stroke WW. Geometric, modern, and razor-crisp at any size — including a 16px favicon.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="stage ink">
+          <svg class="hair-svg on-ink" viewBox="0 0 248 132" aria-label="WW monogram">
+            <defs>
+              <linearGradient id="foilStroke" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#9C7E58"/><stop offset=".45" stop-color="#E7D3AE"/><stop offset="1" stop-color="#9C7E58"/>
+              </linearGradient>
+            </defs>
+            <polyline class="stroke" points="14,20 51,110 88,20 124,110 161,20 197,110 234,20"/>
+          </svg>
+        </div>
+        <div class="caption">
+          <div class="no">04</div>
+          <div class="name">The Hairline — Reversed</div>
+          <div class="use">The drawn mark in gold on ink. Clean line-art that animates well as a loader or hover state.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE SEAL -->
+    <div class="section-rule"><span>The Seal</span><div class="line"></div></div>
+    <div class="grid-3">
+      <div class="tile">
+        <div class="stage paper tall">
+          <div class="seal">
+            <div class="cipher deboss size-md seal-cipher"><span class="w">W</span><span class="w">W</span></div>
+            <div class="seal-rule"></div>
+            <div class="seal-wm">Wander&nbsp;·&nbsp;by&nbsp;·&nbsp;Wilson</div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="no">05</div>
+          <div class="name">The Seal — Paper</div>
+          <div class="use">Stadium crest, after K&amp;A / GB. For social avatars, the loading screen, and wax-seal moments.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="stage ink tall">
+          <div class="seal on-ink">
+            <svg class="hair-svg on-ink" style="width:120px" viewBox="0 0 248 132">
+              <polyline class="stroke" style="stroke:#E7D3AE;stroke-width:4.6" points="14,20 51,110 88,20 124,110 161,20 197,110 234,20"/>
+            </svg>
+            <div class="seal-rule"></div>
+            <div class="seal-wm">Wander&nbsp;·&nbsp;by&nbsp;·&nbsp;Wilson</div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="no">06</div>
+          <div class="name">The Seal — Gold on Ink</div>
+          <div class="use">The hairline cipher framed and reversed. The most "stamp-like" of the set.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="stage olive tall">
+          <div class="seal on-ink">
+            <div class="cipher foil size-md seal-cipher"><span class="w">W</span><span class="w">W</span></div>
+            <div class="seal-rule"></div>
+            <div class="seal-wm">Est.&nbsp;·&nbsp;MMXXVI</div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="no">07</div>
+          <div class="name">The Seal — Olive</div>
+          <div class="use">A warm colourway nodding to the GB reference. Optional accent for print and packaging.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCKUPS -->
+    <div class="section-rule"><span>Lockups</span><div class="line"></div></div>
+    <div class="grid">
+      <div class="tile">
+        <div class="stage bone">
+          <div class="lockup-h">
+            <div class="cipher deboss size-md"><span class="w">W</span><span class="w">W</span></div>
+            <div class="div"></div>
+            <div class="wm">Wander<br>by Wilson</div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="no">08</div>
+          <div class="name">Horizontal Lockup</div>
+          <div class="use">Cipher + wordmark for letterheads and the email signature.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="stage paper">
+          <div class="lockup-v">
+            <svg class="hair-svg" style="width:150px" viewBox="0 0 248 132"><polyline class="stroke" points="14,20 51,110 88,20 124,110 161,20 197,110 234,20"/></svg>
+            <div class="wm">Wander by Wilson</div>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="no">09</div>
+          <div class="name">Stacked Lockup</div>
+          <div class="use">Mark over wordmark, centred. For splash screens and the about page.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IN SITU -->
+    <div class="section-rule"><span>In Situ</span><div class="line"></div></div>
+    <div class="tile" style="margin-bottom:28px;">
+      <div class="mock-header">
+        <div class="mh-brand">
+          <svg class="hair-svg on-ink" style="width:50px" viewBox="0 0 248 132"><polyline class="stroke" style="stroke:#E7D3AE;stroke-width:5.4" points="14,20 51,110 88,20 124,110 161,20 197,110 234,20"/></svg>
+          <span class="mh-wm">Wander by Wilson</span>
+        </div>
+        <div class="nav"><span>Destinations</span><span>Journeys</span><span>Services</span><span>Inquire</span></div>
+      </div>
+      <div class="caption"><div class="no">10</div><div class="name">Site Header</div><div class="use">Drawn mark + tracked wordmark on the dark hero header.</div></div>
+    </div>
+    <div class="tile">
+      <div class="mock-footer">
+        <div class="cipher deboss size-lg"><span class="w">W</span><span class="w">W</span></div>
+        <div class="insc">Wander by Wilson · Volume MMXXVI</div>
+      </div>
+      <div class="caption"><div class="no">11</div><div class="name">Closing Brandmark</div><div class="use">Replaces the current plain-text "WW" at the foot of every page.</div></div>
+    </div>
+
+  </div>
+
+  <div class="foot">Brandmark Studio · Wander by Wilson · drawn in Fraunces &amp; gold</div>
+
+</body>
+</html>

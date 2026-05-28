@@ -1,0 +1,15 @@
+# Wander by Wilson — https://www.wanderbywilson.com
+# Allow all reputable crawlers, point them at the sitemap.
+
+User-agent: *
+Allow: /
+
+# Internal / non-public files
+Disallow: /SITE-NOTES.md
+Disallow: /*.bak
+Disallow: /*.bak-*
+Disallow: /brand-kit.html
+Disallow: /brand-kit-print.html
+Disallow: /brandmark-studio.html
+
+Sitemap: https://www.wanderbywilson.com/sitemap.xml

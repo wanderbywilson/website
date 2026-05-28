@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels | Wander by Wilson</title>
+    <link rel="canonical" href="https://www.wanderbywilson.com/hotels.html">
+    <meta name="description" content="Search the hotels Wander by Wilson books personally — luxury resorts, city icons, and private islands, each with preferred-partner perks. Find your next stay.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-hotels-index-page">
+    <header class="site-header is-scrolled" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         Hero + search
+         ================================================================ -->
+    <section class="journeys-index-hero">
+        <div class="container">
+            <p class="kicker"><span class="kicker-line"></span><span>The collection</span></p>
+            <h1 class="journeys-index-title">
+                Where we&rsquo;d<br>
+                <em>send you.</em>
+            </h1>
+            <p class="journeys-index-lede">
+                Every property we book personally &mdash; each with our preferred-partner perks layered on. Search by hotel or destination to find your stay.
+            </p>
+            <div class="inspo-search">
+                <svg class="inspo-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                <input type="search" id="hotelsSearch" class="inspo-search-input" placeholder="Search by hotel or destination&hellip;" aria-label="Search hotels">
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Hotel grid (built from PROPERTIES)
+         ================================================================ -->
+    <section class="journeys-index-grid-section">
+        <div class="container">
+            <p class="hotels-index-count" id="hotelsCount"></p>
+            <div class="journeys-index-grid" id="hotelsIndexGrid"></div>
+            <p class="inspo-no-results" id="hotelsNoResults" hidden>
+                No hotels match your search yet &mdash; try a different name or destination.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Closing CTA
+         ================================================================ -->
+    <section class="journey-close">
+        <div class="container journey-close-inner">
+            <h2 class="journey-close-title">Don&rsquo;t see your hotel?</h2>
+            <p class="journey-close-lede">
+                We book far more properties than we list here &mdash; from city icons to private islands. Tell us where you&rsquo;re headed and we&rsquo;ll bring our preferred-partner perks to your stay.
+            </p>
+            <a href="inquire-hotel.html" class="cta-primary">
+                <span class="cta-primary-label">Book a hotel with us</span>
+            </a>
+        </div>
+    </section>
+
+    <script src="data.js?v=59"></script>
+    <script>
+        (function buildHotels() {
+            if (typeof PROPERTIES === 'undefined') return;
+            const grid = document.getElementById('hotelsIndexGrid');
+            const searchInput = document.getElementById('hotelsSearch');
+            const noResults = document.getElementById('hotelsNoResults');
+            const countEl = document.getElementById('hotelsCount');
+
+            // Decode HTML entities + normalize (drop apostrophes, punctuation → space)
+            const decoder = document.createElement('textarea');
+            const norm = (s) => {
+                decoder.innerHTML = s || '';
+                return decoder.value.toLowerCase().replace(/[''’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+            };
+
+            // Alphabetical by hotel name
+            const entries = Object.entries(PROPERTIES)
+                .sort((a, b) => (a[1].name || '').localeCompare(b[1].name || ''));
+            const total = entries.length;
+            let query = '';
+
+            const cards = entries.map(([slug, p]) => {
+                const a = document.createElement('a');
+                a.className = 'journeys-index-card';
+                a.href = 'property.html?slug=' + slug;
+                a.dataset.search = norm((p.name || '') + ' ' + (p.location || ''));
+                a.innerHTML =
+                    '<figure class="journeys-index-image"><img src="' + p.heroImage + '" alt="' + p.name + '" loading="lazy"></figure>' +
+                    '<div class="journeys-index-meta">' +
+                        '<p class="journeys-index-region">' + (p.location || '') + '</p>' +
+                        '<h2 class="journeys-index-name">' + p.name + '</h2>' +
+                        '<span class="journeys-index-cta">View hotel &rarr;</span>' +
+                    '</div>';
+                grid.appendChild(a);
+                return a;
+            });
+
+            const setCount = (visible) => {
+                countEl.textContent = (query && visible !== total)
+                    ? visible + ' of ' + total + ' hotels'
+                    : total + ' hotels';
+            };
+
+            const applyFilter = () => {
+                const q = norm(query);
+                let visible = 0;
+                cards.forEach(card => {
+                    const show = !q || card.dataset.search.indexOf(q) > -1;
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                noResults.hidden = visible > 0;
+                setCount(visible);
+            };
+
+            searchInput.addEventListener('input', () => {
+                query = searchInput.value.trim();
+                applyFilter();
+            });
+
+            applyFilter();
+        })();
+
+        // Header scroll state
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('is-scrolled', window.scrollY > 24);
+        }, { passive: true });
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

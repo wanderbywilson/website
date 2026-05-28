@@ -1,0 +1,6647 @@
+/* ==========================================================================
+   Wander by Wilson — Bespoke Luxury Travel
+   Hero — Round 2: editorial, restrained, Patagonia-grade
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Blackstone — casual-chic script, used for image-corner flourishes */
+@font-face {
+    font-family: 'Blackstone';
+    src: url('fonts/blackstone-webfont.woff2') format('woff2'),
+         url('fonts/Blackstone.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Palette — Wander by Wilson brand palette. The homepage is skinned via
+       body.is-home overrides; these :root values carry the same brand colours
+       across the rest of the site. */
+    --bone:         #D9CBB6;   /* Soft Sand */
+    --bone-warm:    #D9CBB6;   /* Soft Sand */
+    --paper:        #FCFCFB;   /* crisp white ground (matches homepage) */
+    --ivory:        #F7F2EB;   /* Ivory — light-on-dark */
+    --ink:          #1E3552;   /* Deep Yacht Blue — brand dark */
+    --ink-80:       rgba(30, 53, 82, 0.8);
+    --umber:        #16283D;   /* Deep Yacht Blue, darker */
+    --gold:         #C3A26A;   /* Vintage Gold */
+    --gold-soft:    #D3B98C;   /* Vintage Gold, lighter */
+    --gold-faint:   rgba(195, 162, 106, 0.5);
+
+    /* Accents — brand palette */
+    --sea:          #A9C6C3;   /* Seafoam */
+    --sea-deep:     #1E3552;   /* Deep Yacht Blue */
+    --sea-soft:     #A9C6C3;   /* Seafoam */
+    --sea-wash:     rgba(169, 198, 195, 0.12);
+    --sun:          #D78161;   /* Coral */
+    --terracotta:   #D78161;   /* Coral */
+    --shell:        #FFFFFF;   /* White */
+
+    /* Typography */
+    --font-serif:  'Fraunces', 'Times New Roman', serif;
+    --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-script: 'Blackstone', 'Snell Roundhand', cursive;
+
+    /* Layout */
+    --container-max: 1480px;
+    --container-pad: 72px;
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    overflow-x: clip;   /* clips horizontal overflow without creating a scroll
+                           container (so descendant position:sticky still works) */
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+    font: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+.container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 34px 0;
+    transition: padding 0.5s var(--ease-soft), background 0.5s var(--ease-soft), transform 0.45s var(--ease-soft);
+}
+
+.site-header.is-scrolled {
+    padding: 18px 0;
+    background: rgba(244, 239, 227, 0.82);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+/* On journey detail pages, slide header up when the in-page stickybar takes over */
+.site-header.is-hidden {
+    transform: translateY(-100%);
+}
+
+/* When scrolled past the hero (into cream sections), flip header text to ink */
+.site-header.is-scrolled .brand,
+.site-header.is-scrolled .nav-primary a,
+.site-header.is-scrolled .header-cta {
+    color: var(--ink);
+}
+
+.site-header.is-scrolled .header-cta {
+    border-bottom-color: rgba(30, 53, 82, 0.4);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+/* Brand — all-caps tracked wordmark (Aman / Cartier register) */
+.brand {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ivory);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    line-height: 1;
+    transition: color 0.4s var(--ease-soft), opacity 0.3s ease;
+    /* Compensate for tracking — uppercase + spacing visually shifts text right */
+    padding-left: 0.34em;
+}
+
+.brand:hover { opacity: 0.82; }
+
+.brand-wordmark { display: inline-block; }
+
+/* Primary nav */
+.nav-primary ul {
+    display: flex;
+    align-items: center;
+    gap: 42px;
+    list-style: none;
+}
+
+.nav-primary a {
+    color: var(--ivory);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    position: relative;
+    padding: 6px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-primary a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold-soft);
+    transition: width 0.4s var(--ease-out);
+}
+
+.nav-primary a:hover { color: var(--gold-soft); }
+.nav-primary a:hover::after { width: 100%; }
+
+/* Header CTA — a sentence, not a button */
+.header-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ivory);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.005em;
+    transition: color 0.3s ease;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 251, 240, 0.4);
+}
+
+.header-cta svg { transition: transform 0.4s var(--ease-out); }
+.header-cta:hover { color: var(--gold-soft); border-bottom-color: var(--gold-soft); }
+.header-cta:hover svg { transform: translateX(4px); }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    color: var(--ivory);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--ink);
+}
+
+/* Static poster — instant paint before any video can decode */
+.hero-bg .hero-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 55%;
+    transform: scale(1.04);
+    filter: saturate(0.86) contrast(1.05) brightness(0.86);
+    z-index: 0;
+}
+
+/* Crossfaded video layer — lighter filter for the light-theme refresh */
+.hero-bg .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: saturate(0.86) contrast(1.05) brightness(0.86);
+    z-index: 1;
+    pointer-events: none;
+    will-change: opacity;
+}
+
+.hero-bg .hero-video.is-active {
+    opacity: 1;
+}
+
+/* Subtle film grain — SVG noise */
+.hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.hero-gradient {
+    position: absolute;
+    inset: 0;
+    /* Vertical: light at the top so the video shines, a soft tonal mid,
+       then fades softer at the bottom so the transition to the cream
+       partners section reads as a wash rather than a hard line.
+       Horizontal: still darker on the left where headline + CTA sit. */
+    background:
+        linear-gradient(
+            180deg,
+            rgba(14, 12, 10, 0.42) 0%,
+            rgba(14, 12, 10, 0.18) 25%,
+            rgba(14, 12, 10, 0.30) 60%,
+            rgba(14, 12, 10, 0.55) 82%,
+            rgba(14, 12, 10, 0.80) 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(14, 12, 10, 0.72) 0%,
+            rgba(14, 12, 10, 0.30) 55%,
+            rgba(14, 12, 10, 0)    100%
+        );
+}
+
+.hero-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 70% 60% at 30% 50%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0.26) 100%
+    );
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Edge rails — editorial sidebar labels
+   ========================================================================== */
+
+.hero-rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    padding: 0 28px;
+    color: rgba(255, 251, 240, 0.72);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.hero-rail--left { left: 0; }
+.hero-rail--right { right: 0; }
+
+.hero-rail--left .rail-mark,
+.hero-rail--left .rail-text,
+.hero-rail--right .rail-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.hero-rail--left .rail-mark {
+    color: var(--gold-soft);
+    font-weight: 500;
+}
+
+.hero-rail--left .rail-divider {
+    width: 1px;
+    height: 56px;
+    background: rgba(255, 251, 240, 0.32);
+}
+
+/* ==========================================================================
+   Hero content
+   ========================================================================== */
+
+.hero-container {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-top: 150px;
+    padding-bottom: 60px;
+}
+
+.hero-content {
+    max-width: 880px;
+    animation: heroRise 1.5s var(--ease-out) both;
+}
+
+@keyframes heroRise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Kicker — light context by default */
+.kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.82);
+    margin-bottom: 32px;
+}
+
+.kicker-line {
+    display: inline-block;
+    width: 56px;
+    height: 1px;
+    background: var(--gold);
+}
+
+/* Hero headline — Fraunces with optical-size variation */
+.hero-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144, "SOFT" 0;
+    font-size: clamp(64px, 11vw, 168px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--ivory);
+    margin-bottom: 36px;
+    text-wrap: balance;
+}
+
+.hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+    color: var(--bone-warm);
+    letter-spacing: -0.025em;
+    display: inline-block;
+}
+
+.title-period {
+    color: var(--gold-soft);
+    font-style: normal;
+    font-weight: 400;
+    margin-left: 0.02em;
+}
+
+/* Hero supporting copy — Blair-style tracked all-caps adjective lede */
+.hero-lede {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.85;
+    color: rgba(255, 251, 240, 0.86);
+    max-width: 620px;
+    font-weight: 500;
+    margin-bottom: 44px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-wrap: balance;
+}
+
+/* CTA row */
+.hero-actions {
+    display: flex;
+    align-items: baseline;
+    gap: 56px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* Primary CTA — light-context default (ink on cream).
+   Hero CTA overrides to ivory below, since it sits on a dark video. */
+.cta-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 42px;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid rgba(30, 53, 82, 0.45);
+    transition: background 0.45s var(--ease-soft),
+                border-color 0.45s var(--ease-soft),
+                color 0.45s var(--ease-soft);
+    overflow: hidden;
+}
+
+.cta-primary-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 0.005em;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-primary::after {
+    content: '→';
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--gold);
+    transition: transform 0.45s var(--ease-out), color 0.45s var(--ease-soft);
+    position: relative;
+    z-index: 1;
+}
+
+.cta-primary:hover {
+    background: rgba(30, 53, 82, 0.04);
+    border-color: var(--ink);
+}
+
+.cta-primary:hover::after {
+    transform: translateX(6px);
+    color: var(--ink);
+}
+
+/* Hero CTA — sits on a dark video, override back to ivory */
+.hero .cta-primary {
+    color: var(--ivory);
+    border-color: rgba(255, 251, 240, 0.55);
+}
+.hero .cta-primary::after { color: var(--gold-soft); }
+.hero .cta-primary:hover {
+    background: rgba(14, 12, 10, 0.55);
+    border-color: var(--ivory);
+}
+.hero .cta-primary:hover::after { color: var(--ivory); }
+
+/* Secondary CTA — small caps + thin arrow */
+.cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: rgba(255, 251, 240, 0.85);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 251, 240, 0.0);
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.cta-secondary svg { transition: transform 0.4s var(--ease-out); }
+.cta-secondary:hover { color: var(--gold-soft); border-bottom-color: var(--gold-soft); }
+.cta-secondary:hover svg { transform: translateX(4px); }
+
+/* Signature */
+.signature {
+    margin-top: 14px;
+    color: rgba(255, 251, 240, 0.78);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+}
+
+.signature-mark {
+    display: inline-block;
+    color: var(--gold-soft);
+    transform: skew(-4deg);
+}
+
+/* ==========================================================================
+   Hero footer
+   ========================================================================== */
+
+.hero-footer {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 48px;
+}
+
+.hero-footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+}
+
+.affiliations {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.affiliations-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255, 251, 240, 0.78);
+    letter-spacing: 0.005em;
+}
+
+.affiliations-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(255, 251, 240, 0.88);
+    flex-wrap: wrap;
+}
+
+.aff-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--gold-soft);
+    display: inline-block;
+}
+
+.hero-scroll {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    color: rgba(255, 251, 240, 0.78);
+    transition: color 0.3s ease;
+}
+
+.hero-scroll:hover { color: var(--gold-soft); }
+
+.scroll-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+}
+
+.scroll-line {
+    position: relative;
+    width: 1px;
+    height: 64px;
+    background: rgba(255, 251, 240, 0.25);
+    overflow: hidden;
+    display: inline-block;
+}
+
+.scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: 0;
+    width: 100%;
+    height: 24px;
+    background: var(--gold-soft);
+    animation: scrollTick 2.6s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+@keyframes scrollTick {
+    0%   { transform: translateY(0);    opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(88px); opacity: 0; }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1280px) {
+    :root { --container-pad: 56px; }
+    .hero-rail { display: none; }
+}
+
+@media (max-width: 1180px) {
+    .nav-primary ul { gap: 32px; }
+    .header-cta { display: none; }
+}
+
+@media (max-width: 960px) {
+    :root { --container-pad: 32px; }
+
+    .site-header { padding: 24px 0; }
+    .nav-primary { display: none; }
+
+    .hero-container {
+        padding-top: 140px;
+        padding-bottom: 80px;
+    }
+
+    .hero-lede { font-size: 19px; margin-bottom: 44px; }
+
+    .hero-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 28px;
+    }
+
+    .hero-scroll { align-self: flex-end; }
+}
+
+@media (max-width: 640px) {
+    :root { --container-pad: 24px; }
+
+    .brand { font-size: 12px; letter-spacing: 0.26em; padding-left: 0.26em; }
+
+    .hero-container {
+        padding-top: 120px;
+        padding-bottom: 56px;
+    }
+
+    .kicker {
+        font-size: 10px;
+        letter-spacing: 0.32em;
+        margin-bottom: 28px;
+    }
+    .kicker-line { width: 36px; }
+
+    .hero-title {
+        font-size: clamp(56px, 18vw, 92px);
+        margin-bottom: 28px;
+    }
+
+    .hero-lede { font-size: 16.5px; margin-bottom: 36px; }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 28px;
+    }
+
+    .cta-primary-label { font-size: 22px; }
+    .cta-primary::after { font-size: 16px; }
+
+    .affiliations {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .affiliations-list {
+        flex-wrap: wrap;
+        font-size: 9.5px;
+        letter-spacing: 0.26em;
+        gap: 12px;
+    }
+
+    .scroll-line { height: 48px; }
+}
+
+/* ==========================================================================
+   §02–§03 — Preferred partners (scrolling marquee)
+   ========================================================================== */
+
+.partners-marquee {
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 72px 0 56px;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.partners-marquee-head { text-align: center; margin-bottom: 64px; max-width: 880px; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
+.partners-marquee-foot { text-align: center; margin-top: 36px; }
+
+.partners-marquee .kicker {
+    justify-content: center;
+    margin-bottom: 22px;
+}
+
+.partners-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    margin: 0 auto 26px;
+    text-wrap: balance;
+}
+
+.partners-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.partners-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.78);
+    letter-spacing: 0.005em;
+    text-wrap: balance;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .partners-title { font-size: clamp(30px, 8vw, 40px); }
+    .partners-lede { font-size: 16px; }
+}
+
+/* White strip wrapper for the homepage partners marquee. Sits inside the
+   cream `.partners-marquee` section and provides the crisp white band that
+   the masked `.marquee` fades its edges into. Mirrors the `.package-partners`
+   pattern used on the services page. */
+.partners-marquee-strip {
+    margin-top: 12px;
+    padding: 36px 0;
+    background: #FFFFFF;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    /* Soft fade-out on the edges so logos drift out of view. When the
+       marquee sits inside a white strip, the mask reveals the strip's
+       white background at the edges — so logos vanish into white, not
+       into the surrounding section color. */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.marquee-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 84px;
+    white-space: nowrap;
+    animation: marquee-scroll 90s linear infinite;
+    will-change: transform;
+}
+
+.marquee:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+.marquee-item {
+    flex-shrink: 0;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(30, 53, 82, 0.78);
+    line-height: 1;
+}
+
+/* Uniform logo cells — every brand sits in the same 180×64 box, scaled to fit */
+.marquee-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 64px;
+    flex-shrink: 0;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.marquee-item img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0);
+    opacity: 0.78;
+}
+
+/* Per-logo scale up — square / short logos need extra visual weight */
+.marquee-item[data-brand="rosewood"] img,
+.marquee-item[data-brand="marriott"] img {
+    transform: scale(1.2);
+}
+
+/* Cruise logos (square / tall) — bumped further for visual parity */
+.marquee-item[data-brand="oceania"] img,
+.marquee-item[data-brand="quark"] img,
+.marquee-item[data-brand="ritz-yacht"] img,
+.marquee-item[data-brand="explora"] img,
+.marquee-item[data-brand="seabourn"] img,
+.marquee-item[data-brand="lindblad"] img,
+.marquee-item[data-brand="windstar"] img,
+.marquee-item[data-brand="uniworld"] img,
+.marquee-item[data-brand="amawaterways"] img {
+    transform: scale(1.4);
+}
+
+/* Text fallback (for brands without a logo file yet) — fits the same cell */
+.marquee-item--text {
+    color: rgba(30, 53, 82, 0.7);
+    font-size: 12px;
+    line-height: 1.35;
+    letter-spacing: 0.22em;
+    text-align: center;
+    white-space: normal;
+}
+
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+.partners-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: rgba(255, 251, 240, 0.62);
+    max-width: 540px;
+    margin: 0 auto;
+    letter-spacing: 0.005em;
+}
+
+@media (max-width: 960px) {
+    .partners-marquee { padding: 56px 0 48px; }
+    .partners-marquee-head { margin-bottom: 36px; }
+    .marquee-track { gap: 56px; animation-duration: 70s; }
+    .marquee-item { font-size: 11px; letter-spacing: 0.28em; }
+}
+
+@media (max-width: 640px) {
+    .partners-marquee { padding: 48px 0 40px; }
+    .marquee-track { gap: 40px; animation-duration: 55s; }
+    .marquee-item { font-size: 10px; letter-spacing: 0.24em; }
+    .partners-note { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; transform: none; }
+}
+
+/* ==========================================================================
+   §03 — Atlas (destinations globe)
+   ========================================================================== */
+
+.atlas {
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 80px 0 100px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Scroll-triggered reveal — quiet rise + fade as the section enters view */
+.atlas-intro,
+.atlas-stage,
+.atlas-footnote {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1.0s var(--ease-out), transform 1.0s var(--ease-out);
+}
+
+.atlas.is-visible .atlas-intro { transition-delay: 0s; }
+.atlas.is-visible .atlas-stage { transition-delay: 0.18s; }
+.atlas.is-visible .atlas-footnote { transition-delay: 0.32s; }
+
+.atlas.is-visible .atlas-intro,
+.atlas.is-visible .atlas-stage,
+.atlas.is-visible .atlas-footnote {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.atlas-intro {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.atlas-intro .kicker {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 28px;
+    justify-content: center;
+}
+
+.atlas-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(40px, 5.4vw, 80px);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0 auto 28px;
+    text-wrap: balance;
+}
+
+.atlas-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.atlas-lede {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.4;
+    color: rgba(30, 53, 82, 0.74);
+    max-width: 520px;
+    margin: 0 auto;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.005em;
+}
+
+.atlas-stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.atlas-globe {
+    position: relative;
+    width: clamp(320px, 72vw, 760px);
+    height: clamp(320px, 72vw, 760px);
+    margin: 0 auto;
+    cursor: grab;
+    /* Soft outer aura — gold halo that radiates beyond the WebGL atmosphere.
+       Two layered drop-shadows: a tight glow + a large soft bloom. */
+    filter:
+        drop-shadow(0 0 24px rgba(232, 199, 145, 0.45))
+        drop-shadow(0 0 90px rgba(183, 151, 112, 0.30));
+}
+
+/* Interactive-globe hint — small italic line under the section lede that
+   tells the visitor pins are clickable, with a subtle down-arrow pointing
+   at the globe. Fades out on first globe interaction or cycle start. */
+.atlas-hint-NEW-PLACEHOLDER {
+    /* Replaced by the rule further down to avoid duplicate selector confusion */
+}
+
+/* Featured-property preview — card that scales out from the globe pin,
+   alternating left/right sides each cycle. A refined hairline + filled
+   dot connects the card back to the pin (no arrowhead; the dot does the
+   anchoring). Cycles through featured properties. */
+/* The preview CONTAINER is always positioned + visible. The CARD inside
+   handles its own fade-in/out so the line (also inside the container) can
+   draw / fade independently of the card. This decoupling is what lets the
+   sequence go: pin → line → card (each appearing in turn). */
+.atlas-preview {
+    position: absolute;
+    top: 50%;
+    z-index: 6;
+    width: clamp(220px, 24vw, 300px);
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+/* Anchor the card just outside the globe (relative to stage CENTER) rather
+   than the stage edge, so it stays ~28px off the globe no matter how wide the
+   screen gets. Extra width spills to the OUTSIDE of the card. max(16px, …)
+   guarantees the card never runs off-screen on narrower (but non-stacked)
+   widths. globeHalf = clamp(160,36vw,380); cardWidth = clamp(220,24vw,300). */
+.atlas-preview--left  { left:  max(16px, calc(50% - clamp(160px, 36vw, 380px) - clamp(220px, 24vw, 300px) - 28px)); right: auto; }
+.atlas-preview--right { right: max(16px, calc(50% - clamp(160px, 36vw, 380px) - clamp(220px, 24vw, 300px) - 28px)); left: auto;  }
+
+.atlas-preview-card {
+    display: block;
+    background: #FFFFFF;
+    border: 1px solid rgba(199, 174, 138, 0.55);
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 18px 56px rgba(30, 53, 82, 0.18);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.6s ease,
+        transform 0.3s var(--ease-out, ease),
+        box-shadow 0.3s var(--ease-out, ease);
+}
+
+.atlas-preview.is-visible .atlas-preview-card {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.atlas-preview-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 64px rgba(30, 53, 82, 0.22);
+}
+
+.atlas-preview-image {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bone-warm, #efe7d6);
+}
+
+.atlas-preview-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out, ease);
+}
+
+.atlas-preview-card:hover .atlas-preview-image img {
+    transform: scale(1.04);
+}
+
+.atlas-preview-meta {
+    padding: 18px 20px 22px;
+}
+
+.atlas-preview-location {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.atlas-preview-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 14px;
+    letter-spacing: -0.005em;
+}
+
+.atlas-preview-cta {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.25s ease;
+}
+
+.atlas-preview-card:hover .atlas-preview-cta {
+    color: var(--ink);
+}
+
+/* Refined connector — a single hairline that spans from the card's edge
+   to the pin marker at globe center. Width is set in JS each cycle so the
+   line lands exactly on the pin regardless of stage width. */
+.atlas-preview-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 180px; /* fallback; replaced by JS sizeArrowToPin() */
+    height: 80px;
+    color: var(--gold);
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.atlas-preview-arrow path {
+    vector-effect: non-scaling-stroke;
+    /* Initial state — line is fully clipped by stroke-dashoffset AND has
+       opacity 0 so it's truly invisible. JS controls both:
+       - drawArrowIn()   sets opacity 1 + animates dashoffset → 0 (line grows out of pin)
+       - fadeOutArrow()  transitions opacity → 0 (line fades together with the card)
+       - resetArrow()    instantly puts both back so the next cycle starts clean */
+    stroke-dasharray: 260 260;
+    stroke-dashoffset: 260;
+    opacity: 0;
+}
+
+.atlas-preview--left  .atlas-preview-arrow { left: 100%;  right: auto; }
+.atlas-preview--right .atlas-preview-arrow { right: 100%; left: auto; transform: translateY(-50%) scaleX(-1); }
+
+/* Pin marker — sits at the geometric center of the atlas stage, which is
+   where the property's pin lands after the globe rotates to face it. Filled
+   gold dot with a soft halo ring. When `.is-visible` is added the dot grows
+   in with a slight overshoot, halo blooms outward, and the dot starts a
+   slow glow pulse. When `.is-visible` is removed the whole marker fades
+   out via the wrapper's opacity transition. */
+.atlas-pin-marker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 26px;
+    height: 26px;
+    z-index: 8;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+.atlas-pin-marker.is-visible {
+    opacity: 1;
+}
+
+.atlas-pin-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    /* Base box-shadow + transform — these are also the post-intro resting
+       state so the dot stays put after its intro animation completes. */
+    box-shadow: 0 0 12px rgba(232, 199, 145, 0.65);
+    transform: translate(-50%, -50%);
+}
+
+.atlas-pin-marker.is-visible .atlas-pin-dot {
+    /* Intro: scale 0 → 1.4 → 1 with a bounce. Box-shadow blooms at the
+       peak for a "glow" feel.
+       After intro: subtle continuous glow pulse via box-shadow oscillation. */
+    animation:
+        atlas-pin-dot-intro 800ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        atlas-pin-dot-glow  2s   ease-in-out 800ms infinite;
+}
+
+@keyframes atlas-pin-dot-intro {
+    0%   { transform: translate(-50%, -50%) scale(0);   box-shadow: 0 0 4px  rgba(232, 199, 145, 0.30); }
+    60%  { transform: translate(-50%, -50%) scale(1.4); box-shadow: 0 0 26px rgba(232, 199, 145, 1.00); }
+    100% { transform: translate(-50%, -50%) scale(1);   box-shadow: 0 0 12px rgba(232, 199, 145, 0.65); }
+}
+
+@keyframes atlas-pin-dot-glow {
+    0%, 100% { box-shadow: 0 0 12px rgba(232, 199, 145, 0.65); }
+    50%      { box-shadow: 0 0 22px rgba(232, 199, 145, 0.95); }
+}
+
+.atlas-pin-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    /* Hidden by default — only blooms in when the marker becomes visible. */
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.atlas-pin-marker.is-visible .atlas-pin-halo {
+    animation:
+        atlas-pin-halo-intro 800ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+        atlas-pin-halo-pulse 2.4s ease-in-out 800ms infinite;
+}
+
+@keyframes atlas-pin-halo-intro {
+    0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0;    }
+    100% { transform: translate(-50%, -50%) scale(1);   opacity: 0.45; }
+}
+
+@keyframes atlas-pin-halo-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.45; }
+    50%      { transform: translate(-50%, -50%) scale(1.55); opacity: 0.08; }
+}
+
+/* Responsive — preview card moves above the globe on smaller screens.
+   The fade scale lives on the CARD (not the container) to match the new
+   desktop visibility model. */
+@media (max-width: 900px) {
+    .atlas-preview,
+    .atlas-preview--left,
+    .atlas-preview--right {
+        position: static;
+        left: auto;
+        right: auto;
+        transform: none;
+        margin: 0 auto 24px;
+        width: min(320px, 88%);
+    }
+    .atlas-preview-card {
+        transform: scale(0.92);
+        transform-origin: center top;
+    }
+    .atlas-preview.is-visible .atlas-preview-card {
+        transform: scale(1);
+    }
+    .atlas-preview-arrow { display: none; }
+}
+
+.atlas-globe:active { cursor: grabbing; }
+
+/* Globe hint — sits under the atlas lede, centered, with a soft
+   downward arrow pointing at the globe below. Auto-dismisses when
+   the property cycle begins or the user touches the globe. */
+.atlas-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px auto 0;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(13px, 1vw, 15px);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    color: var(--gold);
+    opacity: 0.92;
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    animation: atlas-hint-breathe 3.6s ease-in-out infinite;
+}
+
+.atlas-hint em {
+    font-style: italic;
+    font-weight: 400;
+}
+
+.atlas-hint-arrow {
+    width: 14px;
+    height: 18px;
+    color: var(--gold);
+    opacity: 0.78;
+}
+
+.atlas-hint--dismissed {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+@keyframes atlas-hint-breathe {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(3px); }
+}
+
+.atlas-footnote {
+    text-align: center;
+    margin-top: 64px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    color: rgba(255, 251, 240, 0.62);
+    letter-spacing: 0.005em;
+}
+
+/* Atlas markers — hairline gold ring; hover scales + glows + slides label in */
+.atlas-marker {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.atlas-marker-ring {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--gold-soft);
+    background: rgba(14, 12, 10, 0.45);
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition: transform 0.35s var(--ease-soft),
+                background 0.35s var(--ease-soft),
+                border-color 0.35s var(--ease-soft),
+                box-shadow 0.35s var(--ease-soft);
+}
+
+.atlas-marker-ring::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 3px;
+    background: var(--gold-soft);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: background 0.35s ease;
+}
+
+/* Invisible bridge from ring to label — keeps hover state across the gap */
+.atlas-marker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 240px;
+    height: 36px;
+    transform: translateY(-50%);
+}
+
+.atlas-marker-label {
+    position: absolute;
+    left: calc(100% + 18px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    background: rgba(14, 12, 10, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--gold-faint);
+    padding: 14px 18px;
+    min-width: 200px;
+    box-shadow: 0 24px 64px -20px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.atlas-marker:hover .atlas-marker-ring {
+    transform: scale(1.6);
+    background: rgba(201, 176, 139, 0.92);
+    border-color: rgba(255, 251, 240, 0.95);
+    box-shadow: 0 0 22px rgba(201, 176, 139, 0.6);
+}
+
+.atlas-marker:hover .atlas-marker-ring::after {
+    background: var(--ivory);
+}
+
+.atlas-marker:hover .atlas-marker-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.atlas-marker-place {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 9.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold-soft);
+    margin-bottom: 8px;
+}
+
+.atlas-marker-hotel {
+    display: block;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.15;
+    color: var(--ivory);
+    letter-spacing: -0.005em;
+}
+
+/* Anchor reset for linked markers — keep them visually identical to the div version */
+a.atlas-marker {
+    text-decoration: none;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Booking call-to-action that appears on the hover label of linked markers */
+.atlas-marker-cta {
+    display: block;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(199, 174, 138, 0.28);
+    font-family: var(--font-sans);
+    font-size: 9.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold-soft);
+}
+
+@media (max-width: 960px) {
+    .atlas { padding: 100px 0 80px; }
+    .atlas-intro { margin-bottom: 44px; }
+    .atlas-lede { font-size: 20px; }
+    .atlas-globe { width: 88vw; height: 88vw; }
+    .atlas-footnote { font-size: 14px; }
+}
+
+@media (max-width: 640px) {
+    .atlas { padding: 72px 0 56px; }
+    .atlas-rule { height: 60px; }
+    .atlas-title { font-size: clamp(32px, 11vw, 48px); }
+    .atlas-marker-label { min-width: 180px; padding: 12px 14px; }
+    .atlas-marker-hotel { font-size: 17px; }
+}
+
+/* ==========================================================================
+   §04 — Services (how we work)
+   ========================================================================== */
+
+.services {
+    position: relative;
+    background: #FFFFFF;
+    color: var(--ink);
+    padding: 120px 0 140px;
+    overflow: hidden;
+}
+
+.services-head {
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto 88px;
+}
+
+.services-head .kicker {
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.services-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.6vw, 68px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    margin: 0 auto 28px;
+    text-wrap: balance;
+}
+
+.services-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.services-lede {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.74);
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.005em;
+    max-width: 880px;
+    margin: 0 auto;
+    text-wrap: balance;
+}
+
+.services-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 56px 48px;
+    counter-reset: service;
+}
+
+.service-card {
+    position: relative;
+    padding-top: 28px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+    transition: border-color 0.5s var(--ease-soft);
+}
+
+.service-card:hover {
+    border-top-color: var(--gold);
+}
+
+.service-num {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+}
+
+.service-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    text-wrap: balance;
+}
+
+.service-body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.72);
+    font-weight: 400;
+}
+
+@media (max-width: 980px) {
+    .services { padding: 96px 0 104px; }
+    .services-head { margin-bottom: 64px; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 40px; }
+}
+
+@media (max-width: 600px) {
+    .services { padding: 80px 0 88px; }
+    .services-grid { grid-template-columns: 1fr; gap: 40px; }
+    .service-title { font-size: 23px; }
+}
+
+/* ==========================================================================
+   §05 — Founder (Meet Wilson) — LIGHT PILOT
+   Cream backdrop + ink copy + champagne gold accents.
+   ========================================================================== */
+
+.founder {
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 120px 0 140px;
+    overflow: hidden;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.founder-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 96px;
+    align-items: center;
+}
+
+/* Portrait — vertical frame, hairline gold border */
+.founder-portrait {
+    position: relative;
+    margin: 0;
+}
+
+.founder-portrait-frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    width: 100%;
+    background: var(--bone);
+    border: 1px solid rgba(199, 174, 138, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.founder-portrait-frame::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(199, 174, 138, 0.32);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.founder-portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+/* Blackstone tagline over the top-left corner of the portrait (two lines) */
+.founder-script {
+    position: absolute;
+    top: -0.62em;
+    left: -6px;
+    z-index: 3;
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(34px, 4.2vw, 58px);
+    line-height: 1.05;
+    color: #1E3552; /* Deep Yacht Blue */
+    transform: rotate(-9deg);
+    transform-origin: left top;
+    pointer-events: none;
+    text-shadow: 0 1px 14px rgba(255, 255, 255, 0.65);
+}
+
+.founder-portrait-placeholder {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(183, 151, 112, 0.6);
+}
+
+.founder-portrait-caption {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.founder-portrait-name {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.72);
+}
+
+.founder-portrait-location {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    color: rgba(30, 53, 82, 0.5);
+}
+
+/* Copy column */
+.founder-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(40px, 4.8vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.024em;
+    color: var(--ink);
+    margin-bottom: 36px;
+    text-wrap: balance;
+}
+
+.founder-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.founder-prose {
+    max-width: 560px;
+    margin-bottom: 40px;
+}
+
+.founder-prose p {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.82);
+    letter-spacing: 0.005em;
+}
+
+.founder-prose p + p { margin-top: 20px; }
+
+.founder-prose em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+
+/* Credential block — Smartflyer Rising Star badge + caption */
+.founder-credential {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 40px;
+}
+
+.founder-credential-badge {
+    width: 88px;
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 12px rgba(30, 53, 82, 0.14));
+}
+
+.founder-credential-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.founder-credential-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.founder-credential-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.3;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+}
+
+.founder-affiliations {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 0;
+    margin-bottom: 40px;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.founder-affiliations li {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.82);
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.affil-dot {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 50%;
+}
+
+.founder-cta {
+    /* slightly tighter than hero CTA so it doesn't fight the copy column */
+}
+
+@media (max-width: 1080px) {
+    .founder-grid { gap: 64px; }
+}
+
+@media (max-width: 880px) {
+    .founder { padding: 88px 0 104px; }
+    .founder-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+    .founder-portrait-col {
+        max-width: 460px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .founder-prose p { font-size: 17px; }
+}
+
+@media (max-width: 600px) {
+    .founder { padding: 72px 0 80px; }
+    .founder-title { font-size: clamp(32px, 9vw, 44px); }
+    .founder-credential { gap: 16px; }
+    .founder-credential-badge { width: 72px; }
+    .founder-credential-title { font-size: 17px; }
+    .founder-affiliations { gap: 14px; padding: 18px 0; }
+    .founder-affiliations li { font-size: 9px; gap: 14px; }
+}
+
+/* ==========================================================================
+   §06 — Closing brandmark (letterpress WW monogram on paper)
+   ========================================================================== */
+
+.brandmark-close {
+    position: relative;
+    background: var(--paper);
+    padding: 96px 0 110px;
+    text-align: center;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.brandmark-close-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+.brandmark-monogram {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(96px, 14vw, 196px);
+    line-height: 1;
+    letter-spacing: -0.07em;
+    /* Letterpress trick: invisible ink + a single bright highlight line
+       beneath each glyph creates a "pressed into paper" relief. */
+    color: rgba(30, 53, 82, 0.075);
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.75),
+        0 -1px 0 rgba(30, 53, 82, 0.08);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.brandmark-inscription {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.42);
+}
+
+@media (max-width: 640px) {
+    .brandmark-close { padding: 64px 0 76px; }
+    .brandmark-close-inner { gap: 20px; }
+    .brandmark-inscription { font-size: 9px; letter-spacing: 0.3em; }
+}
+
+/* ==========================================================================
+   Property page (property.html)
+   ========================================================================== */
+
+body.is-property-page { background: var(--paper); }
+
+/* Hero */
+.property-hero {
+    position: relative;
+    min-height: 78vh;
+    min-height: 78svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--ivory);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.property-hero-bg { position: absolute; inset: 0; z-index: 0; background: var(--ink); }
+
+.property-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.04);
+    filter: saturate(0.78) contrast(1.08) brightness(0.78) hue-rotate(-2deg);
+}
+
+.property-hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.property-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg,
+            rgba(14, 12, 10, 0.50) 0%,
+            rgba(14, 12, 10, 0.10) 35%,
+            rgba(14, 12, 10, 0.42) 75%,
+            rgba(14, 12, 10, 0.92) 100%);
+}
+
+.property-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 160px;
+    padding-bottom: 80px;
+    /* Inside flex column .property-hero, the .container class's auto margins
+       cause this element to shrink-to-fit its content (so short titles like
+       "Canaves Ena" appear centered while long titles stretch the box).
+       Force full width so alignment is consistent across all properties. */
+    width: 100%;
+}
+
+.property-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(30, 53, 82, 0.62);
+    margin-bottom: 56px;
+    transition: color 0.3s ease;
+}
+
+.property-back:hover { color: var(--gold); }
+
+.property-location {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold-soft);
+    margin-bottom: 24px;
+}
+
+.property-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(54px, 8.5vw, 124px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ivory);
+    text-wrap: balance;
+    margin: 0;
+}
+
+/* Body — two-column overview + exclusives */
+.property-body {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 120px 0 100px;
+}
+
+.property-body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: start;
+}
+
+.property-overview-col .kicker,
+.property-perks-col .kicker {
+    margin-bottom: 32px;
+}
+
+/* Starting nightly rate — sits at the foot of the exclusives column, paired
+   with the Book CTA so price lands at the moment of decision (after value).
+   The perks list's bottom margin provides the separation above. */
+.property-rate {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 20px;
+}
+.property-rate-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.property-rate-value {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 72;
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+}
+.property-rate-note {
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+}
+
+/* Two-line rate (e.g. Resort + Villas) — a compact price list */
+.property-rate-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+.property-rate-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(199, 174, 138, 0.28);
+}
+.property-rate-line:last-child { border-bottom: none; padding-bottom: 0; }
+.property-rate-line-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+.property-rate-line-value {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+/* Converted-currency "?" info button + tooltip — shown when a rate is
+   published outside USD/EUR/GBP and converted to USD as an estimate. */
+.property-rate-valuerow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.property-rate-info {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(183, 151, 112, 0.6);
+    background: transparent;
+    color: var(--gold);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: help;
+    transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+.property-rate-info:hover,
+.property-rate-info:focus {
+    border-color: var(--gold);
+    color: var(--ink);
+    background: rgba(183, 151, 112, 0.12);
+    outline: none;
+}
+.property-rate-info-mark {
+    display: block;
+    transform: translateY(-0.5px);
+}
+
+/* The rate block toggles visibility via the [hidden] attribute in JS. These
+   elements also set `display`, which overrides the UA `[hidden]{display:none}`
+   rule — re-assert it so the "?" info button only appears when a
+   converted-currency note (rateInfo) is present, not blank on every page. */
+.property-rate[hidden],
+.property-rate-lines[hidden],
+.property-rate-info[hidden] { display: none; }
+.property-rate-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    width: min(260px, calc(100vw - 32px));
+    padding: 14px 18px;
+    background: var(--ink);
+    color: var(--ivory);
+    font-family: var(--font-serif);
+    font-style: normal;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+    text-align: left;
+    text-transform: none;
+    box-shadow: 0 14px 40px rgba(30, 53, 82, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 20;
+}
+.property-rate-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--ink);
+}
+.property-rate-info:hover .property-rate-tooltip,
+.property-rate-info:focus .property-rate-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.property-prose {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.84);
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
+}
+
+.property-perks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+}
+
+.property-perks-list li {
+    position: relative;
+    padding: 14px 0 14px 24px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.86);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.property-perks-list li:first-child { padding-top: 0; }
+.property-perks-list li:last-child  { border-bottom: none; }
+
+.property-perks-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--gold);
+    background: transparent;
+}
+
+.property-book-cta {
+    margin-bottom: 20px;
+}
+
+.property-perks-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.6);
+    max-width: 480px;
+}
+
+.property-perks-note em { color: var(--gold); font-style: italic; }
+
+/* Preferred-partner brand badge — closing credential at the bottom of the
+   perks column, beneath the booking note. Hidden entirely on properties
+   without a brand-program affiliation (no reserved slot). */
+.property-brand-badge {
+    display: flex;
+    align-items: center;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.property-brand-badge img {
+    max-height: 56px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    filter: brightness(0);
+    opacity: 0.85;
+}
+
+/* Square logos (Rosewood Elite) — much larger so visual weight reads as
+   a real credential rather than a faint thumbnail. */
+.property-brand-badge img[src*="rosewood-elite"] {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+@media (max-width: 640px) {
+    .property-brand-badge { margin-top: 28px; padding-top: 24px; }
+    .property-brand-badge img { max-height: 48px; max-width: 170px; }
+    .property-brand-badge img[src*="rosewood-elite"] { max-height: 84px; max-width: 84px; }
+}
+
+/* Ideal-for — advisor's qualifying read on who fits this property.
+   Lighter weight than the agent-tip block: just kicker + italic line. */
+.property-ideal-for {
+    margin-top: 40px;
+}
+
+.property-ideal-for .kicker {
+    margin-bottom: 14px;
+}
+
+.ideal-for-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.78);
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+    .ideal-for-text { font-size: 17px; }
+}
+
+/* Agent tip — pull-quote callout inside the overview column.
+   Pulls from SmartFlyer/Virtuoso "Agent Tip" content when present. */
+.property-agent-tip {
+    margin: 40px 0 0;
+    padding: 28px 32px;
+    background: var(--ivory);
+    border-left: 2px solid var(--gold);
+    position: relative;
+}
+
+.agent-tip-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+}
+
+.agent-tip-quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.85);
+    letter-spacing: 0.005em;
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .property-agent-tip { padding: 22px 24px; margin-top: 32px; }
+    .agent-tip-quote { font-size: 17px; }
+}
+
+/* Property gallery — magazine grid below the perks */
+.property-gallery {
+    background: var(--paper);
+    padding: 100px 0 120px;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.property-gallery .kicker {
+    justify-content: center;
+    margin: 0 auto 56px;
+    text-align: center;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.gallery-tile {
+    margin: 0;
+    overflow: hidden;
+    background: var(--bone);
+    aspect-ratio: 3 / 2;
+    border: 1px solid rgba(199, 174, 138, 0.28);
+}
+
+.gallery-tile--wide {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 7;
+}
+
+.gallery-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.gallery-tile:hover img {
+    transform: scale(1.04);
+}
+
+@media (max-width: 720px) {
+    .property-gallery { padding: 72px 0 88px; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 16px; }
+    .gallery-tile--wide { aspect-ratio: 3 / 2; }
+}
+
+/* Closing CTA */
+.property-close {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 100px 0 140px;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.property-close-inner {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.property-close-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    text-wrap: balance;
+}
+
+.property-close-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.78);
+    margin-bottom: 40px;
+    text-wrap: pretty;
+}
+
+.property-close .cta-primary { display: inline-flex; }
+
+/* Fallback / not-found state */
+.property-fallback {
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.property-fallback-inner {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 200px 0;
+}
+
+.property-fallback-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--ink);
+    margin-bottom: 18px;
+    letter-spacing: -0.015em;
+}
+
+.property-fallback-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.74);
+    margin-bottom: 36px;
+}
+
+/* Interim state — atlas data exists but no detailed page yet */
+.property-interim {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 0 40px;
+    text-align: center;
+}
+
+.property-interim .kicker {
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
+.property-interim-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-style: italic;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(34px, 4.4vw, 56px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 22px;
+    text-wrap: balance;
+}
+
+.property-interim-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+    margin-bottom: 40px;
+    text-wrap: pretty;
+}
+
+.property-interim-lede em {
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 400;
+}
+
+.property-interim .cta-primary { display: inline-flex; }
+
+/* Responsive */
+@media (max-width: 960px) {
+    .property-body-grid { grid-template-columns: 1fr; gap: 56px; }
+    .property-body { padding: 80px 0 72px; }
+    .property-close { padding: 72px 0 96px; }
+    .property-hero-inner { padding-top: 130px; padding-bottom: 60px; }
+    .property-back { margin-bottom: 36px; }
+}
+
+@media (max-width: 640px) {
+    .property-title { font-size: clamp(40px, 12vw, 64px); }
+    .property-prose { font-size: 17px; }
+    .property-perks-list li { font-size: 16px; padding: 12px 0 12px 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-bg img { animation: none; transform: none; }
+    .hero-content { animation: none; }
+    .scroll-line::after { animation: none; opacity: 0; }
+    .atlas-rule { display: none; }
+}
+
+/* ==========================================================================
+   Journey page (journey.html)
+   Ready-to-book itinerary pages — long-form, scannable, conversion-driven.
+   ========================================================================== */
+
+body.is-journey-page { background: var(--paper); }
+
+/* Hero — full-bleed image, kicker + title + meta strip + price + CTA */
+.journey-hero {
+    position: relative;
+    min-height: 88vh;
+    min-height: 88svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--ivory);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.journey-hero-bg { position: absolute; inset: 0; z-index: 0; background: var(--ink); }
+
+.journey-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.04);
+    filter: saturate(0.85) contrast(1.05) brightness(0.78);
+}
+
+.journey-hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.journey-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg,
+            rgba(14, 12, 10, 0.50) 0%,
+            rgba(14, 12, 10, 0.12) 30%,
+            rgba(14, 12, 10, 0.55) 78%,
+            rgba(14, 12, 10, 0.92) 100%);
+}
+
+.journey-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 180px;
+    padding-bottom: 80px;
+    width: 100%;
+}
+
+.journey-hero-kicker { color: rgba(255, 251, 240, 0.92); margin-bottom: 28px; }
+.journey-hero-kicker .kicker-line { background: var(--gold-soft); }
+
+.journey-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(44px, 6.6vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--ivory);
+    margin: 0 0 18px;
+    text-wrap: balance;
+    max-width: 16ch;
+}
+
+.journey-subtitle {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(20px, 2.2vw, 28px);
+    color: var(--bone-warm);
+    margin: 0 0 36px;
+    letter-spacing: 0.005em;
+}
+
+.journey-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.86);
+    margin-bottom: 44px;
+}
+
+.journey-meta-dot {
+    width: 3px;
+    height: 3px;
+    background: var(--gold-soft);
+    border-radius: 50%;
+}
+
+.journey-besttime {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin: 0 0 32px;
+}
+
+.journey-hero-action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 32px;
+}
+
+.journey-price-hero {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2vw, 26px);
+    color: var(--ivory);
+    letter-spacing: 0.005em;
+}
+
+.journey-price-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.journey-price-info {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 251, 240, 0.55);
+    background: transparent;
+    color: rgba(255, 251, 240, 0.78);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: help;
+    transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.journey-price-info:hover,
+.journey-price-info:focus-visible {
+    border-color: rgba(255, 251, 240, 0.95);
+    color: rgba(255, 251, 240, 1);
+    background: rgba(255, 251, 240, 0.08);
+    outline: none;
+}
+
+.journey-price-info-mark {
+    display: block;
+    transform: translateY(-1px);
+}
+
+.journey-price-tooltip {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    width: 320px;
+    padding: 18px 22px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    letter-spacing: 0.005em;
+    text-align: left;
+    text-transform: none;
+    border: 1px solid rgba(199, 174, 138, 0.55);
+    box-shadow: 0 14px 40px rgba(30, 53, 82, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 20;
+}
+
+.journey-price-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--paper);
+}
+
+.journey-price-tooltip::after {
+    content: '';
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 9px solid transparent;
+    border-top-color: rgba(199, 174, 138, 0.55);
+    z-index: -1;
+}
+
+.journey-price-info:hover .journey-price-tooltip,
+.journey-price-info:focus-visible .journey-price-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Hero CTA on dark — override base light-mode CTA */
+.journey-hero .cta-primary {
+    color: var(--ivory);
+    border-color: rgba(255, 251, 240, 0.6);
+}
+.journey-hero .cta-primary::after { color: var(--gold-soft); }
+.journey-hero .cta-primary:hover {
+    background: rgba(14, 12, 10, 0.55);
+    border-color: var(--ivory);
+}
+.journey-hero .cta-primary:hover::after { color: var(--ivory); }
+
+/* Sticky bar — appears once hero scrolls past */
+.journey-stickybar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    background: rgba(244, 239, 227, 0.94);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+    transform: translateY(-100%);
+    transition: transform 0.45s var(--ease-soft);
+}
+
+.journey-stickybar.is-visible { transform: translateY(0); }
+
+.journey-stickybar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.journey-anchors {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+}
+
+.journey-anchors a {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.78);
+    padding: 6px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+.journey-anchors a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+.journey-stickybar-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.journey-price-mini {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(30, 53, 82, 0.78);
+    letter-spacing: 0.005em;
+}
+
+.journey-stickybar-cta {
+    display: inline-block;
+    padding: 10px 22px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    color: var(--ink);
+    border: 1px solid rgba(30, 53, 82, 0.45);
+    transition: background 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft);
+}
+.journey-stickybar-cta:hover {
+    background: rgba(30, 53, 82, 0.04);
+    border-color: var(--ink);
+}
+
+/* Section base */
+.journey-overview,
+.journey-highlights,
+.journey-itinerary,
+.journey-stays,
+.journey-inclusions,
+.journey-addons,
+.journey-investment,
+.journey-close {
+    padding: 96px 0;
+    background: var(--paper);
+}
+
+.journey-overview { padding-bottom: 48px; }
+.journey-highlights { padding-top: 48px; }
+
+.journey-itinerary,
+.journey-inclusions { background: var(--ivory); }
+
+.journey-overview-inner,
+.journey-highlights-inner,
+.journey-itinerary-inner,
+.journey-stays-inner,
+.journey-inclusions-inner,
+.journey-addons-inner,
+.journey-investment-inner,
+.journey-close-inner {
+    max-width: 1240px;
+}
+
+/* Overview — centered pullquote opener, then left-aligned body */
+.journey-overview .kicker {
+    margin-bottom: 22px;
+}
+
+.journey-overview-prose {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.85);
+    letter-spacing: 0.005em;
+    max-width: 880px;
+    margin: 0;
+    text-wrap: pretty;
+}
+
+.journey-pullquote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.4;
+    color: var(--gold);
+    margin: 0 auto 88px;
+    max-width: 820px;
+    text-align: center;
+    text-wrap: balance;
+    padding-bottom: 56px;
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+/* Section titles (reused across journey sections) */
+.journey-section-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 56px;
+    text-wrap: balance;
+}
+
+.journey-section-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+/* Best for + highlights */
+.journey-highlights .kicker { margin-bottom: 22px; }
+.journey-highlights-kicker { margin-top: 8px; margin-bottom: 32px !important; }
+
+/* Tailor — mid-page reassurance band */
+.journey-tailor {
+    padding: 72px 0;
+    background: var(--paper);
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.journey-tailor-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.journey-tailor-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "opsz" 100;
+    font-size: clamp(30px, 3.2vw, 42px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 22px;
+    text-wrap: balance;
+}
+
+.journey-tailor-body {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 auto 32px;
+    max-width: 600px;
+    text-wrap: pretty;
+}
+
+.journey-tailor-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(183, 151, 112, 0.45);
+    padding: 6px 2px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.journey-tailor-cta:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+.journey-tailor-cta svg {
+    transition: transform 0.3s var(--ease-out, ease);
+}
+
+.journey-tailor-cta:hover svg {
+    transform: translateX(4px);
+}
+
+.journey-bestfor {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.85);
+    letter-spacing: 0.005em;
+    max-width: 880px;
+    margin-bottom: 64px;
+    text-wrap: pretty;
+}
+
+.journey-highlights-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.journey-highlight {
+    padding-top: 24px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.journey-highlight-num {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+}
+
+.journey-highlight-label {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 20px;
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: -0.012em;
+}
+
+/* Day-by-day legs */
+.journey-itinerary-inner { max-width: 1080px; }
+
+.journey-legs {
+    display: flex;
+    flex-direction: column;
+}
+
+.journey-leg {
+    border-top: 1px solid rgba(199, 174, 138, 0.4);
+}
+.journey-leg:last-of-type { border-bottom: 1px solid rgba(199, 174, 138, 0.4); }
+
+.journey-leg summary {
+    display: grid;
+    grid-template-columns: 130px 1fr auto 32px;
+    align-items: center;
+    gap: 32px;
+    padding: 28px 0;
+    cursor: pointer;
+    list-style: none;
+}
+.journey-leg summary::-webkit-details-marker { display: none; }
+
+.journey-leg-days {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.journey-leg-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+}
+
+.journey-leg-stay {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    color: rgba(30, 53, 82, 0.6);
+    letter-spacing: 0.005em;
+    text-align: right;
+}
+
+.journey-leg-chevron {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--gold);
+    line-height: 1;
+    text-align: center;
+    transition: transform 0.3s var(--ease-soft);
+}
+.journey-leg[open] .journey-leg-chevron { transform: rotate(45deg); }
+
+.journey-leg-content {
+    padding: 0 0 36px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 48px;
+    padding-left: 162px;
+    align-items: start;
+}
+
+.journey-leg-image {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bone-warm);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.journey-leg-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.journey-leg:hover .journey-leg-image img { transform: scale(1.02); }
+
+.journey-leg-text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.journey-leg-desc {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.82);
+    letter-spacing: 0.005em;
+    margin: 0;
+}
+
+.journey-leg-tags {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.journey-leg-tags li {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.82);
+}
+
+.journey-leg-tag-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* Stays — property cards */
+.journey-stays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+}
+
+.journey-stay-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.journey-stay-card--linked:hover {
+    transform: translateY(-4px);
+}
+.journey-stay-card--linked:hover .journey-stay-image img {
+    transform: scale(1.03);
+}
+
+.journey-stay-image {
+    margin: 0 0 22px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--bone-warm);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.journey-stay-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.journey-stay-location {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+.journey-stay-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 0 0 6px;
+}
+
+.journey-stay-nights {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(30, 53, 82, 0.6);
+    margin: 0 0 12px;
+}
+
+.journey-stay-desc {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.74);
+    margin: 0 0 14px;
+}
+
+.journey-stay-cta {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s ease;
+}
+.journey-stay-card--linked:hover .journey-stay-cta { color: var(--ink); }
+
+.journey-stay-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+}
+.journey-stay-mark::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 1px;
+    background: var(--gold);
+}
+
+/* Inclusions */
+.journey-inclusions .kicker { margin-bottom: 36px; }
+
+.journey-inclusions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+}
+
+.journey-inclusions-heading {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 0 0 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.journey-inclusions-list {
+    list-style: none;
+}
+
+.journey-inclusions-list li {
+    position: relative;
+    padding: 13px 0 13px 26px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.86);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.journey-inclusions-list li:last-child { border-bottom: none; }
+
+.journey-inclusions-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background: var(--gold);
+    transform: translateY(-50%);
+}
+
+
+/* Add-ons */
+.journey-addons-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+}
+
+.journey-addon {
+    padding-top: 28px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.journey-addon-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 21px;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 0 0 14px;
+}
+
+.journey-addon-desc {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.74);
+    margin: 0 0 14px;
+}
+
+.journey-addon-price {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--gold);
+    margin: 0;
+}
+
+/* Investment */
+.journey-investment-inner { text-align: center; max-width: 720px; }
+.journey-investment .kicker {
+    justify-content: center;
+    margin-bottom: 28px;
+}
+
+.journey-price-large {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 18px;
+    letter-spacing: -0.018em;
+}
+
+.journey-price-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.62);
+    margin: 0 auto 40px;
+    max-width: 540px;
+}
+
+/* Closing CTA */
+.journey-close-inner { text-align: center; max-width: 720px; }
+
+.journey-close-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 18px;
+}
+
+.journey-close-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 0 40px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .journey-hero-inner { padding-top: 130px; padding-bottom: 60px; }
+    .journey-stickybar-inner { flex-wrap: wrap; gap: 14px; }
+    .journey-anchors { gap: 22px; }
+    .journey-anchors a { font-size: 10px; letter-spacing: 0.22em; }
+    .journey-highlights-grid { grid-template-columns: repeat(2, 1fr); }
+    .journey-leg summary { grid-template-columns: 110px 1fr 28px; gap: 18px; padding: 22px 0; }
+    .journey-leg-stay { grid-column: 1 / -1; text-align: left; padding-left: 128px; margin-top: -10px; }
+    .journey-leg-content { grid-template-columns: 1fr; gap: 24px; padding-left: 128px; padding-right: 0; }
+    .journey-inclusions-grid { grid-template-columns: 1fr; gap: 56px; }
+}
+
+@media (max-width: 640px) {
+    .journey-overview,
+    .journey-highlights,
+    .journey-itinerary,
+    .journey-stays,
+    .journey-inclusions,
+    .journey-addons,
+    .journey-investment,
+    .journey-close { padding: 72px 0; }
+
+    .journey-meta { gap: 12px; font-size: 10px; letter-spacing: 0.26em; }
+    .journey-hero-action { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .journey-stickybar-right .journey-price-mini { display: none; }
+    .journey-anchors { gap: 16px; }
+    .journey-highlights-grid { grid-template-columns: 1fr; gap: 28px; }
+    .journey-leg summary { grid-template-columns: 1fr 28px; gap: 12px; }
+    .journey-leg-days { grid-column: 1; }
+    .journey-leg-title { grid-column: 1; }
+    .journey-leg-stay { grid-column: 1; padding-left: 0; }
+    .journey-leg-content { padding-left: 0; }
+    .journey-leg-tags li { grid-template-columns: 80px 1fr; gap: 10px; font-size: 14px; }
+}
+
+/* ==========================================================================
+   Journeys index page (journeys.html)
+   ========================================================================== */
+
+body.is-journeys-index-page { background: var(--paper); }
+
+.journeys-index-hero {
+    padding: 200px 0 64px;
+    background: var(--paper);
+    text-align: center;
+}
+
+.journeys-index-hero .kicker {
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.journeys-index-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(48px, 6.8vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0 auto 32px;
+    text-wrap: balance;
+    max-width: 18ch;
+}
+
+.journeys-index-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.journeys-index-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.78);
+    max-width: 720px;
+    margin: 0 auto;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
+}
+
+.journeys-index-grid-section {
+    padding: 56px 0 120px;
+    background: var(--paper);
+}
+
+.journeys-index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 48px;
+}
+
+.journeys-index-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.journeys-index-card:hover {
+    transform: translateY(-4px);
+}
+
+.journeys-index-card:hover .journeys-index-image img {
+    transform: scale(1.03);
+}
+
+.journeys-index-image {
+    margin: 0 0 24px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bone-warm);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.journeys-index-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.journeys-index-region {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.journeys-index-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0 0 14px;
+    text-wrap: balance;
+}
+
+.journeys-index-stats {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.7);
+    margin: 0 0 18px;
+    letter-spacing: 0.005em;
+}
+
+.journeys-index-cta {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s ease;
+}
+
+.journeys-index-card:hover .journeys-index-cta { color: var(--ink); }
+
+@media (max-width: 640px) {
+    .journeys-index-hero { padding: 160px 0 48px; }
+    .journeys-index-grid-section { padding: 40px 0 88px; }
+    .journeys-index-grid { gap: 36px; }
+}
+
+/* ── Hotels index — composes .journeys-index-* grid with .inspo-search ───── */
+.journeys-index-hero .inspo-search { margin: 38px auto 0; }
+.hotels-index-count {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+    margin: 0 0 44px;
+}
+
+/* "Browse all hotels" button beneath the homepage atlas globe */
+.atlas-browse { text-align: center; margin-top: 64px; }
+
+/* ============================================================
+   Site footer (all pages) — Deep Yacht Blue, ivory text
+   ============================================================ */
+.site-footer { background: #1E3552; color: var(--ivory); }
+.site-footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 64px 0 40px;
+}
+.site-footer-brand { max-width: 300px; }
+.site-footer-wordmark {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 72;
+    font-size: 24px;
+    letter-spacing: 0.01em;
+    color: var(--ivory);
+    text-decoration: none;
+}
+.site-footer-tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(247, 242, 235, 0.6);
+    margin: 12px 0 0;
+}
+.site-footer-nav { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+.site-footer-nav a,
+.site-footer-ig {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247, 242, 235, 0.82);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.site-footer-nav a:hover,
+.site-footer-ig:hover { color: var(--gold); }
+.site-footer-ig {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    font-size: 13px;
+}
+.site-footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding: 22px 0 30px;
+    border-top: 1px solid rgba(247, 242, 235, 0.14);
+}
+.site-footer-copy,
+.site-footer-links a {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: rgba(247, 242, 235, 0.55);
+}
+.site-footer-links a { text-decoration: none; transition: color 0.2s ease; }
+.site-footer-links a:hover { color: var(--gold); }
+.site-footer-sep { color: rgba(247, 242, 235, 0.3); margin: 0 10px; }
+
+@media (max-width: 720px) {
+    .site-footer-top { flex-direction: column; gap: 28px; padding: 48px 0 32px; }
+    .site-footer-base { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============================================================
+   Legal pages (privacy, terms)
+   ============================================================ */
+.is-legal-page { background: var(--paper); }
+.legal-hero { padding: 160px 0 40px; background: var(--paper); text-align: center; }
+.legal-hero .kicker { justify-content: center; margin-bottom: 24px; }
+.legal-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 16px;
+}
+.legal-updated {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0;
+}
+.legal-body { padding: 16px 0 96px; background: var(--paper); }
+.legal-prose { max-width: 760px; margin: 0 auto; }
+.legal-prose .legal-intro {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.85);
+    margin: 0 0 36px;
+}
+.legal-prose h2 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 72;
+    font-size: clamp(21px, 2.3vw, 27px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 46px 0 14px;
+}
+.legal-prose h3 {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 28px 0 10px;
+}
+.legal-prose p {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.82);
+    margin: 0 0 16px;
+}
+.legal-prose ul { margin: 0 0 18px; padding: 0; list-style: none; }
+.legal-prose li {
+    position: relative;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.82);
+    padding-left: 22px;
+    margin-bottom: 10px;
+}
+.legal-prose li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+}
+.legal-prose a { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
+.legal-contact { font-style: normal; line-height: 1.8; color: rgba(30, 53, 82, 0.82); }
+@media (max-width: 720px) { .legal-hero { padding: 130px 0 32px; } }
+
+/* =================================================================
+   Services page-link CTA on the homepage (under How We Work)
+   ================================================================= */
+.services-page-link {
+    margin-top: 64px;
+    text-align: center;
+}
+
+/* =================================================================
+   Services page — hero, packages, a-la-carte, process, FAQ, close
+   ================================================================= */
+
+/* Hero — full-bleed cinematic image with title overlay */
+.services-hero-bleed {
+    position: relative;
+    width: 100%;
+    height: clamp(560px, 78vh, 820px);
+    overflow: hidden;
+    background: var(--ink);
+}
+
+.services-hero-bleed-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.services-hero-bleed-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.services-hero-bleed-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(30, 53, 82, 0.25) 0%, rgba(30, 53, 82, 0) 40%, rgba(30, 53, 82, 0.45) 100%);
+    pointer-events: none;
+}
+
+.services-hero-bleed-inner {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 72px;
+    color: var(--paper);
+}
+
+.services-hero-bleed-kicker {
+    color: var(--paper);
+    margin-bottom: 20px;
+}
+
+.services-hero-bleed-kicker .kicker-line {
+    background: rgba(255, 251, 240, 0.7);
+}
+
+.services-hero-bleed-kicker span:last-child {
+    color: rgba(255, 251, 240, 0.92);
+}
+
+.services-hero-bleed-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(52px, 6.4vw, 92px);
+    line-height: 1.0;
+    letter-spacing: -0.022em;
+    color: var(--paper);
+    margin: 0;
+    max-width: 880px;
+    text-wrap: balance;
+    text-shadow: 0 2px 24px rgba(30, 53, 82, 0.32);
+}
+
+.services-hero-bleed-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255, 251, 240, 0.85);
+}
+
+/* Intro band — lede + CTA, sits directly under the hero */
+.services-intro {
+    padding: 72px 0 56px;
+    background: var(--paper);
+    text-align: center;
+}
+
+.services-intro-inner {
+    max-width: 820px;
+}
+
+.services-intro-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.82);
+    margin: 0 auto 32px;
+    text-wrap: pretty;
+}
+
+.services-intro-cta {
+    /* relies on cta-primary base */
+}
+
+/* Pricing comparison — at-a-glance row above the bands */
+.pricing-compare {
+    padding: 72px 0 24px;
+    background: var(--paper);
+}
+
+.compare-grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.compare-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px 28px;
+    border-right: 1px solid rgba(199, 174, 138, 0.32);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.3s ease;
+}
+
+.compare-col:last-child {
+    border-right: none;
+}
+
+.compare-col:hover {
+    background: rgba(199, 174, 138, 0.06);
+}
+
+.compare-col--signature {
+    background: rgba(183, 151, 112, 0.08);
+}
+
+.compare-col--signature:hover {
+    background: rgba(183, 151, 112, 0.12);
+}
+
+.compare-flag {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--gold);
+    padding: 5px 10px 4px;
+    margin-bottom: 12px;
+    border-radius: 1px;
+}
+
+.compare-num {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+.compare-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 19px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 8px;
+    letter-spacing: -0.005em;
+}
+
+.compare-best {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(30, 53, 82, 0.65);
+    margin: 0 0 20px;
+    flex: 1;
+}
+
+.compare-pricing {
+    margin: 0 0 20px;
+    padding: 0;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.compare-pricing > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid rgba(199, 174, 138, 0.18);
+}
+
+.compare-pricing > div:last-child {
+    border-bottom: none;
+}
+
+.compare-pricing dt {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+    margin: 0;
+}
+
+.compare-pricing dd {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--ink);
+    margin: 0;
+}
+
+.compare-free {
+    color: var(--gold);
+}
+
+.compare-cta {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: auto;
+    transition: color 0.25s ease;
+}
+
+.compare-col:hover .compare-cta {
+    color: var(--ink);
+}
+
+/* Shared section headline used across multiple services-page sections */
+.section-headline {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 24px 0 64px;
+    text-wrap: balance;
+}
+
+.section-headline em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+/* Planning packages */
+.packages {
+    padding: 96px 0;
+    background: var(--bone);
+}
+
+.package {
+    padding: 88px 0;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px;
+    align-items: center;
+}
+
+.package:first-of-type { margin-top: 32px; }
+.package:last-of-type { border-bottom: 1px solid rgba(199, 174, 138, 0.45); }
+
+/* Zigzag — image alternates side every package */
+.package-image { order: 1; }
+.package-content { order: 2; }
+
+.package:nth-of-type(even) .package-image { order: 2; }
+.package:nth-of-type(even) .package-content { order: 1; }
+
+.package-image {
+    /* The figure is just a wrapper now — the 4:5 frame + optional caption
+       live inside as separate children so the caption can sit beneath the
+       image without breaking the aspect-ratio container. */
+    margin: 0;
+}
+
+.package-image-frame {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--bone-warm, #efe7d6);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.package-image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-out, ease);
+}
+
+.package:hover .package-image-frame img {
+    transform: scale(1.02);
+}
+
+/* Editorial caption beneath the framed image — italic serif, muted ink,
+   gold underlined link. Only renders when a <figcaption> is present. */
+.package-image-caption {
+    margin: 14px 4px 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    color: rgba(30, 53, 82, 0.6);
+}
+
+.package-image-caption a {
+    color: var(--gold);
+    border-bottom: 1px solid rgba(183, 151, 112, 0.4);
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.package-image-caption a:hover {
+    color: var(--ink);
+    border-bottom-color: rgba(30, 53, 82, 0.45);
+}
+
+.package-content {
+    display: block;
+}
+
+.package-meta {
+    margin-bottom: 40px;
+}
+
+/* Signature service badge (Package 3) */
+.package-badge {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--gold);
+    padding: 6px 14px 5px;
+    margin-bottom: 18px;
+    border-radius: 1px;
+}
+
+/* Elevated signature treatment — Package 3 is the conversion hero */
+.package--signature {
+    position: relative;
+    background: linear-gradient(180deg, rgba(195, 162, 106, 0.12), rgba(195, 162, 106, 0.04));
+    border-top: 3px solid var(--gold);
+    padding: 88px 48px;
+    margin: 24px -48px;
+}
+
+.package--signature::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(199, 174, 138, 0.32);
+    border-top: none;
+}
+
+/* Per-package CTA — secondary button style */
+.cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding: 14px 24px;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(30, 53, 82, 0.45);
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.cta-secondary:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+}
+
+.cta-secondary svg {
+    transition: transform 0.3s var(--ease-out, ease);
+}
+
+.cta-secondary:hover svg {
+    transform: translateX(4px);
+}
+
+.package-cta--gold {
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.package-cta--gold:hover {
+    background: var(--gold);
+    color: var(--paper);
+    border-color: var(--gold);
+}
+
+/* Inline pull-quote between package bands */
+.package-pullquote {
+    margin: 24px auto;
+    padding: 32px 0;
+    max-width: 780px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(20px, 1.9vw, 26px);
+    line-height: 1.45;
+    color: var(--gold);
+    text-align: center;
+    text-wrap: balance;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.package-pullquote cite {
+    display: block;
+    margin-top: 14px;
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+/* Hero quote band — full-width testimonial below the signature tier */
+.testimonial-hero {
+    margin: 56px 0;
+    padding: 72px 48px;
+    background: var(--paper);
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.testimonial-hero-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.testimonial-hero-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 28px;
+}
+
+.testimonial-hero-quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 32px;
+    text-wrap: balance;
+}
+
+.testimonial-hero-attr {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.testimonial-hero-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.testimonial-hero-trip {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+/* Testimonials 3-up grid */
+.testimonials-grid-section {
+    padding: 96px 0;
+    background: var(--paper);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+}
+
+.testimonial-card {
+    margin: 0;
+    padding: 32px;
+    background: #fff;
+    border: 1px solid rgba(199, 174, 138, 0.22);
+    border-radius: 3px;
+    box-shadow: 0 18px 44px rgba(30, 53, 82, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.testimonial-photo {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    margin-bottom: 24px;
+    overflow: hidden;
+    background: rgba(199, 174, 138, 0.32);
+}
+
+.testimonial-photo--placeholder {
+    background: linear-gradient(135deg, rgba(183, 151, 112, 0.25), rgba(199, 174, 138, 0.15));
+}
+
+.testimonial-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.testimonial-card blockquote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 24px;
+    text-wrap: pretty;
+}
+
+.testimonial-card figcaption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+}
+
+.testimonial-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.testimonial-trip {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+.package-num {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+}
+
+.package-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 80;
+    font-size: clamp(26px, 2.4vw, 32px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 16px;
+    text-wrap: balance;
+}
+
+.package-tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.72);
+    margin: 0;
+    text-wrap: pretty;
+}
+
+.package-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+}
+
+.package-list li {
+    position: relative;
+    padding: 12px 0 12px 26px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.85);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.28);
+}
+
+.package-list li:last-child { border-bottom: none; }
+
+.package-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background: var(--gold);
+    transform: translateY(-50%);
+}
+
+.package-pricing {
+    padding-top: 24px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.package-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.package-price-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+.package-price-value {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 1.6vw, 22px);
+    color: var(--ink);
+}
+
+.package-price-value--free {
+    color: var(--gold);
+}
+
+.packages-footnote {
+    margin: 56px auto 0;
+    max-width: 780px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.6);
+    text-align: center;
+}
+
+.package-description {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.package-description p {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 0 14px;
+    text-wrap: pretty;
+}
+
+.package-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* A-la-carte grid */
+.alacarte {
+    padding: 96px 0;
+    background: var(--paper);
+}
+
+.alacarte-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px 48px;
+}
+
+.alacarte-item {
+    padding-top: 28px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.alacarte-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 14px;
+    letter-spacing: -0.005em;
+}
+
+.alacarte-body {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 0 18px;
+    text-wrap: pretty;
+}
+
+.alacarte-price {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    margin: 0;
+}
+
+.alacarte-price span {
+    color: rgba(30, 53, 82, 0.5);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+/* Process flow */
+.process {
+    padding: 96px 0;
+    background: var(--bone);
+}
+
+.process-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.process-step {
+    padding-top: 28px;
+    border-top: 1px solid rgba(199, 174, 138, 0.55);
+}
+
+.process-num {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+}
+
+.process-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 12px;
+    letter-spacing: -0.005em;
+}
+
+.process-body {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0;
+    text-wrap: pretty;
+}
+
+/* FAQ */
+.faq {
+    padding: 96px 0;
+    background: var(--paper);
+}
+
+.faq-list {
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.faq-item:first-of-type { border-top: 1px solid rgba(199, 174, 138, 0.45); }
+
+.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 26px 0;
+    transition: color 0.25s ease;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-q {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 60;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.35;
+    color: var(--ink);
+    text-wrap: balance;
+}
+
+.faq-chevron {
+    font-family: var(--font-sans);
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.3s var(--ease-out, ease);
+}
+
+.faq-item[open] .faq-chevron {
+    transform: rotate(45deg);
+}
+
+.faq-a {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+    padding: 0 64px 28px 0;
+    margin: 0;
+    text-wrap: pretty;
+}
+
+.faq-list-inner {
+    list-style: none;
+    padding: 16px 0 0;
+    margin: 0;
+}
+
+.faq-list-inner li {
+    position: relative;
+    padding: 8px 0 8px 22px;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+.faq-list-inner li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 8px;
+    height: 1px;
+    background: var(--gold);
+    transform: translateY(-50%);
+}
+
+.faq-list-inner strong {
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ink);
+}
+
+/* Closing CTA — mirrors journey-close pattern */
+.services-close {
+    padding: 96px 0;
+    background: var(--bone);
+}
+
+.services-close-inner {
+    text-align: center;
+}
+
+.services-close-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 24px;
+}
+
+.services-close-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 auto 36px;
+    max-width: 600px;
+    text-wrap: pretty;
+}
+
+/* Responsive — services page */
+@media (max-width: 900px) {
+    .alacarte-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-grid { grid-template-columns: repeat(2, 1fr); }
+    .package { grid-template-columns: 1fr; gap: 40px; padding: 56px 0; }
+    .package-image,
+    .package:nth-of-type(even) .package-image { order: 1; }
+    .package-content,
+    .package:nth-of-type(even) .package-content { order: 2; }
+    .package--signature { padding: 48px 24px; margin: 16px 0; }
+    .services-hero-bleed { height: clamp(440px, 70vh, 600px); }
+    .services-hero-bleed-inner { padding-bottom: 56px; }
+    .services-intro { padding: 56px 0 40px; }
+    .compare-grid { grid-template-columns: repeat(2, 1fr); }
+    .compare-col:nth-child(2) { border-right: none; }
+    .compare-col:nth-child(-n+2) { border-bottom: 1px solid rgba(199, 174, 138, 0.32); }
+    .testimonials-grid { grid-template-columns: 1fr; gap: 28px; }
+    .testimonial-hero { padding: 56px 24px; margin: 32px 0; }
+}
+
+@media (max-width: 640px) {
+    .services-hero { padding: 140px 0 48px; }
+    .packages, .alacarte, .process, .faq, .services-close { padding: 64px 0; }
+    .alacarte-grid { grid-template-columns: 1fr; gap: 40px; }
+    .process-grid { grid-template-columns: 1fr; gap: 36px; }
+    .package { padding: 36px 0; }
+    .faq-a { padding-right: 0; }
+}
+
+/* =================================================================
+   Services page — crisp white palette override
+   Overrides --paper / --bone for a Modern-Traveler-style white treatment
+   on the services page only (scoped via body.is-services-page).
+   ================================================================= */
+.is-services-page {
+    --paper: #FCFCFB;
+    --bone: #F7F2EB;
+    --bone-warm: #F1EBDE;
+    background: #FCFCFB;
+}
+
+/* Soften the gold so it still reads as champagne against the crisp white */
+.is-services-page .package-badge,
+.is-services-page .compare-flag {
+    background: #C3A26A;
+}
+
+/* Hairline borders read sharper on crisp white — tighten opacity for clean edges */
+.is-services-page .compare-grid,
+.is-services-page .compare-col,
+.is-services-page .package,
+.is-services-page .faq-item,
+.is-services-page .testimonial-card {
+    border-color: rgba(199, 174, 138, 0.55);
+}
+
+/* Crisp-white skin (matches the homepage): the former cream bands —
+   packages / process / services-close / partner strip — become crisp white.
+   Only the Full-Service package keeps a tinted highlight (.package--signature). */
+.is-services-page .packages,
+.is-services-page .process,
+.is-services-page .services-close,
+.is-services-page .package-partners {
+    background: transparent;
+}
+
+/* Testimonial cards stay solid white (like the homepage) so quotes read crisp */
+.is-services-page .testimonial-card {
+    background: #FFFFFF;
+}
+
+/* Keep the Full-Service package's gold top border bold — the hairline rule above
+   would otherwise mute it — so it clearly reads as the signature service */
+.is-services-page .package--signature {
+    border-top-color: var(--gold);
+}
+
+/* ---- Whole-page type scale-up (services page) -----------------------------
+   Everything reads larger — body copy, ledes, display headings, and labels —
+   with proportions preserved. (Hero title left at its existing display size.) */
+
+/* Body copy */
+.is-services-page .package-description p { font-size: 19px; }
+.is-services-page .package-tagline       { font-size: 20px; }
+.is-services-page .package-list li        { font-size: 19px; }
+.is-services-page .package-value-copy     { font-size: 18px; }
+.is-services-page .packages-footnote      { font-size: 16px; }
+.is-services-page .compare-best           { font-size: 16px; }
+.is-services-page .compare-pricing dd     { font-size: 18px; }
+.is-services-page .package-image-caption  { font-size: 15px; }
+.is-services-page .process-body           { font-size: 19px; }
+.is-services-page .alacarte-body          { font-size: 19px; }
+.is-services-page .alacarte-price         { font-size: 15px; }
+.is-services-page .faq-a                  { font-size: 19px; }
+.is-services-page .faq-list-inner li      { font-size: 18px; }
+
+/* Ledes */
+.is-services-page .services-intro-lede { font-size: clamp(20px, 1.9vw, 26px); }
+.is-services-page .services-close-lede { font-size: clamp(19px, 1.7vw, 23px); }
+
+/* Display headings — scaled up, ratio preserved */
+.is-services-page .package-name          { font-size: clamp(30px, 2.9vw, 40px); }
+.is-services-page .compare-name           { font-size: 22px; }
+.is-services-page .package-pullquote      { font-size: clamp(23px, 2.2vw, 30px); }
+.is-services-page .faq-q                  { font-size: clamp(21px, 1.9vw, 26px); }
+.is-services-page .package-value-headline { font-size: clamp(21px, 1.9vw, 26px); }
+.is-services-page .package-price-value    { font-size: clamp(21px, 1.9vw, 26px); }
+
+/* Uppercase labels / kickers — nudged up a touch */
+.is-services-page .compare-flag,
+.is-services-page .compare-num,
+.is-services-page .compare-pricing dt,
+.is-services-page .package-badge { font-size: 11px; }
+.is-services-page .compare-cta,
+.is-services-page .package-num,
+.is-services-page .package-price-label,
+.is-services-page .package-list-label,
+.is-services-page .package-partners-label,
+.is-services-page .process-num,
+.is-services-page .package-pullquote cite { font-size: 12px; }
+
+/* =================================================================
+   Services page additions — value callout, list label, mini marquee,
+   per-package partners
+   ================================================================= */
+.package-value-callout {
+    margin: 0 0 32px;
+    padding: 22px 24px;
+    background: rgba(183, 151, 112, 0.10);
+    border-left: 3px solid var(--gold);
+}
+
+.package-value-headline {
+    margin: 0 0 8px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+.package-value-copy {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+}
+
+.package-list-label {
+    margin: 0 0 18px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+/* Mini partners marquee inside the packages section */
+.package-partners {
+    margin: 56px -24px 24px;
+    padding: 36px 0;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+    background: var(--paper);
+}
+
+.package-partners-label {
+    margin: 0 0 28px;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* =================================================================
+   Inquire pages — shared form layout
+   ================================================================= */
+.is-inquire-page {
+    background: var(--paper);
+}
+
+.inquire-hero {
+    padding: 160px 0 56px;
+    background: var(--paper);
+}
+
+.inquire-hero-inner {
+    max-width: 820px;
+}
+
+.inquire-hero-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(40px, 4.8vw, 68px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 24px 0 32px;
+    text-wrap: balance;
+}
+
+.inquire-hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.inquire-hero-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.82);
+    margin: 0 0 28px;
+    text-wrap: pretty;
+}
+
+.inquire-hero-note {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: rgba(30, 53, 82, 0.62);
+    margin: 0;
+}
+
+.inquire-hero-note em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(30, 53, 82, 0.7);
+    margin-right: 8px;
+}
+
+.inquire-hero-note a {
+    color: var(--gold);
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(183, 151, 112, 0.45);
+    padding-bottom: 2px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.inquire-hero-note a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+/* Form section */
+.inquire-form-section {
+    padding: 24px 0 120px;
+    background: var(--paper);
+}
+
+.inquire-form-container {
+    max-width: 820px;
+}
+
+.inquire-form {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+}
+
+.inquire-fieldset {
+    margin: 0;
+    padding: 32px 0 0;
+    border: none;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.inquire-legend {
+    padding: 0;
+    margin: 0 0 24px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.inquire-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.inquire-field {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inquire-row .inquire-field {
+    margin-bottom: 0;
+}
+
+.inquire-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.72);
+}
+
+.inquire-label span {
+    color: var(--gold);
+    margin-left: 2px;
+}
+
+.inquire-input,
+.inquire-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--ink);
+    background: var(--ivory);
+    border: 1px solid rgba(199, 174, 138, 0.55);
+    border-radius: 0;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.inquire-input:focus,
+.inquire-textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: var(--paper);
+}
+
+.inquire-textarea {
+    font-family: var(--font-serif);
+    line-height: 1.55;
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Make selects look like the other inputs (drop default chrome) */
+select.inquire-input {
+    background-image:
+        linear-gradient(45deg, transparent 50%, rgba(30, 53, 82, 0.55) 50%),
+        linear-gradient(135deg, rgba(30, 53, 82, 0.55) 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) 50%,
+        calc(100% - 14px) 50%;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 40px;
+}
+
+.inquire-submit-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(199, 174, 138, 0.45);
+}
+
+.inquire-submit {
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-style: italic;
+    background: transparent;
+}
+
+.inquire-submit-note {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(30, 53, 82, 0.55);
+}
+
+/* Checkbox rows — consent + newsletter opt-in */
+.inquire-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.inquire-field.inquire-check {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 0;
+}
+.inquire-check input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 3px 0 0;
+    accent-color: var(--gold);
+    cursor: pointer;
+}
+.inquire-check-text {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.82);
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: normal;
+}
+.inquire-check-text span {
+    color: var(--gold);
+    margin-left: 2px;
+}
+
+/* Inline help note under a field (e.g., where to forward a booking confirmation) */
+.inquire-field-note {
+    margin: 2px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.7);
+}
+.inquire-field-note a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold-faint);
+    transition: color 0.2s ease;
+}
+.inquire-field-note a:hover {
+    color: var(--ink);
+}
+
+/* Formspree — hidden honeypot, success + error states */
+.inquire-hp {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+}
+.inquire-success {
+    text-align: center;
+    padding: 56px 36px;
+    background: var(--ivory);
+    border: 1px solid rgba(199, 174, 138, 0.4);
+}
+.inquire-success-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0 0 14px;
+}
+.inquire-success-body {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.75);
+    max-width: 460px;
+    margin: 0 auto;
+}
+.inquire-error {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--terracotta);
+    margin: 0;
+}
+
+/* Responsive — inquire pages */
+@media (max-width: 720px) {
+    .inquire-hero { padding: 120px 0 32px; }
+    .inquire-row { grid-template-columns: 1fr; gap: 0; }
+    .inquire-row .inquire-field { margin-bottom: 24px; }
+}
+
+/* ==========================================================================
+   §05 — Journal / Recently on the blog
+   Cream paper background. Sits between Services (white) and Founder (cream).
+   Three editorial cards — image, eyebrow + read-time, title, dek, CTA.
+   ========================================================================== */
+
+.journal {
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 120px 0 130px;
+    overflow: hidden;
+}
+
+.journal-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 80px;
+}
+
+.journal-head .kicker {
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.journal-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    margin: 0 auto 26px;
+    text-wrap: balance;
+}
+
+.journal-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.journal-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.74);
+    letter-spacing: 0.005em;
+    max-width: 540px;
+    margin: 0 auto;
+    text-wrap: balance;
+}
+
+.journal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+}
+
+.journal-card {
+    /* Reset default <article> spacing */
+    margin: 0;
+}
+
+.journal-card-link {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.journal-card-link:hover {
+    transform: translateY(-4px);
+}
+
+.journal-card-image {
+    margin: 0 0 22px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bone-warm);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.journal-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.journal-card-link:hover .journal-card-image img {
+    transform: scale(1.04);
+}
+
+.journal-card-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.journal-card-category {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.journal-card-dot {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(199, 174, 138, 0.6);
+}
+
+.journal-card-readtime {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: rgba(30, 53, 82, 0.55);
+    letter-spacing: 0.01em;
+}
+
+.journal-card-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(22px, 2.1vw, 28px);
+    line-height: 1.16;
+    letter-spacing: -0.013em;
+    color: var(--ink);
+    margin: 0 0 14px;
+    text-wrap: balance;
+}
+
+.journal-card-dek {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.72);
+    letter-spacing: 0.005em;
+    margin: 0 0 20px;
+}
+
+.journal-card-cta {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s ease;
+    margin-top: auto; /* aligns CTAs across cards even when dek lengths differ */
+}
+
+.journal-card-link:hover .journal-card-cta {
+    color: var(--ink);
+}
+
+@media (max-width: 980px) {
+    .journal { padding: 96px 0 104px; }
+    .journal-head { margin-bottom: 64px; }
+    .journal-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    /* On 2-column layouts, the orphan third card spans both columns and
+       displays a wider image so it doesn't read as a stranded mistake. */
+    .journal-card:nth-child(3) {
+        grid-column: 1 / -1;
+        max-width: 560px;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .journal { padding: 80px 0 88px; }
+    .journal-grid { grid-template-columns: 1fr; gap: 48px; }
+    .journal-card:nth-child(3) { max-width: none; }
+}
+
+/* ==========================================================================
+   §07 — Testimonials / In their own words
+   Crisp white background. Sits between Founder (cream) and Brandmark
+   Close (cream) — breaks the cream-cream-cream tail and acts as social-
+   proof bookend after Wilson's "why clients return" claim.
+   ========================================================================== */
+
+.testimonials {
+    position: relative;
+    background: #FFFFFF;
+    color: var(--ink);
+    padding: 120px 0 130px;
+    overflow: hidden;
+}
+
+.testimonials-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 80px;
+}
+
+.testimonials-head .kicker {
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.testimonials-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(36px, 4.4vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    margin: 0 auto;
+    text-wrap: balance;
+}
+
+.testimonials-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+/* Homepage testimonials carousel — shows 3 cards at a time inside an
+   overflow-hidden viewport; prev/next arrows slide the track one card at a
+   time. Card count visible drops to 2 then 1 on smaller screens. */
+.testimonials-carousel {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.testimonials-viewport {
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.testimonials-track {
+    display: flex;
+    gap: 40px;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.testimonials-track .testimonial-card {
+    /* Exactly 3 cards fit the viewport: full width minus the two 40px gaps. */
+    flex: 0 0 calc((100% - 80px) / 3);
+}
+
+.testimonials-arrow {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.testimonials-arrow:hover {
+    background: var(--gold);
+    color: #FFFFFF;
+}
+
+.testimonials-arrow:disabled {
+    opacity: 0.28;
+    cursor: default;
+}
+
+.testimonials-arrow:disabled:hover {
+    background: transparent;
+    color: var(--gold);
+}
+
+.testimonial-card {
+    margin: 0;
+    background: #fff;
+    border: 1px solid rgba(199, 174, 138, 0.22);
+    border-radius: 3px;
+    box-shadow: 0 18px 44px rgba(30, 53, 82, 0.08);
+    padding: 44px 36px 36px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.testimonial-mark {
+    width: 28px;
+    height: 22px;
+    color: var(--gold);
+    opacity: 0.55;
+    margin-bottom: 22px;
+}
+
+.testimonial-quote {
+    margin: 0 0 26px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+    color: rgba(30, 53, 82, 0.84);
+    text-wrap: pretty;
+}
+
+.testimonial-attribution {
+    margin-top: auto; /* anchors attribution to bottom regardless of quote length */
+    padding-top: 22px;
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.testimonial-name {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+}
+
+.testimonial-context {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+}
+
+@media (max-width: 980px) {
+    .testimonials { padding: 96px 0 104px; }
+    .testimonials-head { margin-bottom: 64px; }
+    /* 2 cards visible — full width minus one 40px gap */
+    .testimonials-track .testimonial-card { flex-basis: calc((100% - 40px) / 2); }
+}
+
+@media (max-width: 640px) {
+    .testimonials { padding: 80px 0 88px; }
+    .testimonial-card { padding: 36px 28px 30px; }
+    .testimonial-quote { font-size: 18px; }
+    /* 1 card visible */
+    .testimonials-track .testimonial-card { flex-basis: 100%; }
+    .testimonials-carousel { gap: 10px; }
+    .testimonials-arrow { width: 40px; height: 40px; }
+}
+
+/* ==========================================================================
+   Inspiration — searchable blog index
+   ========================================================================== */
+.is-inspiration-page { background: var(--paper); }
+
+.inspo-hero {
+    padding: 160px 0 48px;
+    text-align: center;
+    background: var(--paper);
+}
+
+.inspo-hero-inner { max-width: 720px; margin: 0 auto; }
+
+.inspo-hero .kicker { justify-content: center; margin-bottom: 28px; }
+
+.inspo-hero-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(40px, 5.4vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.024em;
+    color: var(--ink);
+    margin: 0 0 24px;
+}
+
+.inspo-hero-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+
+.inspo-hero-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.74);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    text-wrap: balance;
+}
+
+/* Search box */
+.inspo-search {
+    position: relative;
+    max-width: 460px;
+    margin: 0 auto 28px;
+}
+
+.inspo-search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    pointer-events: none;
+}
+
+.inspo-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 18px 14px 46px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--ink);
+    background: #FFFFFF;
+    border: 1px solid rgba(199, 174, 138, 0.55);
+    border-radius: 999px;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.inspo-search-input::placeholder { color: rgba(30, 53, 82, 0.4); }
+
+.inspo-search-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(183, 151, 112, 0.18);
+}
+
+/* Tag chips */
+.inspo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Two-row filter system on the inspiration page: location + trip type */
+.inspo-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 4px;
+}
+.inspo-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+.inspo-filter-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.55);
+    flex: 0 0 auto;
+}
+.inspo-filter-row .inspo-tags {
+    justify-content: flex-start;
+}
+@media (max-width: 720px) {
+    .inspo-filter-row { flex-direction: column; gap: 8px; }
+    .inspo-filter-row .inspo-tags { justify-content: center; }
+}
+
+.inspo-chip {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.6);
+    background: transparent;
+    border: 1px solid rgba(199, 174, 138, 0.5);
+    border-radius: 999px;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.inspo-chip:hover { border-color: var(--gold); color: var(--ink); }
+
+.inspo-chip.is-active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #FFFFFF;
+}
+
+/* Card grid */
+.inspo-grid-section { padding: 40px 0 120px; }
+
+.inspo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 48px;
+}
+
+.inspo-card {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.inspo-card:hover { transform: translateY(-5px); }
+
+.inspo-card-image {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--bone-warm);
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+
+.inspo-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.inspo-card:hover .inspo-card-image img { transform: scale(1.04); }
+
+.inspo-card-scrim {
+    position: absolute;
+    inset: 0;
+    /* Smooth dark-at-bottom gradient: keeps the photo readable up top while
+       guaranteeing the title sits on near-black. Eased multi-stop avoids the
+       hard "band line" a 2-stop gradient creates over bright skies/beaches. */
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10, 8, 6, 0) 0%,
+            rgba(10, 8, 6, 0.04) 30%,
+            rgba(10, 8, 6, 0.22) 50%,
+            rgba(10, 8, 6, 0.55) 72%,
+            rgba(10, 8, 6, 0.82) 88%,
+            rgba(10, 8, 6, 0.92) 100%
+        );
+}
+
+.inspo-card-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 26px 26px 24px;
+}
+
+.inspo-card-eyebrow {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.92);
+    margin-bottom: 10px;
+    /* Tight shadow ring so eyebrow stays crisp even on bright backgrounds */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 0, 0, 0.35);
+}
+
+.inspo-card-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(22px, 2.2vw, 27px);
+    line-height: 1.14;
+    letter-spacing: -0.012em;
+    color: #FFFFFF;
+    margin: 0;
+    text-wrap: balance;
+    /* Layered shadow: a soft halo (carves contrast against bright skies/beaches)
+       + a tight drop (sharpens letterforms over busy backgrounds). */
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.55),
+        0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.inspo-card-foot { padding: 20px 2px 0; }
+
+.inspo-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 12px;
+}
+
+.inspo-card-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(199, 174, 138, 0.6);
+}
+
+.inspo-card-dek {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.72);
+    margin: 0 0 16px;
+}
+
+.inspo-card-readmore {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    transition: color 0.3s ease;
+}
+
+.inspo-card:hover .inspo-card-readmore { color: var(--ink); }
+
+.inspo-no-results {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(30, 53, 82, 0.6);
+    padding: 40px 0;
+}
+
+@media (max-width: 720px) {
+    .inspo-hero { padding: 130px 0 40px; }
+    .inspo-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ==========================================================================
+   Article (post.html) — full blog post
+   ========================================================================== */
+.is-article-page { background: var(--paper); }
+
+.article-hero {
+    position: relative;
+    min-height: 62vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.article-hero-bg { position: absolute; inset: 0; z-index: 0; }
+
+.article-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.article-hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 16, 12, 0.28) 0%, rgba(20, 16, 12, 0.18) 40%, rgba(20, 16, 12, 0.78) 100%);
+}
+
+.article-hero-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: clamp(900px, 86vw, 1400px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) min(100%, 780px) minmax(0, 1fr);
+    padding-top: 120px;
+    padding-bottom: 56px;
+    color: #FFFFFF;
+}
+.article-hero-inner > * { grid-column: 2; }
+
+.article-hero-back {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.82);
+    margin-bottom: 24px;
+    transition: color 0.25s ease;
+}
+.article-hero-back:hover { color: #FFFFFF; }
+
+.article-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.82);
+    margin: 0 0 18px;
+}
+
+.article-hero-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold-soft); }
+
+.article-hero-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(36px, 5.2vw, 78px);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: #FFFFFF;
+    margin: 0 0 22px;
+    max-width: 16ch;
+    text-wrap: balance;
+}
+
+.article-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.article-tag a {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.9);
+    border: 1px solid rgba(255, 251, 240, 0.4);
+    border-radius: 999px;
+    padding: 7px 15px;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.article-tag a:hover { background: #FFFFFF; color: var(--ink); border-color: #FFFFFF; }
+
+/* Article body — readable prose measure */
+.article-section { padding: clamp(56px, 5vw, 104px) 0 clamp(72px, 7vw, 128px); }
+
+.article-container { max-width: clamp(900px, 86vw, 1400px); margin: 0 auto; }
+
+/* Best-in-class reading layout: body text holds an optimal ~73ch measure,
+   while figures break out wider for an immersive, image-led post. */
+.article-body {
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) min(100%, 780px) minmax(0, 1fr);
+}
+.article-body > * { grid-column: 2; }
+.article-body > figure { grid-column: 1 / -1; }
+
+.article-body h2 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    /* Tightened top so the h2→h3 ratio is less dramatic (some posts use h2 for
+       hotel names where others use h3 — keeping them visually closer reads
+       more uniform across the blog). */
+    font-size: clamp(28px, 2.95vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 56px 0 20px;
+    text-wrap: balance;
+}
+
+.article-body h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-variation-settings: "opsz" 80;
+    /* Bumped from clamp(20px, 2.1vw, 25px). h3 was only ~4px above body copy
+       which made hotel section headings feel underpowered. */
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 42px 0 14px;
+    text-wrap: balance;
+}
+
+/* h3 immediately following an h2 (sub-section under a section head) gets a
+   reduced top margin so the heading pair reads as a unit, not two beats. */
+.article-body h2 + h3 { margin-top: 18px; }
+
+.article-body p {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(18px, 0.65vw + 0.78rem, 21px);
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.86);
+    margin: 0 0 22px;
+}
+
+.article-body ul {
+    margin: 0 0 24px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.article-body li {
+    position: relative;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(17px, 0.6vw + 0.74rem, 20px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.86);
+    padding-left: 26px;
+    margin-bottom: 11px;
+}
+
+.article-body li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+}
+
+.article-body strong { font-weight: 600; color: var(--ink); }
+.article-body em { font-style: italic; }
+
+/* Inline hotel links (point to Virtuoso pages) */
+.article-body a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(183, 151, 112, 0.45);
+    transition: color 0.25s ease, border-color 0.25s ease;
+}
+.article-body a:hover { color: var(--ink); border-bottom-color: rgba(30, 53, 82, 0.45); }
+
+/* Inline photos */
+.article-body figure {
+    margin: 34px 0;
+}
+.article-body figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid rgba(199, 174, 138, 0.32);
+}
+.article-body figure figcaption {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: rgba(30, 53, 82, 0.55);
+    margin-top: 10px;
+    text-align: center;
+}
+
+.article-body h2:first-child,
+.article-body h3:first-child { margin-top: 0; }
+
+/* Article closing CTA */
+.article-cta {
+    margin-top: 64px;
+    padding: 48px 40px;
+    background: #FFFFFF;
+    border: 1px solid rgba(199, 174, 138, 0.45);
+    text-align: center;
+}
+
+.article-cta-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 14px;
+}
+
+.article-cta-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0 0 14px;
+}
+
+.article-cta-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.72);
+    max-width: 460px;
+    margin: 0 auto 26px;
+}
+
+@media (max-width: 720px) {
+    .article-hero { min-height: 54vh; }
+    .article-cta { padding: 36px 24px; }
+}
+
+/* ==========================================================================
+   Journey page — added editorial elements (per-journey, data-driven)
+   ========================================================================== */
+
+/* Price-includes trust line under the hero price (light, over the image) */
+.journey-price-includes {
+    margin: 14px 0 4px;
+    max-width: 460px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(251, 247, 238, 0.82);
+}
+
+/* Label above the overview pull-quote (e.g. "WHY WE LOVE THIS JOURNEY") */
+.journey-pullquote-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 18px;
+}
+
+/* Per-property "Best for" / "Why we chose it" line in stay cards */
+.journey-stay-note {
+    margin: 12px 0 0;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.72);
+}
+.journey-stay-note-label {
+    display: inline;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-right: 7px;
+}
+
+/* "Why this journey is different" band */
+.journey-why {
+    padding: 76px 0;
+    background: var(--ivory);
+}
+.journey-why-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+.journey-why .kicker { justify-content: center; margin-bottom: 22px; }
+.journey-why-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 110;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 20px;
+    text-wrap: balance;
+}
+.journey-why-body {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.8);
+}
+
+/* "Why book through Wander" checklist section */
+.journey-whybook {
+    padding: 76px 0;
+    background: var(--paper);
+}
+.journey-whybook-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+.journey-whybook-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    margin: 0 0 16px;
+    text-wrap: balance;
+}
+.journey-whybook-intro {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.74);
+    margin: 0 0 30px;
+}
+.journey-whybook-list {
+    list-style: none;
+    margin: 0 auto 34px;
+    padding: 0;
+    display: inline-block;
+    text-align: left;
+}
+.journey-whybook-list li {
+    position: relative;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    padding-left: 30px;
+    margin-bottom: 15px;
+}
+.journey-whybook-list li::before {
+    content: "\2713"; /* check mark */
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: 700;
+}
+.journey-whybook-cta { margin-top: 4px; }
+
+/* ==========================================================================
+   Mood-board coastal refresh — HOMEPAGE ONLY (scoped to body.is-home)
+   A brighter, sun-drenched Mediterranean layer over the base design:
+   sea-teal + sun-gold accents, an awning-stripe kicker motif, and a lighter
+   hero. Self-contained so it's easy to tune or lift out. Globe colours live
+   in index.html (JS). — 2026-05-26
+   ========================================================================== */
+
+/* — Hero: let more sun through. Keep the left-side wash strong enough for the
+     headline + lede, but lift the overall darkening so the footage reads bright
+     and Mediterranean rather than moody. — */
+.is-home .hero-grain { opacity: 0.05; }
+.is-home .hero-gradient {
+    background:
+        linear-gradient(180deg,
+            rgba(14, 12, 10, 0.30) 0%,
+            rgba(14, 12, 10, 0.10) 28%,
+            rgba(14, 12, 10, 0.20) 60%,
+            rgba(14, 12, 10, 0.48) 84%,
+            rgba(14, 12, 10, 0.78) 100%),
+        linear-gradient(90deg,
+            rgba(14, 12, 10, 0.66) 0%,
+            rgba(14, 12, 10, 0.24) 52%,
+            rgba(14, 12, 10, 0)    100%);
+}
+.is-home .hero-vignette {
+    background: radial-gradient(ellipse 72% 62% at 30% 50%,
+        rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.20) 100%);
+}
+
+/* — Kicker eyebrow: a single fine hairline — restrained and chic. (The earlier
+     striped "awning" motif read as cheap, so it's gone.) — */
+.is-home .kicker-line {
+    width: 52px;
+    height: 1px;
+    background: var(--gold);
+}
+
+/* — Coastal accent recolouring. Sea leads; deeper lagoon tone where the text
+     is small so contrast on cream holds up. — */
+.is-home .atlas-hint            { color: var(--sea-deep); }
+.is-home .journal-card-category { color: var(--sea-deep); }
+.is-home .testimonial-mark      { color: var(--sea); opacity: 0.55; }
+.is-home .scroll-line::after    { background: var(--sea-soft); }
+
+/* CTA arrows + hover pick up the sea (body context, ink border default) */
+.is-home .cta-primary::after        { color: var(--sea); }
+.is-home .cta-primary:hover         { background: var(--sea-wash); border-color: var(--sea-deep); }
+.is-home .cta-primary:hover::after  { color: var(--sea-deep); transform: translateX(6px); }
+
+/* Hero CTA sits on dark footage — keep it luminous, arrow in shallow-sea */
+.is-home .hero .cta-primary::after       { color: var(--sea-soft); }
+.is-home .hero .cta-primary:hover        { background: var(--ivory); border-color: var(--ivory); color: var(--ink); }
+.is-home .hero .cta-primary:hover::after { color: var(--ink); }
+
+/* — Atlas: a faint lagoon wash so the new teal globe sits in 'water'
+     (transparent base lets the crisp-white canvas + texture show through). — */
+.is-home .atlas {
+    background:
+        radial-gradient(115% 75% at 50% 46%,
+            var(--sea-wash) 0%, rgba(46, 151, 163, 0) 62%),
+        transparent;
+}
+
+/* ==========================================================================
+   Round 2 — "Travel chic": script flourish, cinematic photo band, and
+   scroll-reveal motion. Homepage only.
+   ========================================================================== */
+
+/* — Benefits: copy + photo collage on a crisp white field, with the
+     preferred-partner marquee flowing on the same white (no choppy strip). — */
+.benefits { padding: clamp(84px, 11vw, 150px) 0 clamp(40px, 5vw, 64px); }
+.benefits-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+.benefits-copy { text-align: left; }
+.benefits-copy .partners-title { text-align: left; }
+.benefits-copy .partners-lede { margin-left: 0; margin-right: 0; max-width: 30em; }
+
+/* Photo collage — a clean two-column offset mosaic (no frames, no captions).
+   Each column staggers tall/short so the inner seam is offset for a collage
+   feel; object-fit crops gracefully to each slot. */
+.benefits-collage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+/* Blackstone script flourish — straddles the top-left corner of the collage,
+   handwritten-note style (placeholder copy; colour/position easy to tune). */
+.collage-script {
+    position: absolute;
+    top: -0.62em;
+    left: -6px;
+    z-index: 6;
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(36px, 3.6vw, 56px);
+    line-height: 1;
+    color: #1E3552; /* Deep Yacht Blue — brand palette */
+    transform: rotate(-5deg);
+    transform-origin: left center;
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 2px 18px rgba(252, 252, 251, 0.65);
+}
+.collage-col { display: flex; flex-direction: column; gap: 14px; }
+.collage-link {
+    display: block;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 16px 38px rgba(30, 53, 82, 0.12);
+    transition: transform 0.5s var(--ease-out), box-shadow 0.5s ease;
+}
+.collage-link--tall  { aspect-ratio: 3 / 4; }
+.collage-link--short { aspect-ratio: 4 / 3; }
+.collage-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s var(--ease-out);
+}
+/* Hover — the tile lifts slightly + the photo zooms within its frame */
+.collage-link:hover { transform: translateY(-5px); box-shadow: 0 30px 66px rgba(30, 53, 82, 0.22); }
+.collage-link:hover .collage-img { transform: scale(1.06); }
+.collage-link:focus-visible { outline: 2px solid var(--sea); outline-offset: 3px; }
+
+/* Marquee on the same white field — a single hairline, no boxed strip */
+.benefits-marquee {
+    margin-top: clamp(56px, 7vw, 104px);
+    padding: 38px 0 8px;
+    border-top: 1px solid var(--gold-faint);
+}
+
+/* Desktop — the copy pins (stays static) while the photo collage scrolls up
+   past it, then releases at the divider above the partner marquee. */
+@media (min-width: 861px) {
+    .benefits-grid { align-items: start; }
+    .benefits-copy {
+        position: sticky;
+        top: 132px;            /* clears the fixed header */
+        align-self: start;
+    }
+}
+
+/* — Scroll reveal — elements fade + rise as they enter view. — */
+@media (prefers-reduced-motion: no-preference) {
+    .is-home [data-reveal] {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+    }
+    .is-home [data-reveal].is-inview { opacity: 1; transform: none; }
+
+    /* Staggered children within a revealed group (cards, etc.) */
+    .is-home [data-reveal-group] > * {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 0.85s var(--ease-out), transform 0.85s var(--ease-out);
+    }
+    .is-home [data-reveal-group].is-inview > * { opacity: 1; transform: none; }
+    .is-home [data-reveal-group].is-inview > *:nth-child(2) { transition-delay: 0.09s; }
+    .is-home [data-reveal-group].is-inview > *:nth-child(3) { transition-delay: 0.18s; }
+    .is-home [data-reveal-group].is-inview > *:nth-child(4) { transition-delay: 0.27s; }
+    .is-home [data-reveal-group].is-inview > *:nth-child(5) { transition-delay: 0.36s; }
+    .is-home [data-reveal-group].is-inview > *:nth-child(6) { transition-delay: 0.45s; }
+}
+
+/* Benefits — stack to one column on mobile */
+@media (max-width: 860px) {
+    .benefits-grid { grid-template-columns: 1fr; gap: 44px; }
+    .benefits-copy { text-align: center; }
+    .benefits-copy .partners-title { text-align: center; }
+    .benefits-copy .kicker { justify-content: center; }
+    .benefits-copy .partners-lede { margin-left: auto; margin-right: auto; }
+    .benefits-collage { max-width: 520px; margin: 0 auto; }
+}
+
+/* ==========================================================================
+   Round 3 — crisp white canvas. Off the warm cream, onto a clean white field
+   with a whisper of flowing line-texture (a few soft sweeping curves) for
+   dimension — the "transparent designs overlaid" idea. Sections go transparent
+   so it reads as one continuous surface. Scoped .is-home (easy to roll out).
+   Texture opacity is intentionally light; trivially tunable. 2026-05-26
+   ========================================================================== */
+body.is-home {
+    background-color: #FCFCFB;
+    background-image: url("data:image/svg+xml,utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1100' height='760'><g fill='none' stroke='%23C9B08B' stroke-width='1.1' opacity='0.35'><path d='M-60 180 C260 70 620 300 1180 150'/><path d='M-60 340 C260 230 620 475 1180 320'/><path d='M-60 505 C260 400 620 650 1180 505'/><path d='M-60 665 C260 565 620 810 1180 685'/></g></svg>");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.is-home .benefits,
+.is-home .services,
+.is-home .journal,
+.is-home .founder,
+.is-home .testimonials,
+.is-home .brandmark-close { background: transparent; }
+
+/* — "What Booking Online Can't Do" — a faint travel photo washes behind the
+     content for depth, kept very transparent so the copy stays crisp.
+     (Image + opacity are easy to swap.) — */
+.is-home .services { position: relative; }
+.is-home .services::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("backgrounds/amanzoe-villa.jpg") center / cover no-repeat;
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
+}
+.is-home .services-inner { position: relative; z-index: 1; }
+
+/* CTA under the "Why book with us" copy */
+.benefits-cta { margin-top: 30px; }
+
+/* — Client testimonials — a faint Splendido/Portofino pool washes behind the
+     cards (kept very transparent; cards are opaque so copy stays crisp). — */
+.is-home .testimonials { position: relative; }
+.is-home .testimonials::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("backgrounds/splendido-pool.jpg") center / cover no-repeat;
+    opacity: 0.14;
+    z-index: 0;
+    pointer-events: none;
+}
+.is-home .testimonials-inner { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   BRAND PALETTE SKIN — homepage. Remaps the design tokens to the official
+   brand colors so every var()-driven element picks them up. Scoped to
+   .is-home (other pages keep the existing palette until rolled out).
+   Deep Yacht Blue #1E3552 · Vintage Gold #C3A26A · Ivory #F7F2EB ·
+   Seafoam #A9C6C3 · Coral #D78161 · Soft Sand #D9CBB6 · White #FFFFFF
+   ========================================================================== */
+body.is-home {
+    --ink:        #1E3552;   /* Deep Yacht Blue — the brand dark */
+    --gold:       #C3A26A;   /* Vintage Gold */
+    --gold-soft:  #D3B98C;   /* Vintage Gold, lighter */
+    --gold-faint: rgba(195, 162, 106, 0.5);
+    --sea:        #A9C6C3;   /* Seafoam */
+    --sea-soft:   #A9C6C3;   /* Seafoam */
+    --sea-deep:   #1E3552;   /* Deep Yacht Blue */
+    --sea-wash:   rgba(169, 198, 195, 0.12);
+    --sun:        #D78161;   /* Coral */
+    --terracotta: #D78161;   /* Coral */
+    --bone:       #D9CBB6;   /* Soft Sand */
+    --bone-warm:  #D9CBB6;   /* Soft Sand */
+    --paper:      #F7F2EB;   /* Ivory */
+    --ivory:      #F7F2EB;   /* Ivory (light-on-dark) */
+    --shell:      #FFFFFF;   /* White */
+}
+
+/* Body copy → deep yacht blue, so it sits with the navy headings */
+.is-home .partners-lede,
+.is-home .atlas-lede,
+.is-home .journal-lede,
+.is-home .services-lede,
+.is-home .founder-prose,
+.is-home .founder-prose p,
+.is-home .testimonial-quote {
+    color: rgba(30, 53, 82, 0.86);
+}
+
+/* ============================================================================
+   SITE-WIDE TYPE SCALE-UP — matches the approved services-page sizing.
+   Enlarges body copy, ledes, and mid-size headings across the rest of the site
+   (ratios preserved). Big display/hero titles keep their existing sizes.
+   Placed at the true end of the stylesheet so it wins by source order for
+   equal specificity over rules defined earlier (including those after the
+   is-services block).
+   ============================================================================ */
+
+/* — Homepage — */
+.partners-lede            { font-size: 22px; }
+.partners-note            { font-size: 16px; }
+.atlas-lede               { font-size: 24px; }
+.atlas-footnote           { font-size: 16px; }
+.atlas-hint               { font-size: clamp(15px, 1.1vw, 17px); }
+.services-lede            { font-size: 22px; }
+.service-title            { font-size: 28px; }
+.service-body             { font-size: 17px; }
+.journal-lede             { font-size: 22px; }
+.journal-card-title       { font-size: clamp(24px, 2.3vw, 30px); }
+.journal-card-dek         { font-size: 17px; }
+.journal-card-readtime    { font-size: 14px; }
+.founder-prose p          { font-size: 20px; }
+.founder-credential-title { font-size: 20px; }
+.testimonial-quote,
+.testimonial-card blockquote { font-size: 20px; }
+
+/* — Property / hotel pages — */
+.property-prose           { font-size: 20px; }
+.property-perks-list li   { font-size: 19px; }
+.property-perks-note      { font-size: 17px; }
+.property-close-lede      { font-size: 20px; }
+.property-fallback-lede,
+.property-interim-lede    { font-size: 20px; }
+.property-rate-value      { font-size: clamp(28px, 3.2vw, 38px); }
+.property-rate-tooltip    { font-size: 14px; }
+
+/* — Journey pages — */
+.journey-overview-prose,
+.journey-bestfor          { font-size: clamp(20px, 1.9vw, 24px); }
+.journey-tailor-body      { font-size: clamp(18px, 1.6vw, 21px); }
+.journey-leg-title        { font-size: 28px; }
+.journey-leg-stay         { font-size: 18px; }
+.journey-leg-desc         { font-size: 19px; }
+.journey-leg-tags li      { font-size: 16px; }
+.journey-stay-name        { font-size: 24px; }
+.journey-stay-nights      { font-size: 15px; }
+.journey-stay-desc        { font-size: 15px; }
+.journey-highlight-label  { font-size: 22px; }
+.journey-inclusions-heading { font-size: 28px; }
+.journey-inclusions-list li { font-size: 18px; }
+.journey-close-lede       { font-size: 20px; }
+.journey-why-body         { font-size: 20px; }
+.journey-whybook-intro,
+.journey-whybook-list li  { font-size: 18px; }
+
+/* — Index pages (journeys + hotels share these classes) — */
+.journeys-index-lede      { font-size: clamp(20px, 1.9vw, 24px); }
+.journeys-index-name      { font-size: clamp(28px, 2.8vw, 38px); }
+.journeys-index-stats     { font-size: 16px; }
+
+/* — Inspiration index — */
+.inspo-hero-lede          { font-size: 20px; }
+.inspo-card-title         { font-size: clamp(24px, 2.3vw, 30px); }
+.inspo-card-dek           { font-size: 16px; }
+.inspo-search-input       { font-size: 15px; }
+
+/* — Inquiry forms — */
+.inquire-hero-lede        { font-size: clamp(19px, 1.7vw, 23px); }
+.inquire-hero-note,
+.inquire-hero-note em     { font-size: 16px; }
+.inquire-input,
+.inquire-textarea         { font-size: 17px; }
+.inquire-check-text       { font-size: 16px; }
+.inquire-field-note       { font-size: 15px; }
+.inquire-submit-note      { font-size: 14px; }
+
+/* — Legal pages — */
+.legal-prose p,
+.legal-prose li           { font-size: 18px; }

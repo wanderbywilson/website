@@ -1,0 +1,12 @@
+# Internal project documentation — kept in repo for history, not deployed publicly
+SITE-NOTES.md
+DEPLOY.md
+
+# Internal design / brand tools — not for public site
+brand-kit.html
+brand-kit-print.html
+brandmark-studio.html
+
+# Backups (already gitignored but extra safety)
+*.bak
+*.bak-*

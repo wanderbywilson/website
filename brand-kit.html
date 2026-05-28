@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wander by Wilson — Brand Kit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Blackstone — Wilson's licensed script (local, not a web font) */
+        @font-face {
+            font-family: 'Blackstone';
+            src: url('fonts/blackstone-webfont.woff2') format('woff2'),
+                 url('fonts/Blackstone.ttf') format('truetype');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+        :root {
+            --yacht:  #1E3552;  /* Deep Yacht Blue */
+            --gold:   #C3A26A;  /* Vintage Gold */
+            --ivory:  #F7F2EB;  /* Ivory */
+            --seafoam:#A9C6C3;  /* Seafoam */
+            --coral:  #D78161;  /* Coral */
+            --sand:   #D9CBB6;  /* Soft Sand */
+            --white:  #FFFFFF;  /* White */
+            --serif:  'Fraunces', 'Times New Roman', serif;
+            --sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --script: 'Blackstone', 'Snell Roundhand', cursive;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--sans);
+            color: var(--yacht);
+            background: #FCFCFB;   /* crisp white, like the homepage */
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            padding: clamp(44px, 7vw, 112px) clamp(24px, 6vw, 96px);
+        }
+        @media print {
+            .swatch, .face, .photo, .tile, .sec-head { break-inside: avoid; }
+            body { padding: 40px 48px; }
+        }
+        .kit { max-width: 1040px; margin: 0 auto; }
+
+        /* ---- Masthead ---- */
+        .eyebrow {
+            font-size: 11px; font-weight: 500; letter-spacing: 0.42em;
+            text-transform: uppercase; color: var(--gold);
+        }
+        .wordmark {
+            font-family: var(--serif); font-weight: 400;
+            font-size: clamp(32px, 4.6vw, 56px); letter-spacing: 0.16em;
+            text-transform: uppercase;
+            line-height: 1.1; margin: 16px 0 16px;
+        }
+        .masthead-sub {
+            font-family: var(--serif); font-style: italic; font-weight: 400;
+            color: var(--yacht);
+            font-size: clamp(17px, 2vw, 25px); line-height: 1.25; letter-spacing: 0.01em;
+        }
+        .rule { height: 1px; background: var(--gold); opacity: 0.5; border: 0; margin: clamp(44px, 6vw, 76px) 0; }
+
+        /* ---- Section heads ---- */
+        .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 38px; }
+        .sec-num { font-size: 12px; font-weight: 500; letter-spacing: 0.22em; color: var(--gold); }
+        .sec-title { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 3vw, 34px); }
+
+        /* ---- Palette ---- */
+        .palette { display: grid; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); gap: clamp(20px, 3vw, 40px); }
+        .swatch { text-align: center; }
+        .chip {
+            display: block; width: 100%; aspect-ratio: 1 / 1; border-radius: 50%;
+            box-shadow: 0 16px 34px rgba(30, 53, 82, 0.16);
+        }
+        .chip--bordered { box-shadow: 0 16px 34px rgba(30, 53, 82, 0.10); border: 1px solid rgba(30, 53, 82, 0.14); }
+        .sw-name { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 16px; }
+        .sw-hex { display: block; font-size: 12px; letter-spacing: 0.06em; color: rgba(30, 53, 82, 0.6); margin-top: 4px; }
+        .sw-role { display: block; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-top: 6px; }
+
+        /* ---- Typography ---- */
+        .type { display: flex; flex-direction: column; gap: clamp(34px, 4.5vw, 56px); }
+        .face { border-top: 1px solid rgba(30, 53, 82, 0.14); padding-top: 30px; display: grid; grid-template-columns: 0.9fr 1.5fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+        .face-role { font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+        .face-name { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 3vw, 38px); }
+        .face-glyph { line-height: 1; margin-top: 10px; font-size: 60px; color: var(--yacht); }
+        .face-meta { font-size: 13px; color: rgba(30, 53, 82, 0.72); margin-top: 16px; max-width: 30em; }
+        .spec-serif { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4.2vw, 54px); line-height: 1.04; }
+        .spec-serif em { font-style: italic; color: var(--gold); }
+        .kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+        .kicker::before { content: ''; width: 46px; height: 1px; background: var(--gold); display: inline-block; }
+        .spec-body { font-family: var(--sans); font-weight: 300; font-size: 18px; line-height: 1.62; margin-top: 16px; max-width: 34em; }
+        .spec-script { font-family: var(--script); font-size: clamp(42px, 6.2vw, 80px); line-height: 1.02; color: var(--yacht); }
+
+        /* ---- In use ---- */
+        .inuse { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(18px, 2.5vw, 30px); }
+        .tile { border-radius: 4px; padding: 30px; min-height: 150px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+        .tile small { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.65; }
+        .tile-dark { background: var(--yacht); color: var(--ivory); }
+        .tile-dark .t-script { font-family: var(--script); font-size: 38px; line-height: 1; color: var(--white); }
+        .tile-white { background: var(--white); border: 1px solid rgba(30,53,82,0.12); }
+        .tile-white .t-title { font-family: var(--serif); font-size: 26px; }
+        .tile-white .t-title em { font-style: italic; color: var(--gold); }
+        .cta { align-self: flex-start; display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; border: 1px solid var(--yacht); font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--yacht); }
+        .cta::after { content: '→'; font-family: var(--sans); font-style: normal; font-size: 14px; color: var(--gold); }
+
+        /* ---- Photography ---- */
+        .photo-intro { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: clamp(17px, 1.8vw, 21px); color: rgba(30, 53, 82, 0.78); max-width: 40em; margin-bottom: 32px; }
+        .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .photo { margin: 0; }
+        .photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; border-radius: 4px; box-shadow: 0 14px 30px rgba(30, 53, 82, 0.12); }
+        .photo figcaption { font-size: 10.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(30, 53, 82, 0.55); padding-top: 12px; }
+        @media (max-width: 680px) { .photos { grid-template-columns: repeat(2, 1fr); } }
+
+        footer { margin-top: clamp(50px, 7vw, 90px); font-size: 12px; letter-spacing: 0.04em; color: rgba(30, 53, 82, 0.55); }
+        @media (max-width: 680px) { .face { grid-template-columns: 1fr; gap: 18px; } }
+    </style>
+</head>
+<body>
+    <div class="kit">
+
+        <!-- ============ Masthead ============ -->
+        <p class="eyebrow">Brand Kit</p>
+        <h1 class="wordmark">WANDER BY WILSON</h1>
+        <p class="masthead-sub">elevated itineraries. effortless travel.</p>
+
+        <hr class="rule">
+
+        <!-- ============ Colour palette ============ -->
+        <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Colour Palette</h2></div>
+        <div class="palette">
+            <figure class="swatch">
+                <span class="chip" style="background:#1E3552"></span>
+                <figcaption>
+                    <span class="sw-name">Deep Yacht Blue</span>
+                    <span class="sw-hex">#1E3552</span>
+                    <span class="sw-role">Primary · Text</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip" style="background:#C3A26A"></span>
+                <figcaption>
+                    <span class="sw-name">Vintage Gold</span>
+                    <span class="sw-hex">#C3A26A</span>
+                    <span class="sw-role">Accent · Detail</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip chip--bordered" style="background:#F7F2EB"></span>
+                <figcaption>
+                    <span class="sw-name">Ivory</span>
+                    <span class="sw-hex">#F7F2EB</span>
+                    <span class="sw-role">Neutral · Ground</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip" style="background:#A9C6C3"></span>
+                <figcaption>
+                    <span class="sw-name">Seafoam</span>
+                    <span class="sw-hex">#A9C6C3</span>
+                    <span class="sw-role">Accent · Soft</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip" style="background:#D78161"></span>
+                <figcaption>
+                    <span class="sw-name">Coral</span>
+                    <span class="sw-hex">#D78161</span>
+                    <span class="sw-role">Accent · Warm</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip" style="background:#D9CBB6"></span>
+                <figcaption>
+                    <span class="sw-name">Soft Sand</span>
+                    <span class="sw-hex">#D9CBB6</span>
+                    <span class="sw-role">Neutral · Fill</span>
+                </figcaption>
+            </figure>
+            <figure class="swatch">
+                <span class="chip chip--bordered" style="background:#FFFFFF"></span>
+                <figcaption>
+                    <span class="sw-name">White</span>
+                    <span class="sw-hex">#FFFFFF</span>
+                    <span class="sw-role">Neutral · Base</span>
+                </figcaption>
+            </figure>
+        </div>
+
+        <hr class="rule">
+
+        <!-- ============ Typography ============ -->
+        <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Typography</h2></div>
+        <div class="type">
+
+            <div class="face">
+                <div class="face-id">
+                    <p class="face-role">Serif · Display</p>
+                    <p class="face-name">Fraunces</p>
+                    <p class="face-glyph" style="font-family:var(--serif)">Aa</p>
+                    <p class="face-meta">Headlines, section titles, and property names. Weights 300–600; <em style="font-style:italic;color:var(--gold)">italic</em> for emphasis. Soft optical contrast — editorial warmth without stiffness.</p>
+                </div>
+                <div class="face-demo">
+                    <p class="spec-serif">Travel<br><em>deliberately</em></p>
+                </div>
+            </div>
+
+            <div class="face">
+                <div class="face-id">
+                    <p class="face-role">Sans · Text</p>
+                    <p class="face-name">Inter</p>
+                    <p class="face-glyph" style="font-family:var(--sans)">Aa</p>
+                    <p class="face-meta">Body copy, ledes, navigation, buttons, and uppercase letter-spaced kickers. Weights 300–600.</p>
+                </div>
+                <div class="face-demo">
+                    <p class="kicker">Why book with us</p>
+                    <p class="spec-body">For travelers who value their time as much as the journey itself — private itineraries shaped around the world&rsquo;s best hotels, experiences, and people.</p>
+                </div>
+            </div>
+
+            <div class="face">
+                <div class="face-id">
+                    <p class="face-role">Script · Accent</p>
+                    <p class="face-name">Blackstone</p>
+                    <p class="face-glyph" style="font-family:var(--script);font-size:78px;">Aa</p>
+                    <p class="face-meta">Editorial accents only — short phrases set over photography, at the corner of an image. Use sparingly; never for body copy or UI.</p>
+                </div>
+                <div class="face-demo">
+                    <p class="spec-script">elevated itineraries.<br>effortless travel.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="rule">
+
+        <!-- ============ Photography ============ -->
+        <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Photography</h2></div>
+        <p class="photo-intro">Sun-drenched and design-led &mdash; clear turquoise water, white Mediterranean architecture, warm neutrals, and the occasional pop of citrus or coral. Real places we book, not stock clich&eacute;s.</p>
+        <div class="photos">
+            <figure class="photo"><img src="property-images/cap-juluca/00-hero.jpg" alt="Cap Juluca, Anguilla" loading="lazy"><figcaption>Cap Juluca &middot; Anguilla</figcaption></figure>
+            <figure class="photo"><img src="property-images/canaves-ena/02-pool.webp" alt="Canaves Ena, Santorini" loading="lazy"><figcaption>Canaves Ena &middot; Santorini</figcaption></figure>
+            <figure class="photo"><img src="property-images/borgo-santandrea/04-pool-terrace.png" alt="Borgo Santandrea, Amalfi Coast" loading="lazy"><figcaption>Borgo Santandrea &middot; Amalfi</figcaption></figure>
+            <figure class="photo"><img src="property-images/hotel-esencia/02-pool.webp" alt="Hotel Esencia, Riviera Maya" loading="lazy"><figcaption>Hotel Esencia &middot; Riviera Maya</figcaption></figure>
+            <figure class="photo"><img src="property-images/rosewood-little-dix-bay/04-bay-view.jpg" alt="Rosewood Little Dix Bay, Virgin Gorda" loading="lazy"><figcaption>Little Dix Bay &middot; Virgin Gorda</figcaption></figure>
+            <figure class="photo"><img src="backgrounds/splendido-pool.jpg" alt="Splendido, Portofino" loading="lazy"><figcaption>Splendido &middot; Portofino</figcaption></figure>
+        </div>
+
+        <hr class="rule">
+
+        <!-- ============ In use ============ -->
+        <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">In Use</h2></div>
+        <div class="inuse">
+            <div class="tile tile-dark">
+                <small>Deep Yacht Blue · script accent</small>
+                <span class="t-script">the places we love</span>
+            </div>
+            <div class="tile tile-white">
+                <small>Ivory ground · serif + gold</small>
+                <span class="t-title">Booking <em>With Us</em></span>
+            </div>
+            <div class="tile tile-white" style="align-items:flex-start;">
+                <small>Primary button</small>
+                <span class="cta">Begin Planning</span>
+            </div>
+        </div>
+
+        <hr class="rule">
+
+        <footer>Wander by Wilson — Brand Kit · Fraunces (serif) · Inter (sans) · Blackstone (script)</footer>
+
+    </div>
+</body>
+</html>

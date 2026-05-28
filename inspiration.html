@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiration | Wander by Wilson</title>
+    <link rel="canonical" href="https://www.wanderbywilson.com/inspiration.html">
+    <meta name="description" content="Hotel reviews, destination guides, and the trips we're planning right now. Search the Wander by Wilson journal by destination or topic.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-inspiration-page">
+    <header class="site-header is-scrolled" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         Hero + search + tag filters
+         ================================================================ -->
+    <section class="inspo-hero">
+        <div class="container inspo-hero-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Inspiration</span></p>
+            <h1 class="inspo-hero-title">
+                From the<br>
+                <em>journal.</em>
+            </h1>
+            <p class="inspo-hero-lede">
+                Hotel reviews, destination guides, and the places we&rsquo;re most excited
+                about right now. Search by destination or topic to find your next trip.
+            </p>
+            <div class="inspo-search">
+                <svg class="inspo-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                <input type="search" id="inspoSearch" class="inspo-search-input" placeholder="Search by destination or topic&hellip;" aria-label="Search posts">
+            </div>
+            <div class="inspo-filters">
+                <div class="inspo-filter-row">
+                    <span class="inspo-filter-label">By location</span>
+                    <div class="inspo-tags" id="inspoLocations" role="group" aria-label="Filter by location"></div>
+                </div>
+                <div class="inspo-filter-row">
+                    <span class="inspo-filter-label">By trip type</span>
+                    <div class="inspo-tags" id="inspoTripTypes" role="group" aria-label="Filter by trip type"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Post grid (built from BLOG_POSTS)
+         ================================================================ -->
+    <section class="inspo-grid-section">
+        <div class="container">
+            <div class="inspo-grid" id="inspoGrid"></div>
+            <p class="inspo-no-results" id="inspoNoResults" hidden>
+                No posts match your search yet &mdash; try a different keyword or topic.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Closing brandmark
+         ================================================================ -->
+    <section class="brandmark-close" aria-hidden="true">
+        <div class="container brandmark-close-inner">
+            <span class="brandmark-monogram">WW</span>
+            <span class="brandmark-inscription">Wander by Wilson &middot; Volume MMXXVI</span>
+        </div>
+    </section>
+
+    <script src="blog-data.js?v=10"></script>
+    <script>
+        (function buildInspiration() {
+            const grid = document.getElementById('inspoGrid');
+            const searchInput = document.getElementById('inspoSearch');
+            const locBar = document.getElementById('inspoLocations');
+            const typeBar = document.getElementById('inspoTripTypes');
+            const noResults = document.getElementById('inspoNoResults');
+            if (!grid || typeof BLOG_POSTS === 'undefined') return;
+
+            const posts = Object.entries(BLOG_POSTS);
+
+            // ---- Build unique location + tripType lists ----
+            // Locations: keep curated order (matches the data buckets)
+            const LOC_ORDER = ['Worldwide','Caribbean','Mexico','United States','Italy','Greece','France','Asia'];
+            const TYPE_ORDER = ['Honeymoon','Babymoon','Family','Hotel Review','Travel Guide','Itinerary','Travel Inspiration'];
+
+            const locCounts = new Map();
+            const typeCounts = new Map();
+            posts.forEach(([, p]) => {
+                if (p.location) locCounts.set(p.location, (locCounts.get(p.location) || 0) + 1);
+                (p.tripTypes || []).forEach(t => typeCounts.set(t, (typeCounts.get(t) || 0) + 1));
+            });
+            const allLocations = LOC_ORDER.filter(l => locCounts.has(l));
+            const allTypes     = TYPE_ORDER.filter(t => typeCounts.has(t));
+
+            let activeLocation = null;
+            let activeType = null;
+            let query = '';
+
+            // ---- Build cards ----
+            const cards = posts.map(([slug, p]) => {
+                const a = document.createElement('a');
+                a.className = 'inspo-card';
+                a.href = 'post.html?slug=' + slug;
+                a.dataset.location = (p.location || '').toLowerCase();
+                a.dataset.tripTypes = (p.tripTypes || []).map(t => t.toLowerCase()).join('|');
+                a.dataset.search = (p.title + ' ' + (p.dek || '') + ' ' + (p.location || '') + ' ' + (p.tripTypes || []).join(' ')).toLowerCase();
+                const eyebrow = p.location || (p.tripTypes && p.tripTypes[0]) || '';
+                a.innerHTML =
+                    '<figure class="inspo-card-image">' +
+                        '<img src="' + p.heroImage + '" alt="' + p.title + '" loading="lazy">' +
+                        '<div class="inspo-card-scrim" aria-hidden="true"></div>' +
+                        '<div class="inspo-card-overlay">' +
+                            (eyebrow ? '<span class="inspo-card-eyebrow">' + eyebrow + '</span>' : '') +
+                            '<h2 class="inspo-card-title">' + p.title + '</h2>' +
+                        '</div>' +
+                    '</figure>' +
+                    '<div class="inspo-card-foot">' +
+                        '<p class="inspo-card-meta">' + (p.date || '') +
+                            '<span class="inspo-card-dot" aria-hidden="true"></span>' + (p.readTime || '') + '</p>' +
+                        '<p class="inspo-card-dek">' + (p.dek || '') + '</p>' +
+                        '<span class="inspo-card-readmore">Read the post &rarr;</span>' +
+                    '</div>';
+                grid.appendChild(a);
+                return a;
+            });
+
+            // ---- Chip helpers ----
+            const makeChip = (label, value, onClick) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'inspo-chip';
+                b.textContent = label;
+                b.dataset.value = value || '';
+                b.addEventListener('click', () => { onClick(value); });
+                return b;
+            };
+
+            // Location chips
+            locBar.appendChild(makeChip('All', null, v => { activeLocation = v; syncChips(); applyFilter(); }));
+            allLocations.forEach(l => locBar.appendChild(makeChip(l, l.toLowerCase(), v => { activeLocation = v; syncChips(); applyFilter(); })));
+
+            // Trip-type chips
+            typeBar.appendChild(makeChip('All', null, v => { activeType = v; syncChips(); applyFilter(); }));
+            allTypes.forEach(t => typeBar.appendChild(makeChip(t, t.toLowerCase(), v => { activeType = v; syncChips(); applyFilter(); })));
+
+            const syncChips = () => {
+                Array.from(locBar.children).forEach(ch => ch.classList.toggle('is-active', (ch.dataset.value || '') === (activeLocation || '')));
+                Array.from(typeBar.children).forEach(ch => ch.classList.toggle('is-active', (ch.dataset.value || '') === (activeType || '')));
+            };
+
+            const applyFilter = () => {
+                let visible = 0;
+                cards.forEach(card => {
+                    const matchesLoc   = !activeLocation || card.dataset.location === activeLocation;
+                    const matchesType  = !activeType || card.dataset.tripTypes.split('|').indexOf(activeType) > -1;
+                    const matchesQuery = !query || card.dataset.search.indexOf(query) > -1;
+                    const show = matchesLoc && matchesType && matchesQuery;
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                noResults.hidden = visible > 0;
+            };
+
+            searchInput.addEventListener('input', () => {
+                query = searchInput.value.trim().toLowerCase();
+                applyFilter();
+            });
+
+            // Honor ?location= or ?type= from URL (e.g. article tag links)
+            const params = new URLSearchParams(window.location.search);
+            const urlLoc = params.get('location'); if (urlLoc) activeLocation = urlLoc.toLowerCase();
+            const urlType = params.get('type');    if (urlType) activeType = urlType.toLowerCase();
+
+            syncChips();
+            applyFilter();
+        })();
+
+        // Header scroll state
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('is-scrolled', window.scrollY > 24);
+        }, { passive: true });
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Your Trip | Wander by Wilson</title>
+    <link rel="canonical" href="https://www.wanderbywilson.com/inquire-trip.html">
+    <meta name="description" content="Tell us about the trip you're imagining and we'll be in touch within 48 hours to start designing it together.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-inquire-page">
+    <header class="site-header is-scrolled" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Plan a trip</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         Hero
+         ================================================================ -->
+    <section class="inquire-hero">
+        <div class="container inquire-hero-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Plan your trip</span></p>
+            <h1 class="inquire-hero-title">
+                Tell us about the trip<br>
+                <em>you&rsquo;re imagining.</em>
+            </h1>
+            <p class="inquire-hero-lede">
+                The more you share, the better we can tailor a proposal to your travel
+                style, dates, and pace. We&rsquo;ll be in touch within 48 hours to start
+                designing it together.
+            </p>
+            <p class="inquire-hero-note">
+                <em>Already have a hotel in mind?</em>
+                <a href="inquire-hotel.html">Just add our perks &rarr;</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Form
+         ================================================================ -->
+    <section class="inquire-form-section">
+        <div class="container inquire-form-container">
+            <form class="inquire-form" action="https://formspree.io/f/xwvzanjd" method="POST" id="tripInquiryForm">
+                <input type="hidden" name="form_type" value="custom_trip">
+                <input type="hidden" name="_subject" value="New trip inquiry — Wander by Wilson">
+                <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="inquire-hp">
+
+                <fieldset class="inquire-fieldset">
+                    <legend class="inquire-legend">About you</legend>
+                    <div class="inquire-row">
+                        <div class="inquire-field">
+                            <label for="firstName" class="inquire-label">First name <span aria-hidden="true">*</span></label>
+                            <input type="text" id="firstName" name="first_name" class="inquire-input" required autocomplete="given-name">
+                        </div>
+                        <div class="inquire-field">
+                            <label for="lastName" class="inquire-label">Last name <span aria-hidden="true">*</span></label>
+                            <input type="text" id="lastName" name="last_name" class="inquire-input" required autocomplete="family-name">
+                        </div>
+                    </div>
+                    <div class="inquire-row">
+                        <div class="inquire-field">
+                            <label for="email" class="inquire-label">Email <span aria-hidden="true">*</span></label>
+                            <input type="email" id="email" name="email" class="inquire-input" required autocomplete="email">
+                        </div>
+                        <div class="inquire-field">
+                            <label for="phone" class="inquire-label">Phone</label>
+                            <input type="tel" id="phone" name="phone" class="inquire-input" autocomplete="tel">
+                        </div>
+                    </div>
+                    <div class="inquire-field">
+                        <label for="howFound" class="inquire-label">How did you hear about us?</label>
+                        <select id="howFound" name="how_found" class="inquire-input">
+                            <option value="">Select &hellip;</option>
+                            <option value="referral">Referral from a friend</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="google">Google search</option>
+                            <option value="press">Press / publication</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="inquire-field">
+                        <label for="referralName" class="inquire-label">If you&rsquo;re a referral, who can we thank?</label>
+                        <input type="text" id="referralName" name="referral_name" class="inquire-input" placeholder="The friend or advisor who sent you our way">
+                    </div>
+                </fieldset>
+
+                <fieldset class="inquire-fieldset">
+                    <legend class="inquire-legend">The trip</legend>
+                    <div class="inquire-field">
+                        <label for="destinations" class="inquire-label">Destination(s) <span aria-hidden="true">*</span></label>
+                        <input type="text" id="destinations" name="destinations" class="inquire-input" placeholder="e.g., Italy &amp; Greece &middot; South Africa &amp; Mozambique" required>
+                    </div>
+                    <div class="inquire-row">
+                        <div class="inquire-field">
+                            <label for="departureDate" class="inquire-label">Approximate departure</label>
+                            <input type="date" id="departureDate" name="departure_date" class="inquire-input">
+                        </div>
+                        <div class="inquire-field">
+                            <label for="returnDate" class="inquire-label">Approximate return</label>
+                            <input type="date" id="returnDate" name="return_date" class="inquire-input">
+                        </div>
+                    </div>
+                    <div class="inquire-row">
+                        <div class="inquire-field">
+                            <label for="travelers" class="inquire-label">Number of travelers</label>
+                            <select id="travelers" name="travelers" class="inquire-input">
+                                <option value="">Select &hellip;</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3-4">3 &ndash; 4</option>
+                                <option value="5-8">5 &ndash; 8</option>
+                                <option value="9+">9 or more</option>
+                            </select>
+                        </div>
+                        <div class="inquire-field">
+                            <label for="tripType" class="inquire-label">Trip type</label>
+                            <select id="tripType" name="trip_type" class="inquire-input">
+                                <option value="">Select &hellip;</option>
+                                <option value="couples">Couples getaway</option>
+                                <option value="honeymoon">Honeymoon</option>
+                                <option value="anniversary">Anniversary / milestone</option>
+                                <option value="family">Family vacation</option>
+                                <option value="multi-gen">Multi-generational</option>
+                                <option value="friends">Friends group</option>
+                                <option value="wedding">Wedding or group block</option>
+                                <option value="solo">Solo</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="inquire-field">
+                        <label for="budget" class="inquire-label">Approximate trip budget (excluding international flights)</label>
+                        <select id="budget" name="budget" class="inquire-input">
+                            <option value="">Select &hellip;</option>
+                            <option value="5-10">$5,000 &ndash; $10,000</option>
+                            <option value="10-15">$10,000 &ndash; $15,000</option>
+                            <option value="15-20">$15,000 &ndash; $20,000</option>
+                            <option value="20-30">$20,000 &ndash; $30,000</option>
+                            <option value="30-40">$30,000 &ndash; $40,000</option>
+                            <option value="40-50">$40,000 &ndash; $50,000</option>
+                            <option value="50-75">$50,000 &ndash; $75,000</option>
+                            <option value="75-100">$75,000 &ndash; $100,000</option>
+                            <option value="100+">$100,000+</option>
+                            <option value="discuss">Prefer to discuss</option>
+                        </select>
+                    </div>
+                    <div class="inquire-field">
+                        <label for="package" class="inquire-label">Which planning package interests you?</label>
+                        <select id="package" name="package" class="inquire-input">
+                            <option value="">Select &hellip;</option>
+                            <option value="vacation-planning">Vacation Planning ($250 design fee)</option>
+                            <option value="full-service">Full-Service Itinerary Design ($500+ design fee, depends on scope of the trip &mdash; our most popular service)</option>
+                            <option value="custom">Beyond the Traditional Itinerary (custom quote)</option>
+                            <option value="not-sure">Not sure yet &mdash; help me figure out</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset class="inquire-fieldset">
+                    <legend class="inquire-legend">Tell us more</legend>
+                    <div class="inquire-field">
+                        <label for="vision" class="inquire-label">What are you imagining?</label>
+                        <textarea id="vision" name="vision" class="inquire-textarea" rows="6" placeholder="The places you want to see, the kinds of experiences you love, any non-negotiables, who&rsquo;s travelling with you &hellip;"></textarea>
+                    </div>
+                    <div class="inquire-field">
+                        <label for="special" class="inquire-label">Anything special we should know?</label>
+                        <textarea id="special" name="special" class="inquire-textarea" rows="3" placeholder="Celebrations, dietary needs, mobility considerations, loyalty programs &hellip;"></textarea>
+                    </div>
+                </fieldset>
+
+                <div class="inquire-checks">
+                    <div class="inquire-field inquire-check">
+                        <input type="checkbox" id="planningConsent" name="planning_consent" value="yes" required>
+                        <label for="planningConsent" class="inquire-check-text">I understand that planning fees are non-refundable. If I choose to book any of the recommendations Wilson provides, I&rsquo;ll book them with her rather than on my own. <span aria-hidden="true">*</span></label>
+                    </div>
+                    <div class="inquire-field inquire-check">
+                        <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+                        <label for="newsletter" class="inquire-check-text">Yes &mdash; subscribe me to Wander by Wilson&rsquo;s newsletter for destination scouting reports, hotel site-visit notes, and other travel insights.</label>
+                    </div>
+                </div>
+
+                <div class="inquire-submit-row">
+                    <button type="submit" class="cta-primary inquire-submit">
+                        <span class="cta-primary-label">Send inquiry</span>
+                    </button>
+                    <p class="inquire-submit-note">We typically respond within 48 hours.</p>
+                    <p class="inquire-error" id="tripError" role="alert" hidden></p>
+                </div>
+            </form>
+            <div class="inquire-success" id="tripSuccess" role="status" hidden>
+                <p class="inquire-success-title">Thank you &mdash; your inquiry is on its way.</p>
+                <p class="inquire-success-body">We typically respond within 48 hours. Keep an eye on your inbox (and your spam folder, just in case).</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Header scroll state
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 24) header.classList.add('is-scrolled');
+            else header.classList.remove('is-scrolled');
+        }, { passive: true });
+
+        // Formspree AJAX submit → inline thank-you (falls back to a normal POST if JS is off)
+        (function wireForm() {
+            const form = document.getElementById('tripInquiryForm');
+            if (!form) return;
+            const successEl = document.getElementById('tripSuccess');
+            const errorEl = document.getElementById('tripError');
+            const btn = form.querySelector('.inquire-submit');
+            const label = btn ? btn.querySelector('.cta-primary-label') : null;
+            const original = label ? label.textContent : 'Send inquiry';
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (errorEl) errorEl.hidden = true;
+                if (btn) btn.disabled = true;
+                if (label) label.textContent = 'Sending…';
+                try {
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        form.hidden = true;
+                        if (successEl) {
+                            successEl.hidden = false;
+                            successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return;
+                    }
+                    const data = await res.json().catch(() => ({}));
+                    const msg = (data.errors && data.errors.map(x => x.message).join(' ')) ||
+                        'Something went wrong. Please try again, or email wilson@wanderbywilson.com.';
+                    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
+                } catch (err) {
+                    if (errorEl) {
+                        errorEl.textContent = 'Network error — please try again, or email wilson@wanderbywilson.com.';
+                        errorEl.hidden = false;
+                    }
+                } finally {
+                    if (btn) btn.disabled = false;
+                    if (label) label.textContent = original;
+                }
+            });
+        })();
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

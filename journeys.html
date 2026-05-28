@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journeys — Ready-to-Book Luxury Itineraries | Wander by Wilson</title>
+    <link rel="canonical" href="https://www.wanderbywilson.com/journeys.html">
+    <meta name="description" content="Ready-to-book luxury travel itineraries curated by Wander by Wilson. Safari and beach, wellness retreats, family journeys, honeymoons.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-journeys-index-page">
+    <header class="site-header is-scrolled" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <section class="journeys-index-hero">
+        <div class="container">
+            <p class="kicker"><span class="kicker-line"></span><span>Curated journeys</span></p>
+            <h1 class="journeys-index-title">
+                A shortlist of trips we&rsquo;d<br>
+                <em>book ourselves.</em>
+            </h1>
+            <p class="journeys-index-lede">
+                Curated routes, exceptional stays, and the details already thoughtfully mapped out. Pick one as a starting point &mdash; every journey is shaped around your dates, your party, your pace.
+            </p>
+        </div>
+    </section>
+
+    <section class="journeys-index-grid-section">
+        <div class="container">
+            <div class="journeys-index-grid" id="journeysIndexGrid"></div>
+        </div>
+    </section>
+
+    <section class="journey-close">
+        <div class="container journey-close-inner">
+            <h2 class="journey-close-title">Don&rsquo;t see your trip?</h2>
+            <p class="journey-close-lede">
+                Every journey we send is tailored specifically for you. Tell us what you&rsquo;re imagining and we&rsquo;ll start sketching from scratch.
+            </p>
+            <a href="index.html#inquire" class="cta-primary">
+                <span class="cta-primary-label">Plan a trip</span>
+            </a>
+        </div>
+    </section>
+
+    <script src="data.js?v=59"></script>
+    <script>
+        (function loadJourneys() {
+            if (typeof ITINERARIES === 'undefined') return;
+            const grid = document.getElementById('journeysIndexGrid');
+            Object.entries(ITINERARIES).forEach(([slug, j]) => {
+                const card = document.createElement('a');
+                card.className = 'journeys-index-card';
+                card.href = 'journey.html?slug=' + slug;
+                card.innerHTML =
+                    '<figure class="journeys-index-image"><img src="' + j.heroImage + '" alt="' + j.title + '" loading="lazy"></figure>' +
+                    '<div class="journeys-index-meta">' +
+                        '<p class="journeys-index-region">' + j.countries.join(' &amp; ') + '</p>' +
+                        '<h2 class="journeys-index-name">' + j.title + '</h2>' +
+                        '<p class="journeys-index-stats">' + j.duration + ' &middot; ' + j.properties.length + ' properties &middot; From $' + j.priceFrom.toLocaleString() + ' pp</p>' +
+                        '<span class="journeys-index-cta">View journey &rarr;</span>' +
+                    '</div>';
+                grid.appendChild(card);
+            });
+        })();
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

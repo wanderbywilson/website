@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wander by Wilson — Bespoke Luxury Travel</title>
+    <link rel="canonical" href="https://www.wanderbywilson.com/">
+    <meta name="description" content="Privately designed journeys for the few who travel deliberately. By Wilson.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-home">
+    <header class="site-header" id="siteHeader">
+        <div class="container header-inner">
+            <a href="#" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <section class="hero" aria-label="Welcome">
+        <div class="hero-bg" id="heroBg">
+            <!-- Instant-paint poster — Amalfi still, matches first video -->
+            <img class="hero-poster"
+                src="hero-poster.jpg"
+                alt=""
+                fetchpriority="high"
+            >
+            <!-- Crossfaded video stack. Each slide carries its rail copy in data-* -->
+            <!-- Hero rotation curated to the coastal / Mediterranean mood board (2026-05-26):
+                 Capri · Amalfi · Caribbean · Lake Como · Maldives · Santorini · Tuscany.
+                 ARCHIVED — "On Safari" clip (swapped out for mood-board fit). To restore, set a slot's
+                 data-place="On Safari" + data-src to:
+                 https://videos.pexels.com/video-files/7499056/7499056-hd_1920_1080_30fps.mp4
+                 ARCHIVED — "Machu Picchu, Peru" clip (swapped out for mood-board fit). To restore:
+                 https://videos.pexels.com/video-files/29604766/12740957_1920_1080_30fps.mp4 -->
+            <video class="hero-video is-active"
+                data-index="01"
+                data-place="Capri, Italy"
+                muted loop playsinline preload="auto"
+                src="https://videos.pexels.com/video-files/32693749/13938428_1920_1080_30fps.mp4"
+                poster="hero-poster.jpg"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="02"
+                data-place="Amalfi Coast, Italy"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/20156101/20156101-uhd_2560_1440_24fps.mp4"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="03"
+                data-place="The Caribbean"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/15018730/15018730-uhd_2560_1440_24fps.mp4"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="04"
+                data-place="Lake Como, Italy"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/16577325/16577325-hd_1920_1080_30fps.mp4"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="05"
+                data-place="The Maldives"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/6003445/6003445-hd_1920_1080_25fps.mp4"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="06"
+                data-place="Santorini, Greece"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/20707629/20707629-hd_1920_1080_30fps.mp4"
+                aria-hidden="true"></video>
+            <video class="hero-video"
+                data-index="07"
+                data-place="Tuscany, Italy"
+                muted loop playsinline preload="none"
+                data-src="https://videos.pexels.com/video-files/27459521/12148539_1920_1080_25fps.mp4"
+                aria-hidden="true"></video>
+
+            <div class="hero-grain" aria-hidden="true"></div>
+            <div class="hero-gradient"></div>
+            <div class="hero-vignette"></div>
+        </div>
+
+        <!-- Vertical edge labels (editorial chrome) -->
+        <aside class="hero-rail hero-rail--left" aria-hidden="true">
+            <span class="rail-mark" id="railMark">N° 01</span>
+            <span class="rail-divider"></span>
+            <span class="rail-text" id="railText">Amalfi Coast, Italy</span>
+        </aside>
+
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Travel<br>
+                    <em>deliberately</em>
+                </h1>
+
+                <p class="hero-lede">
+                    For travelers who value their time as much as the journey itself.
+                    Private itineraries shaped around the world&rsquo;s best
+                    hotels, experiences, and people.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="inquire-trip.html" class="cta-primary">
+                        <span class="cta-primary-label">Begin Planning</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-footer">
+            <div class="container hero-footer-inner">
+                <!-- TEMPORARILY HIDDEN — affiliations strip. Uncomment to restore.
+                <div class="affiliations">
+                    <span class="affiliations-label">In trusted company &mdash;</span>
+                    <span class="affiliations-list">
+                        <span>Smartflyer Rising Star &rsquo;23 &amp; &rsquo;24</span>
+                        <span class="aff-dot" aria-hidden="true"></span>
+                        <span>Virtuoso</span>
+                        <span class="aff-dot" aria-hidden="true"></span>
+                        <span>Jetset &amp; Travel</span>
+                    </span>
+                </div>
+                -->
+                <div class="hero-footer-spacer" aria-hidden="true"></div>
+
+                <a href="#next" class="hero-scroll" aria-label="Continue">
+                    <span class="scroll-label">Continue</span>
+                    <span class="scroll-line" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §02 — The Benefits of Booking With Us.
+         Copy + a photo collage of mood-board scenes on one side, the
+         preferred-partner marquee below — all on one crisp white field
+         (no separate bordered strip, so the scroll doesn't read as choppy).
+         ================================================================ -->
+    <section class="benefits" aria-label="The benefits of booking through us">
+        <div class="container benefits-grid">
+            <div class="benefits-copy" data-reveal>
+                <p class="kicker"><span class="kicker-line"></span><span>Why book with us</span></p>
+                <h2 class="partners-title">
+                    The Benefits of<br>
+                    <em>Booking With Us</em>
+                </h2>
+                <p class="partners-lede">
+                    Complimentary breakfast, upgrades, resort credits, priority waitlist
+                    access, and VIP recognition at many of the world&rsquo;s most
+                    sought-after hotels.
+                </p>
+                <a class="cta-primary benefits-cta" href="services.html#package-01">
+                    <span class="cta-primary-label">Book a Hotel With Perks</span>
+                </a>
+            </div>
+
+            <!-- Photo collage — clean-edged mood-board scenes in a two-column
+                 offset mosaic (no frames, no captions). -->
+            <div class="benefits-collage" data-reveal>
+                <span class="collage-script" aria-hidden="true">same rate. better outcome.</span>
+                <div class="collage-col">
+                    <a class="collage-link collage-link--tall" href="property.html?slug=cap-juluca" aria-label="Explore Cap Juluca, Anguilla">
+                        <img class="collage-img" src="property-images/cap-juluca/00-hero.jpg" alt="Turquoise water at Cap Juluca, Anguilla" loading="lazy">
+                    </a>
+                    <a class="collage-link collage-link--short" href="property.html?slug=canaves-ena" aria-label="Explore Canaves Ena, Santorini">
+                        <img class="collage-img" src="property-images/canaves-ena/02-pool.webp" alt="Infinity pool over the caldera at Canaves Ena, Santorini" loading="lazy">
+                    </a>
+                </div>
+                <div class="collage-col">
+                    <a class="collage-link collage-link--short" href="property.html?slug=hotel-esencia" aria-label="Explore Hotel Esencia, Riviera Maya">
+                        <img class="collage-img" src="property-images/hotel-esencia/02-pool.webp" alt="Palm-lined pool at Hotel Esencia, Riviera Maya" loading="lazy">
+                    </a>
+                    <a class="collage-link collage-link--tall" href="property.html?slug=caruso" aria-label="Explore Caruso, A Belmond Hotel">
+                        <img class="collage-img" src="property-images/caruso/00-amalfi-view.jpg" alt="Amalfi Coast view from Caruso, A Belmond Hotel, Ravello" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferred-partner marquee — full-bleed on the same white field. -->
+        <div class="benefits-marquee">
+            <div class="marquee" data-marquee>
+                <div class="marquee-track">
+                    <span class="marquee-item"><img src="logos/four-seasons.png" alt="Four Seasons Preferred Partner"></span>
+                    <span class="marquee-item"><img src="logos/bellini-club.png" alt="Bellini Club by Belmond"></span>
+                    <span class="marquee-item"><img src="logos/aman.png" alt="Aman"></span>
+                    <span class="marquee-item" data-brand="rosewood"><img src="logos/rosewood-elite.png" alt="Rosewood Elite"></span>
+                    <span class="marquee-item marquee-item--text">Pearl Partner &mdash; Oetker Collection</span>
+                    <span class="marquee-item"><img src="logos/one-only.png" alt="One&amp;Only Resorts"></span>
+                    <span class="marquee-item"><img src="logos/mandarin-fan-club.png" alt="Mandarin Oriental Fan Club"></span>
+                    <span class="marquee-item"><img src="logos/peninsula.png" alt="The Peninsula PenClub"></span>
+                    <span class="marquee-item"><img src="logos/virtuoso.png" alt="Virtuoso Member"></span>
+                    <span class="marquee-item marquee-item--text">Montage</span>
+                    <span class="marquee-item"><img src="logos/diamond-club.png" alt="Diamond Club Dorchester Collection"></span>
+                    <span class="marquee-item"><img src="logos/jumeirah.png" alt="Jumeirah Passport to Luxury"></span>
+                    <span class="marquee-item"><img src="logos/leading-hotels.png" alt="The Leading Hotels of the World"></span>
+                    <span class="marquee-item"><img src="logos/hilton-luxury.png" alt="Hilton for Luxury"></span>
+                    <span class="marquee-item"><img src="logos/ihg.png" alt="IHG Hotels &amp; Resorts"></span>
+                    <span class="marquee-item"><img src="logos/hyatt-prive.png" alt="Hyatt Privé"></span>
+                    <span class="marquee-item" data-brand="marriott"><img src="logos/marriott-stars.png" alt="Marriott STARS | Luminous"></span>
+                    <span class="marquee-item"><img src="logos/relais-chateaux.png" alt="Relais &amp; Châteaux"></span>
+                    <span class="marquee-item" data-brand="ritz-yacht"><img src="logos/ritz-yacht.png" alt="The Ritz-Carlton Yacht Collection"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §03 — The Atlas. A world of addresses worth checking into.
+         ================================================================ -->
+    <section class="atlas" id="atlas" aria-label="The atlas">
+        <div class="container atlas-intro" data-reveal>
+            <h2 class="atlas-title">
+                A world of addresses<br>
+                <em>worth checking into.</em>
+            </h2>
+
+            <p class="atlas-lede">
+                Uncover a shortlist of extraordinary stays behind our most unforgettable itineraries.
+            </p>
+
+            <p class="atlas-hint" id="atlasHint">
+                <em>Click any pin to explore</em>
+                <svg class="atlas-hint-arrow" viewBox="0 0 18 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 2 L9 18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M4 13 L9 18 L14 13" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </p>
+        </div>
+
+        <div class="atlas-stage">
+            <div class="atlas-globe" id="atlasGlobe"></div>
+
+            <!-- Pin marker — sits at the globe center where the rotated pin
+                 lands. Filled gold dot + soft halo. Shows when a featured
+                 card is on screen so the connector visually originates here. -->
+            <div class="atlas-pin-marker" id="atlasPinMarker" aria-hidden="true">
+                <span class="atlas-pin-halo"></span>
+                <span class="atlas-pin-dot"></span>
+            </div>
+
+            <!-- Featured property preview — cycles through featured properties
+                 when the atlas scrolls into view. Card content populated by JS;
+                 side (left/right of globe) alternates per cycle. -->
+            <div class="atlas-preview" id="atlasPreview" aria-hidden="true">
+                <a class="atlas-preview-card" id="atlasPreviewCard" href="">
+                    <figure class="atlas-preview-image">
+                        <img id="atlasPreviewImg" src="" alt="" loading="lazy">
+                    </figure>
+                    <div class="atlas-preview-meta">
+                        <span class="atlas-preview-location" id="atlasPreviewLocation"></span>
+                        <h3 class="atlas-preview-name" id="atlasPreviewName"></h3>
+                        <span class="atlas-preview-cta">View property &rarr;</span>
+                    </div>
+                </a>
+                <!-- Refined connector — single hairline curve from the card's
+                     edge to the pin marker at globe center. The marker (dot +
+                     halo) lives separately so it always sits exactly on the pin
+                     regardless of stage width. -->
+                <svg class="atlas-preview-arrow" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+                    <!-- Path direction starts at the pin (right, x=240) and ends at the card edge (left, x=0)
+                         so the stroke-dashoffset animation grows the line OUT from the pin. -->
+                    <path d="M 240 40 Q 160 20, 80 40 T 0 40" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="atlas-browse" data-reveal>
+            <a href="hotels.html" class="cta-primary">
+                <span class="cta-primary-label">Browse all hotels</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §04 — How we work. Four cards, no icons.
+         ================================================================ -->
+    <section class="services" id="services" aria-label="How we work">
+        <div class="container services-inner">
+            <div class="services-head" data-reveal>
+                <p class="kicker"><span class="kicker-line"></span><span>How we work</span></p>
+                <h2 class="services-title">
+                    What Booking Online<br>
+                    <em>Can&rsquo;t Do.</em>
+                </h2>
+                <p class="services-lede">
+                    A hotel is only one piece of the journey. We coordinate the flights,
+                    transfers, dining reservations, private touring, special requests, and
+                    the dozens of details that separate a good trip from an effortless one.
+                    Through trusted relationships around the world, we help ensure every
+                    piece fits together seamlessly before you ever leave home.
+                </p>
+            </div>
+
+            <ol class="services-grid" data-reveal-group>
+                <li class="service-card">
+                    <span class="service-num">N&deg; 01</span>
+                    <h3 class="service-title">VIP recognition at every stay</h3>
+                    <p class="service-body">
+                        Preferred-partner benefits at many of the world&rsquo;s leading
+                        hotels, including daily breakfast, resort credits, room upgrades,
+                        and priority for early check-in and late check-out whenever
+                        available.
+                    </p>
+                </li>
+
+                <li class="service-card">
+                    <span class="service-num">N&deg; 02</span>
+                    <h3 class="service-title">A trip designed around you</h3>
+                    <p class="service-body">
+                        Hotels, private transfers, dining, touring, spa appointments,
+                        golf tee times, and thoughtful downtime recommendations &mdash;
+                        curated around your travel style, not pulled from a template.
+                    </p>
+                </li>
+
+                <li class="service-card">
+                    <span class="service-num">N&deg; 03</span>
+                    <h3 class="service-title">Support before &amp; during travel</h3>
+                    <p class="service-body">
+                        Your itinerary lives in a mobile travel app, with confirmations,
+                        logistics, and recommendations in one place. If plans shift while
+                        you&rsquo;re away, we&rsquo;re here to help.
+                    </p>
+                </li>
+
+                <li class="service-card">
+                    <span class="service-num">N&deg; 04</span>
+                    <h3 class="service-title">More than hotel bookings</h3>
+                    <p class="service-body">
+                        From villas and yachts to safaris, cruises, milestone celebrations,
+                        and multi-generational journeys, we coordinate the details that
+                        turn a reservation into a fully realized trip.
+                    </p>
+                </li>
+            </ol>
+
+            <div class="services-page-link">
+                <a href="services.html" class="cta-primary">
+                    <span class="cta-primary-label">View services &amp; pricing</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §05 — From the journal. Recently published blog posts.
+         ================================================================ -->
+    <section class="journal" aria-label="From the journal">
+        <div class="container journal-inner">
+            <div class="journal-head" data-reveal>
+                <p class="kicker"><span class="kicker-line"></span><span>From the Journal</span></p>
+                <h2 class="journal-title">
+                    What we&rsquo;re recommending<br>
+                    <em>right now.</em>
+                </h2>
+                <p class="journal-lede">
+                    The hotels we&rsquo;re booking, the destinations we&rsquo;re
+                    watching, and the travel ideas we&rsquo;re sharing with
+                    clients every day.
+                </p>
+            </div>
+
+            <div class="journal-grid" data-reveal-group>
+                <article class="journal-card">
+                    <a class="journal-card-link" href="post.html?slug=25-of-the-best-honeymoon-destinations-around-the-world">
+                        <figure class="journal-card-image">
+                            <img src="blog-images/honeymoon-destinations.jpg" alt="Overwater suite at a luxury honeymoon resort" loading="lazy">
+                        </figure>
+                        <div class="journal-card-meta-row">
+                            <span class="journal-card-category">Honeymoons</span>
+                            <span class="journal-card-dot" aria-hidden="true"></span>
+                            <span class="journal-card-readtime">13 min read</span>
+                        </div>
+                        <h3 class="journal-card-title">26 of the Best Honeymoon Destinations Around the World</h3>
+                        <p class="journal-card-dek">A globe-spanning shortlist of honeymoon destinations paired with luxury hotels and exclusive booking perks.</p>
+                        <span class="journal-card-cta">Read the post &rarr;</span>
+                    </a>
+                </article>
+
+                <article class="journal-card">
+                    <a class="journal-card-link" href="post.html?slug=sugar-beach-hotel-review">
+                        <figure class="journal-card-image">
+                            <img src="blog-images/sugar-beach-review.jpg" alt="Sugar Beach Viceroy St. Lucia between the Pitons" loading="lazy">
+                        </figure>
+                        <div class="journal-card-meta-row">
+                            <span class="journal-card-category">Hotel Review</span>
+                            <span class="journal-card-dot" aria-hidden="true"></span>
+                            <span class="journal-card-readtime">5 min read</span>
+                        </div>
+                        <h3 class="journal-card-title">Sugar Beach Review: Viceroy St. Lucia</h3>
+                        <p class="journal-card-dek">An on-the-ground review of Viceroy Sugar Beach, where powder sands meet the dramatic Pitons of St. Lucia.</p>
+                        <span class="journal-card-cta">Read the post &rarr;</span>
+                    </a>
+                </article>
+
+                <article class="journal-card">
+                    <a class="journal-card-link" href="post.html?slug=top-babymoon-destinations-for-every-month-of-the-year">
+                        <figure class="journal-card-image">
+                            <img src="blog-images/babymoon-destinations.jpg" alt="Quiet beach scene for a babymoon escape" loading="lazy">
+                        </figure>
+                        <div class="journal-card-meta-row">
+                            <span class="journal-card-category">Babymoons</span>
+                            <span class="journal-card-dot" aria-hidden="true"></span>
+                            <span class="journal-card-readtime">13 min read</span>
+                        </div>
+                        <h3 class="journal-card-title">Top Babymoon Destinations for Every Month of the Year</h3>
+                        <p class="journal-card-dek">A month-by-month guide to babymoon escapes, from white-sand beaches to mountain retreats and quiet nature stays.</p>
+                        <span class="journal-card-cta">Read the post &rarr;</span>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §06 — Meet Wilson. Founder portrait + story + affiliations.
+         ================================================================ -->
+    <section class="founder" id="about" aria-label="Meet Wilson">
+        <div class="container founder-grid" data-reveal>
+
+            <div class="founder-portrait-col">
+                <figure class="founder-portrait">
+                    <div class="founder-portrait-frame">
+                        <img src="wilson.jpg?v=4" alt="Wilson Schubert" loading="lazy">
+                    </div>
+                    <span class="founder-script" aria-hidden="true">elevated itineraries.<br>effortless travel.</span>
+                    <figcaption class="founder-portrait-caption">
+                        <span class="founder-portrait-name">Wilson Schubert</span>
+                        <span class="founder-portrait-location">Pictured at Sugar Beach, St. Lucia</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="founder-copy-col">
+                <p class="kicker"><span class="kicker-line"></span><span>The founder</span></p>
+
+                <h2 class="founder-title">
+                    Why Clients Return<br>
+                    <em>Year After Year.</em>
+                </h2>
+
+                <div class="founder-prose">
+                    <p>
+                        <em>Wander by Wilson</em> was built on a simple belief: exceptional
+                        travel should feel effortless.
+                    </p>
+                    <p>
+                        As a two-time SmartFlyer Rising Star and member of Virtuoso&rsquo;s
+                        invitation-only network, Wilson combines trusted industry relationships
+                        with firsthand destination knowledge to create journeys that feel
+                        personal, seamless, and thoughtfully executed.
+                    </p>
+                    <p>
+                        From milestone anniversaries and honeymoons to family adventures and
+                        once-in-a-lifetime safaris, clients return because they know every
+                        recommendation has been carefully vetted &mdash; and every detail
+                        has someone looking after it.
+                    </p>
+                    <p>
+                        Today, Wander by Wilson works with travelers across Europe, Africa,
+                        the Caribbean, and beyond, pairing exceptional hotels with the
+                        experiences, guides, and local partners that bring a destination
+                        to life.
+                    </p>
+                </div>
+
+                <div class="founder-credential">
+                    <img class="founder-credential-badge"
+                         src="logos/smartflyer-rising-star.png"
+                         alt="Smartflyer Rising Star badge">
+                    <div class="founder-credential-copy">
+                        <span class="founder-credential-eyebrow">Two-time recipient</span>
+                        <span class="founder-credential-title">Smartflyer Rising Star &mdash; &rsquo;23 &amp; &rsquo;24</span>
+                    </div>
+                </div>
+
+                <a href="inquire-trip.html" class="cta-primary founder-cta">
+                    <span class="cta-primary-label">Start Planning</span>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §07 — In their own words. Client testimonials.
+         ================================================================ -->
+    <section class="testimonials" aria-label="Client testimonials">
+        <div class="container testimonials-inner">
+            <div class="testimonials-head" data-reveal>
+                <p class="kicker"><span class="kicker-line"></span><span>From our travelers</span></p>
+                <h2 class="testimonials-title">
+                    In their own<br>
+                    <em>words.</em>
+                </h2>
+            </div>
+
+            <div class="testimonials-carousel">
+                <button class="testimonials-arrow testimonials-arrow--prev" type="button" aria-label="Previous testimonials">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 2 L4 8 l6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="testimonials-viewport">
+                    <div class="testimonials-track">
+                <figure class="testimonial-card">
+                    <svg class="testimonial-mark" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 18V12C0 5.4 4.2 0.6 10.8 0L11.4 3C7.2 3.6 4.8 6 4.8 9H7.2C8.5 9 9.6 10.1 9.6 11.4V15.6C9.6 16.9 8.5 18 7.2 18H0ZM12.6 18V12C12.6 5.4 16.8 0.6 23.4 0L24 3C19.8 3.6 17.4 6 17.4 9H19.8C21.1 9 22.2 10.1 22.2 11.4V15.6C22.2 16.9 21.1 18 19.8 18H12.6Z" fill="currentColor"/>
+                    </svg>
+                    <blockquote class="testimonial-quote">
+                        What made our trip feel truly special &mdash; every hotel
+                        we stayed at, we were met with a special surprise that
+                        Wilson arranged. From flowers on our birthday to a nice
+                        bottle of Champagne.
+                    </blockquote>
+                    <figcaption class="testimonial-attribution">
+                        <span class="testimonial-name">Veronica &amp; John</span>
+                        <span class="testimonial-context">Birthday trip &middot; Positano, Italy</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="testimonial-card">
+                    <svg class="testimonial-mark" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 18V12C0 5.4 4.2 0.6 10.8 0L11.4 3C7.2 3.6 4.8 6 4.8 9H7.2C8.5 9 9.6 10.1 9.6 11.4V15.6C9.6 16.9 8.5 18 7.2 18H0ZM12.6 18V12C12.6 5.4 16.8 0.6 23.4 0L24 3C19.8 3.6 17.4 6 17.4 9H19.8C21.1 9 22.2 10.1 22.2 11.4V15.6C22.2 16.9 21.1 18 19.8 18H12.6Z" fill="currentColor"/>
+                    </svg>
+                    <blockquote class="testimonial-quote">
+                        Every transfer, check in, pick up &mdash; timed
+                        perfectly, which made the trip stress free. The safaris
+                        were truly unbeatable. Everything felt handpicked and
+                        well thought out.
+                    </blockquote>
+                    <figcaption class="testimonial-attribution">
+                        <span class="testimonial-name">Sydney &amp; Nick</span>
+                        <span class="testimonial-context">Honeymoon &middot; South Africa</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="testimonial-card">
+                    <svg class="testimonial-mark" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 18V12C0 5.4 4.2 0.6 10.8 0L11.4 3C7.2 3.6 4.8 6 4.8 9H7.2C8.5 9 9.6 10.1 9.6 11.4V15.6C9.6 16.9 8.5 18 7.2 18H0ZM12.6 18V12C12.6 5.4 16.8 0.6 23.4 0L24 3C19.8 3.6 17.4 6 17.4 9H19.8C21.1 9 22.2 10.1 22.2 11.4V15.6C22.2 16.9 21.1 18 19.8 18H12.6Z" fill="currentColor"/>
+                    </svg>
+                    <blockquote class="testimonial-quote">
+                        The best part of booking with you was how easy it was
+                        &mdash; AND all the wonderful benefits that literally
+                        saved us hundreds if not thousands of dollars. We loved
+                        having the free breakfasts and resort credits.
+                    </blockquote>
+                    <figcaption class="testimonial-attribution">
+                        <span class="testimonial-name">Molly &amp; Alex</span>
+                        <span class="testimonial-context">Honeymoon &middot; Four Seasons Lanai</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="testimonial-card">
+                    <svg class="testimonial-mark" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 18V12C0 5.4 4.2 0.6 10.8 0L11.4 3C7.2 3.6 4.8 6 4.8 9H7.2C8.5 9 9.6 10.1 9.6 11.4V15.6C9.6 16.9 8.5 18 7.2 18H0ZM12.6 18V12C12.6 5.4 16.8 0.6 23.4 0L24 3C19.8 3.6 17.4 6 17.4 9H19.8C21.1 9 22.2 10.1 22.2 11.4V15.6C22.2 16.9 21.1 18 19.8 18H12.6Z" fill="currentColor"/>
+                    </svg>
+                    <blockquote class="testimonial-quote">
+                        Such a wonderful feeling to simply relax and enjoy the
+                        trip, knowing everything was handled. You always offer a
+                        personal touch and truly listen to what we want to
+                        experience.
+                    </blockquote>
+                    <figcaption class="testimonial-attribution">
+                        <span class="testimonial-name">Morgan &amp; Justin</span>
+                        <span class="testimonial-context">Anniversary &middot; Greece</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="testimonial-card">
+                    <svg class="testimonial-mark" viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 18V12C0 5.4 4.2 0.6 10.8 0L11.4 3C7.2 3.6 4.8 6 4.8 9H7.2C8.5 9 9.6 10.1 9.6 11.4V15.6C9.6 16.9 8.5 18 7.2 18H0ZM12.6 18V12C12.6 5.4 16.8 0.6 23.4 0L24 3C19.8 3.6 17.4 6 17.4 9H19.8C21.1 9 22.2 10.1 22.2 11.4V15.6C22.2 16.9 21.1 18 19.8 18H12.6Z" fill="currentColor"/>
+                    </svg>
+                    <blockquote class="testimonial-quote">
+                        Thank you for planning the most incredible honeymoon
+                        &mdash; we had the time of our lives. We loved the
+                        Chiang Mai hotel and the cooking class at a local Thai
+                        family&rsquo;s home.
+                    </blockquote>
+                    <figcaption class="testimonial-attribution">
+                        <span class="testimonial-name">Kaley &amp; Pat</span>
+                        <span class="testimonial-context">Honeymoon &middot; Thailand</span>
+                    </figcaption>
+                </figure>
+                    </div><!-- /.testimonials-track -->
+                </div><!-- /.testimonials-viewport -->
+                <button class="testimonials-arrow testimonials-arrow--next" type="button" aria-label="Next testimonials">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 2 l6 6 l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div><!-- /.testimonials-carousel -->
+        </div>
+    </section>
+
+    <!-- ================================================================
+         §08 — Closing brandmark. Embossed WW monogram, magazine-end.
+         ================================================================ -->
+    <section class="brandmark-close" aria-hidden="true">
+        <div class="container brandmark-close-inner">
+            <span class="brandmark-monogram">WW</span>
+            <span class="brandmark-inscription">Wander by Wilson</span>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="data.js?v=59"></script>
+    <script>
+        const header = document.getElementById('siteHeader');
+        const heroBgEl = document.querySelector('.hero-bg');
+        const heroContentEl = document.querySelector('.hero-content');
+
+        let scrollTicking = false;
+        const onScroll = () => {
+            // Header scroll state
+            if (window.scrollY > 24) header.classList.add('is-scrolled');
+            else header.classList.remove('is-scrolled');
+
+            // Scroll-linked fade: hero video + text fade out as you scroll past the hero,
+            // so the transition into the next section reads as one continuous dark space.
+            if (heroBgEl) {
+                const vh = window.innerHeight;
+                const fadeStart = vh * 0.10;
+                const fadeEnd   = vh * 0.85;
+                const t = Math.max(0, Math.min(1, (window.scrollY - fadeStart) / (fadeEnd - fadeStart)));
+                heroBgEl.style.opacity = (1 - t).toFixed(3);
+                if (heroContentEl) heroContentEl.style.opacity = (1 - t).toFixed(3);
+            }
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                requestAnimationFrame(() => { onScroll(); scrollTicking = false; });
+                scrollTicking = true;
+            }
+        }, { passive: true });
+        onScroll();
+
+        /* Marquee — duplicate items so the linear translate from 0 → -50% loops seamlessly */
+        document.querySelectorAll('[data-marquee]').forEach(m => {
+            const track = m.querySelector('.marquee-track');
+            if (!track) return;
+            Array.from(track.children).forEach(item => track.appendChild(item.cloneNode(true)));
+        });
+
+        /* ------------------------------------------------------------------ */
+        /*  Hero — video crossfade controller                                 */
+        /* ------------------------------------------------------------------ */
+        (function() {
+            const heroBg = document.getElementById('heroBg');
+            if (!heroBg) return;
+
+            const videos = Array.from(heroBg.querySelectorAll('.hero-video'));
+            const railMark = document.getElementById('railMark');
+            const railText = document.getElementById('railText');
+            const isMobile = window.matchMedia('(max-width: 640px)').matches;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Mobile: only run the first clip; show poster otherwise.
+            if (isMobile || reducedMotion) {
+                videos.slice(1).forEach(v => v.remove());
+                const first = videos[0];
+                if (first && first.dataset.src && !first.src) first.src = first.dataset.src;
+                return;
+            }
+
+            // Hydrate any lazy <video> sources now that we're past the mobile gate.
+            // Stagger so we don't fire 5 simultaneous requests on top of the first.
+            videos.forEach((v, i) => {
+                if (v.dataset.src && !v.src) {
+                    setTimeout(() => { v.src = v.dataset.src; v.load(); }, 1200 + i * 1200);
+                }
+            });
+
+            const SLIDE_MS = 5500;          // shorter clips — faster pace
+            let active = 0;
+
+            const seekTo = (v) => {
+                const start = parseFloat(v.dataset.start) || 0;
+                try { v.currentTime = start; } catch(e) {}
+            };
+
+            // Prevent loop-seek glitch on clips shorter than the slide duration.
+            // Short clips freeze on their last frame instead of seeking back to 0.
+            const setLoopBehavior = (v) => {
+                const dur = v.duration;
+                v.loop = !(isFinite(dur) && dur > 0 && dur * 1000 < SLIDE_MS - 100);
+            };
+
+            const updateRail = (i) => {
+                const v = videos[i];
+                if (!v || !railMark || !railText) return;
+                // Tiny fade on the rail text for the swap
+                [railMark, railText].forEach(el => el.style.opacity = '0');
+                setTimeout(() => {
+                    railMark.textContent = 'N° ' + v.dataset.index;
+                    railText.textContent = v.dataset.place;
+                    railMark.style.opacity = '';
+                    railText.style.opacity = '';
+                }, 450);
+            };
+
+            const advance = () => {
+                const next = (active + 1) % videos.length;
+                const cur = videos[active];
+                const nxt = videos[next];
+                // If the next video hasn't loaded enough to play smoothly, skip it
+                if (nxt.readyState < 2) {
+                    // skip ahead one more
+                    const skip = (next + 1) % videos.length;
+                    if (videos[skip] !== cur && videos[skip].readyState >= 2) {
+                        return swap(videos[skip], skip);
+                    }
+                    // If nothing's ready, just hold on current
+                    return;
+                }
+                swap(nxt, next);
+
+                function swap(target, idx) {
+                    target.classList.add('is-active');
+                    cur.classList.remove('is-active');
+                    seekTo(target);
+                    setLoopBehavior(target);
+                    target.play().catch(() => {});
+                    updateRail(idx);
+                    active = idx;
+                }
+            };
+
+            // Kick off the first video and the cycle
+            const startPlayback = () => {
+                seekTo(videos[0]);
+                setLoopBehavior(videos[0]);
+                videos[0].play().catch(() => {});
+                setInterval(advance, SLIDE_MS);
+            };
+            if (videos[0].readyState >= 2) startPlayback();
+            else videos[0].addEventListener('canplay', startPlayback, { once: true });
+
+            // Set initial rail to match first slide
+            updateRail(0);
+        })();
+
+        // Tiny transition on rail labels (added inline so we don't bloat styles.css)
+        const railCss = document.createElement('style');
+        railCss.textContent = '#railMark, #railText { transition: opacity 0.35s ease; }';
+        document.head.appendChild(railCss);
+
+        /* ------------------------------------------------------------------ */
+        /*  §02 — Atlas globe                                                 */
+        /* ------------------------------------------------------------------ */
+        /* ATLAS_POINTS is loaded from data.js (shared by index.html and property.html). */
+
+        (function initAtlas() {
+            if (typeof Globe !== 'function') return;
+            const el = document.getElementById('atlasGlobe');
+            if (!el) return;
+
+            // Guard the WebGL globe: if it can't initialize (no WebGL / GPU issue /
+            // locked-down device), catch it so the rest of the page's JS still runs.
+            try {
+            let controls = null;
+
+            const createMarker = (d) => {
+                // Routing priority: internal property page (slug) > direct Virtuoso link (url)
+                const internalHref = d.slug ? `property.html?slug=${encodeURIComponent(d.slug)}` : null;
+                const href = internalHref || d.url || null;
+                const m = document.createElement(href ? 'a' : 'div');
+                m.className = 'atlas-marker' + (href ? ' atlas-marker--linked' : '');
+                if (href) {
+                    m.href = href;
+                    if (!internalHref) {
+                        // External Virtuoso link — open in new tab
+                        m.target = '_blank';
+                        m.rel = 'noopener noreferrer';
+                    }
+                }
+                m.innerHTML = `
+                    <span class="atlas-marker-ring" aria-hidden="true"></span>
+                    <div class="atlas-marker-label">
+                        <span class="atlas-marker-place">${d.city}, ${d.country}</span>
+                        <span class="atlas-marker-hotel">${d.hotel}</span>
+                        ${href ? '<span class="atlas-marker-cta">View &amp; book &rarr;</span>' : ''}
+                    </div>
+                `;
+                m.addEventListener('mouseenter', () => { if (controls) controls.autoRotate = false; });
+                m.addEventListener('mouseleave', () => { if (controls) controls.autoRotate = true; });
+                return m;
+            };
+
+            const globe = Globe()
+                .backgroundColor('rgba(0,0,0,0)')
+                /* Deep-lagoon sphere with sandy continents. Atmosphere kept
+                   white + minimal so there's no blue glow ring around the orb. */
+                .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+                .atmosphereColor('#FFFFFF')
+                .atmosphereAltitude(0.1)
+                /* Only show QA'd hotels — others stay in data.js + reachable
+                   via direct URL but are hidden on the globe until verified. */
+                .htmlElementsData(ATLAS_POINTS.filter(p => p.live))
+                .htmlLat('lat')
+                .htmlLng('lng')
+                .htmlAltitude(0.012)
+                .htmlElement(createMarker)
+                (el);
+
+            // Deep-lagoon sphere — lets the sandy continents + sea halo glow.
+            const sphereMat = globe.globeMaterial();
+            if (sphereMat && sphereMat.color)    sphereMat.color.set('#103D44');
+            if (sphereMat && sphereMat.emissive) sphereMat.emissive.set('#000000');
+            if (sphereMat && sphereMat.specular) sphereMat.specular.set('#000000');
+            if (sphereMat && 'shininess' in sphereMat) sphereMat.shininess = 18;
+
+            // "Click any pin to explore" hint stays visible (no auto-dismiss).
+
+            /* ----------------------------------------------------------------
+               Featured-property preview cycle. When the atlas section scrolls
+               into view, rotate the globe to a featured property, fade in a
+               card with the property's photo + name + a hairpin arrow pointing
+               at the pin. After ~6 sec, advance to the next property. Cycle
+               loops. Stops if the user takes manual control of the globe.
+               ---------------------------------------------------------------- */
+            const FEATURED = [
+                { slug: 'borgo-santandrea', name: 'Borgo Santandrea',  location: 'Amalfi Coast, Italy',  image: 'property-images/borgo-santandrea/02-aerial-coastal.jpg', lat: 40.612, lng: 14.568 },
+                { slug: 'hotel-esencia',    name: 'Hotel Esencia',     location: 'Xpu-Ha, Mexico',       image: 'property-images/hotel-esencia/00-hero.jpg',              lat: 20.497, lng: -87.252 },
+                { slug: 'canaves-ena',      name: 'Canaves Ena',       location: 'Oia, Santorini',       image: 'property-images/canaves-ena/00-hero.webp',               lat: 36.461, lng: 25.376 }
+            ];
+
+            const preview = document.getElementById('atlasPreview');
+            const previewCard = document.getElementById('atlasPreviewCard');
+            const previewImg = document.getElementById('atlasPreviewImg');
+            const previewLocation = document.getElementById('atlasPreviewLocation');
+            const previewName = document.getElementById('atlasPreviewName');
+
+            // Cycle state — `cycleTimers` (declared below in the orchestration
+            // block) tracks every pending phase so stopCycle() can cancel cleanly.
+            let cycleActive = false;
+
+            const pinMarker = document.getElementById('atlasPinMarker');
+            const previewArrow = preview ? preview.querySelector('.atlas-preview-arrow') : null;
+            const previewArrowPath = previewArrow ? previewArrow.querySelector('path') : null;
+            const stage = document.querySelector('.atlas-stage');
+
+            // Size the connector so its line spans exactly from the card edge
+            // to the globe center (where the pin marker sits).
+            const sizeArrowToPin = (side) => {
+                if (!previewArrow || !previewCard || !stage) return;
+                const stageRect = stage.getBoundingClientRect();
+                const cardRect  = previewCard.getBoundingClientRect();
+                const centerX   = stageRect.left + stageRect.width / 2;
+                const gap = side === 'left'
+                    ? Math.max(40, centerX - cardRect.right)
+                    : Math.max(40, cardRect.left - centerX);
+                previewArrow.style.width = gap + 'px';
+            };
+
+            // Measure the path length so the dasharray/dashoffset matches
+            // whatever curve the path actually traces.
+            const arrowPathLen = () => {
+                if (!previewArrowPath) return 260;
+                try { return previewArrowPath.getTotalLength() || 260; }
+                catch (e) { return 260; }
+            };
+
+            /* ------------------------------------------------------------------
+               Animation primitives.
+
+               The line uses TWO independent properties:
+               - stroke-dashoffset: controls how much of the path is drawn
+                 (full length = invisible, 0 = fully drawn). Used to grow the
+                 line OUT from the pin (start of path = pin end).
+               - opacity: instant or animated fade. Used to vanish the line
+                 together with the card during the joint fade-out.
+
+               Keeping these separate lets the line "draw" once, then later
+               "fade" — without retracting first.
+               ------------------------------------------------------------------ */
+            const resetArrow = () => {
+                if (!previewArrowPath) return;
+                const len = arrowPathLen();
+                previewArrowPath.style.transition = 'none';
+                previewArrowPath.style.opacity = '0';
+                previewArrowPath.style.strokeDasharray = len + ' ' + len;
+                previewArrowPath.style.strokeDashoffset = len;
+                previewArrowPath.getBoundingClientRect(); // commit
+            };
+
+            const drawArrowIn = () => {
+                if (!previewArrowPath) return;
+                // Snap opacity to 1 instantly (line is still invisible because
+                // dashoffset = length — only the dashoffset animation will
+                // reveal it), then animate the draw.
+                previewArrowPath.style.transition = 'none';
+                previewArrowPath.style.opacity = '1';
+                previewArrowPath.getBoundingClientRect();
+                previewArrowPath.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(0.22, 1, 0.36, 1)';
+                previewArrowPath.style.strokeDashoffset = '0';
+            };
+
+            const fadeOutArrow = () => {
+                if (!previewArrowPath) return;
+                previewArrowPath.style.transition = 'opacity 0.6s ease';
+                previewArrowPath.style.opacity = '0';
+            };
+
+            /* ------------------------------------------------------------------
+               Pin marker show/hide.
+
+               Re-adding `.is-visible` after removing it would not re-fire the
+               CSS keyframe animation in Chrome unless we force a reflow
+               between the two class operations.
+               ------------------------------------------------------------------ */
+            const showPin = () => {
+                if (!pinMarker) return;
+                pinMarker.classList.remove('is-visible');
+                void pinMarker.offsetWidth; // reflow — restarts the dot intro
+                pinMarker.classList.add('is-visible');
+            };
+            const hidePin = () => { if (pinMarker) pinMarker.classList.remove('is-visible'); };
+
+            const showCard = () => { if (preview) preview.classList.add('is-visible'); };
+            const hideCard = () => { if (preview) preview.classList.remove('is-visible'); };
+
+            const populateCard = (p) => {
+                if (!previewCard || !p) return;
+                previewCard.href = 'property.html?slug=' + p.slug;
+                previewImg.src = p.image;
+                previewImg.alt = p.name;
+                previewLocation.textContent = p.location;
+                previewName.textContent = p.name;
+            };
+
+            const setSide = (side) => {
+                if (!preview) return;
+                preview.classList.toggle('atlas-preview--left',  side === 'left');
+                preview.classList.toggle('atlas-preview--right', side === 'right');
+            };
+
+            const rotateGlobeTo = (p, durationMs) => {
+                if (globe && globe.pointOfView && p) {
+                    globe.pointOfView({ lat: p.lat, lng: p.lng, altitude: 2.0 }, durationMs);
+                }
+            };
+
+            /* ------------------------------------------------------------------
+               Cycle orchestration.
+
+               Per Wilson's spec, the sequence for each property is:
+                 1.  Dot pulses/glows/grows in       (0     → 800ms)
+                 2.  Line grows out of the dot       (800   → 1900ms)
+                 3.  Card fades in at line's end     (1700  → 2300ms)
+                 4.  Hold                            (...   → 7300ms)
+                 5.  Card + line fade out together   (7300  → 7900ms)
+                 6.  Dot fades out                   (7500  → 7950ms)
+                 7.  Globe rotates to next prop      (8000  → 9800ms)
+                 8.  Loop with next idx              (9800ms → repeat)
+
+               Total per property ≈ 9.8s. All timers are tracked in
+               `cycleTimers` so `stopCycle()` can cancel a partial sequence
+               cleanly when the visitor takes over the globe.
+               ------------------------------------------------------------------ */
+            let cycleTimers = [];
+            const clearCycleTimers = () => {
+                cycleTimers.forEach(t => clearTimeout(t));
+                cycleTimers = [];
+            };
+            const scheduleAt = (ms, fn) => {
+                cycleTimers.push(setTimeout(fn, ms));
+            };
+
+            const cycleProperty = (idx) => {
+                if (!cycleActive) return;
+                const p = FEATURED[idx];
+                if (!p) return;
+
+                // Reset visuals + set this property's content + side
+                populateCard(p);
+                const side = idx % 2 === 0 ? 'left' : 'right';
+                setSide(side);
+                resetArrow();
+                hideCard();
+
+                // Phase 1 — dot grows/pulses/glows in
+                showPin();
+
+                // Phase 2 — line grows out of the dot (starts after dot intro)
+                scheduleAt(800, () => {
+                    sizeArrowToPin(side);
+                    drawArrowIn();
+                });
+
+                // Phase 3 — card fades in at the line's far end (starts while
+                // line is still drawing so it feels like the line arrives and
+                // the card appears at its tip)
+                scheduleAt(1700, () => {
+                    showCard();
+                    // Re-measure once the card actually positioned itself
+                    requestAnimationFrame(() => sizeArrowToPin(side));
+                });
+
+                // Phase 5 — card + line fade out together
+                scheduleAt(7300, () => {
+                    hideCard();
+                    fadeOutArrow();
+                });
+
+                // Phase 6 — dot fades out (slightly after card so the line
+                // appears to vanish at its destination, not at its origin)
+                scheduleAt(7500, () => {
+                    hidePin();
+                });
+
+                // Phase 7 — rotate globe to the next property's pin once
+                // everything has cleared the previous location
+                scheduleAt(8000, () => {
+                    const nextIdx = (idx + 1) % FEATURED.length;
+                    rotateGlobeTo(FEATURED[nextIdx], 1800);
+                    // Phase 8 — loop after rotation completes
+                    scheduleAt(1800, () => cycleProperty(nextIdx));
+                });
+            };
+
+            const startCycle = () => {
+                if (cycleActive) return;
+                cycleActive = true;
+                if (controls) controls.autoRotate = false;
+                // Rotate to the first property's pin BEFORE the first cycle
+                // begins, so the dot pulses in at the right location.
+                scheduleAt(1200, () => {
+                    rotateGlobeTo(FEATURED[0], 1800);
+                    scheduleAt(1800, () => cycleProperty(0));
+                });
+            };
+
+            const stopCycle = () => {
+                cycleActive = false;
+                clearCycleTimers();
+                hideCard();
+                hidePin();
+                resetArrow();
+                if (controls) controls.autoRotate = true;
+            };
+
+            // Stop the cycle if the user interacts with the globe directly
+            ['pointerdown', 'touchstart'].forEach(evt => {
+                el.addEventListener(evt, stopCycle, { passive: true });
+            });
+
+            // Trigger the cycle when the atlas section is meaningfully in view
+            const atlasSection = document.querySelector('.atlas');
+            if (atlasSection && 'IntersectionObserver' in window) {
+                const previewObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(e => {
+                        if (e.isIntersecting && e.intersectionRatio > 0.45 && !cycleActive) {
+                            startCycle();
+                        }
+                    });
+                }, { threshold: [0.45] });
+                previewObserver.observe(atlasSection);
+            }
+
+            const sizeGlobe = () => {
+                globe.width(el.clientWidth).height(el.clientHeight);
+            };
+            sizeGlobe();
+            window.addEventListener('resize', sizeGlobe);
+
+            controls = globe.controls();
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.18;
+            controls.enableZoom = false;
+            controls.minPolarAngle = Math.PI * 0.25;
+            controls.maxPolarAngle = Math.PI * 0.75;
+
+            // Initial framing — show Europe / Mediterranean / N. Africa
+            globe.pointOfView({ lat: 20, lng: 20, altitude: 2.4 }, 1500);
+
+            // Continent silhouettes — single land geojson, no political borders, static styling
+            fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson')
+                .then(r => r.json())
+                .then(land => {
+                    globe
+                        .polygonsData(land.features || [])
+                        .polygonAltitude(0.008)
+                        .polygonCapColor(() => 'rgba(241, 227, 200, 0.82)')
+                        .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
+                        .polygonStrokeColor(() => 'rgba(252, 244, 224, 0.95)');
+                })
+                .catch(err => console.warn('Land polygons failed to load:', err));
+            } catch (err) {
+                console.warn('Atlas globe failed to initialize (WebGL unavailable?). The rest of the page is unaffected.', err);
+            }
+        })();
+
+        /* ------------------------------------------------------------------ */
+        /*  Scroll-triggered reveal for the atlas section                     */
+        /* ------------------------------------------------------------------ */
+        (function() {
+            const atlas = document.querySelector('.atlas');
+            if (!atlas) return;
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduced) { atlas.classList.add('is-visible'); return; }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        atlas.classList.add('is-visible');
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
+
+            observer.observe(atlas);
+        })();
+
+        /* ------------------------------------------------------------------ */
+        /*  §07 — Testimonials carousel (shows 3, slides one card per arrow)   */
+        /* ------------------------------------------------------------------ */
+        (function() {
+            const carousel = document.querySelector('.testimonials-carousel');
+            if (!carousel) return;
+            const viewport = carousel.querySelector('.testimonials-viewport');
+            const track = carousel.querySelector('.testimonials-track');
+            const cards = Array.from(track.querySelectorAll('.testimonial-card'));
+            const prevBtn = carousel.querySelector('.testimonials-arrow--prev');
+            const nextBtn = carousel.querySelector('.testimonials-arrow--next');
+            if (!viewport || !track || !cards.length) return;
+
+            let index = 0;
+
+            const gap = () => {
+                const cs = getComputedStyle(track);
+                return parseFloat(cs.columnGap || cs.gap) || 0;
+            };
+            // One "step" = a card's width plus the gap to the next.
+            const step = () => cards[0].getBoundingClientRect().width + gap();
+            // How many whole cards are visible in the viewport right now.
+            const visibleCount = () => Math.max(1, Math.round((viewport.clientWidth + gap()) / step()));
+            const maxIndex = () => Math.max(0, cards.length - visibleCount());
+
+            const update = () => {
+                index = Math.min(Math.max(index, 0), maxIndex());
+                track.style.transform = 'translateX(' + (-index * step()) + 'px)';
+                if (prevBtn) prevBtn.disabled = index <= 0;
+                if (nextBtn) nextBtn.disabled = index >= maxIndex();
+            };
+
+            if (prevBtn) prevBtn.addEventListener('click', () => { index -= 1; update(); });
+            if (nextBtn) nextBtn.addEventListener('click', () => { index += 1; update(); });
+
+            // Recompute on resize (visible count + step change across breakpoints).
+            let rT = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(rT);
+                rT = setTimeout(update, 120);
+            }, { passive: true });
+
+            // Auto-advance through the testimonials. Loops back to the start; pauses on
+            // hover and when the tab is hidden; respects reduced-motion.
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let autoTimer = null;
+            const stopAuto = () => { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } };
+            const startAuto = () => {
+                stopAuto();
+                if (reduceMotion || cards.length <= visibleCount()) return;
+                autoTimer = setInterval(() => {
+                    index = (index >= maxIndex()) ? 0 : index + 1;
+                    update();
+                }, 5500);
+            };
+            carousel.addEventListener('mouseenter', stopAuto);
+            carousel.addEventListener('mouseleave', startAuto);
+            if (prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); startAuto(); });
+            if (nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); startAuto(); });
+            document.addEventListener('visibilitychange', () => { document.hidden ? stopAuto() : startAuto(); });
+
+            update();
+            startAuto();
+        })();
+
+        /* ------------------------------------------------------------------ */
+        /*  Round 2 — scroll-reveal (fade/rise) + parallax for full-bleed band */
+        /* ------------------------------------------------------------------ */
+        (function() {
+            const items = document.querySelectorAll('[data-reveal], [data-reveal-group]');
+            if (!items.length) return;
+            const revealAll = () => items.forEach(el => el.classList.add('is-inview'));
+            // Reduced-motion users, or browsers without IntersectionObserver: show everything immediately.
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+                revealAll();
+                return;
+            }
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('is-inview'); io.unobserve(e.target); }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+            items.forEach(el => io.observe(el));
+            // Failsafe backstop — if the observer ever stalls (GPU/renderer hiccup, throttled
+            // background tab, etc.), reveal any element that is actually in view but still hidden.
+            // Mirrors the observer, so it's a no-op when things work — but content can never
+            // be permanently invisible.
+            const backstop = () => {
+                items.forEach(el => {
+                    if (el.classList.contains('is-inview')) return;
+                    const r = el.getBoundingClientRect();
+                    if (r.top < window.innerHeight * 0.95 && r.bottom > 0) el.classList.add('is-inview');
+                });
+            };
+            window.addEventListener('scroll', backstop, { passive: true });
+            window.addEventListener('resize', backstop, { passive: true });
+            window.addEventListener('load', () => setTimeout(backstop, 1500));
+        })();
+
+        (function() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const items = Array.from(document.querySelectorAll('[data-parallax]'));
+            if (!items.length) return;
+            let ticking = false;
+            const update = () => {
+                const vh = window.innerHeight;
+                items.forEach(el => {
+                    const sec = el.closest('section') || el.parentElement;
+                    const r = sec.getBoundingClientRect();
+                    if (r.bottom < -50 || r.top > vh + 50) return;
+                    // -1 (entering bottom) → +1 (leaving top); shift the media a touch
+                    const prog = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
+                    el.style.transform = 'translate3d(0,' + (prog * 9).toFixed(2) + '%,0)';
+                });
+                ticking = false;
+            };
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

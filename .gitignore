@@ -1,0 +1,33 @@
+# Backup files from migration / cleanup passes
+*.bak
+*.bak-*
+
+# Large unused source files (kept locally but never deployed)
+SPL-POOL-30.jpg
+SPL-DEST-07.jpg
+CAR-ACC-SUI-99.jpg
+IMG_7864.JPG
+
+# CLIENT-CONFIDENTIAL — never commit
+proposals/
+
+# Old backups + experimental landing pages
+logos-original-backup/
+Landing Pages/
+
+# OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Local server log
+wbw-server.log
+/tmp/wbw-server.log
+
+# Editor metadata
+.vscode/
+.idea/
+
+# Claude Code session / local settings
+.claude/

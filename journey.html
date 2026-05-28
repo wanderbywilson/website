@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="journeyTitle">A Journey — Wander by Wilson</title>
+    <meta name="description" id="journeyMetaDesc" content="A ready-to-book luxury journey curated by Wander by Wilson.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-journey-page">
+    <header class="site-header" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         Hero
+         ================================================================ -->
+    <section class="journey-hero" aria-label="Journey hero">
+        <div class="journey-hero-bg">
+            <img id="journeyHeroImg" src="" alt="" fetchpriority="high">
+            <div class="journey-hero-grain" aria-hidden="true"></div>
+            <div class="journey-hero-gradient"></div>
+        </div>
+        <div class="container journey-hero-inner">
+            <p class="kicker journey-hero-kicker"><span class="kicker-line"></span><span id="journeyKicker">A ready-to-book journey</span></p>
+            <h1 class="journey-title" id="journeyTitleH1"></h1>
+            <p class="journey-subtitle" id="journeySubtitle"></p>
+            <div class="journey-meta">
+                <span id="journeyDuration"></span>
+                <span class="journey-meta-dot" aria-hidden="true"></span>
+                <span id="journeyCountries"></span>
+                <span class="journey-meta-dot" aria-hidden="true"></span>
+                <span id="journeyPropertiesCount"></span>
+            </div>
+            <div class="journey-hero-action">
+                <span class="journey-price-row">
+                    <span class="journey-price-hero" id="journeyPrice"></span>
+                    <button class="journey-price-info" type="button" aria-label="Pricing details">
+                        <span class="journey-price-info-mark" aria-hidden="true">?</span>
+                        <span class="journey-price-tooltip" id="journeyPriceTooltip" role="tooltip"></span>
+                    </button>
+                </span>
+                <p class="journey-price-includes" id="journeyPriceIncludes" hidden></p>
+                <a href="#" class="cta-primary journey-inquire-cta">
+                    <span class="cta-primary-label">Inquire about this journey</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Sticky in-page nav bar (revealed on scroll past hero)
+         ================================================================ -->
+    <nav class="journey-stickybar" id="journeyStickybar" aria-label="Page sections">
+        <div class="container journey-stickybar-inner">
+            <ul class="journey-anchors">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#itinerary">Itinerary</a></li>
+                <li><a href="#stays">Stays</a></li>
+                <li><a href="#inclusions">Inclusions</a></li>
+            </ul>
+            <div class="journey-stickybar-right">
+                <span class="journey-price-mini" id="journeyPriceMini"></span>
+                <a href="#" class="journey-stickybar-cta journey-inquire-cta">Inquire</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================================================================
+         Overview
+         ================================================================ -->
+    <section class="journey-overview" id="overview">
+        <div class="container journey-overview-inner">
+            <p class="journey-pullquote-label" id="journeyPullquoteLabel" hidden></p>
+            <blockquote class="journey-pullquote" id="journeyPullquote"></blockquote>
+            <p class="kicker"><span class="kicker-line"></span><span>The journey</span></p>
+            <p class="journey-overview-prose" id="journeyOverview"></p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Best for + Highlights
+         ================================================================ -->
+    <section class="journey-highlights">
+        <div class="container journey-highlights-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Best for</span></p>
+            <p class="journey-bestfor" id="journeyBestFor"></p>
+            <p class="kicker journey-highlights-kicker"><span class="kicker-line"></span><span>Highlights</span></p>
+            <ol class="journey-highlights-grid" id="journeyHighlights"></ol>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Day by day — grouped chapters
+         ================================================================ -->
+    <section class="journey-itinerary" id="itinerary">
+        <div class="container journey-itinerary-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Day by day</span></p>
+            <h2 class="journey-section-title" id="journeyItineraryHeading">Your fifteen days, broken<br><em>by region.</em></h2>
+            <div class="journey-legs" id="journeyLegs"></div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Mid-page reassurance band — invitation to tailor
+         ================================================================ -->
+    <section class="journey-tailor" aria-label="Tailor this journey">
+        <div class="container journey-tailor-inner">
+            <h2 class="journey-tailor-title" id="journeyTailorTitle">Inspired by this journey?</h2>
+            <p class="journey-tailor-body" id="journeyTailorBody">
+                Every itinerary is tailored around your travel style, preferred pace, and the experiences that matter most to you. Consider this the framework; we&rsquo;ll tailor the details together.
+            </p>
+            <a href="#" class="journey-tailor-cta journey-inquire-cta">
+                <span id="journeyTailorCtaLabel">Tailor this journey</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Where you stay — property cards
+         ================================================================ -->
+    <section class="journey-stays" id="stays">
+        <div class="container journey-stays-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Where you stay</span></p>
+            <h2 class="journey-section-title" id="journeyStaysHeading">Five properties, each<br><em>chosen for a reason.</em></h2>
+            <div class="journey-stays-grid" id="journeyStays"></div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Why this journey is different (optional, per-journey)
+         ================================================================ -->
+    <section class="journey-why" id="journeyWhyDifferent" hidden>
+        <div class="container journey-why-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Why this journey</span></p>
+            <h2 class="journey-why-title" id="journeyWhyDifferentTitle"></h2>
+            <p class="journey-why-body" id="journeyWhyDifferentBody"></p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Inclusions
+         ================================================================ -->
+    <section class="journey-inclusions" id="inclusions">
+        <div class="container journey-inclusions-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Inclusions</span></p>
+            <div class="journey-inclusions-grid">
+                <div class="journey-included">
+                    <h3 class="journey-inclusions-heading">Included</h3>
+                    <ul id="journeyIncluded" class="journey-inclusions-list"></ul>
+                </div>
+                <div class="journey-not-included">
+                    <h3 class="journey-inclusions-heading">Not included</h3>
+                    <ul id="journeyNotIncluded" class="journey-inclusions-list journey-inclusions-list--exclude"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Why book through Wander (optional, per-journey)
+         ================================================================ -->
+    <section class="journey-whybook" id="journeyWhyBook" hidden>
+        <div class="container journey-whybook-inner">
+            <h2 class="journey-whybook-title" id="journeyWhyBookTitle"></h2>
+            <p class="journey-whybook-intro" id="journeyWhyBookIntro"></p>
+            <ul class="journey-whybook-list" id="journeyWhyBookList"></ul>
+            <a href="#" class="cta-primary journey-inquire-cta journey-whybook-cta" id="journeyWhyBookCtaWrap" hidden>
+                <span class="cta-primary-label" id="journeyWhyBookCta"></span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Investment — anchored price + CTA
+         ================================================================ -->
+    <section class="journey-investment">
+        <div class="container journey-investment-inner">
+            <p class="kicker"><span class="kicker-line"></span><span>Investment</span></p>
+            <p class="journey-price-large" id="journeyPriceLarge"></p>
+            <p class="journey-price-note" id="journeyPriceNote"></p>
+            <a href="#" class="cta-primary journey-inquire-cta">
+                <span class="cta-primary-label">Inquire about this journey</span>
+            </a>
+        </div>
+    </section>
+
+    <script src="data.js?v=59"></script>
+    <script>
+        (function loadJourney() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            const journey = (slug && typeof ITINERARIES !== 'undefined') ? ITINERARIES[slug] : null;
+
+            if (!journey) {
+                window.location.replace('journeys.html');
+                return;
+            }
+
+            // Title + meta
+            const title = journey.title + ' — ' + (journey.subtitle || '');
+            document.title = title.replace(/&[a-z]+;/g, '').replace('  ', ' ') + ' | Wander by Wilson';
+            const metaDescText = journey.duration + ' luxury journey by Wander by Wilson. ' +
+                journey.countries.join(' & ') + '. From $' + journey.priceFrom.toLocaleString() + ' per person.';
+            document.getElementById('journeyMetaDesc').setAttribute('content', metaDescText);
+
+            // Per-journey SEO: canonical, OG tags
+            const canonicalUrl = 'https://www.wanderbywilson.com/journey.html?slug=' + slug;
+            const setHead = (sel, attr, val) => {
+                let el = document.head.querySelector(sel);
+                if (!el) {
+                    el = document.createElement(sel.split('[')[0]);
+                    const m = sel.match(/\[([^=]+)="([^"]+)"\]/);
+                    if (m) el.setAttribute(m[1], m[2]);
+                    document.head.appendChild(el);
+                }
+                el.setAttribute(attr, val);
+            };
+            setHead('link[rel="canonical"]', 'href', canonicalUrl);
+            setHead('meta[property="og:title"]', 'content', journey.title.replace(/<[^>]+>/g,''));
+            setHead('meta[property="og:description"]', 'content', metaDescText);
+            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com/' + journey.heroImage);
+            setHead('meta[property="og:url"]', 'content', canonicalUrl);
+            setHead('meta[property="og:type"]', 'content', 'website');
+            setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
+
+            // Hero
+            document.getElementById('journeyHeroImg').src = journey.heroImage;
+            document.getElementById('journeyHeroImg').alt = journey.title;
+            document.getElementById('journeyTitleH1').innerHTML = journey.title;
+            document.getElementById('journeySubtitle').innerHTML = journey.subtitle;
+            document.getElementById('journeyDuration').textContent = journey.duration;
+            document.getElementById('journeyCountries').innerHTML = journey.countries.join(' &amp; ');
+            document.getElementById('journeyPropertiesCount').textContent = journey.properties.length + ' properties';
+
+            const priceFull  = 'From $' + journey.priceFrom.toLocaleString() + ' ' + journey.priceCurrency + ' per person';
+            const priceShort = 'From $' + journey.priceFrom.toLocaleString() + ' ' + journey.priceCurrency + ' pp';
+            document.getElementById('journeyPrice').textContent = priceFull;        // hero — spelled out
+            document.getElementById('journeyPriceMini').textContent = priceShort;   // sticky bar — compact
+            document.getElementById('journeyPriceLarge').textContent = priceFull;   // investment — spelled out
+            document.getElementById('journeyPriceNote').innerHTML = journey.priceNote;
+
+            // Optional hero kicker override + price-includes trust line
+            if (journey.kicker) document.getElementById('journeyKicker').textContent = journey.kicker;
+            if (journey.priceIncludes) {
+                const pInc = document.getElementById('journeyPriceIncludes');
+                pInc.textContent = journey.priceIncludes;
+                pInc.hidden = false;
+            }
+
+            // Price tooltip (hover on ? icon)
+            if (journey.priceTooltip) {
+                document.getElementById('journeyPriceTooltip').textContent = journey.priceTooltip;
+            }
+
+            // Wire every inquiry CTA to the trip inquiry form (carry the slug for future pre-fill)
+            const inquireUrl = 'inquire-trip.html?itinerary=' + encodeURIComponent(slug);
+            document.querySelectorAll('.journey-inquire-cta').forEach(a => { a.href = inquireUrl; });
+
+            // Overview + pull-quote
+            document.getElementById('journeyOverview').innerHTML = journey.overview;
+            const journeyPullquoteEl = document.getElementById('journeyPullquote');
+            if (journey.wilsonNote) {
+                journeyPullquoteEl.innerHTML = journey.wilsonNote;
+                if (journey.wilsonNoteLabel) {
+                    const pql = document.getElementById('journeyPullquoteLabel');
+                    pql.textContent = journey.wilsonNoteLabel;
+                    pql.hidden = false;
+                }
+            } else {
+                journeyPullquoteEl.hidden = true;
+            }
+
+            // Best for + Highlights
+            document.getElementById('journeyBestFor').innerHTML = journey.bestFor;
+            const highlightsEl = document.getElementById('journeyHighlights');
+            journey.highlights.forEach(h => {
+                const li = document.createElement('li');
+                li.className = 'journey-highlight';
+                li.innerHTML = '<span class="journey-highlight-label">' + h.label + '</span>';
+                highlightsEl.appendChild(li);
+            });
+
+            // Day-by-day section heading — pull day count from duration
+            const numberWords = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty','twenty-one'];
+            const dayMatch = (journey.duration || '').match(/(\d+)/);
+            const dayWord = dayMatch ? (numberWords[parseInt(dayMatch[1])] || dayMatch[1]) : 'fifteen';
+            const itineraryHeading = document.getElementById('journeyItineraryHeading');
+            if (itineraryHeading) {
+                itineraryHeading.innerHTML = 'Your ' + dayWord + ' days, broken<br><em>by region.</em>';
+            }
+
+            // Legs (grouped day-by-day)
+            const legsEl = document.getElementById('journeyLegs');
+            journey.legs.forEach((leg, i) => {
+                const details = document.createElement('details');
+                details.className = 'journey-leg';
+                if (i === 0) details.open = true;
+                const imageBlock = leg.image
+                    ? '<figure class="journey-leg-image"><img src="' + leg.image + '" alt="' + leg.title + '" loading="lazy"></figure>'
+                    : '';
+                const highlightText = leg.highlight || leg.signature || '';
+                details.innerHTML =
+                    '<summary>' +
+                        '<span class="journey-leg-days">' + leg.days + '</span>' +
+                        '<span class="journey-leg-title">' + leg.title + '</span>' +
+                        '<span class="journey-leg-stay">' + leg.property + '</span>' +
+                        '<span class="journey-leg-chevron" aria-hidden="true">+</span>' +
+                    '</summary>' +
+                    '<div class="journey-leg-content">' +
+                        imageBlock +
+                        '<div class="journey-leg-text">' +
+                            '<p class="journey-leg-desc">' + leg.description + '</p>' +
+                            '<ul class="journey-leg-tags">' +
+                                '<li><span class="journey-leg-tag-label">Stay</span><span>' + leg.property + '</span></li>' +
+                                '<li><span class="journey-leg-tag-label">Meals</span><span>' + leg.meals + '</span></li>' +
+                                '<li><span class="journey-leg-tag-label">Highlight</span><span>' + highlightText + '</span></li>' +
+                            '</ul>' +
+                        '</div>' +
+                    '</div>';
+                legsEl.appendChild(details);
+            });
+
+            // Stays — dynamic heading count + property cards
+            const staysHeading = document.getElementById('journeyStaysHeading');
+            if (staysHeading) {
+                let pw = numberWords[journey.properties.length] || ('' + journey.properties.length);
+                pw = pw.charAt(0).toUpperCase() + pw.slice(1);
+                staysHeading.innerHTML = pw + ' properties, each<br><em>chosen for a reason.</em>';
+            }
+            const noteLabel = journey.propertyNoteLabel || 'Best for';
+            const staysEl = document.getElementById('journeyStays');
+            journey.properties.forEach(p => {
+                const wrap = document.createElement(p.slug ? 'a' : 'div');
+                wrap.className = 'journey-stay-card' + (p.slug ? ' journey-stay-card--linked' : '');
+                if (p.slug) wrap.href = 'property.html?slug=' + p.slug;
+                wrap.innerHTML =
+                    '<figure class="journey-stay-image"><img src="' + p.image + '" alt="' + p.name + '" loading="lazy"></figure>' +
+                    '<div class="journey-stay-meta">' +
+                        '<p class="journey-stay-location">' + p.location + '</p>' +
+                        '<h3 class="journey-stay-name">' + p.name + '</h3>' +
+                        '<p class="journey-stay-nights">' + p.nights + ' nights</p>' +
+                        '<p class="journey-stay-desc">' + p.description + '</p>' +
+                        (p.note ? '<p class="journey-stay-note"><span class="journey-stay-note-label">' + noteLabel + '</span> ' + p.note + '</p>' : '') +
+                        (p.slug ? '<span class="journey-stay-cta">View property &rarr;</span>' : '') +
+                    '</div>';
+                staysEl.appendChild(wrap);
+            });
+
+            // Inclusions
+            const buildList = (id, items) => {
+                const el = document.getElementById(id);
+                items.forEach(i => {
+                    const li = document.createElement('li');
+                    li.innerHTML = i;
+                    el.appendChild(li);
+                });
+            };
+            buildList('journeyIncluded', journey.included);
+            buildList('journeyNotIncluded', journey.notIncluded);
+
+            // Tailor / CTA section — per-journey overrides (fallback to defaults)
+            if (journey.ctaTitle) document.getElementById('journeyTailorTitle').innerHTML = journey.ctaTitle;
+            if (journey.ctaBody)  document.getElementById('journeyTailorBody').innerHTML = journey.ctaBody;
+            if (journey.ctaLabel) document.getElementById('journeyTailorCtaLabel').textContent = journey.ctaLabel;
+
+            // "Why this journey is different" — optional section before inclusions
+            if (journey.whyDifferent) {
+                document.getElementById('journeyWhyDifferentTitle').innerHTML = journey.whyDifferent.title;
+                document.getElementById('journeyWhyDifferentBody').innerHTML = journey.whyDifferent.body;
+                document.getElementById('journeyWhyDifferent').hidden = false;
+            }
+
+            // "Why book through Wander" — optional checklist section before investment
+            if (journey.whyBook) {
+                document.getElementById('journeyWhyBookTitle').innerHTML = journey.whyBook.title;
+                const wbIntro = document.getElementById('journeyWhyBookIntro');
+                if (journey.whyBook.intro) { wbIntro.innerHTML = journey.whyBook.intro; } else { wbIntro.hidden = true; }
+                const wbList = document.getElementById('journeyWhyBookList');
+                (journey.whyBook.items || []).forEach(it => {
+                    const li = document.createElement('li');
+                    li.innerHTML = it;
+                    wbList.appendChild(li);
+                });
+                if (journey.whyBook.ctaLabel) {
+                    document.getElementById('journeyWhyBookCta').textContent = journey.whyBook.ctaLabel;
+                    document.getElementById('journeyWhyBookCtaWrap').hidden = false;
+                }
+                document.getElementById('journeyWhyBook').hidden = false;
+            }
+
+            // Sticky bar reveal after the hero scrolls past — and hide the site
+            // header while the stickybar is taking the top slot.
+            const stickybar = document.getElementById('journeyStickybar');
+            const siteHeader = document.getElementById('siteHeader');
+            const hero = document.querySelector('.journey-hero');
+            const onScroll = () => {
+                const showAfter = hero.offsetHeight - 120;
+                if (window.scrollY > showAfter) {
+                    stickybar.classList.add('is-visible');
+                    if (siteHeader) siteHeader.classList.add('is-hidden');
+                } else {
+                    stickybar.classList.remove('is-visible');
+                    if (siteHeader) siteHeader.classList.remove('is-hidden');
+                }
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        })();
+
+        // Header scroll state — same as other pages
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 24) header.classList.add('is-scrolled');
+            else header.classList.remove('is-scrolled');
+        }, { passive: true });
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>

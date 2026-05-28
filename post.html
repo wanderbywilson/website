@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiration | Wander by Wilson</title>
+    <meta name="description" content="Hotel reviews, destination guides, and the trips we're planning right now. From the Wander by Wilson journal.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=137">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="is-article-page">
+    <header class="site-header is-scrolled" id="siteHeader">
+        <div class="container header-inner">
+            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+            <nav class="nav-primary" aria-label="Primary">
+                <ul>
+                    <li><a href="hotels.html">Hotels</a></li>
+                    <li><a href="journeys.html">Journeys</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="inspiration.html">Inspiration</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+            </nav>
+            <a href="inquire-trip.html" class="header-cta">
+                <span>Inquire</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         Article hero — full-bleed image with title overlay
+         ================================================================ -->
+    <section class="article-hero">
+        <div class="article-hero-bg">
+            <img id="articleHeroImg" src="" alt="" fetchpriority="high">
+            <div class="article-hero-scrim" aria-hidden="true"></div>
+        </div>
+        <div class="container article-hero-inner">
+            <a href="inspiration.html" class="article-hero-back">&larr; Inspiration</a>
+            <p class="article-hero-meta"><span id="articleDate"></span><span class="article-hero-dot" aria-hidden="true"></span><span id="articleReadTime"></span></p>
+            <h1 class="article-hero-title" id="articleTitle"></h1>
+            <ul class="article-hero-tags" id="articleTags" aria-label="Tags"></ul>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Article body
+         ================================================================ -->
+    <section class="article-section">
+        <div class="container article-container">
+            <div class="article-body" id="articleBody"></div>
+
+            <div class="article-cta">
+                <p class="article-cta-eyebrow">Inspired to go?</p>
+                <h2 class="article-cta-title">Let&rsquo;s plan it together.</h2>
+                <p class="article-cta-lede">
+                    Tell us what you&rsquo;re imagining and we&rsquo;ll tailor the trip
+                    around the way you like to travel &mdash; with exclusive perks at the
+                    hotels above.
+                </p>
+                <a href="inquire-trip.html" class="cta-primary">
+                    <span class="cta-primary-label">Begin Planning</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Closing brandmark
+         ================================================================ -->
+    <section class="brandmark-close" aria-hidden="true">
+        <div class="container brandmark-close-inner">
+            <span class="brandmark-monogram">WW</span>
+            <span class="brandmark-inscription">Wander by Wilson &middot; Volume MMXXVI</span>
+        </div>
+    </section>
+
+    <script src="blog-data.js?v=10"></script>
+    <script>
+        (function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            const post = (slug && typeof BLOG_POSTS !== 'undefined') ? BLOG_POSTS[slug] : null;
+
+            if (!post) { window.location.replace('inspiration.html'); return; }
+
+            document.title = post.title + ' | Wander by Wilson';
+
+            // Per-post SEO: canonical URL, meta description, OG tags
+            const canonicalUrl = 'https://www.wanderbywilson.com/post.html?slug=' + slug;
+            const setHead = (selector, attr, value) => {
+                let el = document.head.querySelector(selector);
+                if (!el) {
+                    el = document.createElement(selector.split('[')[0]);
+                    const attrMatch = selector.match(/\[([^=]+)="([^"]+)"\]/);
+                    if (attrMatch) el.setAttribute(attrMatch[1], attrMatch[2]);
+                    document.head.appendChild(el);
+                }
+                el.setAttribute(attr, value);
+            };
+            setHead('link[rel="canonical"]', 'href', canonicalUrl);
+            setHead('meta[name="description"]', 'content', post.dek || post.title);
+            setHead('meta[property="og:title"]', 'content', post.title);
+            setHead('meta[property="og:description"]', 'content', post.dek || '');
+            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com/' + post.heroImage);
+            setHead('meta[property="og:url"]', 'content', canonicalUrl);
+            setHead('meta[property="og:type"]', 'content', 'article');
+            setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
+
+            const heroImg = document.getElementById('articleHeroImg');
+            heroImg.src = post.heroImage;
+            heroImg.alt = post.title;
+            document.getElementById('articleTitle').textContent = post.title;
+            document.getElementById('articleDate').textContent = post.date || '';
+            document.getElementById('articleReadTime').textContent = post.readTime || '';
+            document.getElementById('articleBody').innerHTML = post.bodyHtml;
+
+            const tagsEl = document.getElementById('articleTags');
+            (post.tags || []).forEach(t => {
+                const li = document.createElement('li');
+                li.className = 'article-tag';
+                // Tags link back to the index pre-filtered by tag
+                const a = document.createElement('a');
+                a.href = 'inspiration.html?tag=' + encodeURIComponent(t);
+                a.textContent = t;
+                li.appendChild(a);
+                tagsEl.appendChild(li);
+            });
+        })();
+
+        // Header scroll state
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('is-scrolled', window.scrollY > 24);
+        }, { passive: true });
+    </script>
+    <!-- ================================================================
+         Site footer
+         ================================================================ -->
+    <footer class="site-footer">
+        <div class="container site-footer-top">
+            <div class="site-footer-brand">
+                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
+            </div>
+            <nav class="site-footer-nav" aria-label="Footer">
+                <a href="hotels.html">Hotels</a>
+                <a href="journeys.html">Journeys</a>
+                <a href="services.html">Services</a>
+                <a href="inspiration.html">Inspiration</a>
+                <a href="index.html#about">About</a>
+            </nav>
+            <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor"/>
+                </svg>
+                <span>@wanderbywilson</span>
+            </a>
+        </div>
+        <div class="container site-footer-base">
+            <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
+            <span class="site-footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <span class="site-footer-sep" aria-hidden="true">&middot;</span>
+                <a href="terms.html">Terms &amp; Conditions</a>
+            </span>
+        </div>
+    </footer>
+</body>
+</html>
