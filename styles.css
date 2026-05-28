@@ -6655,3 +6655,58 @@ body.is-home {
 /* — Legal pages — */
 .legal-prose p,
 .legal-prose li           { font-size: 18px; }
+
+/* ============================================================================
+   VIEWPORT-FIT SIZING (2026-05-28)
+   Trim atomic content sections so they fit one viewport (~900-1000px) on
+   standard desktops. Lives at file end to win source-order vs. earlier rules.
+
+   Targets every section that audit showed overflowing at vh=916:
+     index.html  .founder (1322), .services (1211), .testimonials (1099), .journal (1065)
+     services.html  .faq (1161), .testimonials-grid-section (1050)
+     property.html  .property-body (1204), .property-gallery (1388)
+
+   Approach: shrink vertical padding (was 100-140px each side → 48-60px),
+   cap big section title clamps (was 64-72px → 50-56px), tighten content gaps,
+   and constrain a few oversize images. Long sections that are MEANT to scroll
+   (packages stack, journey stays/inclusions, blog grids, forms, hotels-grid)
+   are intentionally untouched.
+============================================================================ */
+
+/* -- Section vertical padding -- */
+.services,
+.journal,
+.founder,
+.testimonials                { padding: 56px 0 64px; }
+.testimonials-grid-section,
+.faq                         { padding: 52px 0; }
+.property-body               { padding: 56px 0 56px; }
+.property-gallery            { padding: 52px 0 56px; }
+
+/* -- Section title caps (was 64-72px max → 50-56px) -- */
+.services-title              { font-size: clamp(34px, 3.6vw, 52px); margin: 0 auto 20px; }
+.journal-title               { font-size: clamp(34px, 3.6vw, 52px); margin: 0 auto 20px; }
+.founder-title               { font-size: clamp(36px, 3.8vw, 56px); margin-bottom: 22px; }
+.testimonials-title          { font-size: clamp(34px, 3.6vw, 52px); }
+
+/* -- Founder portrait -- shorter aspect + capped width so the section fits.
+      Was the worst overflow (1322 → ~860 target). The 3:4 portrait at
+      auto-width was producing ~666px-tall images. */
+.founder-grid                { gap: 56px; align-items: center; }
+.founder-portrait-frame      { aspect-ratio: 4 / 5; max-height: 520px; }
+.founder-portrait            { max-width: 420px; }
+
+/* -- Journal cards: cap card hero image height so the 3-card row fits.
+      Cards stay legible; just less photo dominance. */
+.journal-card-image          { aspect-ratio: 4 / 3; }
+
+/* -- Testimonials grid card: trim internal vertical padding -- */
+.testimonials-grid-section .kicker,
+.faq .kicker                 { margin-bottom: 24px; }
+
+/* -- Property gallery: shorter aspect ratios on the tiles so the gallery
+      fits one viewport. Wide hero tile goes from 16:7 to 16:5 (shorter).
+      Standard tiles go from 3:2 to 16:9 (shorter). */
+.property-gallery .gallery-tile         { aspect-ratio: 16 / 9; }
+.property-gallery .gallery-tile--wide   { aspect-ratio: 21 / 8; }
+.property-gallery .kicker               { margin: 0 auto 24px; }
