@@ -1024,8 +1024,8 @@ button {
     /* Shrunk so the whole atlas section (intro + globe + "Click any pin"
        hint + Browse-all-hotels CTA) fits in one viewport on standard laptops
        (vh ~900px), with room above for the fixed header. Was 320-760, then 260-500. */
-    width: clamp(240px, 38vw, 440px);
-    height: clamp(240px, 38vw, 440px);
+    width: clamp(230px, 36vw, 420px);
+    height: clamp(230px, 36vw, 420px);
     margin: 0 auto;
     cursor: grab;
     /* Soft outer aura — gold halo that radiates beyond the WebGL atmosphere.
