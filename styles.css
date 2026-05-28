@@ -6676,7 +6676,7 @@ body.is-home {
 /* -- Section vertical padding -- */
 .services                    { padding: 44px 0 52px; }
 .journal                     { padding: 52px 0 60px; }
-.founder                     { padding: 40px 0 48px; }
+.founder                     { padding: 36px 0 44px; }
 .testimonials                { padding: 48px 0 56px; }
 .testimonials-grid-section,
 .faq                         { padding: 52px 0; }
@@ -6733,3 +6733,24 @@ body.is-home {
 /* .testimonials — quote card padding trim so the carousel sits ~40px shorter */
 .testimonials .testimonials-head { margin-bottom: 28px; }
 .testimonials .testimonials-carousel { gap: 16px; }
+
+/* Pass 4 — services.html + property.html final trims */
+
+/* services.html .testimonials-grid-section overflow by ~38 */
+.testimonials-grid-section          { padding: 44px 0; }
+.testimonials-grid-section .kicker  { margin-bottom: 18px; }
+
+/* services.html .faq -- shrink padding + tighten heading + accordion item spacing.
+   The FAQ list is meant to scroll if very long, but trim what we can. */
+.faq                                 { padding: 44px 0 52px; }
+.faq .kicker                         { margin-bottom: 20px; }
+
+/* property.html .property-body — 2-col body. Tighten section padding + the
+   inner column gap so the perks column doesn't push the section past viewport. */
+.property-body                       { padding: 44px 0 44px; }
+.property-body .property-body-grid   { gap: 64px; }
+
+/* property.html .property-gallery — shorter tile aspects so 2 rows + 1 wide fit. */
+.property-gallery .gallery-tile      { aspect-ratio: 21 / 11; }
+.property-gallery .gallery-tile--wide{ aspect-ratio: 24 / 7; }
+.property-gallery                    { padding: 40px 0 44px; }
