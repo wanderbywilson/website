@@ -939,7 +939,10 @@ button {
     color: var(--ink);
     /* Tightened vertical padding so the section fits inside one viewport
        on standard laptops (was 80/100 = 180px total). */
-    padding: 36px 0 40px;
+    padding: 24px 0 28px;
+    /* Pad scroll-into-view by the fixed header height so the title doesn't
+       sit under it when this section is the scroll target. */
+    scroll-margin-top: 72px;
     overflow: hidden;
     isolation: isolate;
 }
@@ -1020,9 +1023,9 @@ button {
     position: relative;
     /* Shrunk so the whole atlas section (intro + globe + "Click any pin"
        hint + Browse-all-hotels CTA) fits in one viewport on standard laptops
-       (vh ~900px). Was clamp(320, 72vw, 760). */
-    width: clamp(260px, 42vw, 500px);
-    height: clamp(260px, 42vw, 500px);
+       (vh ~900px), with room above for the fixed header. Was 320-760, then 260-500. */
+    width: clamp(240px, 38vw, 440px);
+    height: clamp(240px, 38vw, 440px);
     margin: 0 auto;
     cursor: grab;
     /* Soft outer aura — gold halo that radiates beyond the WebGL atmosphere.
