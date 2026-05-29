@@ -7322,21 +7322,27 @@ body.is-home {
         color: var(--ink) !important;
         opacity: 1 !important;
     }
-    /* Inquire CTA pinned to the bottom of the overlay */
+    /* Inquire CTA pinned to the bottom of the overlay. Use left/right:0
+       + margin:auto rather than transform — transform-based centering
+       was breaking with position:fixed (rect showing negative coords). */
     .site-header.nav-open .header-cta {
         display: inline-flex !important;
         align-items: center !important;
         gap: 10px !important;
         position: fixed !important;
         bottom: 60px !important;
-        left: 50% !important;
-        right: auto !important;
+        left: 0 !important;
+        right: 0 !important;
         top: auto !important;
-        transform: translateX(-50%) !important;
+        transform: none !important;
+        margin: 0 auto !important;
+        width: max-content !important;
+        max-width: calc(100% - 48px) !important;
         z-index: 10000 !important;
         color: var(--ink) !important;
         background: transparent !important;
         border: 1px solid var(--ink) !important;
+        border-bottom: 1px solid var(--ink) !important;
         padding: 14px 28px !important;
         text-decoration: none !important;
         font-family: var(--font-sans) !important;
@@ -7344,6 +7350,13 @@ body.is-home {
         font-weight: 500 !important;
         letter-spacing: 0.22em !important;
         text-transform: uppercase !important;
+        font-style: normal !important;
+    }
+    .site-header.nav-open .header-cta span {
+        color: var(--ink) !important;
+    }
+    .site-header.nav-open .header-cta svg {
+        stroke: var(--ink) !important;
     }
     /* Hide desktop Inquire button outside the overlay on mobile */
     .header-cta { display: none; }
