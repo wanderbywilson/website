@@ -4274,10 +4274,10 @@ body.is-journeys-index-page { background: var(--paper); }
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(24px, 2.6vw, 34px);
-    line-height: 1.4;
+    font-size: clamp(16px, 1.5vw, 20px);
+    line-height: 1.5;
     color: var(--ink);
-    margin: 0 0 32px;
+    margin: 0 0 24px;
     text-wrap: balance;
 }
 
