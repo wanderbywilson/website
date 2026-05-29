@@ -4111,11 +4111,11 @@ body.is-journeys-index-page { background: var(--paper); }
 /* Editorial caption beneath the framed image — italic serif, muted ink,
    gold underlined link. Only renders when a <figcaption> is present. */
 .package-image-caption {
-    margin: 14px 4px 0;
+    margin: 10px 4px 0;
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 0.01em;
     color: rgba(30, 53, 82, 0.6);
 }
@@ -4218,13 +4218,13 @@ body.is-journeys-index-page { background: var(--paper); }
 
 /* Inline pull-quote between package bands */
 .package-pullquote {
-    margin: 24px auto;
-    padding: 32px 0;
+    margin: 12px auto;
+    padding: 20px 0;
     max-width: 780px;
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(20px, 1.9vw, 26px);
+    font-size: clamp(15px, 1.5vw, 19px);
     line-height: 1.45;
     color: var(--gold);
     text-align: center;
@@ -4399,11 +4399,11 @@ body.is-journeys-index-page { background: var(--paper); }
     font-family: var(--font-serif);
     font-weight: 400;
     font-variation-settings: "opsz" 80;
-    font-size: clamp(26px, 2.4vw, 32px);
+    font-size: clamp(20px, 2vw, 25px);
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--ink);
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     text-wrap: balance;
 }
 
@@ -4411,8 +4411,8 @@ body.is-journeys-index-page { background: var(--paper); }
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: 17px;
-    line-height: 1.55;
+    font-size: 13px;
+    line-height: 1.4;
     color: rgba(30, 53, 82, 0.72);
     margin: 0;
     text-wrap: pretty;
@@ -4426,11 +4426,11 @@ body.is-journeys-index-page { background: var(--paper); }
 
 .package-list li {
     position: relative;
-    padding: 12px 0 12px 26px;
+    padding: 8px 0 8px 26px;
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: 16px;
-    line-height: 1.55;
+    font-size: 12px;
+    line-height: 1.45;
     color: rgba(30, 53, 82, 0.85);
     border-bottom: 1px solid rgba(199, 174, 138, 0.28);
 }
@@ -4476,7 +4476,7 @@ body.is-journeys-index-page { background: var(--paper); }
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(18px, 1.6vw, 22px);
+    font-size: clamp(14px, 1.3vw, 17px);
     color: var(--ink);
 }
 
@@ -4485,13 +4485,13 @@ body.is-journeys-index-page { background: var(--paper); }
 }
 
 .packages-footnote {
-    margin: 56px auto 0;
+    margin: 40px auto 0;
     max-width: 780px;
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.55;
     color: rgba(30, 53, 82, 0.6);
     text-align: center;
 }
@@ -4505,10 +4505,10 @@ body.is-journeys-index-page { background: var(--paper); }
 .package-description p {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: 15px;
-    line-height: 1.65;
+    font-size: 13px;
+    line-height: 1.5;
     color: rgba(30, 53, 82, 0.78);
-    margin: 0 0 14px;
+    margin: 0 0 8px;
     text-wrap: pretty;
 }
 
@@ -4827,48 +4827,10 @@ body.is-journeys-index-page { background: var(--paper); }
 }
 
 /* ---- Whole-page type scale-up (services page) -----------------------------
-   Everything reads larger — body copy, ledes, display headings, and labels —
-   with proportions preserved. (Hero title left at its existing display size.) */
-
-/* Body copy — sized to fit each package in viewport with breathing room */
-.is-services-page .package-description p { font-size: 13px; line-height: 1.45; }
-.is-services-page .package-tagline       { font-size: 13px; line-height: 1.35; }
-.is-services-page .package-list li        { font-size: 12px; line-height: 1.4; }
-.is-services-page .package-value-copy     { font-size: 12px; line-height: 1.4; }
-.is-services-page .packages-footnote      { font-size: 12px; }
-.is-services-page .compare-best           { font-size: 13px; }
-.is-services-page .compare-pricing dd     { font-size: 14px; }
-.is-services-page .package-image-caption  { font-size: 11px; }
-.is-services-page .process-body           { font-size: 13px; }
-.is-services-page .alacarte-body          { font-size: 13px; }
-.is-services-page .alacarte-price         { font-size: 12px; }
-.is-services-page .faq-a                  { font-size: 13px; }
-.is-services-page .faq-list-inner li      { font-size: 13px; }
-
-/* Ledes */
-.is-services-page .services-intro-lede { font-size: clamp(14px, 1.3vw, 17px); }
-.is-services-page .services-close-lede { font-size: clamp(13px, 1.2vw, 16px); }
-
-/* Display headings */
-.is-services-page .package-name          { font-size: clamp(20px, 2vw, 25px); }
-.is-services-page .compare-name           { font-size: 16px; }
-.is-services-page .package-pullquote      { font-size: clamp(15px, 1.5vw, 19px); }
-.is-services-page .faq-q                  { font-size: clamp(14px, 1.4vw, 17px); }
-.is-services-page .package-value-headline { font-size: clamp(13px, 1.3vw, 16px); }
-.is-services-page .package-price-value    { font-size: clamp(14px, 1.3vw, 17px); }
-
-/* Uppercase labels / kickers — nudged up a touch */
-.is-services-page .compare-flag,
-.is-services-page .compare-num,
-.is-services-page .compare-pricing dt,
-.is-services-page .package-badge { font-size: 11px; }
-.is-services-page .compare-cta,
-.is-services-page .package-num,
-.is-services-page .package-price-label,
-.is-services-page .package-list-label,
-.is-services-page .package-partners-label,
-.is-services-page .process-num,
-.is-services-page .package-pullquote cite { font-size: 12px; }
+   REMOVED — original .package-*, .compare-*, .faq-*, .process-*, .alacarte-*,
+   and .services-* rules now define their own type sizes (smaller, dialed in
+   to fit each package in one viewport with breathing room).
+   ─────────────────────────────────────────────────────────────────────────── */
 
 /* =================================================================
    Services page additions — value callout, list label, mini marquee,
@@ -4882,11 +4844,11 @@ body.is-journeys-index-page { background: var(--paper); }
 }
 
 .package-value-headline {
-    margin: 0 0 8px;
+    margin: 0 0 4px;
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(18px, 1.6vw, 22px);
+    font-size: clamp(13px, 1.3vw, 16px);
     line-height: 1.2;
     color: var(--ink);
 }
@@ -4895,8 +4857,8 @@ body.is-journeys-index-page { background: var(--paper); }
     margin: 0;
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.45;
     color: rgba(30, 53, 82, 0.78);
 }
 
@@ -6786,20 +6748,13 @@ body.is-home {
 .property-gallery                       { padding: 24px 0 32px; }
 .property-gallery .kicker               { margin-bottom: 18px; }
 
-/* PACKAGES — section spacing (fonts live in .is-services-page block above) */
+/* PACKAGES — section spacing only (font sizes now baked into the original
+   .package-* rules above). Keeps packages tight enough to fit per viewport. */
 .packages                       { padding: 24px 0; }
 .package                        { padding: 16px 0; }
 .package--signature             { padding: 24px 32px; margin: 8px -32px; }
 .package-meta                   { margin-bottom: 12px; }
-.package-description p + p      { margin-top: 6px; }
-.package-list                   { margin: 0 0 12px; }
-
-/* Tighten list item vertical padding while keeping left padding for the gold dash */
-.is-services-page .package-list li,
-.package-list li                { padding: 6px 0 6px 26px; }
-
 .package-pricing                { padding-top: 12px; }
 .package-price-row              { padding: 6px 0; }
 .packages .kicker               { margin-bottom: 12px; }
-.package-pullquote              { padding: 16px 0; }
 .package-partners               { padding: 12px 0; }
