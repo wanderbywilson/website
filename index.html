@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=202">
+    <link rel="stylesheet" href="styles.css?v=203">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -35,6 +35,11 @@
                     <li><a href="#about">About</a></li>
                 </ul>
             </nav>
+            <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+            </button>
 
             <a href="inquire-trip.html" class="header-cta">
                 <span>Inquire</span>
@@ -1299,5 +1304,30 @@
             </span>
         </div>
     </footer>
+    <script>
+        // Mobile nav hamburger toggle
+        (function navToggle() {
+            const toggle = document.getElementById('navToggle');
+            const header = document.getElementById('siteHeader');
+            if (!toggle || !header) return;
+            toggle.addEventListener('click', () => {
+                const isOpen = header.classList.toggle('nav-open');
+                document.body.classList.toggle('nav-open', isOpen);
+                toggle.classList.toggle('is-open', isOpen);
+                toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+            // Close when any link inside the overlay is clicked
+            header.querySelectorAll('.nav-primary a, .header-cta').forEach(a => {
+                a.addEventListener('click', () => {
+                    header.classList.remove('nav-open');
+                    document.body.classList.remove('nav-open');
+                    toggle.classList.remove('is-open');
+                    toggle.setAttribute('aria-label', 'Open menu');
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

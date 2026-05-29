@@ -7198,3 +7198,144 @@ body.is-home {
     margin-top: 0;
     padding-top: 8px;
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   MOBILE / RESPONSIVE BATCH — Wilson feedback (2026-05-29 evening)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* #35 BENEFITS MOBILE: when copy + collage stack on mobile, add room
+   above the script + collage so they don't crash into the CTA button */
+@media (max-width: 860px) {
+    .benefits-collage {
+        margin-top: 96px;  /* clears the .collage-script which sits above */
+    }
+    /* Add room ABOVE the script too — script overlaps the top of collage */
+    .benefits-marquee {
+        margin-top: 48px;
+    }
+}
+
+/* #36 FOUNDER MOBILE: make the portrait photo bigger so it doesn't
+   look lost against the surrounding script + copy */
+@media (max-width: 860px) {
+    .founder-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .founder-portrait-frame {
+        max-height: none;
+        aspect-ratio: 4 / 5;
+    }
+    .founder-portrait {
+        max-width: 100% !important;
+    }
+    .founder-portrait-col {
+        margin: 0 auto;
+        max-width: 540px;
+        width: 100%;
+    }
+}
+
+/* #37 FOOTER MOBILE: ensure side padding on narrowest viewports —
+   container should apply 24px but force it explicitly to fix the edge cutoff */
+@media (max-width: 720px) {
+    .site-footer-top,
+    .site-footer-bottom,
+    .site-footer .container {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+    .site-footer-top {
+        flex-direction: column;
+        gap: 32px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   #38 MOBILE NAV HAMBURGER — replaces the display:none nav on small
+   screens with a hamburger toggle + full-overlay menu. Inserted into
+   header HTML separately.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Hamburger button — hidden on desktop, visible <= 860px */
+.nav-toggle {
+    display: none;
+    position: relative;
+    z-index: 12;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav-toggle-line {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+    margin: 5px auto;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+/* Default color matches header text */
+.nav-toggle { color: var(--ivory); }
+.site-header.is-scrolled .nav-toggle { color: var(--ink); }
+
+/* Open state — X icon */
+.nav-toggle.is-open .nav-toggle-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open .nav-toggle-line:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open .nav-toggle-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 860px) {
+    .nav-toggle { display: block; }
+    /* Hide the desktop nav by default on mobile (already done at line 675)
+       but when the toggle is open, reveal it as a full-screen overlay */
+    .site-header.nav-open .nav-primary {
+        display: flex !important;
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        background: var(--paper);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 24px 60px;
+    }
+    .site-header.nav-open .nav-primary ul {
+        flex-direction: column;
+        gap: 32px;
+        align-items: center;
+    }
+    .site-header.nav-open .nav-primary a {
+        font-size: 24px;
+        color: var(--ink);
+    }
+    /* Show Inquire CTA inside the overlay too */
+    .site-header.nav-open .header-cta {
+        display: flex !important;
+        margin-top: 40px;
+        color: var(--ink);
+    }
+    /* Hide desktop Inquire button outside the overlay on mobile */
+    .header-cta { display: none; }
+    /* Keep wordmark visible above overlay */
+    .site-header.nav-open .brand { position: relative; z-index: 11; }
+    /* Lock body scroll when menu open */
+    body.nav-open { overflow: hidden; }
+}
+
+/* #39 UPGRADE ON ARRIVAL ASTERISK — applied per-property via JS.
+   The footnote at the bottom of the perks list is styled here. */
+.property-perks-footnote {
+    margin-top: 16px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.6);
+}
+.property-hero-perk-chip--soft {
+    /* Subtle marker for hero perks that have * asterisks */
+}
