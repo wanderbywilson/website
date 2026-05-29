@@ -6905,3 +6905,34 @@ body.is-home {
 .package-list                   { margin-bottom: 6px; }
 .package-value-callout          { padding: 8px 12px; margin-bottom: 8px; }
 .package-description p          { margin-bottom: 2px; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   PACKAGES — REVERT structural changes. Restore original 2-col layout
+   (image LEFT, content RIGHT, pricing/CTA inside the content column).
+   Compression is achieved via typography only. Each package will be
+   somewhat taller than viewport but not by much, with breathing room.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Cancel the grid-template-areas overrides we added before */
+.package {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: none;
+    gap: 56px;
+    align-items: start;
+}
+.package > .package-image    { grid-area: auto; }
+.package > .package-content  { grid-area: auto; }
+
+/* Zigzag — image on right for even packages (original behavior) */
+.package:nth-of-type(even) {
+    grid-template-areas: none;
+}
+.package-image      { order: 1; }
+.package-content    { order: 2; }
+.package:nth-of-type(even) .package-image   { order: 2; }
+.package:nth-of-type(even) .package-content { order: 1; }
+
+/* Restore image to original aspect 4:5 but slightly less tall */
+.package-image-frame { aspect-ratio: 4 / 4.6; }
