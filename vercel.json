@@ -2,82 +2,6 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/property.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "slug",
-          "value": "(?<s>.+)"
-        }
-      ],
-      "destination": "/hotels/:s",
-      "permanent": true
-    },
-    {
-      "source": "/journey.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "slug",
-          "value": "(?<s>.+)"
-        }
-      ],
-      "destination": "/journeys/:s",
-      "permanent": true
-    },
-    {
-      "source": "/post.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "slug",
-          "value": "(?<s>.+)"
-        }
-      ],
-      "destination": "/post/:s",
-      "permanent": true
-    },
-    {
-      "source": "/hotels.html",
-      "destination": "/hotels",
-      "permanent": true
-    },
-    {
-      "source": "/journeys.html",
-      "destination": "/journeys",
-      "permanent": true
-    },
-    {
-      "source": "/services.html",
-      "destination": "/services",
-      "permanent": true
-    },
-    {
-      "source": "/inspiration.html",
-      "destination": "/inspiration",
-      "permanent": true
-    },
-    {
-      "source": "/inquire-trip.html",
-      "destination": "/inquire-trip",
-      "permanent": true
-    },
-    {
-      "source": "/inquire-hotel.html",
-      "destination": "/inquire-hotel",
-      "permanent": true
-    },
-    {
-      "source": "/privacy.html",
-      "destination": "/privacy",
-      "permanent": true
-    },
-    {
-      "source": "/terms.html",
-      "destination": "/terms",
-      "permanent": true
-    },
-    {
       "source": "/blog/20-best-all-inclusive-luxury-hotels-in-the-caribbean",
       "destination": "/post.html?slug=20-best-all-inclusive-luxury-hotels-in-the-caribbean",
       "permanent": true
@@ -612,52 +536,6 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/hotels",
-      "destination": "/hotels.html"
-    },
-    {
-      "source": "/journeys",
-      "destination": "/journeys.html"
-    },
-    {
-      "source": "/services",
-      "destination": "/services.html"
-    },
-    {
-      "source": "/inspiration",
-      "destination": "/inspiration.html"
-    },
-    {
-      "source": "/inquire-trip",
-      "destination": "/inquire-trip.html"
-    },
-    {
-      "source": "/inquire-hotel",
-      "destination": "/inquire-hotel.html"
-    },
-    {
-      "source": "/privacy",
-      "destination": "/privacy.html"
-    },
-    {
-      "source": "/terms",
-      "destination": "/terms.html"
-    },
-    {
-      "source": "/hotels/:slug",
-      "destination": "/property.html?slug=:slug"
-    },
-    {
-      "source": "/journeys/:slug",
-      "destination": "/journey.html?slug=:slug"
-    },
-    {
-      "source": "/post/:slug",
-      "destination": "/post.html?slug=:slug"
     }
   ]
 }
