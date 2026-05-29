@@ -6786,13 +6786,20 @@ body.is-home {
 .property-gallery                       { padding: 24px 0 32px; }
 .property-gallery .kicker               { margin-bottom: 18px; }
 
-/* PACKAGES — section spacing only. All font sizes now live in the
-   .is-services-page block above (dialed back to readable sizes that fit). */
-.packages                       { padding: 32px 0; }
-.package                        { padding: 24px 0; }
-.package--signature             { padding: 32px 36px; margin: 12px -36px; }
-.package-meta                   { margin-bottom: 16px; }
-.package-description p + p      { margin-top: 8px; }
-.package-list                   { margin: 0 0 16px; }
-.package-pricing                { padding-top: 16px; }
-.packages .kicker               { margin-bottom: 16px; }
+/* PACKAGES — section spacing (fonts live in .is-services-page block above) */
+.packages                       { padding: 24px 0; }
+.package                        { padding: 16px 0; }
+.package--signature             { padding: 24px 32px; margin: 8px -32px; }
+.package-meta                   { margin-bottom: 12px; }
+.package-description p + p      { margin-top: 6px; }
+.package-list                   { margin: 0 0 12px; }
+
+/* Tighten list item vertical padding while keeping left padding for the gold dash */
+.is-services-page .package-list li,
+.package-list li                { padding: 6px 0 6px 26px; }
+
+.package-pricing                { padding-top: 12px; }
+.package-price-row              { padding: 6px 0; }
+.packages .kicker               { margin-bottom: 12px; }
+.package-pullquote              { padding: 16px 0; }
+.package-partners               { padding: 12px 0; }
