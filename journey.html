@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=208">
+    <link rel="stylesheet" href="styles.css?v=209">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -493,22 +493,41 @@
             const toggle = document.getElementById('navToggle');
             const header = document.getElementById('siteHeader');
             if (!toggle || !header) return;
+            const cta = header.querySelector('.header-cta');
+            const nav = header.querySelector('.nav-primary');
+            const ctaParent = cta ? cta.parentNode : null;
+            const ctaNext = cta ? cta.nextSibling : null;
+
+            const close = () => {
+                header.classList.remove('nav-open');
+                document.body.classList.remove('nav-open');
+                toggle.classList.remove('is-open');
+                toggle.setAttribute('aria-label', 'Open menu');
+                toggle.setAttribute('aria-expanded', 'false');
+                // Restore CTA to its original position
+                if (cta && ctaParent && ctaParent !== cta.parentNode) {
+                    ctaParent.insertBefore(cta, ctaNext);
+                }
+            };
+            const open = () => {
+                header.classList.add('nav-open');
+                document.body.classList.add('nav-open');
+                toggle.classList.add('is-open');
+                toggle.setAttribute('aria-label', 'Close menu');
+                toggle.setAttribute('aria-expanded', 'true');
+                // Move CTA INTO the nav overlay so it always shows
+                if (cta && nav && cta.parentNode !== nav) {
+                    nav.appendChild(cta);
+                }
+            };
             toggle.addEventListener('click', () => {
-                const isOpen = header.classList.toggle('nav-open');
-                document.body.classList.toggle('nav-open', isOpen);
-                toggle.classList.toggle('is-open', isOpen);
-                toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                if (header.classList.contains('nav-open')) close();
+                else open();
             });
             // Close when any link inside the overlay is clicked
-            header.querySelectorAll('.nav-primary a, .header-cta').forEach(a => {
-                a.addEventListener('click', () => {
-                    header.classList.remove('nav-open');
-                    document.body.classList.remove('nav-open');
-                    toggle.classList.remove('is-open');
-                    toggle.setAttribute('aria-label', 'Open menu');
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
+            header.addEventListener('click', (e) => {
+                const link = e.target.closest('.nav-primary a, .header-cta');
+                if (link && header.classList.contains('nav-open')) close();
             });
         })();
     </script>
