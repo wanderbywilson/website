@@ -7164,18 +7164,18 @@ body.is-home {
     background-image: url('property-images/caruso/00-amalfi-view.jpg');
 }
 /* Make filter pill text actually readable on the dark hero */
-.is-inspiration-page .inspo-hero .inspo-tag {
+.is-inspiration-page .inspo-hero .inspo-chip {
     background: rgba(255, 251, 240, 0.08);
     border: 1px solid rgba(255, 251, 240, 0.32);
     color: rgba(255, 251, 240, 0.95) !important;
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
 }
-.is-inspiration-page .inspo-hero .inspo-tag:hover {
+.is-inspiration-page .inspo-hero .inspo-chip:hover {
     background: rgba(255, 251, 240, 0.18);
     border-color: rgba(255, 251, 240, 0.5);
 }
-.is-inspiration-page .inspo-hero .inspo-tag.is-active {
+.is-inspiration-page .inspo-hero .inspo-chip.is-active {
     background: var(--gold) !important;
     border-color: var(--gold) !important;
     color: var(--ink) !important;
