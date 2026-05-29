@@ -7322,29 +7322,56 @@ body.is-home {
         color: var(--ink) !important;
         opacity: 1 !important;
     }
-    /* Show Inquire CTA inside the overlay too — also pinned above the overlay */
+    /* Inquire CTA pinned to the bottom of the overlay */
     .site-header.nav-open .header-cta {
         display: inline-flex !important;
+        align-items: center !important;
+        gap: 10px !important;
         position: fixed !important;
         bottom: 60px !important;
         left: 50% !important;
+        right: auto !important;
+        top: auto !important;
         transform: translateX(-50%) !important;
         z-index: 10000 !important;
         color: var(--ink) !important;
         background: transparent !important;
         border: 1px solid var(--ink) !important;
         padding: 14px 28px !important;
+        text-decoration: none !important;
+        font-family: var(--font-sans) !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.22em !important;
+        text-transform: uppercase !important;
     }
     /* Hide desktop Inquire button outside the overlay on mobile */
     .header-cta { display: none; }
-    /* Keep wordmark + hamburger visible ABOVE the overlay */
-    .site-header.nav-open .brand,
-    .site-header.nav-open .nav-toggle {
-        position: relative !important;
+    /* Pin wordmark (linked to homepage) + close X to viewport corners
+       above the overlay — must be position:fixed to escape any parent
+       stacking context created by the header */
+    .site-header.nav-open .brand {
+        display: flex !important;
+        align-items: center !important;
+        position: fixed !important;
+        top: 28px !important;
+        left: 24px !important;
         z-index: 10001 !important;
-        color: var(--ink) !important;
+        text-decoration: none !important;
     }
     .site-header.nav-open .brand-wordmark {
+        color: var(--ink) !important;
+        font-family: var(--font-serif) !important;
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.16em !important;
+        text-transform: uppercase !important;
+    }
+    .site-header.nav-open .nav-toggle {
+        position: fixed !important;
+        top: 24px !important;
+        right: 18px !important;
+        z-index: 10001 !important;
         color: var(--ink) !important;
     }
     /* Lock body scroll when menu open */
