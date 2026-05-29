@@ -6787,31 +6787,17 @@ body.is-home {
 .property-gallery .kicker               { margin-bottom: 18px; }
 
 /* ─────────────────────────────────────────────────────────────────────
-   PACKAGES — font-size only.
-   Per Wilson: keep the ORIGINAL layout, spacing, list style, borders,
-   and proportions exactly as designed. Only the type scale shrinks so
-   each .package card fits naturally in one viewport.
+   PACKAGES — font-size ONLY adjustments. Formatting, spacing, list
+   style, borders, layout all PRESERVED as original. Just smaller type.
    ───────────────────────────────────────────────────────────────────── */
 
-.packages                       { padding: 56px 0; }
-.package                        { padding: 44px 0; }
-.package--signature             { padding: 56px 48px; margin: 16px -48px; }
-
-.package-name                   { font-size: clamp(24px, 2.6vw, 32px); }
-.package-tagline                { font-size: 14px; line-height: 1.4; }
-.package-description p          { font-size: 14px; line-height: 1.55; }
-.package-description p + p      { margin-top: 8px; }
-
-.package-value-callout          { padding: 14px 18px; }
-.package-value-headline         { font-size: 14px; }
-.package-value-copy             { font-size: 13px; line-height: 1.5; }
-
-.package-list-label             { font-size: 11px; }
-.package-list li                { font-size: 13px; line-height: 1.45; padding: 12px 0; }
-
-.package-price-row              { padding: 10px 0; }
-.package-price-label            { font-size: 12px; }
-.package-price-value            { font-size: 16px; }
-.package-cta                    { padding: 12px 22px; font-size: 11px; }
-
-.package-meta                   { margin-bottom: 24px; }
+.package-name                   { font-size: clamp(22px, 2.2vw, 28px); }
+.package-tagline                { font-size: 13px; }
+.package-description p          { font-size: 13px; }
+.package-value-headline         { font-size: 13px; }
+.package-value-copy             { font-size: 12.5px; }
+.package-list-label             { font-size: 10px; }
+.package-list li                { font-size: 12px; }
+.package-price-label            { font-size: 11px; }
+.package-price-value            { font-size: 14px; }
+.package-cta                    { font-size: 10px; }
