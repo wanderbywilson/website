@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=192">
+    <link rel="stylesheet" href="styles.css?v=193">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -53,7 +53,15 @@
         </div>
         <div class="container property-hero-inner">
             <p class="property-location" id="propertyLocation"></p>
+            <p class="property-hero-rate" id="propertyHeroRate" hidden></p>
             <h1 class="property-title" id="propertyName"></h1>
+            <div class="property-hero-perks" id="propertyHeroPerks" hidden></div>
+            <a class="property-hero-cta" id="propertyHeroCta" href="inquire-hotel.html" hidden>
+                <span id="propertyHeroCtaLabel">Inquire about this property</span>
+                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                </svg>
+            </a>
         </div>
     </section>
 
@@ -271,6 +279,40 @@
                     badgeImg.src = detail.brandBadge;
                     badgeImg.alt = detail.brandBadgeAlt || '';
                     document.getElementById('propertyBrandBadge').hidden = false;
+                }
+
+                // ─────────────────────────────────────────────────────────
+                // BORGO SANTANDREA HERO OVERHAUL (pilot)
+                // Per UX audit: surface perks badge + soft CTA + rate
+                // ABOVE the fold so users see the value prop instantly.
+                // Rolling out on this one property first to validate.
+                // ─────────────────────────────────────────────────────────
+                if (slug === 'borgo-santandrea') {
+                    // 1. Rate under location kicker
+                    if (detail.rateFrom) {
+                        const heroRate = document.getElementById('propertyHeroRate');
+                        heroRate.textContent = 'From ' + detail.rateFrom;
+                        heroRate.hidden = false;
+                    }
+                    // 2. Top 4 perks as horizontal pill chips over hero
+                    const heroPerks = document.getElementById('propertyHeroPerks');
+                    const topPerks = [
+                        'Virtuoso Preferred',
+                        'Complimentary Breakfast for Two',
+                        '$100 USD Resort Credit',
+                        'Upgrade On Arrival When Available'
+                    ];
+                    topPerks.forEach(p => {
+                        const chip = document.createElement('span');
+                        chip.className = 'property-hero-perk-chip';
+                        chip.textContent = p;
+                        heroPerks.appendChild(chip);
+                    });
+                    heroPerks.hidden = false;
+                    // 3. Soft CTA bottom-right of hero
+                    const heroCta = document.getElementById('propertyHeroCta');
+                    document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about ' + nameText;
+                    heroCta.hidden = false;
                 }
 
                 // Ideal-for — advisor's qualifying read on who fits this property
