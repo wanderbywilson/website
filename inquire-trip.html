@@ -131,7 +131,7 @@
          ================================================================ -->
     <section class="inquire-form-section">
         <div class="container inquire-form-container">
-            <form class="inquire-form" action="https://formspree.io/f/xwvzanjd" method="POST" id="tripInquiryForm">
+            <form class="inquire-form" action="/api/inquire-trip" method="POST" id="tripInquiryForm">
                 <input type="hidden" name="form_type" value="custom_trip">
                 <input type="hidden" name="_subject" value="New trip inquiry — Wander by Wilson">
                 <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="inquire-hp">
@@ -293,7 +293,7 @@
             if (window.scrollY > 24) header.classList.add('is-scrolled');
         }, { passive: true });
 
-        // Formspree AJAX submit → inline thank-you (falls back to a normal POST if JS is off)
+        // AJAX submit to /api/inquire-trip (Vercel serverless → Brevo, branded email to Wilson)
         (function wireForm() {
             const form = document.getElementById('tripInquiryForm');
             if (!form) return;
@@ -308,10 +308,12 @@
                 if (btn) btn.disabled = true;
                 if (label) label.textContent = 'Sending…';
                 try {
+                    const formData = new FormData(form);
+                    const payload = Object.fromEntries(formData.entries());
                     const res = await fetch(form.action, {
                         method: 'POST',
-                        body: new FormData(form),
-                        headers: { 'Accept': 'application/json' }
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(payload)
                     });
                     if (res.ok) {
                         form.hidden = true;
@@ -322,7 +324,7 @@
                         return;
                     }
                     const data = await res.json().catch(() => ({}));
-                    const msg = (data.errors && data.errors.map(x => x.message).join(' ')) ||
+                    const msg = data.error ||
                         'Something went wrong. Please try again, or email wilson@wanderbywilson.com.';
                     if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
                 } catch (err) {
