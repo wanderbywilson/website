@@ -61,40 +61,54 @@ for slug, body in entries:
 
 print(f"Checking {len(links)} hotel booking URLs…\n")
 
-UA = "Mozilla/5.0 (compatible; WanderByWilsonLinkBot/1.0; +https://www.wanderbywilson.com/)"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 broken = []
 ok = []
 warnings = []
 
-for slug, name, url in links:
-    status = None
-    err = None
+
+def fetch(url, method, range_header=None):
+    """Try one request; return (status, final_url, error)."""
+    headers = {
+        "User-Agent": UA,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+    if range_header:
+        headers["Range"] = range_header
     try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": UA})
+        req = urllib.request.Request(url, method=method, headers=headers)
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
-            status = resp.status
-            final_url = resp.url
+            return (resp.status, resp.url, None)
     except urllib.error.HTTPError as e:
-        status = e.code
-        final_url = url
+        return (e.code, url, None)
     except (urllib.error.URLError, TimeoutError, OSError) as e:
-        err = str(e)
-        final_url = url
+        return (None, url, str(e))
+
+
+for slug, name, url in links:
+    # Try HEAD first (cheap), fall back to GET with a small Range
+    # (Virtuoso + many anti-bot CDNs return 404/405 on HEAD).
+    status, final_url, err = fetch(url, "HEAD")
+    if (err or status not in (200, 301, 302, 303, 307, 308)):
+        # Retry with GET, only fetching the first 512 bytes
+        status, final_url, err = fetch(url, "GET", range_header="bytes=0-512")
 
     label = f"{name} ({slug})"
     if err:
         broken.append((label, url, f"connection error: {err}"))
-        print(f"  ✗ BROKEN: {label}  →  {err}")
-    elif status in (200, 301, 302, 303, 307, 308):
+        print(f"  X BROKEN: {label}  ->  {err}")
+    elif status in (200, 206, 301, 302, 303, 307, 308):
+        # 206 = Partial Content (Range request honored)
         ok.append((label, url, status, final_url))
-        print(f"  ✓ OK ({status}): {label}")
-    elif status == 405 and "virtuoso.com" in url:
-        # Virtuoso disallows HEAD; treat as OK (we know URLs work in browser)
-        warnings.append((label, url, f"HEAD blocked (Virtuoso anti-bot — URL likely OK)"))
-        print(f"  ⚠ Warn ({status}, expected for Virtuoso): {label}")
+        print(f"  OK ({status}): {label}")
+    elif status in (403, 401) and "virtuoso.com" in url:
+        # Virtuoso may reject bots entirely — URL likely fine in a real browser
+        warnings.append((label, url, f"HTTP {status} (Virtuoso anti-bot; URL likely OK)"))
+        print(f"  Warn ({status}, expected for Virtuoso): {label}")
     else:
         broken.append((label, url, f"HTTP {status}"))
-        print(f"  ✗ BROKEN ({status}): {label}")
+        print(f"  X BROKEN ({status}): {label}")
 
 # Write summary file the GitHub workflow will read
 summary_lines = [
