@@ -6758,3 +6758,59 @@ body.is-home {
 .package-price-row              { padding: 6px 0; }
 .packages .kicker               { margin-bottom: 12px; }
 .package-partners               { padding: 12px 0; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   LAYOUT REFINEMENTS — Wilson feedback batch (2026-05-29)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* 1. HOMEPAGE HERO — push the headline + button down so "Begin Planning"
+      sits over the water (not the rocks/sky). Was vertically centered. */
+.hero-container {
+    align-items: flex-end;
+    padding-top: 200px;
+    padding-bottom: 120px;
+}
+
+/* 2. SERVICES — breathing room between scrolling partner marquee and the
+      pullquote, plus remove the top/bottom borders around the quote */
+.package-partners                   { padding: 28px 0 64px; }
+.package-pullquote {
+    margin: 56px auto;
+    padding: 12px 0;
+    border-top: none;
+    border-bottom: none;
+}
+
+/* 3. HOMEPAGE FOUNDER SECTION — remove the cream divider line between
+      founder + journal, add breathing room above the photo, and let the
+      portrait grow back to original proportions so it balances the text */
+.founder {
+    border-top: none;
+    padding-top: 88px;
+    padding-bottom: 88px;
+}
+.founder-grid                       { gap: 72px; align-items: center; }
+.founder-portrait-frame             { aspect-ratio: 4 / 5; max-height: 640px; }
+.founder-portrait                   { max-width: 100%; }
+
+/* 4. HOMEPAGE GLOBE / ATLAS — add breathing room below the "Browse all
+      hotels" CTA so it doesn't crowd the next "How We Work" section */
+.atlas-browse                       { margin-top: 56px; margin-bottom: 72px; }
+.is-home .atlas                     { padding-bottom: 100px; }
+
+/* 5. HOTELS PAGE — move "29 HOTELS" count up near the search bar, and
+      surface the differentiator. (Layout in HTML; this rule restyles.) */
+.hotels-index-count {
+    margin: 24px auto 0;
+    text-align: center;
+}
+.hotels-index-perks-line {
+    text-align: center;
+    margin: 8px auto 0;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
