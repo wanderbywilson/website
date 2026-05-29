@@ -1,0 +1,59 @@
+name: Weekly Booking Link Check
+
+# Runs every Monday at 14:00 UTC (10am ET) — verifies every hotel
+# bookingUrl in data.js still resolves. If any return 404/5xx,
+# opens a GitHub Issue which emails Wilson immediately.
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  # Also let Wilson trigger manually from the Actions tab any time
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write  # needed so the action can open an issue on failure
+      contents: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run link checker
+        id: check
+        run: python scripts/check-booking-links.py
+        continue-on-error: true  # so the next step can read the summary even on failure
+
+      - name: Read summary
+        id: summary
+        if: always()
+        run: |
+          {
+            echo 'SUMMARY<<EOF'
+            cat link-check-summary.md
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open issue if any links broke
+        if: steps.check.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `${{ steps.summary.outputs.SUMMARY }}\n\n---\n*This issue was opened automatically by the weekly link-check workflow. To re-run manually, go to **Actions → Weekly Booking Link Check → Run workflow**.*`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔗 Broken hotel booking link(s) detected — ${new Date().toISOString().slice(0,10)}`,
+              body,
+              labels: ['booking-link-broken']
+            });
+
+      - name: Show summary in the workflow run
+        if: always()
+        run: cat link-check-summary.md >> $GITHUB_STEP_SUMMARY
