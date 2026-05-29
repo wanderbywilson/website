@@ -1178,16 +1178,8 @@ button {
     stroke-dashoffset: 260;
     opacity: 0;
 }
-/* Arrowhead (polygon, not path) — explicit opacity so it doesn't get
-   caught by the line-drawing rules. Fades together with the line via
-   the SVG parent's opacity transition. */
-.atlas-preview-arrow .atlas-preview-arrowhead {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-.atlas-preview-arrow.is-drawn .atlas-preview-arrowhead {
-    opacity: 0.9;
-}
+/* Arrowhead removed — line now overshoots into the card edge directly */
+.atlas-preview-arrow { overflow: visible; }
 
 .atlas-preview--left  .atlas-preview-arrow { left: 100%;  right: auto; }
 .atlas-preview--right .atlas-preview-arrow { right: 100%; left: auto; transform: translateY(-50%) scaleX(-1); }
