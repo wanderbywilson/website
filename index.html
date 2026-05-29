@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=207">
+    <link rel="stylesheet" href="styles.css?v=208">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -295,11 +295,12 @@
                      halo) lives separately so it always sits exactly on the pin
                      regardless of stage width. -->
                 <svg class="atlas-preview-arrow" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
-                    <!-- Straight horizontal line — the previous Q/T curve dipped above
-                         the midline, making it look like the line ended SHORT of the
-                         card edge. A straight line at y=40 connects cleanly from pin
-                         (x=240) to card edge (x=0). -->
-                    <path d="M 240 40 L 0 40" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+                    <!-- Straight line from pin (x=240) to card edge (x=0).
+                         An arrowhead at x=0 makes the connection unambiguous
+                         even if anti-aliasing or rounding leaves a 1-2px gap
+                         between line-end and card-edge. -->
+                    <path d="M 240 40 L 8 40" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+                    <path class="atlas-preview-arrowhead" d="M 0 40 L 10 35 L 10 45 Z" fill="currentColor" opacity="0.85"/>
                 </svg>
             </div>
         </div>

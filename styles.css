@@ -5979,11 +5979,12 @@ select.inquire-input {
     grid-template-columns: minmax(0, 1fr) min(100%, 780px) minmax(0, 1fr);
 }
 .article-body > * { grid-column: 2; }
-/* Figures: constrained on desktop (slightly wider than text but not full-bleed),
-   full-bleed on mobile where small screens benefit from edge-to-edge imagery. */
+/* Figures: tighter than the body column on desktop (editorial inline-image
+   feel, not full-bleed spread). Wilson feedback: previous 920px was still too
+   big. 620px sits nicely inside the 780px body column. */
 .article-body > figure {
     grid-column: 2;
-    max-width: 920px;
+    max-width: 620px;
     margin: 32px auto;
 }
 @media (max-width: 720px) {
