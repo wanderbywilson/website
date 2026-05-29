@@ -6872,3 +6872,30 @@ body.is-home {
 
 /* Slightly less square image */
 .package-image-frame            { aspect-ratio: 4 / 3.6; }
+
+/* PACKAGES — Layout restructure: pricing now lives as a sibling of
+   .package-content (moved out of .package-body). Use grid areas to put
+   pricing in the image column under the image, balancing both columns. */
+.package {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "image content"
+        "pricing content";
+    gap: 24px 56px;
+    align-items: start;
+}
+.package > .package-image    { grid-area: image; }
+.package > .package-content  { grid-area: content; }
+.package > .package-pricing  { grid-area: pricing; max-width: 460px; }
+
+/* Zigzag — flip the IMAGE/PRICING column to the right on even packages */
+.package:nth-of-type(even) {
+    grid-template-areas:
+        "content image"
+        "content pricing";
+}
+.package:nth-of-type(even) > .package-image    { grid-area: image; }
+.package:nth-of-type(even) > .package-content  { grid-area: content; }
+.package:nth-of-type(even) > .package-pricing  { grid-area: pricing; }
