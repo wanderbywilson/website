@@ -4830,32 +4830,32 @@ body.is-journeys-index-page { background: var(--paper); }
    Everything reads larger — body copy, ledes, display headings, and labels —
    with proportions preserved. (Hero title left at its existing display size.) */
 
-/* Body copy — dialed back ~30% so packages fit naturally per Wilson's request */
-.is-services-page .package-description p { font-size: 14px; }
-.is-services-page .package-tagline       { font-size: 14px; }
-.is-services-page .package-list li        { font-size: 13px; }
-.is-services-page .package-value-copy     { font-size: 13px; }
-.is-services-page .packages-footnote      { font-size: 13px; }
+/* Body copy — sized to fit each package in viewport with breathing room */
+.is-services-page .package-description p { font-size: 13px; line-height: 1.45; }
+.is-services-page .package-tagline       { font-size: 13px; line-height: 1.35; }
+.is-services-page .package-list li        { font-size: 12px; line-height: 1.4; }
+.is-services-page .package-value-copy     { font-size: 12px; line-height: 1.4; }
+.is-services-page .packages-footnote      { font-size: 12px; }
 .is-services-page .compare-best           { font-size: 13px; }
-.is-services-page .compare-pricing dd     { font-size: 15px; }
-.is-services-page .package-image-caption  { font-size: 12px; }
-.is-services-page .process-body           { font-size: 14px; }
-.is-services-page .alacarte-body          { font-size: 14px; }
-.is-services-page .alacarte-price         { font-size: 13px; }
-.is-services-page .faq-a                  { font-size: 14px; }
+.is-services-page .compare-pricing dd     { font-size: 14px; }
+.is-services-page .package-image-caption  { font-size: 11px; }
+.is-services-page .process-body           { font-size: 13px; }
+.is-services-page .alacarte-body          { font-size: 13px; }
+.is-services-page .alacarte-price         { font-size: 12px; }
+.is-services-page .faq-a                  { font-size: 13px; }
 .is-services-page .faq-list-inner li      { font-size: 13px; }
 
 /* Ledes */
-.is-services-page .services-intro-lede { font-size: clamp(15px, 1.4vw, 19px); }
-.is-services-page .services-close-lede { font-size: clamp(14px, 1.3vw, 18px); }
+.is-services-page .services-intro-lede { font-size: clamp(14px, 1.3vw, 17px); }
+.is-services-page .services-close-lede { font-size: clamp(13px, 1.2vw, 16px); }
 
-/* Display headings — also reduced proportionally */
-.is-services-page .package-name          { font-size: clamp(22px, 2.2vw, 28px); }
-.is-services-page .compare-name           { font-size: 17px; }
-.is-services-page .package-pullquote      { font-size: clamp(16px, 1.6vw, 21px); }
-.is-services-page .faq-q                  { font-size: clamp(15px, 1.5vw, 19px); }
-.is-services-page .package-value-headline { font-size: clamp(14px, 1.3vw, 18px); }
-.is-services-page .package-price-value    { font-size: clamp(15px, 1.4vw, 19px); }
+/* Display headings */
+.is-services-page .package-name          { font-size: clamp(20px, 2vw, 25px); }
+.is-services-page .compare-name           { font-size: 16px; }
+.is-services-page .package-pullquote      { font-size: clamp(15px, 1.5vw, 19px); }
+.is-services-page .faq-q                  { font-size: clamp(14px, 1.4vw, 17px); }
+.is-services-page .package-value-headline { font-size: clamp(13px, 1.3vw, 16px); }
+.is-services-page .package-price-value    { font-size: clamp(14px, 1.3vw, 17px); }
 
 /* Uppercase labels / kickers — nudged up a touch */
 .is-services-page .compare-flag,
