@@ -6897,3 +6897,109 @@ body.is-home {
         align-self: flex-start;
     }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   INDEX PAGE HEROES — per UX audit recommendation #1.
+   Add full-bleed editorial hero imagery to Journeys, Hotels, Inspiration
+   so the first viewport sells the visual fantasy (was cream walls).
+   Title/lede/search become white over a dark gradient overlay.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Shared: turn the existing intro section into a hero strip with image bg */
+.is-journeys-index-page .journeys-index-hero,
+.is-hotels-index-page   .journeys-index-hero,
+.is-inspiration-page    .inspo-hero {
+    position: relative;
+    isolation: isolate;
+    padding-top: 240px;
+    padding-bottom: 96px;
+    background: var(--ink);
+    overflow: hidden;
+}
+
+/* Background image layer */
+.is-journeys-index-page .journeys-index-hero::before,
+.is-hotels-index-page   .journeys-index-hero::before,
+.is-inspiration-page    .inspo-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.92) brightness(0.78);
+}
+
+/* Dark gradient overlay for legibility */
+.is-journeys-index-page .journeys-index-hero::after,
+.is-hotels-index-page   .journeys-index-hero::after,
+.is-inspiration-page    .inspo-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+        180deg,
+        rgba(15, 32, 56, 0.45) 0%,
+        rgba(15, 32, 56, 0.35) 40%,
+        rgba(15, 32, 56, 0.6) 100%
+    );
+}
+
+/* Per-page hero photos */
+.is-journeys-index-page .journeys-index-hero::before { background-image: url('itinerary-images/iconic-greece/00-hero.jpg'); }
+.is-hotels-index-page   .journeys-index-hero::before { background-image: url('property-images/borgo-santandrea/02-aerial-coastal.jpg'); }
+.is-inspiration-page    .inspo-hero::before          { background-image: url('blog-images/anguilla-travel-guide/fourseasonsanguilla.jpg'); }
+
+/* Light typography over the image */
+.is-journeys-index-page .journeys-index-hero .kicker,
+.is-hotels-index-page   .journeys-index-hero .kicker,
+.is-inspiration-page    .inspo-hero .kicker {
+    color: rgba(255, 251, 240, 0.92);
+}
+.is-journeys-index-page .journeys-index-hero .kicker-line,
+.is-hotels-index-page   .journeys-index-hero .kicker-line,
+.is-inspiration-page    .inspo-hero .kicker-line {
+    background: var(--gold);
+}
+.is-journeys-index-page .journeys-index-title,
+.is-hotels-index-page   .journeys-index-title,
+.is-inspiration-page    .inspo-hero-title {
+    color: var(--ivory);
+}
+.is-journeys-index-page .journeys-index-lede,
+.is-hotels-index-page   .journeys-index-lede,
+.is-inspiration-page    .inspo-hero-lede {
+    color: rgba(255, 251, 240, 0.85);
+}
+
+/* Search input on the hero — translucent so it sits over the image */
+.is-hotels-index-page   .journeys-index-hero .inspo-search,
+.is-inspiration-page    .inspo-hero .inspo-search {
+    background: rgba(255, 251, 240, 0.92);
+    border-color: rgba(255, 251, 240, 0.4);
+}
+
+/* Hotels count + perks subline over hero — light text */
+.is-hotels-index-page .hotels-index-count,
+.is-hotels-index-page .hotels-index-perks-line {
+    color: rgba(255, 251, 240, 0.85);
+}
+.is-hotels-index-page .hotels-index-perks-line {
+    color: var(--gold-soft, #d4b888);
+}
+
+/* Inspiration filter pills — make them readable on dark hero */
+.is-inspiration-page .inspo-hero .inspo-filter-group-label {
+    color: rgba(255, 251, 240, 0.55);
+}
+.is-inspiration-page .inspo-hero .inspo-filter-pill {
+    background: rgba(255, 251, 240, 0.08);
+    border-color: rgba(255, 251, 240, 0.32);
+    color: rgba(255, 251, 240, 0.95);
+}
+.is-inspiration-page .inspo-hero .inspo-filter-pill.is-active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+}
