@@ -6899,3 +6899,9 @@ body.is-home {
 .package:nth-of-type(even) > .package-image    { grid-area: image; }
 .package:nth-of-type(even) > .package-content  { grid-area: content; }
 .package:nth-of-type(even) > .package-pricing  { grid-area: pricing; }
+
+/* PACKAGES — Micro pass: shave final 10-50px from the long-list packages */
+.package-list li                { padding: 2px 0; line-height: 1.28; }
+.package-list                   { margin-bottom: 6px; }
+.package-value-callout          { padding: 8px 12px; margin-bottom: 8px; }
+.package-description p          { margin-bottom: 2px; }
