@@ -161,7 +161,7 @@
         </div>
     </section>
 
-    <script src="data.js?v=59"></script>
+    <script src="data.js?v=60"></script>
     <script>
         /* ------------------------------------------------------------------
            Property page bootstrap. Data lives in data.js (ATLAS_POINTS + PROPERTIES).
@@ -321,15 +321,25 @@
                     note.innerHTML = '*Upgrades are always subject to availability and not guaranteed unless otherwise stated.';
                     ul.parentNode.insertBefore(note, ul.nextSibling);
                 }
-                // Book CTA — link to Virtuoso when we have a URL,
-                // otherwise route to the homepage inquiry form.
+                // Book CTA — link to Virtuoso when we have a URL, otherwise
+                // route to the hotel-inquiry form with the slug pre-filled so
+                // we never strand a user on a "#" or 404. Per Wilson: any
+                // property missing or with a broken Virtuoso link goes to the
+                // hotel inquiry form (same fallback the hero CTA uses).
                 const bookCta = document.getElementById('propertyBookCta');
                 if (detail.bookingUrl && detail.bookingUrl !== '#') {
                     bookCta.href = detail.bookingUrl;
                 } else {
-                    bookCta.href = 'index.html#inquire';
+                    bookCta.href = 'inquire-hotel.html?hotel=' + encodeURIComponent(slug);
                     bookCta.removeAttribute('target');
                     bookCta.removeAttribute('rel');
+                    // Swap label so it's clear this is the inquiry path, not direct booking
+                    const ctaLabel = bookCta.querySelector('.cta-primary-label');
+                    if (ctaLabel) ctaLabel.textContent = 'Inquire about this property';
+                    // Hide the "completed on preferred portal" note since we're
+                    // not going to a booking portal — we're going to a form
+                    const perksNote = document.querySelector('.property-perks-note');
+                    if (perksNote) perksNote.hidden = true;
                 }
 
                 // Brand badge — preferred-partner program affiliation.
