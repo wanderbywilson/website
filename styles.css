@@ -6562,7 +6562,7 @@ body.is-home {
 .founder-prose p          { font-size: 20px; }
 .founder-credential-title { font-size: 20px; }
 .testimonial-quote,
-.testimonial-card blockquote { font-size: 20px; }
+.testimonial-card blockquote { font-size: 15px; line-height: 1.5; }
 
 /* — Property / hotel pages — */
 .property-prose           { font-size: 20px; }
