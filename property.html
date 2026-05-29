@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=197">
+    <link rel="stylesheet" href="styles.css?v=199">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -282,38 +282,53 @@
                 }
 
                 // ─────────────────────────────────────────────────────────
-                // BORGO SANTANDREA HERO OVERHAUL (pilot)
-                // Per UX audit: surface perks badge + soft CTA + rate
-                // ABOVE the fold so users see the value prop instantly.
-                // Rolling out on this one property first to validate.
+                // PROPERTY HERO OVERHAUL — every property gets perks
+                // chips + rate + soft CTA pinned over the hero so the
+                // value prop reads in the first viewport. (Per UX audit.)
                 // ─────────────────────────────────────────────────────────
-                if (slug === 'borgo-santandrea') {
-                    // 1. Rate under location kicker
-                    if (detail.rateFrom) {
-                        const heroRate = document.getElementById('propertyHeroRate');
-                        heroRate.textContent = 'From ' + detail.rateFrom;
-                        heroRate.hidden = false;
-                    }
-                    // 2. Top 4 perks as horizontal pill chips over hero
-                    const heroPerks = document.getElementById('propertyHeroPerks');
-                    const topPerks = [
-                        'Virtuoso Preferred',
-                        'Complimentary Breakfast for Two',
-                        '$100 USD Resort Credit',
-                        'Upgrade On Arrival When Available'
-                    ];
-                    topPerks.forEach(p => {
-                        const chip = document.createElement('span');
-                        chip.className = 'property-hero-perk-chip';
-                        chip.textContent = p;
-                        heroPerks.appendChild(chip);
-                    });
-                    heroPerks.hidden = false;
-                    // 3. Soft CTA bottom-right of hero
-                    const heroCta = document.getElementById('propertyHeroCta');
-                    document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about ' + nameText;
-                    heroCta.hidden = false;
+
+                // 1. Rate under location kicker
+                const heroRate = document.getElementById('propertyHeroRate');
+                if (detail.rateFrom) {
+                    heroRate.textContent = 'From ' + detail.rateFrom;
+                    heroRate.hidden = false;
+                } else if (detail.rateLines && detail.rateLines.length) {
+                    heroRate.textContent = 'From ' + detail.rateLines[0].value;
+                    heroRate.hidden = false;
                 }
+
+                // 2. Perk chips derived from the property's perks[] array.
+                //    Keep labels short for the chip pill style.
+                const heroPerks = document.getElementById('propertyHeroPerks');
+                const isVirtuoso = (detail.bookingUrl || '').includes('virtuoso.com');
+                const allPerks = (detail.perks || []).join(' ');
+                const perkText = allPerks.toLowerCase();
+                const chips = [];
+                if (isVirtuoso) chips.push('Virtuoso Preferred');
+                if (perkText.includes('breakfast')) chips.push('Complimentary Breakfast');
+                // Extract dollar/euro/etc. credit amount when present
+                const creditMatch = allPerks.match(/(\$\d+|€\d+|£\d+|USD\s*\d+|EUR\s*\d+)[^\n]*?(credit|food)/i);
+                if (creditMatch) {
+                    const amt = creditMatch[1].replace(/USD\s*/i, '$').replace(/EUR\s*/i, '€').replace(/£\s*/i, '£');
+                    chips.push(amt + ' Resort Credit');
+                } else if (perkText.includes('credit')) {
+                    chips.push('Resort Credit');
+                }
+                if (perkText.includes('upgrade')) chips.push('Upgrade on Arrival');
+                else if (perkText.includes('early check')) chips.push('Early Check-In');
+                chips.slice(0, 4).forEach(p => {
+                    const chip = document.createElement('span');
+                    chip.className = 'property-hero-perk-chip';
+                    chip.textContent = p;
+                    heroPerks.appendChild(chip);
+                });
+                if (chips.length) heroPerks.hidden = false;
+
+                // 3. Soft CTA bottom-right of hero
+                const heroCta = document.getElementById('propertyHeroCta');
+                document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about ' + nameText;
+                heroCta.href = 'inquire-hotel.html?hotel=' + encodeURIComponent(slug);
+                heroCta.hidden = false;
 
                 // Ideal-for — advisor's qualifying read on who fits this property
                 if (detail.idealFor) {

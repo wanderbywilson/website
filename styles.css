@@ -7134,3 +7134,67 @@ body.is-home {
     }
     .inquire-hero-visual { aspect-ratio: 16 / 10; }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   FOLLOW-UP REFINEMENTS — Wilson feedback round 2 (2026-05-29)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* #32 HOMEPAGE HERO — push the button further down into the water area
+   (under the Capri rocks). Was 200/120 (top/bottom) — now 280/40. */
+.hero-container {
+    padding-top: 280px;
+    padding-bottom: 40px;
+}
+
+/* #31 BORGO/PROPERTY CTA SPACING — pull the bottom-right Inquire CTA up
+   from the hero edge so it doesn't crash into the section break */
+.property-hero-cta {
+    bottom: 56px;
+    right: 0;
+}
+/* Add a touch more padding to property-hero so there's room for CTA */
+.property-hero-inner {
+    padding-bottom: 32px;
+}
+
+/* #29 INSPIRATION HERO — use a more editorial image (was anguilla person
+   shot — too portrait-y for hero). And FIX the filter pills so the
+   text is actually visible on the dark overlay. */
+.is-inspiration-page .inspo-hero::before {
+    background-image: url('property-images/caruso/00-amalfi-view.jpg');
+}
+/* Make filter pill text actually readable on the dark hero */
+.is-inspiration-page .inspo-hero .inspo-tag {
+    background: rgba(255, 251, 240, 0.08);
+    border: 1px solid rgba(255, 251, 240, 0.32);
+    color: rgba(255, 251, 240, 0.95) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+.is-inspiration-page .inspo-hero .inspo-tag:hover {
+    background: rgba(255, 251, 240, 0.18);
+    border-color: rgba(255, 251, 240, 0.5);
+}
+.is-inspiration-page .inspo-hero .inspo-tag.is-active {
+    background: var(--gold) !important;
+    border-color: var(--gold) !important;
+    color: var(--ink) !important;
+}
+.is-inspiration-page .inspo-hero .inspo-filter-label {
+    color: rgba(255, 251, 240, 0.65) !important;
+}
+/* Search bar contrast over the dark image */
+.is-inspiration-page .inspo-hero .inspo-search {
+    background: rgba(255, 251, 240, 0.94);
+    border-color: rgba(255, 251, 240, 0.4);
+}
+
+/* #34 INQUIRE FORM — more breathing room between trust row + "Already
+   have a hotel" link (they were touching). */
+.inquire-trust-row {
+    margin-bottom: 24px;
+}
+.inquire-hero-note {
+    margin-top: 0;
+    padding-top: 8px;
+}
