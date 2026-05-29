@@ -6787,17 +6787,45 @@ body.is-home {
 .property-gallery .kicker               { margin-bottom: 18px; }
 
 /* ─────────────────────────────────────────────────────────────────────
-   PACKAGES — font-size ONLY adjustments. Formatting, spacing, list
-   style, borders, layout all PRESERVED as original. Just smaller type.
+   PACKAGES — fit in viewport with original formatting preserved.
+   ✓ KEEP: 1-col list with dashes + horizontal separators between items
+   ✓ KEEP: original 2-col layout, zigzag, image aspect, callout style
+   ✓ KEEP: pricing block + CTA inside content column
+   ✗ TIGHTEN: padding/margins around things (you don't see those —
+              you only see them as space between elements)
+   ✗ SHRINK: type sizes
    ───────────────────────────────────────────────────────────────────── */
 
-.package-name                   { font-size: clamp(22px, 2.2vw, 28px); }
-.package-tagline                { font-size: 13px; }
-.package-description p          { font-size: 13px; }
-.package-value-headline         { font-size: 13px; }
-.package-value-copy             { font-size: 12.5px; }
+/* Section spacing — bring packages section closer */
+.packages                       { padding: 40px 0; }
+.package                        { padding: 24px 0; }
+.package--signature             { padding: 32px 40px; margin: 12px -40px; }
+
+/* Type scale — smaller across the board */
+.package-name                   { font-size: clamp(24px, 2.4vw, 30px); }
+.package-tagline                { font-size: 14px; line-height: 1.45; }
+.package-description p          { font-size: 14px; line-height: 1.55; }
+.package-description p + p      { margin-top: 10px; }
+
+.package-value-callout          { padding: 12px 16px; }
+.package-value-headline         { font-size: 14px; }
+.package-value-copy             { font-size: 13px; line-height: 1.5; }
+
 .package-list-label             { font-size: 10px; }
-.package-list li                { font-size: 12px; }
+.package-list li                { font-size: 13px; line-height: 1.45; padding: 8px 0; }
+
+.package-price-row              { padding: 8px 0; }
 .package-price-label            { font-size: 11px; }
-.package-price-value            { font-size: 14px; }
-.package-cta                    { font-size: 10px; }
+.package-price-value            { font-size: 15px; }
+.package-cta                    { padding: 10px 18px; font-size: 11px; }
+
+/* Tighten gaps between the header bits inside content col */
+.package-meta                   { margin-bottom: 18px; }
+.package-num                    { margin-bottom: 8px; }
+
+/* Section header (Planning packages kicker) */
+.packages .kicker               { margin-bottom: 20px; }
+
+/* Pullquote + partners between packages */
+.package-pullquote              { padding: 24px 0; font-size: 18px; }
+.package-partners               { padding: 20px 0; }
