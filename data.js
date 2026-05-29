@@ -103,7 +103,7 @@ const PROPERTIES = {
         name: 'Borgo Santandrea',
         location: 'Amalfi Coast, Italy',
         rateFrom: '€850 / night',
-        heroImage: 'property-images/borgo-santandrea/02-aerial-coastal.jpg',
+        heroImage: '/property-images/borgo-santandrea/02-aerial-coastal.jpg',
         description: "Borgo Santandrea is an award-winning hotel on Italy's Amalfi Coast, embodying a captivating blend of Italian elegance, local charm, and breathtaking natural beauty. Here, mid-century design meets Mediterranean style in perfect harmony. Indulge in culinary delights at the three restaurants, relax by the panoramic pool surrounded by terraced gardens, or retreat to the peaceful fitness and wellness area for a rejuvenating escape. For a real treat, the hotel's exclusive private beach club, Marinella, is a truly unique haven on the rocky Amalfi Coast.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -113,11 +113,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/borgo-santandrea/04-pool-terrace.png',
-            'property-images/borgo-santandrea/01-premium-pool-suite.jpg',
-            'property-images/borgo-santandrea/03-beach-club-marinella.jpg',
-            'property-images/borgo-santandrea/05-plumbago-bar.jpg',
-            'property-images/borgo-santandrea/00-suite-801-original.webp'
+            '/property-images/borgo-santandrea/04-pool-terrace.png',
+            '/property-images/borgo-santandrea/01-premium-pool-suite.jpg',
+            '/property-images/borgo-santandrea/03-beach-club-marinella.jpg',
+            '/property-images/borgo-santandrea/05-plumbago-bar.jpg',
+            '/property-images/borgo-santandrea/00-suite-801-original.webp'
         ],
         idealFor: "Honeymooners, design devotees, and seasoned Italy travelers who&rsquo;d skip the Positano fanfare for somewhere quieter and more considered.",
         agentTip: "Embark on a boat tour of the Amalfi Coast, departing directly from the hotel's dock aboard the luxury Pardo boat &mdash; experience the beauty of the coast while enjoying the essence of seaside living.",
@@ -128,7 +128,7 @@ const PROPERTIES = {
         name: 'Cheval Blanc Paris',
         location: 'Paris, France',
         rateFrom: '€1,800 / night',
-        heroImage: 'property-images/cheval-blanc-paris/00-hero.jpg',
+        heroImage: '/property-images/cheval-blanc-paris/00-hero.jpg',
         description: "Cheval Blanc Paris is an intimate 72-room hideaway designed by Peter Marino, where contemporary refinement meets understated Parisian elegance inside the landmark Samaritaine. Facing the Seine within steps of the Louvre and Notre-Dame, the hotel hosts a three-Michelin-starred restaurant by Arnaud Donckele, the Dior Spa Cheval Blanc, and an artisan-mosaic infinity pool. Bespoke service, family-friendly Dior touches, and an exceptional culinary line-up make it a quietly bold base for honeymooners, families, and Paris devotees.",
         perks: [
             'Complimentary two-way private transfer with airport meet &amp; greet service upon arrival',
@@ -140,9 +140,9 @@ const PROPERTIES = {
             'Courtesy car access, upon availability'
         ],
         gallery: [
-            'property-images/cheval-blanc-paris/01-pool-gym.jpg',
-            'property-images/cheval-blanc-paris/02-spa.jpg',
-            'property-images/cheval-blanc-paris/03-restaurant-bar.jpg'
+            '/property-images/cheval-blanc-paris/01-pool-gym.jpg',
+            '/property-images/cheval-blanc-paris/02-spa.jpg',
+            '/property-images/cheval-blanc-paris/03-restaurant-bar.jpg'
         ],
         idealFor: "Honeymooners, design devotees, and Paris regulars who want the city through a quieter, more curated lens &mdash; Dior touches without the spectacle of the grandes dames.",
         bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/15873984/cheval-blanc-paris'
@@ -152,7 +152,7 @@ const PROPERTIES = {
         name: 'Hotel Il Pellicano',
         location: 'Porto Ercole, Italy',
         rateFrom: '€690 / night',
-        heroImage: 'property-images/hotel-il-pellicano/00-hero.jpg',
+        heroImage: '/property-images/hotel-il-pellicano/00-hero.jpg',
         description: "Hotel Il Pellicano spills down Monte Argentario into a cove of rare Tyrrhenian beauty, a sun-drenched hideaway opened in 1965 and immortalized by Slim Aarons&rsquo; poolside frames. Terraced gardens of centuries-old olive trees lead to a heated seawater pool perched on the cliffs and a private rocky beach below. Inside, refined Tuscan suites, a Michelin-starred dining room, the Pelligrill, and the Pelliclub wellness suite keep the dolce-vita spirit alive each season from April through October.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -162,11 +162,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/hotel-il-pellicano/01-pool.jpg',
-            'property-images/hotel-il-pellicano/02-restaurant-view.jpg',
-            'property-images/hotel-il-pellicano/03-executive-suite-view.jpg',
-            'property-images/hotel-il-pellicano/04-location.jpg',
-            'property-images/hotel-il-pellicano/05-tuscan-home.jpg'
+            '/property-images/hotel-il-pellicano/01-pool.jpg',
+            '/property-images/hotel-il-pellicano/02-restaurant-view.jpg',
+            '/property-images/hotel-il-pellicano/03-executive-suite-view.jpg',
+            '/property-images/hotel-il-pellicano/04-location.jpg',
+            '/property-images/hotel-il-pellicano/05-tuscan-home.jpg'
         ],
         idealFor: "Slim Aarons aesthetes, couples seeking a slower Italian summer, and well-traveled Italy regulars who&rsquo;d trade Capri&rsquo;s crowds for Tuscany&rsquo;s quiet.",
         agentTip: "Book one of the Deluxe Suites overlooking the Tyrrhenian Sea and relax on your private grand terrace.",
@@ -177,7 +177,7 @@ const PROPERTIES = {
         name: 'Eden Rock &mdash; St Barths',
         location: 'St Barths, French West Indies',
         rateFrom: '€1,850 / night',
-        heroImage: 'property-images/eden-rock-st-barths/00-hero.jpg',
+        heroImage: '/property-images/eden-rock-st-barths/00-hero.jpg',
         description: "Eden Rock occupies one of the Caribbean&rsquo;s most photographed perches, a granite outcrop wedged between two crescents of white-sand beach on St Jean Bay. Part of the Oetker Collection and freshly reimagined in 2019, its art-filled rooms, villas, and suites mix island ease with effortless French style. Days drift between the beach restaurant, the Sand Bar&rsquo;s barefoot lunches, and an enviable contemporary art collection scattered across the property.",
         perks: [
             'One category room upgrade guaranteed at time of booking, based on availability',
@@ -189,11 +189,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/eden-rock-st-barths/01-aerial-view.jpg',
-            'property-images/eden-rock-st-barths/02-beach.jpg',
-            'property-images/eden-rock-st-barths/03-beach-bar.jpg',
-            'property-images/eden-rock-st-barths/04-premium-suite-fregate.jpg',
-            'property-images/eden-rock-st-barths/05-christopher-columbus-suite.jpg'
+            '/property-images/eden-rock-st-barths/01-aerial-view.jpg',
+            '/property-images/eden-rock-st-barths/02-beach.jpg',
+            '/property-images/eden-rock-st-barths/03-beach-bar.jpg',
+            '/property-images/eden-rock-st-barths/04-premium-suite-fregate.jpg',
+            '/property-images/eden-rock-st-barths/05-christopher-columbus-suite.jpg'
         ],
         idealFor: "Honeymooners, contemporary-art enthusiasts, and Caribbean regulars who want St Barths at its most quietly stylish.",
         agentTip: "Discover the surprising art collection throughout the hotel and inside your very unique room.",
@@ -204,8 +204,8 @@ const PROPERTIES = {
         name: 'Amangiri',
         location: 'Canyon Point, Utah',
         rateFrom: '$4,170 / night',
-        heroImage: 'property-images/amangiri/00-hero.jpg',
-        brandBadge: 'logos/aman.png',
+        heroImage: '/property-images/amangiri/00-hero.jpg',
+        brandBadge: '/logos/aman.png',
         brandBadgeAlt: 'Aman',
         description: "Amangiri rises from 900 acres of the Colorado Plateau in Utah&rsquo;s Grand Staircase-Escalante region, its understated architecture echoing the red-rock canyons that surround it. The 34 suites and private four-bedroom home open onto private terraces, a sculptural pool curls around an ancient rock formation, and the Aman Spa weaves in Navajo healing traditions. Just minutes away, Camp Sarika&rsquo;s tented pavilions deliver an even more remote desert reverie, with hot-air balloons, slot-canyon hikes, and Via Ferrata climbs at the doorstep.",
         perks: [
@@ -214,11 +214,11 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability'
         ],
         gallery: [
-            'property-images/amangiri/01-camp-sarika-tent.jpeg',
-            'property-images/amangiri/02-desert-view-suite.jpeg',
-            'property-images/amangiri/03-spa-reflection-pool.jpeg',
-            'property-images/amangiri/04-desert-lounge-dusk.jpeg',
-            'property-images/amangiri/05-main-space.jpg'
+            '/property-images/amangiri/01-camp-sarika-tent.jpeg',
+            '/property-images/amangiri/02-desert-view-suite.jpeg',
+            '/property-images/amangiri/03-spa-reflection-pool.jpeg',
+            '/property-images/amangiri/04-desert-lounge-dusk.jpeg',
+            '/property-images/amangiri/05-main-space.jpg'
         ],
         idealFor: "Architecture pilgrims, wellness travelers, and adventurous couples who want the American Southwest at its most cinematic &mdash; far from the lodge stereotype.",
         agentTip: "Snag a complimentary BMW and head to Horseshoe Bend, a 30-minute drive into Arizona &mdash; or stay on property and climb the Studhorse Via Ferrata.",
@@ -229,7 +229,7 @@ const PROPERTIES = {
         name: 'Royal Mansour Marrakech',
         location: 'Marrakech, Morocco',
         rateFrom: '€1,500 / night',
-        heroImage: 'property-images/royal-mansour-marrakech/00-hero.jpg',
+        heroImage: '/property-images/royal-mansour-marrakech/00-hero.jpg',
         description: "Royal Mansour Marrakech reimagines a traditional medina across six private hectares, where 53 individually designed riads &mdash; each one to four bedrooms &mdash; sit along terracotta-coloured alleys and gardens. Discreet butler service threads through hidden underground tunnels, and a 2,500-square-metre spa, four signature restaurants, and bespoke wellness programmes anchor the experience. Located in Hivernage near Jamaa El Fna, it pairs imperial Moroccan craftsmanship with contemporary indulgence at every turn.",
         perks: [
             'Upgrade on arrival, subject to availability (up to Premier one bedroom Riad)',
@@ -239,11 +239,11 @@ const PROPERTIES = {
             'Complimentary roundtrip private airport transfers &amp; Fast track'
         ],
         gallery: [
-            'property-images/royal-mansour-marrakech/01-grand-riad.jpg',
-            'property-images/royal-mansour-marrakech/02-courtyard.jpg',
-            'property-images/royal-mansour-marrakech/03-sesamo.jpg',
-            'property-images/royal-mansour-marrakech/04-lobby.jpg',
-            'property-images/royal-mansour-marrakech/05-spa-pool.jpg'
+            '/property-images/royal-mansour-marrakech/01-grand-riad.jpg',
+            '/property-images/royal-mansour-marrakech/02-courtyard.jpg',
+            '/property-images/royal-mansour-marrakech/03-sesamo.jpg',
+            '/property-images/royal-mansour-marrakech/04-lobby.jpg',
+            '/property-images/royal-mansour-marrakech/05-spa-pool.jpg'
         ],
         idealFor: "Multi-generational families in their own private riads, couples chasing imperial Moroccan opulence, and first-time Marrakech visitors who want the city decoded from inside the medina walls.",
         agentTip: "The Concierge, who proudly wears the &lsquo;Cl&eacute;s d&rsquo;Or&rsquo; distinction, is available to help make a personalized plan for every guest.",
@@ -255,7 +255,7 @@ const PROPERTIES = {
         location: 'Thornybush, South Africa',
         rateFrom: '$3,250 / night',
         rateNote: 'All-inclusive, per person',
-        heroImage: 'property-images/royal-malewane/00-hero.webp',
+        heroImage: '/property-images/royal-malewane/00-hero.webp',
         description: "Royal Malewane sits deep within the Thornybush Private Game Reserve on the western edge of Greater Kruger, a flagship of The Royal Portfolio renowned as the &lsquo;Harvard of the Bush.&rsquo; Its guiding team is widely considered the most qualified in Africa, and Big-Five sightings &mdash; especially leopard &mdash; are exceptional. Across the main lodge and the intimate Farmstead villa, guests retreat to private plunge pools, a Bush Spa, and fireside dinners under a sky thick with stars.",
         perks: [
             'Upgrade on arrival, subject to availability (not applicable to Royal Suites or Africa House)',
@@ -265,11 +265,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/royal-malewane/01-lion-pride.webp',
-            'property-images/royal-malewane/02-suite.webp',
-            'property-images/royal-malewane/03-main-lodge.webp',
-            'property-images/royal-malewane/04-pool.webp',
-            'property-images/royal-malewane/05-sundowner.webp'
+            '/property-images/royal-malewane/01-lion-pride.webp',
+            '/property-images/royal-malewane/02-suite.webp',
+            '/property-images/royal-malewane/03-main-lodge.webp',
+            '/property-images/royal-malewane/04-pool.webp',
+            '/property-images/royal-malewane/05-sundowner.webp'
         ],
         idealFor: "First-time safari travelers who want the finest guiding in Africa, photographers chasing leopard, and honeymooners who&rsquo;d trade champagne brunches for fireside dinners under a sky thick with stars.",
         agentTip: "There are only thirteen Professional Field Guides with FGASA Scout status in the world &mdash; and two of those are on the Royal Malewane team.",
@@ -280,7 +280,7 @@ const PROPERTIES = {
         name: 'Soneva Fushi',
         location: 'Baa Atoll, Maldives',
         rateFrom: '$1,880 / night',
-        heroImage: 'property-images/soneva-fushi/00-hero.webp',
+        heroImage: '/property-images/soneva-fushi/00-hero.webp',
         description: "Soneva Fushi pioneered barefoot luxury in the Maldives, hiding 64 beachfront villas and eight overwater retreats among jungle paths on a private island in the Baa Atoll UNESCO Biosphere Reserve. Fourteen dining venues &mdash; from a tree-top restaurant to the chocolate, ice-cream, and charcuterie parlours &mdash; sit alongside the holistic Soneva Soul wellness centre and a dedicated children&rsquo;s complex, The Den. With personal Barefoot Guardians, an optional all-inclusive plan, and a strong sustainability ethos, it remains the gold standard for families, honeymooners, and wellness travellers.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -290,10 +290,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/soneva-fushi/04-accommodation.webp',
-            'property-images/soneva-fushi/01-pool-gym.webp',
-            'property-images/soneva-fushi/02-spa.webp',
-            'property-images/soneva-fushi/03-restaurant-bar.webp'
+            '/property-images/soneva-fushi/04-accommodation.webp',
+            '/property-images/soneva-fushi/01-pool-gym.webp',
+            '/property-images/soneva-fushi/02-spa.webp',
+            '/property-images/soneva-fushi/03-restaurant-bar.webp'
         ],
         idealFor: "Families across three generations, honeymooners who want overwater seclusion without the formality, and wellness travelers drawn to Soneva Soul&rsquo;s holistic programmes.",
         agentTip: "Your Barefoot Guardian is available around the clock &mdash; a personal concierge who will help shape your stay from the moment you arrive.",
@@ -304,8 +304,8 @@ const PROPERTIES = {
         name: 'Rosewood Little Dix Bay',
         location: 'Virgin Gorda, British Virgin Islands',
         rateFrom: '$900 / night',
-        heroImage: 'property-images/rosewood-little-dix-bay/00-hero.jpg',
-        brandBadge: 'logos/rosewood-elite.png',
+        heroImage: '/property-images/rosewood-little-dix-bay/00-hero.jpg',
+        brandBadge: '/logos/rosewood-elite.png',
         brandBadgeAlt: 'Rosewood Elite',
         description: "Rosewood Little Dix Bay defines understated Caribbean luxury along a half-mile crescent of powder-white sand on Virgin Gorda, an eco-minded resort that has been welcoming guests for more than half a century. Light-filled rooms and villas use natural materials, while two pools &mdash; including a cliff-side infinity pool at Sense Spa &mdash; frame panoramic ocean views. Three beachfront restaurants spotlight fresh local seafood, butler service is on call, and water taxis whisk guests to seven secluded beaches around the island.",
         perks: [
@@ -316,11 +316,11 @@ const PROPERTIES = {
             'Guests will receive locally made candles with the scent of Virgin Gorda to bring a bit of their island discovery home'
         ],
         gallery: [
-            'property-images/rosewood-little-dix-bay/01-bungalow.jpg',
-            'property-images/rosewood-little-dix-bay/02-sense-spa-pool.jpg',
-            'property-images/rosewood-little-dix-bay/03-suite-terrace.jpg',
-            'property-images/rosewood-little-dix-bay/04-bay-view.jpg',
-            'property-images/rosewood-little-dix-bay/05-ldb-view.jpg'
+            '/property-images/rosewood-little-dix-bay/01-bungalow.jpg',
+            '/property-images/rosewood-little-dix-bay/02-sense-spa-pool.jpg',
+            '/property-images/rosewood-little-dix-bay/03-suite-terrace.jpg',
+            '/property-images/rosewood-little-dix-bay/04-bay-view.jpg',
+            '/property-images/rosewood-little-dix-bay/05-ldb-view.jpg'
         ],
         idealFor: "Honeymooners, multi-generational families, and Caribbean regulars who&rsquo;d trade resort glamour for half a mile of empty beach, seven secret coves, and a butler who still knows your name.",
         agentTip: "Be sure to visit &lsquo;The Baths&rsquo; &mdash; the iconic BVI rock formation lets you hike through caves, discover rock pools, and climb on giant boulders.",
@@ -332,7 +332,7 @@ const PROPERTIES = {
         location: 'Nosy Ankao, Madagascar',
         rateFrom: '$3,700 / night',
         rateNote: 'All-inclusive, per person',
-        heroImage: 'property-images/time-tide-miavana/00-hero.webp',
+        heroImage: '/property-images/time-tide-miavana/00-hero.webp',
         description: "Miavana by Time + Tide sits on the private island of Nosy Ankao off Madagascar&rsquo;s northeastern coast, where fourteen beachfront villas with private pools, direct beach access, and panoramic ocean views blur the line between inside and out. Days flex from lemur trekking and scuba diving to kiteboarding and helicopter excursions over nearby national parks. Conservation sits at the heart of everything here &mdash; reforestation, marine protection, and meaningful support for local communities &mdash; making it one of the rare places where the experience genuinely gives back.",
         perks: [
             'Daily breakfast for up to two guests per bedroom, served in the restaurant and via in-room dining (already included in property rates)',
@@ -341,10 +341,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/time-tide-miavana/01-villa.webp',
-            'property-images/time-tide-miavana/02-pool.webp',
-            'property-images/time-tide-miavana/03-restaurant.webp',
-            'property-images/time-tide-miavana/04-lemur-trekking.webp'
+            '/property-images/time-tide-miavana/01-villa.webp',
+            '/property-images/time-tide-miavana/02-pool.webp',
+            '/property-images/time-tide-miavana/03-restaurant.webp',
+            '/property-images/time-tide-miavana/04-lemur-trekking.webp'
         ],
         idealFor: "Adventurous couples who&rsquo;d trade familiar luxury for true remoteness, conservation-minded travelers, and honeymooners seeking an island so private the staff still outnumber the guests.",
         agentTip: "For a truly unforgettable experience, request a private helicopter excursion at golden hour.",
@@ -357,7 +357,7 @@ const PROPERTIES = {
         rateFrom: '$2,200 / night',
         rateNote: 'All-inclusive',
         rateInfo: 'Converted to USD from the lodge’s published AUD rate — approximate and subject to exchange-rate movement. Final pricing is confirmed at the time of booking.',
-        heroImage: 'property-images/southern-ocean-lodge/00-hero.jpg',
+        heroImage: '/property-images/southern-ocean-lodge/00-hero.jpg',
         description: "Set along the limestone cliffs of Kangaroo Island&rsquo;s southwest coast, Baillie Lodges&rsquo; flagship is an all-inclusive lens on Australia&rsquo;s &lsquo;Galapagos.&rsquo; Twenty-five luxury suites curve along the coast with uninterrupted ocean views, contemporary interiors, fireplaces, and generous outdoor terraces. Stays include all meals, an open bar with premium wines and spirits, daily-replenished in-suite minibars, signature guided excursions, and round-trip airport transfers.",
         perks: [
             'Lodge credit on property (USD $100)',
@@ -367,10 +367,10 @@ const PROPERTIES = {
             'Upgrade to next category, subject to availability'
         ],
         gallery: [
-            'property-images/southern-ocean-lodge/01-suite.jpg',
-            'property-images/southern-ocean-lodge/02-pool-bar.jpg',
-            'property-images/southern-ocean-lodge/03-spa.jpg',
-            'property-images/southern-ocean-lodge/04-restaurant.jpg'
+            '/property-images/southern-ocean-lodge/01-suite.jpg',
+            '/property-images/southern-ocean-lodge/02-pool-bar.jpg',
+            '/property-images/southern-ocean-lodge/03-spa.jpg',
+            '/property-images/southern-ocean-lodge/04-restaurant.jpg'
         ],
         idealFor: "Australia regulars looking beyond Uluru and the Reef, wildlife enthusiasts drawn to Kangaroo Island&rsquo;s &lsquo;Galapagos,&rsquo; and couples who want true all-inclusive ease without surrendering the service touches.",
         agentTip: "Plan three nights or more so guests can experience every signature guided excursion &mdash; from Seal Bay sea lions to Remarkable Rocks and Kelly Hill Caves. For the ultimate stay, reserve the Baillie Pavilion, a four-bedroom private residence with dedicated host service.",
@@ -381,7 +381,7 @@ const PROPERTIES = {
         name: 'COMO Shambhala Estate',
         location: 'Ubud, Bali',
         rateFrom: '$630 / night',
-        heroImage: 'property-images/como-shambhala-estate/00-hero.webp',
+        heroImage: '/property-images/como-shambhala-estate/00-hero.webp',
         description: "COMO Shambhala Estate is an award-winning wellness retreat spread across twenty-three acres of jungle-covered riverbank twenty minutes from Ubud. Healing runs deep here &mdash; from medicinal plants growing in the surrounding forest to a natural spring locally revered for its restorative properties. The estate is built around COMO&rsquo;s holistic wellness philosophy, with tailored Wellness Paths and nutritional COMO Shambhala Cuisine at its core, while guides and fitness experts lead guests into the surrounding outdoors for a more active approach to wellbeing.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -391,11 +391,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/como-shambhala-estate/01-wellness-pool.jpg',
-            'property-images/como-shambhala-estate/02-kedara-water-garden.webp',
-            'property-images/como-shambhala-estate/03-pool-jungle-view.jpg',
-            'property-images/como-shambhala-estate/04-villa-aerial.jpg',
-            'property-images/como-shambhala-estate/05-jungle-dining.jpg'
+            '/property-images/como-shambhala-estate/01-wellness-pool.jpg',
+            '/property-images/como-shambhala-estate/02-kedara-water-garden.webp',
+            '/property-images/como-shambhala-estate/03-pool-jungle-view.jpg',
+            '/property-images/como-shambhala-estate/04-villa-aerial.jpg',
+            '/property-images/como-shambhala-estate/05-jungle-dining.jpg'
         ],
         idealFor: "Wellness travelers serious about a reset, solo guests seeking a structured retreat, and couples between chapters who want Bali&rsquo;s spiritual side without the Seminyak scene.",
         agentTip: "Book a massage at the bale by the Kedara water garden for a treatment in the heart of the jungle.",
@@ -406,8 +406,8 @@ const PROPERTIES = {
         name: 'Las Ventanas al Para&iacute;so, A Rosewood Resort',
         location: 'San Jos&eacute; del Cabo, Mexico',
         rateFrom: '$1,015 / night',
-        heroImage: 'property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero.jpg',
-        brandBadge: 'logos/rosewood-elite.png',
+        heroImage: '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero.jpg',
+        brandBadge: '/logos/rosewood-elite.png',
         brandBadgeAlt: 'Rosewood Elite',
         description: "Pure romance envelops you the moment a trio of musicians serenade your arrival at Las Ventanas al Para&iacute;so. The resort is beautiful and blissfully private, with a network of underground tunnels keeping staff discreet and making it a favourite of honeymooning couples and celebrities. Mediterranean-Mexican buildings dotted with succulents and cacti blend into the desert landscape, while winding infinity pools seem to disappear into the sea. Every suite has its own twenty-four-hour butler, and the resort&rsquo;s &lsquo;director of romance&rsquo; orchestrates on-the-beach dinners, oceanfront proposals, and over-the-top anniversaries.",
         perks: [
@@ -419,10 +419,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/las-ventanas-al-paraiso-a-rosewood-resort/01-suite.jpg',
-            'property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-pool.jpg',
-            'property-images/las-ventanas-al-paraiso-a-rosewood-resort/03-beach.jpg',
-            'property-images/las-ventanas-al-paraiso-a-rosewood-resort/04-dining.jpg'
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/01-suite.jpg',
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-pool.jpg',
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/03-beach.jpg',
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/04-dining.jpg'
         ],
         idealFor: "Honeymooners, anniversary couples, and Cabo regulars who&rsquo;d skip the buzzy beach clubs for serenades, beachside dinners, and a butler on call around the clock.",
         agentTip: "Don&rsquo;t miss Magic Dinner with the resort&rsquo;s resident magician host &mdash; surrounded by catrinas, candles, and traditional d&eacute;cor in the magical herb gardens, it&rsquo;s a theatrical evening full of intrigue and mystery.",
@@ -434,7 +434,7 @@ const PROPERTIES = {
         location: 'Torres del Paine, Chile',
         rateFrom: '$4,850 / night',
         rateNote: 'All-inclusive, per villa',
-        heroImage: 'property-images/awasi-patagonia/00-hero.webp',
+        heroImage: '/property-images/awasi-patagonia/00-hero.webp',
         description: "Awasi Patagonia comprises just fourteen modern-rustic villas, each with a direct view of Torres del Paine&rsquo;s iconic twin peaks. Built from native lenga wood and scattered across a private forested reserve, each villa features a wood-burning stove and a private hot tub for stargazing. A dedicated guide and 4WD vehicle let you explore the park entirely at your pace &mdash; hike to a glacier or along the Base Torres trail, track pumas, or ride with gauchos &mdash; before returning to fjord-caught fish, locally reared lamb, and exceptional Chilean wines at the restaurant.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -443,10 +443,10 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability'
         ],
         gallery: [
-            'property-images/awasi-patagonia/01-villa.webp',
-            'property-images/awasi-patagonia/02-torres-del-paine.webp',
-            'property-images/awasi-patagonia/03-interior.webp',
-            'property-images/awasi-patagonia/04-puma.webp'
+            '/property-images/awasi-patagonia/01-villa.webp',
+            '/property-images/awasi-patagonia/02-torres-del-paine.webp',
+            '/property-images/awasi-patagonia/03-interior.webp',
+            '/property-images/awasi-patagonia/04-puma.webp'
         ],
         idealFor: "Adventurous couples after their first true Patagonia, photographers chasing puma and condor, and travelers who&rsquo;d rather have a private guide and 4WD than crowd onto a group bus through Torres del Paine.",
         agentTip: "Schedule a sunrise wildlife photography session for the chance to snap guanacos, rheas, foxes, condors, and perhaps an elusive puma.",
@@ -457,8 +457,8 @@ const PROPERTIES = {
         name: 'Cap Juluca, A Belmond Hotel',
         location: 'Maundays Bay, Anguilla',
         rateFrom: '$1,500 / night',
-        heroImage: 'property-images/cap-juluca/00-hero.jpg',
-        brandBadge: 'logos/bellini-club.png',
+        heroImage: '/property-images/cap-juluca/00-hero.jpg',
+        brandBadge: '/logos/bellini-club.png',
         brandBadgeAlt: 'Bellini Club by Belmond',
         description: "Cap Juluca anchors a mile-long crescent of powdered sand along Anguilla&rsquo;s Maundays Bay, where Moorish-inspired white villas open onto the turquoise water of one of the Caribbean&rsquo;s most photographed beaches. Reimagined by Belmond in 2018, the resort balances barefoot island ease with quietly elegant service &mdash; multiple oceanfront pools, restaurants spanning Caribbean to Mediterranean cuisine, the Arawak Spa, and reef-side water sports along Maundays Bay. The setting is famously private, the pace genuinely slow.",
         perks: [
@@ -471,11 +471,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/cap-juluca/01-aerial-maundays-bay.jpg',
-            'property-images/cap-juluca/02-beachfront-villas.jpg',
-            'property-images/cap-juluca/03-villa-balcony-breakfast.jpg',
-            'property-images/cap-juluca/04-pimms-restaurant.jpg',
-            'property-images/cap-juluca/05-arawak-spa.jpg'
+            '/property-images/cap-juluca/01-aerial-maundays-bay.jpg',
+            '/property-images/cap-juluca/02-beachfront-villas.jpg',
+            '/property-images/cap-juluca/03-villa-balcony-breakfast.jpg',
+            '/property-images/cap-juluca/04-pimms-restaurant.jpg',
+            '/property-images/cap-juluca/05-arawak-spa.jpg'
         ],
         idealFor: "Couples chasing barefoot luxury without the crowds, multi-generational families who want space to spread out, and Caribbean regulars ready to graduate from island-hop resorts to one of the region&rsquo;s most quietly storied stays.",
         agentTip: "If you&rsquo;re looking for the ultimate beachside experience, you&rsquo;ve found it! Every room has an ocean view, and all of Cap Juluca, A Belmond Hotel is accessible with a walk down the beach.",
@@ -485,8 +485,8 @@ const PROPERTIES = {
         name: 'Caruso, A Belmond Hotel',
         location: 'Ravello, Amalfi Coast',
         rateFrom: '€1,800 / night',
-        heroImage: 'property-images/caruso/00-amalfi-view.jpg',
-        brandBadge: 'logos/bellini-club.png',
+        heroImage: '/property-images/caruso/00-amalfi-view.jpg',
+        brandBadge: '/logos/bellini-club.png',
         brandBadgeAlt: 'Bellini Club by Belmond',
         description: "High above the Amalfi Coast in the hill town of Ravello, Caruso occupies an 11th-century palazzo whose terraces seem to float between the gardens and the sea. Belmond&rsquo;s restoration kept the frescoed ceilings, vaulted salons, and antique detail intact while adding a cliff-edge infinity pool that has become one of Italy&rsquo;s most photographed &mdash; water meeting sky over the Tyrrhenian far below. Days drift between the rose-and-citrus gardens, long lunches on the Belvedere terrace, and the hotel&rsquo;s boat down to the water. Set apart from the crush of Positano and Amalfi, it is the coast at its most serene.",
         perks: [
@@ -510,7 +510,7 @@ const PROPERTIES = {
             { label: 'Resort', value: '$740 / night' },
             { label: 'Villas', value: '$2,500 / night' }
         ],
-        heroImage: 'property-images/wymara-villas/01-villa-slide-into-sea.jpg',
+        heroImage: '/property-images/wymara-villas/01-villa-slide-into-sea.jpg',
         description: "Wymara is two distinct experiences under one name on Providenciales. On Grace Bay &mdash; routinely ranked among the world&rsquo;s best beaches &mdash; the flagship Wymara Resort fronts the sand with a mosaic oceanfront infinity pool, floating cabanas, a spa, and an open-air lobby and restaurant framing the water. A short drive away on the Turtle Tail bluff, Wymara Villas step down a private headland toward their own turquoise cove: contemporary white villas with ocean-view infinity pools and the signature water slides that spiral straight into the sea, anchored by the six-bedroom Azure Villa. Book the resort for full-service beachfront ease, the villas for total privacy, or pair the two &mdash; villa guests have the run of the resort&rsquo;s beach, pool, and dining.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -520,14 +520,14 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/wymara-villas/07-resort-grace-bay-pool.jpg',
-            'property-images/wymara-villas/02-azure-villa-aerial.jpg',
-            'property-images/wymara-villas/08-resort-oceanfront-suite.jpg',
-            'property-images/wymara-villas/03-azure-villa-pool.jpg',
-            'property-images/wymara-villas/11-resort-grace-bay-beach.jpg',
-            'property-images/wymara-villas/04-villa-interior-dining.jpg',
-            'property-images/wymara-villas/10-resort-open-air-lobby.jpg',
-            'property-images/wymara-villas/05-villa-master-bedroom.jpg'
+            '/property-images/wymara-villas/07-resort-grace-bay-pool.jpg',
+            '/property-images/wymara-villas/02-azure-villa-aerial.jpg',
+            '/property-images/wymara-villas/08-resort-oceanfront-suite.jpg',
+            '/property-images/wymara-villas/03-azure-villa-pool.jpg',
+            '/property-images/wymara-villas/11-resort-grace-bay-beach.jpg',
+            '/property-images/wymara-villas/04-villa-interior-dining.jpg',
+            '/property-images/wymara-villas/10-resort-open-air-lobby.jpg',
+            '/property-images/wymara-villas/05-villa-master-bedroom.jpg'
         ],
         idealFor: "We love Wymara for couples and honeymooners at both the main resort and the one-bedroom pool villas, and for families, groups, and multigenerational travelers looking for a private villa experience with serious amenities on the doorstep.",
         agentTip: "The ocean pool runs stand-up paddleboard yoga most mornings, one of the finest ways to appreciate the beauty of Grace Bay Beach.",
@@ -537,8 +537,8 @@ const PROPERTIES = {
     'belmond-hiram-bingham': {
         name: 'Belmond Hiram Bingham',
         location: 'Cusco to Machu Picchu, Peru',
-        heroImage: 'property-images/belmond-hiram-bingham/00-hero.jpg',
-        brandBadge: 'logos/bellini-club.png',
+        heroImage: '/property-images/belmond-hiram-bingham/00-hero.jpg',
+        brandBadge: '/logos/bellini-club.png',
         brandBadgeAlt: 'Bellini Club by Belmond',
         description: "Hiram Bingham, A Belmond Train, travels the fabled route from just outside Cusco &mdash; the historic capital of the Inca Empire &mdash; to ancient Machu Picchu. Sink into an armchair in the train&rsquo;s 1920s Pullman-style carriages and savour the glamour of a bygone era, gleaming with antique fittings. Each journey includes a light lunch, a guided tour of Machu Picchu, and dinner set to the melody of live music as the Andean landscape rolls by.",
         perks: [
@@ -549,11 +549,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/belmond-hiram-bingham/01-train-bridge.jpg',
-            'property-images/belmond-hiram-bingham/02-train-exterior.jpg',
-            'property-images/belmond-hiram-bingham/03-train-interior.jpg',
-            'property-images/belmond-hiram-bingham/04-dining.jpg',
-            'property-images/belmond-hiram-bingham/05-landscape.jpg'
+            '/property-images/belmond-hiram-bingham/01-train-bridge.jpg',
+            '/property-images/belmond-hiram-bingham/02-train-exterior.jpg',
+            '/property-images/belmond-hiram-bingham/03-train-interior.jpg',
+            '/property-images/belmond-hiram-bingham/04-dining.jpg',
+            '/property-images/belmond-hiram-bingham/05-landscape.jpg'
         ],
         idealFor: "Travelers who believe the journey is half the trip, couples celebrating a milestone, and Machu Picchu pilgrims who want to arrive at the Inca capital the way nineteen-twenties explorers did &mdash; through the windows of a polished Pullman.",
         agentTip: "Work with your advisor to charter an exclusive itinerary personalized to your group&rsquo;s needs.",
@@ -564,8 +564,8 @@ const PROPERTIES = {
         name: 'Kona Village, A Rosewood Resort',
         location: 'Kona Coast, Hawai&lsquo;i Island',
         rateFrom: '$1,131 / night',
-        heroImage: 'property-images/kona-village-a-rosewood-resort/00-hero.jpg',
-        brandBadge: 'logos/rosewood-elite.png',
+        heroImage: '/property-images/kona-village-a-rosewood-resort/00-hero.jpg',
+        brandBadge: '/logos/rosewood-elite.png',
         brandBadgeAlt: 'Rosewood Elite',
         description: "Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&lsquo;i Island. 150 hale &mdash; free-standing Hawaiian bungalows with oversized lanais and outdoor showers &mdash; weave modern luxury with local artisan craft. Multiple restaurants, a full-service Asaya spa, robust ocean programming, and a zero-waste, solar-powered commitment that makes Kona Village one of the largest privately-owned microgrids in the state combine for a cutting-edge example of green Hawaiian hospitality.",
         perks: [
@@ -575,10 +575,10 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability'
         ],
         gallery: [
-            'property-images/kona-village-a-rosewood-resort/01-bungalow.jpg',
-            'property-images/kona-village-a-rosewood-resort/02-lanai.jpg',
-            'property-images/kona-village-a-rosewood-resort/03-dining.jpg',
-            'property-images/kona-village-a-rosewood-resort/04-spa.jpg'
+            '/property-images/kona-village-a-rosewood-resort/01-bungalow.jpg',
+            '/property-images/kona-village-a-rosewood-resort/02-lanai.jpg',
+            '/property-images/kona-village-a-rosewood-resort/03-dining.jpg',
+            '/property-images/kona-village-a-rosewood-resort/04-spa.jpg'
         ],
         idealFor: "Multi-generational families, sustainability-minded travelers drawn to Kona Village&rsquo;s solar microgrid, and Hawai&lsquo;i regulars wanting bungalows and lava fields instead of high-rise resort row.",
         agentTip: "Don&rsquo;t miss Island Roots on Wednesdays and Saturdays &mdash; a communal dinner under the Kiawe Trees that&rsquo;s as much a tribute to the land&rsquo;s abundance as it is a meal. Also book the Kilo Kai canoe sailing experience.",
@@ -590,7 +590,7 @@ const PROPERTIES = {
         location: 'Kadavu, Fiji',
         rateFrom: '$1,995 / night',
         rateNote: 'All-inclusive, per villa',
-        heroImage: 'property-images/kokomo-private-island-fiji/00-hero.jpg',
+        heroImage: '/property-images/kokomo-private-island-fiji/00-hero.jpg',
         description: "Kokomo is the ideal all-inclusive island escape for couples chasing a romantic retreat and families looking to slow down. From the moment you arrive you&rsquo;re welcomed into the family with genuine warmth, with activities spanning snorkelling, diving, waterfall hikes to neighbouring islands, fishing, paddleboarding, and kayaking. Service is unparalleled &mdash; staff anticipate your next move with a glass of your favourite ros&eacute;, the newspaper you were reading at breakfast, or snorkelling masks already sized and ready.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -601,10 +601,10 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability'
         ],
         gallery: [
-            'property-images/kokomo-private-island-fiji/01-villa-exterior.jpg',
-            'property-images/kokomo-private-island-fiji/02-bedroom.jpg',
-            'property-images/kokomo-private-island-fiji/03-snorkeling.jpg',
-            'property-images/kokomo-private-island-fiji/04-dining.jpg'
+            '/property-images/kokomo-private-island-fiji/01-villa-exterior.jpg',
+            '/property-images/kokomo-private-island-fiji/02-bedroom.jpg',
+            '/property-images/kokomo-private-island-fiji/03-snorkeling.jpg',
+            '/property-images/kokomo-private-island-fiji/04-dining.jpg'
         ],
         idealFor: "Honeymooners after barefoot privacy, multi-generational families who&rsquo;d rather have a whole island than a resort, and divers drawn to Kokomo&rsquo;s stretch of the Great Astrolabe Reef.",
         agentTip: "Trust chef Caroline implicitly &mdash; Walker d&rsquo;Plank has no set menu. She&rsquo;ll chat with you about preferences and dietary needs, then plan around what&rsquo;s local and fresh that day. Plan at least four meals with her.",
@@ -615,7 +615,7 @@ const PROPERTIES = {
         name: 'Canaves Ena',
         location: 'Oia, Santorini, Greece',
         rateFrom: '€500 / night',
-        heroImage: 'property-images/canaves-ena/00-hero.webp',
+        heroImage: '/property-images/canaves-ena/00-hero.webp',
         description: "Inviting, inspiring, and elegantly classic, Canaves Ena tempts guests into the best of Oia. Freshly renovated suites are decorated in a bright, minimalist style with private verandas, al fresco dining areas, and breathtaking views of the Caldera and the Aegean. Adults-only, intimate, and quietly contemporary &mdash; this is Santorini at its most considered.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -626,10 +626,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/canaves-ena/01-suite.webp',
-            'property-images/canaves-ena/02-pool.webp',
-            'property-images/canaves-ena/03-dining.webp',
-            'property-images/canaves-ena/04-caldera.webp'
+            '/property-images/canaves-ena/01-suite.webp',
+            '/property-images/canaves-ena/02-pool.webp',
+            '/property-images/canaves-ena/03-dining.webp',
+            '/property-images/canaves-ena/04-caldera.webp'
         ],
         idealFor: "Honeymooners, adults-only travelers who want Santorini without children running through the breakfast room, and couples seeking the Oia caldera view at its most considered.",
         agentTip: "Enjoy a traditional Greek meal with views of the famous Caldera at Adami restaurant.",
@@ -640,7 +640,7 @@ const PROPERTIES = {
         name: "Claridge&rsquo;s",
         location: 'London, United Kingdom',
         rateFrom: '£800 / night',
-        heroImage: 'property-images/claridges/00-hero.webp',
+        heroImage: '/property-images/claridges/00-hero.webp',
         description: "Claridge&rsquo;s is a favourite among the City of London&rsquo;s most savvy guests. Rooms are effortlessly glamorous, with original art deco features complemented by the latest technology. Experience Claridge&rsquo;s Bar with its unparalleled collection of vintage champagnes and rare spirits, celebrate the heritage of British baking at Claridge&rsquo;s Bakery, while afternoon tea at The Foyer &amp; Reading Room is a must. For an intimate nightcap, slip behind the Lalique door of The Fumoir.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -650,11 +650,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/claridges/01-suite.webp',
-            'property-images/claridges/02-foyer.webp',
-            'property-images/claridges/03-art-deco.webp',
-            'property-images/claridges/04-bar.webp',
-            'property-images/claridges/05-detail.webp'
+            '/property-images/claridges/01-suite.webp',
+            '/property-images/claridges/02-foyer.webp',
+            '/property-images/claridges/03-art-deco.webp',
+            '/property-images/claridges/04-bar.webp',
+            '/property-images/claridges/05-detail.webp'
         ],
         idealFor: "Anglophiles, repeat London visitors who want Mayfair from inside its most storied address, and travelers who&rsquo;d rather afternoon tea at the Foyer than the latest design hotel three streets over.",
         agentTip: "Request one of the stunning guest rooms or suites by royal designer David Linley.",
@@ -665,7 +665,7 @@ const PROPERTIES = {
         name: 'Adare Manor',
         location: 'County Limerick, Ireland',
         rateFrom: '€895 / night',
-        heroImage: 'property-images/adare-manor/00-hero.webp',
+        heroImage: '/property-images/adare-manor/00-hero.webp',
         description: "Built in 1832 and tucked into the heart of Adare Village thirty minutes from Shannon, Adare Manor is one of Ireland&rsquo;s leading five-star castle resorts &mdash; voted the number one resort in Europe by Cond&eacute; Nast Traveler readers and home to the 2027 Ryder Cup. The Forbes five-star castle holds three Michelin Keys, with 103 guest rooms plus two- to four-bedroom Lodges and Cottages, a one-Michelin-star restaurant, and a Tom Fazio-designed eighteen-hole golf course on the grounds.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -675,10 +675,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/adare-manor/01-stateroom.webp',
-            'property-images/adare-manor/02-pool.webp',
-            'property-images/adare-manor/03-spa.webp',
-            'property-images/adare-manor/04-dining.webp'
+            '/property-images/adare-manor/01-stateroom.webp',
+            '/property-images/adare-manor/02-pool.webp',
+            '/property-images/adare-manor/03-spa.webp',
+            '/property-images/adare-manor/04-dining.webp'
         ],
         idealFor: "Golfers en route to the 2027 Ryder Cup, castle-stay enthusiasts, and multi-generational families who&rsquo;d trade a city break for a true Irish country estate &mdash; horses, hounds, and afternoon tea included.",
         agentTip: "Add the Horse &amp; Hound Welcome for a storybook arrival &mdash; two horses and twenty hounds escort you up Adare Manor&rsquo;s tree-lined drive, with time for photos and a chat with the riders. Pure Irish magic.",
@@ -689,7 +689,7 @@ const PROPERTIES = {
         name: 'Hotel Esencia',
         location: 'Xpu-Ha, Riviera Maya, Mexico',
         rateFrom: '$1,028 / night',
-        heroImage: 'property-images/hotel-esencia/00-hero.jpg',
+        heroImage: '/property-images/hotel-esencia/00-hero.jpg',
         description: "The former beachside villa of an Italian duchess, Hotel Esencia is a private estate set on expansive gardens along Xpu-Ha Beach. This Riviera Maya refuge holds four villas and twenty-seven suites, a calming organic spa, and two farm-to-table Mexican restaurants drawing on mole from Oaxaca and fruits from the Yucat&aacute;n. Every room features plunge pools, private fitness areas, rooftop terraces, or sitting areas with garden-canopy or Caribbean views.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -701,10 +701,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/hotel-esencia/01-suite.webp',
-            'property-images/hotel-esencia/02-pool.webp',
-            'property-images/hotel-esencia/03-spa.webp',
-            'property-images/hotel-esencia/04-dining.webp'
+            '/property-images/hotel-esencia/01-suite.webp',
+            '/property-images/hotel-esencia/02-pool.webp',
+            '/property-images/hotel-esencia/03-spa.webp',
+            '/property-images/hotel-esencia/04-dining.webp'
         ],
         idealFor: "Couples and honeymooners wanting the Riviera Maya at its most discreet, design-led travelers who&rsquo;d skip the all-inclusive megaresorts up the coast, and anyone craving a duchess&rsquo;s private villa over a hotel-shaped hotel.",
         agentTip: "Don&rsquo;t miss the property&rsquo;s private freshwater cenote &mdash; a fifteen-minute walk from the resort, where you can swim alongside manatees.",
@@ -715,7 +715,7 @@ const PROPERTIES = {
         name: 'One&amp;Only Mandarina',
         location: 'Riviera Nayarit, Mexico',
         rateFrom: '$1,090 / night',
-        heroImage: 'property-images/oneandonly-mandarina/00-hero.webp',
+        heroImage: '/property-images/oneandonly-mandarina/00-hero.webp',
         description: "One&amp;Only Mandarina is woven into one of the last tropical beachfront rainforests on Mexico&rsquo;s Riviera Nayarit, where jungle-clad cliffs meet the Pacific. Spacious standalone treehouses and cliffside villas &mdash; each with a private plunge pool and dedicated host &mdash; hover in the canopy or perch over the surf. The resort&rsquo;s playground spans miles of nature trails, swimmable beaches, an equestrian and polo club, and four dining concepts from beachfront to treetop. It&rsquo;s adventure-led barefoot luxury, dialed up for families, couples, and groups taking over an entire Private Home.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -725,11 +725,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/oneandonly-mandarina/01-treehouse.webp',
-            'property-images/oneandonly-mandarina/02-villa.webp',
-            'property-images/oneandonly-mandarina/03-pool.webp',
-            'property-images/oneandonly-mandarina/04-dining.webp',
-            'property-images/oneandonly-mandarina/05-jungle.webp'
+            '/property-images/oneandonly-mandarina/01-treehouse.webp',
+            '/property-images/oneandonly-mandarina/02-villa.webp',
+            '/property-images/oneandonly-mandarina/03-pool.webp',
+            '/property-images/oneandonly-mandarina/04-dining.webp',
+            '/property-images/oneandonly-mandarina/05-jungle.webp'
         ],
         idealFor: "Multi-generational families taking over a Private Home, adventurous couples after barefoot luxury with a jungle backdrop, and Mexico regulars who&rsquo;d trade the Riviera Maya crowds for the wilder Pacific coast.",
         agentTip: "With endless room to roam, airy terraces, private swimming pools, and ultra-luxe comforts, One&amp;Only Mandarina&rsquo;s Private Homes range from four to ten bedrooms &mdash; the ultimate group retreat.",
@@ -740,8 +740,8 @@ const PROPERTIES = {
         name: 'Nekaj&uacute;i, A Ritz-Carlton Reserve',
         location: 'Peninsula Papagayo, Costa Rica',
         rateFrom: '$1,500 / night',
-        heroImage: 'property-images/nekajui/00-hero.webp',
-        brandBadge: 'logos/marriott-stars.png',
+        heroImage: '/property-images/nekajui/00-hero.webp',
+        brandBadge: '/logos/marriott-stars.png',
         brandBadgeAlt: 'Marriott STARS &amp; Luminous',
         description: "Nekaj&uacute;i is Central America&rsquo;s first Ritz-Carlton Reserve, opened in 2025 on a clifftop within Peninsula Papagayo&rsquo;s 1,400-acre protected sanctuary. The 107 accommodations blend quietly elegant interiors with expansive terraces and Pacific views; three glamping-style Treetop Tents sit aloft in the canopy. Days are shaped around eco-adventures &mdash; tubing along the R&iacute;o Celeste, hiking to waterfalls, surfing, zip-lining &mdash; and slowed back down with indigenous spa rituals, an artisanal coffee ceremony, and Chef Diego Mu&ntilde;oz&rsquo;s Peruvian-inflected cooking at Puna. Each room is paired with a personal Manzu, a butler-host who manages every detail of the stay.",
         perks: [
@@ -752,11 +752,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/nekajui/01-suite.webp',
-            'property-images/nekajui/02-villa.webp',
-            'property-images/nekajui/03-pool.webp',
-            'property-images/nekajui/04-dining.webp',
-            'property-images/nekajui/05-treetop-tent.webp'
+            '/property-images/nekajui/01-suite.webp',
+            '/property-images/nekajui/02-villa.webp',
+            '/property-images/nekajui/03-pool.webp',
+            '/property-images/nekajui/04-dining.webp',
+            '/property-images/nekajui/05-treetop-tent.webp'
         ],
         idealFor: "First-time Costa Rica visitors who want eco-adventure paired with ultra-refined service, families chasing rainforest bonding, and travelers drawn to the new Ritz-Carlton Reserve standard in Central America.",
         agentTip: "Just minutes from the resort, the UNESCO World Heritage-listed &Aacute;rea de Conservaci&oacute;n Guanacaste comprises a tropical dry forest, many volcanoes, and several nesting areas for endangered sea turtles.",
@@ -768,7 +768,7 @@ const PROPERTIES = {
         location: 'Flj&oacute;t Valley, Iceland',
         rateFrom: '$2,775 / night',
         rateNote: 'All-inclusive',
-        heroImage: 'property-images/deplar-farm/00-hero.jpg',
+        heroImage: '/property-images/deplar-farm/00-hero.jpg',
         description: "Deplar Farm is an Eleven Experiences lodge tucked into Iceland&rsquo;s remote Troll Peninsula, converted from a 15th-century sheep farm into 13 Scandi-chic suites with floor-to-ceiling views of the Flj&oacute;t Valley. The all-inclusive stay layers in two guided adventures a day &mdash; heli-skiing, surfing the Arctic, fly fishing, sea kayaking, snowmobiling, or horseback riding under the midnight sun. A 5,000-square-foot Eleven Life spa, geothermal indoor-outdoor pool with swim-up bar, Viking sauna, and floatation tanks make recovery as serious as the action. Meals come from Iceland&rsquo;s 2018 Chef of the Year, with island-sourced produce, Arctic char, and frequent visits from the farmers and fishermen behind the menu.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -779,11 +779,11 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability'
         ],
         gallery: [
-            'property-images/deplar-farm/01-aurora-pool.jpg',
-            'property-images/deplar-farm/02-spa.jpg',
-            'property-images/deplar-farm/03-bar.jpg',
-            'property-images/deplar-farm/04-lounge.jpg',
-            'property-images/deplar-farm/05-floki-suite.jpg'
+            '/property-images/deplar-farm/01-aurora-pool.jpg',
+            '/property-images/deplar-farm/02-spa.jpg',
+            '/property-images/deplar-farm/03-bar.jpg',
+            '/property-images/deplar-farm/04-lounge.jpg',
+            '/property-images/deplar-farm/05-floki-suite.jpg'
         ],
         idealFor: "Adventure travelers chasing heli-skiing and Arctic surfing, couples seeking a remote bucket-list escape, and active multi-generational families who&rsquo;d trade a Caribbean beach week for floatation tanks under the Northern Lights.",
         agentTip: "There&rsquo;s no wrong time to visit Deplar Farm &mdash; summer brings endless daylight, while winter transforms the valley into a snowy playground with heli-skiing and the Northern Lights.",
@@ -794,7 +794,7 @@ const PROPERTIES = {
         name: 'Cap Rocat',
         location: 'Cala Blava, Mallorca, Spain',
         rateFrom: '€500 / night',
-        heroImage: 'property-images/cap-rocat/00-hero.webp',
+        heroImage: '/property-images/cap-rocat/00-hero.webp',
         description: "Cap Rocat is a 19th-century coastal fortress reborn as an adults-only Relais &amp; Ch&acirc;teaux hideaway, clinging to its own cliff above the Bay of Palma. Its former bunkers and buttresses now hold 30 barrel-vaulted rooms and suites &mdash; some with private plunge pools and gazebos &mdash; while an ethereal hammam-style spa has been carved straight from the rock. Golf carts ferry guests across the sprawling grounds to tennis courts, a private beach, and an infinity pool that seems to spill into the Mediterranean. It&rsquo;s a quiet, cinematic base for sailing, cycling the coast, or slipping into Palma for the day.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -804,10 +804,10 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/cap-rocat/01-accommodation.webp',
-            'property-images/cap-rocat/02-pool.webp',
-            'property-images/cap-rocat/03-spa.webp',
-            'property-images/cap-rocat/04-restaurant.webp'
+            '/property-images/cap-rocat/01-accommodation.webp',
+            '/property-images/cap-rocat/02-pool.webp',
+            '/property-images/cap-rocat/03-spa.webp',
+            '/property-images/cap-rocat/04-restaurant.webp'
         ],
         idealFor: "Adults-only travelers wanting Mallorca with cinematic gravitas, honeymooners after a dramatic Mediterranean fortress, and couples who&rsquo;d skip the Balearic beach clubs for a private cliffside cove.",
         agentTip: "Wake each morning to fresh coffee, juice, and a breakfast hamper filled with ham, cheeses, and pan con tomate, discreetly delivered to your room&rsquo;s private patio.",
@@ -818,7 +818,7 @@ const PROPERTIES = {
         name: 'Six Senses Douro Valley',
         location: 'Lamego, Portugal',
         rateFrom: '€700 / night',
-        heroImage: 'property-images/six-senses-douro-valley/00-hero.webp',
+        heroImage: '/property-images/six-senses-douro-valley/00-hero.webp',
         description: "Six Senses Douro Valley is a 19-acre wellness retreat set high above the River Douro, inside the world&rsquo;s oldest demarcated wine region. A restored 19th-century manor house anchors 71 rooms, suites, and villas, joined by a 10-treatment-room spa, indoor and outdoor pools, and a wine library stocked with the valley&rsquo;s standout vintages. Days run on the Six Senses rhythm &mdash; river cruises and kayaking on the Douro, vineyard hikes and tastings, tree climbing for the whole family, and organic-garden-led cuisine across three dining spaces. The UNESCO World Heritage setting won the property Virtuoso&rsquo;s Best Achievement in Design, and it still feels every bit as considered.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -828,11 +828,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            'property-images/six-senses-douro-valley/01-quinta-room.webp',
-            'property-images/six-senses-douro-valley/02-vineyard.webp',
-            'property-images/six-senses-douro-valley/03-spa.webp',
-            'property-images/six-senses-douro-valley/04-dining.webp',
-            'property-images/six-senses-douro-valley/05-pool.webp'
+            '/property-images/six-senses-douro-valley/01-quinta-room.webp',
+            '/property-images/six-senses-douro-valley/02-vineyard.webp',
+            '/property-images/six-senses-douro-valley/03-spa.webp',
+            '/property-images/six-senses-douro-valley/04-dining.webp',
+            '/property-images/six-senses-douro-valley/05-pool.webp'
         ],
         idealFor: "Wine enthusiasts curious about Portugal&rsquo;s oldest demarcated region, wellness travelers serious about restoration, and families who&rsquo;d swap a city break for vineyard hikes and tree-climbing across UNESCO terraces.",
         agentTip: "It is absolutely worth it to splurge for a room with a river view.",
@@ -856,7 +856,7 @@ const ITINERARIES = {
     'safari-and-beach': {
         title: 'The Ultimate Safari and Beach Itinerary',
         subtitle: 'South Africa &amp; Mozambique',
-        heroImage: 'itinerary-images/safari-and-beach/hero-candidate-1.jpg',
+        heroImage: '/itinerary-images/safari-and-beach/hero-candidate-1.jpg',
         duration: '15 days',
         nights: 14,
         countries: ['South Africa', 'Mozambique'],
@@ -887,7 +887,7 @@ const ITINERARIES = {
                 days: 'Days 1&ndash;3',
                 title: 'Captivating Cape Town',
                 property: 'Ellerman House',
-                image: 'itinerary-images/safari-and-beach/property-01-ellerman-house.jpg',
+                image: '/itinerary-images/safari-and-beach/property-01-ellerman-house.jpg',
                 description: "Ease into Africa at Ellerman House, an Edwardian villa above Bantry Bay with twelve rooms, a museum-worthy art collection, and the kind of butler service that anticipates your second cappuccino. Days move between Table Mountain at sunrise, V&amp;A Waterfront strolls, the painted lanes of Bo-Kaap, and the penguins at Boulders Beach.",
                 highlight: "Cable car up Table Mountain at first light",
                 meals: "Breakfast daily"
@@ -896,7 +896,7 @@ const ITINERARIES = {
                 days: 'Days 4&ndash;5',
                 title: 'The Floral Coast at Grootbos',
                 property: 'Grootbos Private Nature Reserve',
-                image: 'itinerary-images/safari-and-beach/property-02-grootbos.jpg',
+                image: '/itinerary-images/safari-and-beach/property-02-grootbos.jpg',
                 description: "Two hours east of Cape Town, Grootbos drops you into 11,000 acres of fynbos and milkwood forest along the Walker Bay coast. Suites overlook the ocean, the spa is built into the forest, and depending on the season you&rsquo;ll head out for whale watching, horseback rides on the beach at Hermanus, or marine Big Five boat trips.",
                 highlight: "Southern right whale boat encounter (June&ndash;November)",
                 meals: "Breakfast, lunch, and dinner daily"
@@ -905,7 +905,7 @@ const ITINERARIES = {
                 days: 'Days 6&ndash;8',
                 title: 'Cellar Country at Babylonstoren',
                 property: 'Babylonstoren',
-                image: 'itinerary-images/safari-and-beach/property-03-babylonstoren.jpg',
+                image: '/itinerary-images/safari-and-beach/property-03-babylonstoren.jpg',
                 description: "A 17th-century Cape Dutch farm reborn as a working garden of 300+ edible plants, with whitewashed cottages set among the vines. Wine and dine your way through Franschhoek and Stellenbosch, take a guided garden tour, ride bicycles through the rows, and bookend the day at the Babel restaurant with vegetables harvested that morning.",
                 highlight: "Private cellar tour and tasting at a premier Cape estate",
                 meals: "Breakfast daily, plus a private cellar dinner"
@@ -914,7 +914,7 @@ const ITINERARIES = {
                 days: 'Days 9&ndash;11',
                 title: 'Big Five at Dulini Moya',
                 property: 'Dulini Moya',
-                image: 'itinerary-images/safari-and-beach/property-04-dulini-moya.jpg',
+                image: '/itinerary-images/safari-and-beach/property-04-dulini-moya.jpg',
                 description: "A short charter flight north into Sabi Sand &mdash; the gold-standard private game reserve adjacent to Kruger. Dulini Moya is intimate: six villas, no fences, leopards in the trees. Twice-daily game drives with your private ranger and tracker, fireside meals under the stars, and a plunge pool on your deck for between-drive recovery.",
                 highlight: "Walking safari with armed ranger at first light",
                 meals: "All meals included &mdash; bush breakfasts and boma dinners"
@@ -923,7 +923,7 @@ const ITINERARIES = {
                 days: 'Days 12&ndash;15',
                 title: 'Island Life at Azura Benguerra',
                 property: 'Azura Benguerra Island',
-                image: 'itinerary-images/safari-and-beach/property-05-azura-benguerra.jpg',
+                image: '/itinerary-images/safari-and-beach/property-05-azura-benguerra.jpg',
                 description: "Cross from bush to beach with a flight to Vilanculos and a short boat transfer to Benguerra Island in the Bazaruto Archipelago. Twenty beach villas with private pools sit on a powder-soft crescent of sand. Three days of dhow cruises, snorkelling with whale sharks in season, and seafood under the palms; nights mean stars uninterrupted by light pollution.",
                 highlight: "Sunset dhow sail with sundowners on the Indian Ocean",
                 meals: "All meals and house beverages included"
@@ -935,7 +935,7 @@ const ITINERARIES = {
                 name: 'Ellerman House',
                 location: 'Cape Town, South Africa',
                 nights: 3,
-                image: 'itinerary-images/safari-and-beach/property-01-ellerman-house.jpg',
+                image: '/itinerary-images/safari-and-beach/property-01-ellerman-house.jpg',
                 description: "Twelve-room Edwardian villa above Bantry Bay; museum-worthy contemporary art collection, panoramic Atlantic views.",
                 note: "First-time Cape Town visitors who want the city&rsquo;s best views and service.",
                 slug: null
@@ -944,7 +944,7 @@ const ITINERARIES = {
                 name: 'Grootbos Private Nature Reserve',
                 location: 'Hermanus, South Africa',
                 nights: 2,
-                image: 'itinerary-images/safari-and-beach/property-02-grootbos.jpg',
+                image: '/itinerary-images/safari-and-beach/property-02-grootbos.jpg',
                 description: "Forest- and ocean-view suites across 11,000 acres of fynbos &mdash; marine Big Five from the doorstep.",
                 note: "Nature lovers who want to experience coastal South Africa beyond wine country.",
                 slug: null
@@ -953,7 +953,7 @@ const ITINERARIES = {
                 name: 'Babylonstoren',
                 location: 'Franschhoek, South Africa',
                 nights: 3,
-                image: 'itinerary-images/safari-and-beach/property-03-babylonstoren.jpg',
+                image: '/itinerary-images/safari-and-beach/property-03-babylonstoren.jpg',
                 description: "A 17th-century working farm with a celebrated edible garden, Cape Dutch cottages, and ten farm-led dining venues.",
                 note: "Food and wine travelers.",
                 slug: null
@@ -962,7 +962,7 @@ const ITINERARIES = {
                 name: 'Dulini Moya',
                 location: 'Sabi Sand, South Africa',
                 nights: 3,
-                image: 'itinerary-images/safari-and-beach/property-04-dulini-moya.jpg',
+                image: '/itinerary-images/safari-and-beach/property-04-dulini-moya.jpg',
                 description: "Six intimate villas on a private concession in Sabi Sand &mdash; the gold-standard Big Five game reserve.",
                 note: "Leopard sightings and intimate safari experiences.",
                 slug: null
@@ -971,7 +971,7 @@ const ITINERARIES = {
                 name: 'Azura Benguerra Island',
                 location: 'Bazaruto Archipelago, Mozambique',
                 nights: 3,
-                image: 'itinerary-images/safari-and-beach/property-05-azura-benguerra.jpg',
+                image: '/itinerary-images/safari-and-beach/property-05-azura-benguerra.jpg',
                 description: "Twenty beach villas with private pools on a powder-soft crescent of Indian Ocean sand.",
                 note: "Barefoot luxury and post-safari recovery.",
                 slug: null
@@ -1024,7 +1024,7 @@ const ITINERARIES = {
     'classic-japan': {
         title: 'The Classic Japan Itinerary',
         subtitle: 'Tokyo, Hakone, Osaka &amp; Kyoto',
-        heroImage: 'itinerary-images/classic-japan/00-hero.jpg',
+        heroImage: '/itinerary-images/classic-japan/00-hero.jpg',
         duration: '9 days',
         nights: 8,
         countries: ['Japan'],
@@ -1072,7 +1072,7 @@ const ITINERARIES = {
                 days: 'Days 1&ndash;3',
                 title: 'Tokyo, at Full Tilt',
                 property: 'Four Seasons Hotel Tokyo at Otemachi',
-                image: 'itinerary-images/classic-japan/property-01-four-seasons-tokyo.jpg',
+                image: '/itinerary-images/classic-japan/property-01-four-seasons-tokyo.jpg',
                 description: "Settle in above the Imperial Palace at Four Seasons Otemachi. Days move between Sens&omacr;-ji in Asakusa and Meiji Shrine, a private taiko-drum workshop where you actually play, the Toyosu fish market at first light, and a chef-led sushi class that ends with the lunch you made yourself. The city&rsquo;s energy shifts constantly &mdash; from Shibuya Crossing to Harajuku, from hidden sushi counters to peaceful gardens &mdash; with Mt. Fuji visible on clear afternoons.",
                 highlight: "Private taiko drum workshop and chef-led sushi class",
                 meals: "Breakfast daily, plus 2 lunches"
@@ -1081,7 +1081,7 @@ const ITINERARIES = {
                 days: 'Day 4',
                 title: 'A Night at G&ocirc;ra Kadan',
                 property: 'G&ocirc;ra Kadan',
-                image: 'itinerary-images/classic-japan/property-02-gora-kadan.jpg',
+                image: '/itinerary-images/classic-japan/property-02-gora-kadan.jpg',
                 description: "Travel to Hakone hot-spring country in Fuji-Hakone-Izu National Park. The Hakone Ropeway delivers the postcard view of Mt Fuji; the Hakone Open-Air Museum sets Henry Moore, Rodin, and a hundred-piece Picasso pavilion against forested hillsides. Evening brings you to G&ocirc;ra Kadan &mdash; one of Japan&rsquo;s most celebrated ryokans &mdash; for a kaiseki dinner you eat in yukata by lantern, and a private onsen soak before bed.",
                 highlight: "Kaiseki dinner and private onsen at G&ocirc;ra Kadan",
                 meals: "Breakfast, lunch, and a kaiseki dinner"
@@ -1090,7 +1090,7 @@ const ITINERARIES = {
                 days: 'Days 5&ndash;6',
                 title: 'Osaka &amp; Nara',
                 property: 'Four Seasons Hotel Osaka',
-                image: 'itinerary-images/classic-japan/property-03-four-seasons-osaka.jpg',
+                image: '/itinerary-images/classic-japan/property-03-four-seasons-osaka.jpg',
                 description: "Bullet train south to Osaka, where evenings unfold along the Dotonbori district&rsquo;s takoyaki stalls and neon-mirrored canals. A day trip to Nara &mdash; Japan&rsquo;s first capital &mdash; takes you to Todai-ji and its towering bronze Buddha, then through Nara Park, where the sika deer are considered messengers of the gods and will bow for a cracker, and ends at Kasuga Taisha for a private Shinto ceremony we&rsquo;ve arranged in advance.",
                 highlight: "Private Shinto ceremony at Kasuga Taisha",
                 meals: "Breakfast daily, plus 2 lunches"
@@ -1099,7 +1099,7 @@ const ITINERARIES = {
                 days: 'Days 7&ndash;8',
                 title: 'Kyoto: Gold Leaf and Stillness',
                 property: 'Hotel The Mitsui Kyoto',
-                image: 'itinerary-images/classic-japan/property-04-mitsui-kyoto.jpg',
+                image: '/itinerary-images/classic-japan/property-04-mitsui-kyoto.jpg',
                 description: "Kyoto rewards the unhurried. Ryoan-ji&rsquo;s rock garden &mdash; fifteen stones arranged so you can only ever see fourteen at once &mdash; is the kind of thing you keep thinking about for weeks; Kinkaku-ji&rsquo;s gold-leaf pavilion mirrors perfectly in its pond when the morning light is right. Afternoons take in the Arashiyama bamboo grove and Kiyomizu-dera&rsquo;s hillside terrace. Your final morning is a private tea ceremony in a temple &mdash; the slowest, most precise hour of the trip, by design.",
                 highlight: "Private tea ceremony at a Kyoto temple",
                 meals: "Breakfast daily, plus 1 lunch"
@@ -1111,7 +1111,7 @@ const ITINERARIES = {
                 name: 'Four Seasons Hotel Tokyo at Otemachi',
                 location: 'Tokyo, Japan',
                 nights: 3,
-                image: 'itinerary-images/classic-japan/property-01-four-seasons-tokyo.jpg',
+                image: '/itinerary-images/classic-japan/property-01-four-seasons-tokyo.jpg',
                 description: "Modern luxury above the Imperial Palace, with floor-to-ceiling Tokyo views that stretch to Mt Fuji on clear days.",
                 note: "The best blend of Tokyo views, location, and contemporary luxury.",
                 slug: null
@@ -1120,7 +1120,7 @@ const ITINERARIES = {
                 name: 'G&ocirc;ra Kadan',
                 location: 'Hakone, Japan',
                 nights: 1,
-                image: 'itinerary-images/classic-japan/property-02-gora-kadan.jpg',
+                image: '/itinerary-images/classic-japan/property-02-gora-kadan.jpg',
                 description: "A heritage ryokan in Hakone hot-spring country &mdash; tatami suites, private onsen, and one of Japan&rsquo;s most celebrated kaiseki kitchens.",
                 note: "One of Japan&rsquo;s most celebrated ryokans.",
                 slug: null
@@ -1129,7 +1129,7 @@ const ITINERARIES = {
                 name: 'Four Seasons Hotel Osaka',
                 location: 'Osaka, Japan',
                 nights: 2,
-                image: 'itinerary-images/classic-japan/property-03-four-seasons-osaka.jpg',
+                image: '/itinerary-images/classic-japan/property-03-four-seasons-osaka.jpg',
                 description: "Modern Four Seasons polish in central Osaka, with Dotonbori&rsquo;s street food and the Shinkansen station within easy reach.",
                 note: "The strongest luxury base for Osaka and Nara.",
                 slug: null
@@ -1138,7 +1138,7 @@ const ITINERARIES = {
                 name: 'Hotel The Mitsui Kyoto',
                 location: 'Kyoto, Japan',
                 nights: 2,
-                image: 'itinerary-images/classic-japan/property-04-mitsui-kyoto.jpg',
+                image: '/itinerary-images/classic-japan/property-04-mitsui-kyoto.jpg',
                 description: "A Luxury Collection property on the grounds of a 250-year-old Mitsui family estate, opposite Nijo Castle &mdash; private onsen suites and a thermal spring spa.",
                 note: "Kyoto&rsquo;s most refined modern hotel experience.",
                 slug: null
@@ -1171,7 +1171,7 @@ const ITINERARIES = {
     'iconic-greece': {
         title: 'Athens &amp; the Iconic Greek Islands',
         subtitle: 'Athens, Crete, Santorini &amp; Mykonos',
-        heroImage: 'itinerary-images/iconic-greece/00-hero-day.jpg',
+        heroImage: '/itinerary-images/iconic-greece/00-hero-day.jpg',
         duration: '13 days',
         nights: 13,
         countries: ['Greece'],
@@ -1210,7 +1210,7 @@ const ITINERARIES = {
                 days: 'Days 1&ndash;3',
                 title: 'Marble and Markets in Athens',
                 property: 'Hotel Grande Bretagne',
-                image: 'itinerary-images/iconic-greece/property-01-grande-bretagne.jpg',
+                image: '/itinerary-images/iconic-greece/property-01-grande-bretagne.jpg',
                 description: "Three days in Athens, based at the Grande Bretagne overlooking Syntagma Square with the Parthenon visible from the rooftop bar. Begin with the Acropolis Museum before stepping onto the Acropolis itself with a private guide, then leave room to wander. Walk through Plaka with stops for honey, cheese, and olive oil at family-run shops in Varvakios Market, and end with an evening drive south to Cape Sounion to watch sundown at the Temple of Poseidon.",
                 highlight: "Guided Parthenon visit and a Plaka food walk through Varvakios Market",
                 meals: "Breakfast daily"
@@ -1219,7 +1219,7 @@ const ITINERARIES = {
                 days: 'Days 4&ndash;6',
                 title: 'East Crete: Olives and Ruins',
                 property: 'Phaea Blue',
-                image: 'itinerary-images/iconic-greece/property-02-phaea-blue.jpg',
+                image: '/itinerary-images/iconic-greece/property-02-phaea-blue.jpg',
                 description: "Fly to Heraklion and drive east along Crete&rsquo;s north coast to Elounda. Phaea Blue is your base &mdash; a low-rise contemporary resort folded into the hillside above the Gulf of Mirabello. An expert-led tour of the Palace of Knossos sets the Minoan scene; another day takes you by private boat to Spinalonga, the Venetian fortress turned leper colony, with lunch in the flower-filled village of Plaka after. In between: long mornings by the sea, olive oil tastings in the hills, vineyards in the inland sun.",
                 highlight: "Private boat to Spinalonga and lunch in Plaka village",
                 meals: "Breakfast daily, plus 1 lunch"
@@ -1228,7 +1228,7 @@ const ITINERARIES = {
                 days: 'Days 7&ndash;9',
                 title: 'The Caldera, Slowly',
                 property: 'Canaves Ena',
-                image: 'itinerary-images/iconic-greece/property-03-canaves-ena.jpg',
+                image: '/itinerary-images/iconic-greece/property-03-canaves-ena.jpg',
                 description: "A short hop to Santorini and into Canaves Ena &mdash; a cliff-edge hotel in Oia with terraces hung directly over the caldera. Days take in the island&rsquo;s quieter corners: a backcountry tour to black-sand Perivolos Beach and the mountaintop Monastery of Prophitis Ilias, with private wine tastings at family estates pouring assyrtiko whites and Mavrotragano reds. Evenings are for the sunset over the volcanic rim &mdash; yours, with a glass of something cold, from your own terrace.",
                 highlight: "Wine tastings at family estates and a sunset from your private terrace",
                 meals: "Breakfast daily, plus 1 lunch"
@@ -1237,7 +1237,7 @@ const ITINERARIES = {
                 days: 'Days 10&ndash;13',
                 title: 'Mykonos, the Slow Last Act',
                 property: 'Bill &amp; Coo Mykonos',
-                image: 'itinerary-images/iconic-greece/property-04-bill-and-coo.jpg',
+                image: '/itinerary-images/iconic-greece/property-04-bill-and-coo.jpg',
                 description: "Four nights at Bill &amp; Coo on Megali Ammos, just below Mykonos Town. One morning crosses by private boat to Delos &mdash; the uninhabited island where Greek myth says Artemis and Apollo were born, now an open-air archaeological site as photographable as it is hot. The rest is yours: harbor lanes lined with whitewashed buildings and bougainvillea, paradise-named beaches, the windmills above Little Venice, and long lunches that turn into long afternoons.",
                 highlight: "Private boat crossing to Delos and the archaeological site",
                 meals: "Breakfast daily, plus 1 lunch"
@@ -1249,7 +1249,7 @@ const ITINERARIES = {
                 name: 'Hotel Grande Bretagne',
                 location: 'Athens, Greece',
                 nights: 3,
-                image: 'itinerary-images/iconic-greece/property-01-grande-bretagne.jpg',
+                image: '/itinerary-images/iconic-greece/property-01-grande-bretagne.jpg',
                 description: "An iconic 1874 hotel facing Syntagma Square, with a rooftop pool and bar looking straight onto the Acropolis.",
                 slug: null
             },
@@ -1257,7 +1257,7 @@ const ITINERARIES = {
                 name: 'Phaea Blue',
                 location: 'Elounda, Crete',
                 nights: 3,
-                image: 'itinerary-images/iconic-greece/property-02-phaea-blue.jpg',
+                image: '/itinerary-images/iconic-greece/property-02-phaea-blue.jpg',
                 description: "Low-rise contemporary resort folded into the hillside above the Gulf of Mirabello, with private beach access and sea-facing suites.",
                 slug: null
             },
@@ -1265,7 +1265,7 @@ const ITINERARIES = {
                 name: 'Canaves Ena',
                 location: 'Oia, Santorini',
                 nights: 3,
-                image: 'itinerary-images/iconic-greece/property-03-canaves-ena.jpg',
+                image: '/itinerary-images/iconic-greece/property-03-canaves-ena.jpg',
                 description: "Cliff-edge suites in Oia with caldera-facing infinity terraces &mdash; a small, design-led property at the island&rsquo;s quietest end.",
                 slug: null
             },
@@ -1273,7 +1273,7 @@ const ITINERARIES = {
                 name: 'Bill &amp; Coo Mykonos',
                 location: 'Megali Ammos, Mykonos',
                 nights: 4,
-                image: 'itinerary-images/iconic-greece/property-04-bill-and-coo.jpg',
+                image: '/itinerary-images/iconic-greece/property-04-bill-and-coo.jpg',
                 description: "Whitewashed adults-only retreat on Megali Ammos beach, ten minutes from Mykonos Town, and one of the most reliably good kitchens on the island.",
                 slug: null
             }

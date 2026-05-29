@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=213">
+    <link rel="stylesheet" href="/styles.css?v=214">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -34,16 +34,16 @@
 <body class="is-hotels-index-page">
     <header class="site-header is-scrolled" id="siteHeader">
         <div class="container header-inner">
-            <a href="index.html" class="brand" aria-label="Wander by Wilson — home">
+            <a href="/" class="brand" aria-label="Wander by Wilson — home">
                 <span class="brand-wordmark">Wander by Wilson</span>
             </a>
             <nav class="nav-primary" aria-label="Primary">
                 <ul>
-                    <li><a href="hotels.html">Hotels</a></li>
-                    <li><a href="journeys.html">Journeys</a></li>
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="inspiration.html">Inspiration</a></li>
-                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="/hotels">Hotels</a></li>
+                    <li><a href="/journeys">Journeys</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/inspiration">Inspiration</a></li>
+                    <li><a href="/#about">About</a></li>
                 </ul>
             </nav>
             <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
@@ -51,7 +51,7 @@
                 <span class="nav-toggle-line"></span>
                 <span class="nav-toggle-line"></span>
             </button>
-            <a href="inquire-trip.html" class="header-cta">
+            <a href="/inquire-trip" class="header-cta">
                 <span>Inquire</span>
                 <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
@@ -116,13 +116,13 @@
             <p class="journey-close-lede">
                 We book far more properties than we list here &mdash; from city icons to private islands. Tell us where you&rsquo;re headed and we&rsquo;ll bring our preferred-partner perks to your stay.
             </p>
-            <a href="inquire-hotel.html" class="cta-primary">
+            <a href="/inquire-hotel" class="cta-primary">
                 <span class="cta-primary-label">Book a hotel with us</span>
             </a>
         </div>
     </section>
 
-    <script src="data.js?v=60"></script>
+    <script src="/data.js?v=61"></script>
     <script>
         (function buildHotels() {
             if (typeof PROPERTIES === 'undefined') return;
@@ -147,7 +147,7 @@
             const cards = entries.map(([slug, p]) => {
                 const a = document.createElement('a');
                 a.className = 'journeys-index-card';
-                a.href = 'property.html?slug=' + slug;
+                a.href = '/hotels/' + slug;
                 a.dataset.search = norm((p.name || '') + ' ' + (p.location || ''));
                 a.innerHTML =
                     '<figure class="journeys-index-image"><img src="' + p.heroImage + '" alt="' + p.name + '" loading="lazy"></figure>' +
@@ -212,15 +212,15 @@
     <footer class="site-footer">
         <div class="container site-footer-top">
             <div class="site-footer-brand">
-                <a href="index.html" class="site-footer-wordmark">Wander by Wilson</a>
+                <a href="/" class="site-footer-wordmark">Wander by Wilson</a>
                 <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
             </div>
             <nav class="site-footer-nav" aria-label="Footer">
-                <a href="hotels.html">Hotels</a>
-                <a href="journeys.html">Journeys</a>
-                <a href="services.html">Services</a>
-                <a href="inspiration.html">Inspiration</a>
-                <a href="index.html#about">About</a>
+                <a href="/hotels">Hotels</a>
+                <a href="/journeys">Journeys</a>
+                <a href="/services">Services</a>
+                <a href="/inspiration">Inspiration</a>
+                <a href="/#about">About</a>
             </nav>
             <a class="site-footer-ig" href="https://www.instagram.com/wanderbywilson/" target="_blank" rel="noopener noreferrer" aria-label="Follow Wander by Wilson on Instagram">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -234,9 +234,9 @@
         <div class="container site-footer-base">
             <span class="site-footer-copy">&copy; 2026 Wander by Wilson. All rights reserved.</span>
             <span class="site-footer-links">
-                <a href="privacy.html">Privacy Policy</a>
+                <a href="/privacy">Privacy Policy</a>
                 <span class="site-footer-sep" aria-hidden="true">&middot;</span>
-                <a href="terms.html">Terms &amp; Conditions</a>
+                <a href="/terms">Terms &amp; Conditions</a>
             </span>
         </div>
     </footer>
