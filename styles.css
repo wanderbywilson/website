@@ -6785,3 +6785,41 @@ body.is-home {
 /* Pass 7 — property gallery final 25px shave */
 .property-gallery                       { padding: 24px 0 32px; }
 .property-gallery .kicker               { margin-bottom: 18px; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   PACKAGES — fit each individual .package card in ONE viewport on
+   services.html. Content cols were 1400-1541px tall; this layer
+   compresses everything aggressively so the whole card sits in ~860px.
+   ───────────────────────────────────────────────────────────────────── */
+
+.packages                       { padding: 36px 0; }
+
+.package                        { padding: 28px 0; gap: 56px; align-items: start; }
+.package:first-of-type          { margin-top: 12px; }
+.package--signature             { padding: 36px 48px; margin: 12px -48px; }
+
+.package-image-frame            { aspect-ratio: 4 / 4.4; }   /* slightly less tall */
+.package-image-caption          { margin-top: 10px; font-size: 12px; }
+
+.package-meta                   { margin-bottom: 18px; }
+.package-num                    { margin-bottom: 6px; font-size: 11px; letter-spacing: 0.32em; }
+.package-name                   { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.05; margin-bottom: 8px; }
+.package-tagline                { font-size: 15px; line-height: 1.4; margin-bottom: 12px; }
+.package-description p          { font-size: 14.5px; line-height: 1.5; margin-bottom: 7px; }
+.package-description p:last-child { margin-bottom: 0; }
+
+.package-value-callout          { padding: 12px 16px; margin-bottom: 14px; }
+.package-value-headline         { font-size: 15px; margin-bottom: 4px; }
+.package-value-copy             { font-size: 13.5px; line-height: 1.45; }
+
+.package-list-label             { font-size: 11px; letter-spacing: 0.32em; margin-bottom: 8px; }
+.package-list                   { margin-bottom: 14px; }
+.package-list li                { font-size: 13.5px; line-height: 1.4; padding: 8px 0; }
+
+.package-pricing                { margin-top: 12px; padding-top: 12px; }
+.package-price-row              { padding: 6px 0; font-size: 13.5px; }
+.package-cta                    { margin-top: 14px; padding: 10px 18px; font-size: 12px; }
+
+/* Pullquote / partners marquee between packages — also trim */
+.package-pullquote              { padding: 32px 0; font-size: 18px; line-height: 1.4; }
+.package-partners               { padding: 24px 0; }
