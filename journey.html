@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=212">
+    <link rel="stylesheet" href="styles.css?v=213">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -254,13 +254,57 @@
                 }
                 el.setAttribute(attr, val);
             };
+            const journeyTitle = journey.title.replace(/<[^>]+>/g,'');
             setHead('link[rel="canonical"]', 'href', canonicalUrl);
-            setHead('meta[property="og:title"]', 'content', journey.title.replace(/<[^>]+>/g,''));
+            setHead('meta[property="og:title"]', 'content', journeyTitle);
             setHead('meta[property="og:description"]', 'content', metaDescText);
             setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com/' + journey.heroImage);
             setHead('meta[property="og:url"]', 'content', canonicalUrl);
             setHead('meta[property="og:type"]', 'content', 'website');
+            setHead('meta[property="og:site_name"]', 'content', 'Wander by Wilson');
             setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
+            setHead('meta[name="twitter:title"]', 'content', journeyTitle);
+            setHead('meta[name="twitter:description"]', 'content', metaDescText);
+            setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com/' + journey.heroImage);
+
+            // TouristTrip + BreadcrumbList JSON-LD for rich Google results
+            const tripSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'TouristTrip',
+                'name': journeyTitle,
+                'description': metaDescText,
+                'image': 'https://www.wanderbywilson.com/' + journey.heroImage,
+                'url': canonicalUrl,
+                'touristType': journey.subtitle ? journey.subtitle.replace(/<[^>]+>/g,'') : 'Luxury Travel',
+                'itinerary': journey.countries.map(c => ({ '@type': 'Country', 'name': c.replace(/<[^>]+>/g,'') })),
+                'provider': {
+                    '@type': 'TravelAgency',
+                    'name': 'Wander by Wilson',
+                    'url': 'https://www.wanderbywilson.com/'
+                }
+            };
+            if (journey.priceFrom) {
+                tripSchema.offers = {
+                    '@type': 'Offer',
+                    'price': journey.priceFrom,
+                    'priceCurrency': journey.priceCurrency || 'USD',
+                    'priceSpecification': { '@type': 'UnitPriceSpecification', 'price': journey.priceFrom, 'priceCurrency': journey.priceCurrency || 'USD', 'referenceQuantity': { '@type': 'QuantitativeValue', 'value': 1, 'unitText': 'person' } }
+                };
+            }
+            const breadcrumbSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                'itemListElement': [
+                    { '@type': 'ListItem', 'position': 1, 'name': 'Journeys', 'item': 'https://www.wanderbywilson.com/journeys.html' },
+                    { '@type': 'ListItem', 'position': 2, 'name': journeyTitle, 'item': canonicalUrl }
+                ]
+            };
+            [tripSchema, breadcrumbSchema].forEach(schema => {
+                const s = document.createElement('script');
+                s.type = 'application/ld+json';
+                s.textContent = JSON.stringify(schema);
+                document.head.appendChild(s);
+            });
 
             // Hero
             document.getElementById('journeyHeroImg').src = journey.heroImage;
