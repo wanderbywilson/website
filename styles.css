@@ -7046,8 +7046,7 @@ body.is-home {
    INQUIRE FORM HERO — UX #4: left-column visual + testimonial pull-quote
    so the inquiry form doesn't feel like a bare cream wall.
    ───────────────────────────────────────────────────────────────────── */
-.is-inquire-trip-page .inquire-hero,
-.is-inquire-hotel-page .inquire-hero {
+.is-inquire-page .inquire-hero {
     padding-top: 140px;
 }
 
