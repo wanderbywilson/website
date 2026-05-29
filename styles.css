@@ -6936,3 +6936,25 @@ body.is-home {
 
 /* Restore image to original aspect 4:5 but slightly less tall */
 .package-image-frame { aspect-ratio: 4 / 4.6; }
+
+/* PACKAGES — Final layout reset. Override EVERYTHING above with one
+   clean rule. 2-column grid, image LEFT in odd / RIGHT in even, with
+   pricing/CTA at the bottom of the content column. */
+.package,
+.package:nth-of-type(even) {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    grid-template-areas: "a b" !important;
+    gap: 56px !important;
+    align-items: start !important;
+}
+.package-image    { grid-area: a; }
+.package-content  { grid-area: b; }
+.package:nth-of-type(even) .package-image   { grid-area: b; }
+.package:nth-of-type(even) .package-content { grid-area: a; }
+
+/* Disable the legacy order-based swap so it doesn't interfere */
+.package-image, .package-content,
+.package:nth-of-type(even) .package-image,
+.package:nth-of-type(even) .package-content { order: 0; }
