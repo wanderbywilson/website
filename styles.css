@@ -7003,3 +7003,135 @@ body.is-home {
     border-color: var(--gold);
     color: var(--ink);
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   HOTELS DESTINATION CHIPS — UX #5: surface filters above the fold
+   ───────────────────────────────────────────────────────────────────── */
+.hotels-index-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px auto 0;
+    max-width: 720px;
+}
+.hotels-index-chip {
+    appearance: none;
+    cursor: pointer;
+    padding: 8px 18px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.95);
+    background: rgba(255, 251, 240, 0.08);
+    border: 1px solid rgba(255, 251, 240, 0.32);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.hotels-index-chip:hover {
+    background: rgba(255, 251, 240, 0.16);
+    border-color: rgba(255, 251, 240, 0.5);
+}
+.hotels-index-chip.is-active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   INQUIRE FORM HERO — UX #4: left-column visual + testimonial pull-quote
+   so the inquiry form doesn't feel like a bare cream wall.
+   ───────────────────────────────────────────────────────────────────── */
+.is-inquire-trip-page .inquire-hero,
+.is-inquire-hotel-page .inquire-hero {
+    padding-top: 140px;
+}
+
+/* Inject a 2-column hero layout: image left, copy right */
+.inquire-hero-with-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 72px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.inquire-hero-visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--bone);
+}
+.inquire-hero-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.inquire-hero-visual-quote {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    padding: 18px 22px;
+    background: rgba(255, 251, 240, 0.94);
+    color: var(--ink);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+.inquire-hero-visual-quote blockquote {
+    margin: 0 0 6px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+}
+.inquire-hero-visual-quote cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* Trust row under the form headline */
+.inquire-trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 24px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.inquire-trust-row li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.7);
+}
+.inquire-trust-row svg {
+    flex-shrink: 0;
+    color: var(--gold);
+}
+
+@media (max-width: 900px) {
+    .inquire-hero-with-visual {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .inquire-hero-visual { aspect-ratio: 16 / 10; }
+}
