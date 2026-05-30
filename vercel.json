@@ -581,6 +581,111 @@
       "source": "/about/",
       "destination": "/index.html#about",
       "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services-1",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/links",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cart",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Luxury+Cruises",
+      "destination": "/cruises",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Itineraries",
+      "destination": "/journeys",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Itinerary",
+      "destination": "/journeys",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Destinations",
+      "destination": "/journeys",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Destination+Guides",
+      "destination": "/journeys",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Hotel+Spotlight",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Luxury+Hotel+Reviews",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Greece",
+      "destination": "/journeys/iconic-greece",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Italy",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Caribbean",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Caribbean+Resorts",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Mexico",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Thailand",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/United+States",
+      "destination": "/hotels",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/Private+Jets",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/blog/category/(.*)",
+      "destination": "/inspiration",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tag/(.*)",
+      "destination": "/inspiration",
+      "permanent": true
     }
   ],
   "headers": [
