@@ -67,7 +67,7 @@ const CRUISE_LINES = {
     passengers: '16–40 guests · 6 ships',
     crewRatio: '1:1',
     priceFrom: '$1,200 per person, per day',
-    image: '/cruise-images/aqua-expeditions/01-hero.jpg',
+    image: '/cruise-images/four-seasons-yachts/03-marina-platform.jpg',
     region: ['Amazon', 'Mekong', 'Galápagos', 'Indonesia', 'Seychelles'],
     affiliations: ['Virtuoso', 'Signature', 'USTOA AECO', 'Ensemble'],
     feeling: 'AMAN-meets-Belmond at sea, in the world\'s wildest places. For travelers who want National Geographic energy with five-star comfort.'
@@ -82,7 +82,7 @@ const CRUISE_LINES = {
     passengers: 'Up to 461 suites · 6 ships by 2028',
     crewRatio: 'Cosmopolitan / casual-luxe',
     priceFrom: 'Premium ocean (varies)',
-    image: '/cruise-images/explora-journeys/01-hero.jpg',
+    image: '/cruise-images/ritz-carlton-yacht/03-luminara.jpg',
     region: ['Caribbean', 'Mediterranean', 'Americas', 'Worldwide'],
     affiliations: ['Virtuoso'],
     feeling: 'Mandarin-Oriental or One&Only on water. Younger demographic, well-traveled, casual-luxe vibe.'
