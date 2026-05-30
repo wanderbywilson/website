@@ -26,9 +26,10 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
     })
     .join('');
 
-  const title = formType === 'custom_trip'
-    ? 'New trip inquiry'
-    : 'New VIP hotel booking inquiry';
+  const title =
+    formType === 'custom_trip' ? 'New trip inquiry' :
+    formType === 'cruise'      ? 'New cruise inquiry' :
+                                 'New VIP hotel booking inquiry';
 
   return `<!DOCTYPE html>
 <html>
@@ -45,7 +46,7 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
 
         <!-- Title band -->
         <tr><td style="padding:36px 40px 12px 40px;">
-          <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:${BRAND_GOLD};margin-bottom:14px;">${formType === 'custom_trip' ? 'Plan Your Trip' : 'VIP Hotel Booking'}</div>
+          <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:${BRAND_GOLD};margin-bottom:14px;">${formType === 'custom_trip' ? 'Plan Your Trip' : formType === 'cruise' ? 'Plan Your Cruise' : 'VIP Hotel Booking'}</div>
           <div style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:${BRAND_BLUE};line-height:1.2;">${title}<br><em style="color:${BRAND_GOLD};font-style:italic;">from ${escapeHtml(clientName) || 'a new client'}.</em></div>
         </td></tr>
 

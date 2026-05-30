@@ -73,6 +73,11 @@
       "permanent": true
     },
     {
+      "source": "/inquire-cruise.html",
+      "destination": "/inquire-cruise",
+      "permanent": true
+    },
+    {
       "source": "/privacy.html",
       "destination": "/privacy",
       "permanent": true
@@ -643,6 +648,10 @@
     {
       "source": "/inquire-hotel",
       "destination": "/inquire-hotel.html"
+    },
+    {
+      "source": "/inquire-cruise",
+      "destination": "/inquire-cruise.html"
     },
     {
       "source": "/privacy",
