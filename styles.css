@@ -7770,13 +7770,14 @@ body.is-home {
     position: relative;
     max-width: 860px;
     margin: 0 auto 48px;
-    /* Dreamy horizon photo background — overlaid with dark gradient for legibility */
+    /* Ritz Luminara Beach House pool — golden-hour, deck + ocean.
+       Softer dark gradient (top/bottom) lets the warm pool light come through. */
     background-image:
         linear-gradient(180deg,
-            rgba(30, 53, 82, 0.72) 0%,
-            rgba(30, 53, 82, 0.60) 45%,
-            rgba(30, 53, 82, 0.72) 100%),
-        url('/cruise-images/quiz-bg/01-dreamy-horizon.jpg');
+            rgba(30, 53, 82, 0.62) 0%,
+            rgba(30, 53, 82, 0.42) 45%,
+            rgba(30, 53, 82, 0.62) 100%),
+        url('/cruise-images/ritz-carlton-yacht/03-luminara-pool.jpg');
     background-size: cover;
     background-position: center;
     border: 1px solid rgba(199, 174, 138, 0.32);
