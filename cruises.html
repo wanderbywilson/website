@@ -43,7 +43,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=221">
+    <link rel="stylesheet" href="/styles.css?v=222">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -177,7 +177,7 @@
     </aside>
 
     <!-- ================================================================
-         FIND YOUR STYLE — 5 traveler-type cards with imagery
+         FIND YOUR STYLE — interactive matchmaker quiz + style cards
          ================================================================ -->
     <section class="cruise-styles" aria-label="Find your style of cruising">
         <div class="container">
@@ -188,12 +188,52 @@
                     <em>of cruising.</em>
                 </h2>
                 <p class="cruise-styles-lede">
-                    Most luxury travelers don&rsquo;t know which cruise line fits them, whether river
-                    or ocean or expedition is the right call, or which cabins are worth paying for.
-                    That&rsquo;s where we come in &mdash; here&rsquo;s a quick way to find yours.
+                    Most luxury travelers don&rsquo;t know which cruise line fits them. Take the
+                    60-second matchmaker &mdash; we&rsquo;ll show you the cruise type and brands that
+                    best match how you travel.
                 </p>
             </div>
 
+            <!-- INTERACTIVE QUIZ — 4 questions, scored to map to a style -->
+            <div class="quiz" id="cruiseQuiz">
+                <!-- Intro screen -->
+                <div class="quiz-screen quiz-intro" data-screen="intro">
+                    <p class="quiz-intro-label">60-second cruise matchmaker</p>
+                    <h3 class="quiz-intro-title">Which cruise is <em>right for you?</em></h3>
+                    <p class="quiz-intro-lede">Four quick questions. We&rsquo;ll match you with your cruise style and recommend specific brands.</p>
+                    <button type="button" class="cta-primary quiz-start-btn" data-quiz-action="start">
+                        <span class="cta-primary-label">Take the matchmaker</span>
+                    </button>
+                </div>
+
+                <!-- Question screens injected by JS into here -->
+                <div class="quiz-screen quiz-question" data-screen="question" hidden>
+                    <div class="quiz-progress" id="quizProgress" aria-hidden="true"></div>
+                    <p class="quiz-q-count" id="quizQCount"></p>
+                    <h3 class="quiz-q-title" id="quizQTitle"></h3>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <button type="button" class="quiz-back" data-quiz-action="back" hidden>&larr; Back</button>
+                </div>
+
+                <!-- Result screen -->
+                <div class="quiz-screen quiz-result" data-screen="result" hidden>
+                    <p class="quiz-result-label">Your match</p>
+                    <h3 class="quiz-result-style" id="quizResultStyle"></h3>
+                    <p class="quiz-result-feeling" id="quizResultFeeling"></p>
+
+                    <div class="quiz-result-lines" id="quizResultLines"></div>
+
+                    <div class="quiz-result-actions">
+                        <a href="/inquire-trip?type=cruise" class="cta-primary">
+                            <span class="cta-primary-label">Plan This Cruise</span>
+                        </a>
+                        <button type="button" class="quiz-restart" data-quiz-action="restart">Retake the quiz</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing style cards remain BELOW the quiz as "or browse all" -->
+            <p class="cruise-styles-browse-label">Or browse all five cruise styles</p>
             <div class="cruise-style-grid">
 
                 <article class="cruise-style-card">
@@ -258,7 +298,7 @@
                 <article class="cruise-style-card cruise-style-card--wide cruise-style-card--signature">
                     <span class="cruise-signature-badge">Our signature offering</span>
                     <figure class="cruise-style-image">
-                        <img src="/property-images/borgo-santandrea/02-aerial-coastal.jpg" alt="Amalfi coastline — luxury hotel-brand yacht setting" loading="lazy">
+                        <img src="/cruise-images/four-seasons-yachts/01-main-pool.jpg" alt="Four Seasons Yachts — main pool deck" loading="lazy">
                     </figure>
                     <div class="cruise-style-body">
                         <p class="cruise-style-want">I love Four Seasons, Aman &amp; Ritz-Carlton.</p>
@@ -338,11 +378,179 @@
         </div>
     </footer>
 
+    <script src="/cruise-lines.js?v=1"></script>
     <script>
         const header = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
             header.classList.toggle('is-scrolled', window.scrollY > 24);
         }, { passive: true });
+
+        // ── MATCHMAKER QUIZ ──────────────────────────────────────────
+        // 4 questions, each option carries weights for the 5 cruise styles.
+        // We tally scores across answers; highest-scoring style wins.
+        (function cruiseQuiz() {
+            const root = document.getElementById('cruiseQuiz');
+            if (!root) return;
+
+            const QUESTIONS = [
+                {
+                    q: 'What kind of trip are you imagining?',
+                    options: [
+                        { label: 'Pure relaxation — a floating five-star resort',  weights: { 'yacht-style': 3, 'ocean': 2 } },
+                        { label: 'A mix of comfort and cultural exploration',      weights: { 'ocean': 3, 'river': 2 } },
+                        { label: 'Adventure in remote, unspoiled places',          weights: { 'expedition': 4 } },
+                        { label: 'Total privacy with my own group',                weights: { 'charter': 4 } }
+                    ]
+                },
+                {
+                    q: 'Where do you want to go?',
+                    options: [
+                        { label: 'Through Europe — slowly, by water',              weights: { 'river': 4, 'yacht-style': 1 } },
+                        { label: 'The Mediterranean or Caribbean',                 weights: { 'yacht-style': 3, 'ocean': 3 } },
+                        { label: 'Somewhere remote — Antarctica, Galápagos, Amazon', weights: { 'expedition': 4 } },
+                        { label: 'I&rsquo;m open — wherever the right experience is', weights: { 'yacht-style': 2, 'ocean': 2, 'charter': 1 } }
+                    ]
+                },
+                {
+                    q: 'Who&rsquo;s coming with you?',
+                    options: [
+                        { label: 'Just my partner — a couple&rsquo;s trip',        weights: { 'yacht-style': 3, 'river': 2, 'ocean': 1 } },
+                        { label: 'Our family (multi-generational)',                weights: { 'ocean': 2, 'river': 2, 'charter': 3 } },
+                        { label: 'A group of friends — celebrating something',     weights: { 'charter': 4, 'yacht-style': 2 } },
+                        { label: 'Solo or with one travel companion',              weights: { 'expedition': 3, 'yacht-style': 2 } }
+                    ]
+                },
+                {
+                    q: 'Which hotel brand feels most like &ldquo;you&rdquo;?',
+                    options: [
+                        { label: 'Four Seasons, Ritz-Carlton, Belmond',            weights: { 'yacht-style': 4 } },
+                        { label: 'Aman, COMO Shambhala — wellness-led',            weights: { 'expedition': 3, 'yacht-style': 2 } },
+                        { label: 'Cheval Blanc, Mandarin Oriental — cosmopolitan', weights: { 'ocean': 3, 'yacht-style': 2 } },
+                        { label: 'A private villa anywhere',                       weights: { 'charter': 4 } }
+                    ]
+                }
+            ];
+
+            const STYLE_LABELS = {
+                'yacht-style': { name: 'Luxury Yacht-Style Cruise', emoji: '⚓' },
+                'ocean':       { name: 'Ocean Cruise', emoji: '🌊' },
+                'river':       { name: 'River Cruise', emoji: '🛶' },
+                'expedition':  { name: 'Expedition Cruise', emoji: '🧭' },
+                'charter':     { name: 'Private Yacht Charter', emoji: '🛥️' }
+            };
+
+            let currentQ = 0;
+            const scores = { 'yacht-style': 0, 'ocean': 0, 'river': 0, 'expedition': 0, 'charter': 0 };
+            const history = []; // for back button
+
+            const screens = {
+                intro:    root.querySelector('[data-screen="intro"]'),
+                question: root.querySelector('[data-screen="question"]'),
+                result:   root.querySelector('[data-screen="result"]')
+            };
+            const show = (key) => {
+                Object.entries(screens).forEach(([k, el]) => el.hidden = (k !== key));
+                root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            const renderQuestion = (idx) => {
+                const q = QUESTIONS[idx];
+                document.getElementById('quizQCount').textContent = `Question ${idx + 1} of ${QUESTIONS.length}`;
+                document.getElementById('quizQTitle').innerHTML = q.q;
+                // Progress dots
+                const dots = QUESTIONS.map((_, i) =>
+                    `<span class="quiz-dot${i <= idx ? ' is-active' : ''}"></span>`
+                ).join('');
+                document.getElementById('quizProgress').innerHTML = dots;
+                // Options
+                const opts = q.options.map((o, i) =>
+                    `<button type="button" class="quiz-option" data-opt="${i}">${o.label}</button>`
+                ).join('');
+                document.getElementById('quizOptions').innerHTML = opts;
+                // Back button
+                root.querySelector('[data-quiz-action="back"]').hidden = idx === 0;
+            };
+
+            const renderResult = () => {
+                // Find winning style
+                const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+                const meta = STYLE_LABELS[winner];
+                document.getElementById('quizResultStyle').innerHTML = `${meta.emoji} ${meta.name}`;
+
+                // Use the data file (CRUISE_LINES + CRUISE_LINES_BY_STYLE)
+                const recommendedKeys = (typeof CRUISE_LINES_BY_STYLE !== 'undefined')
+                    ? (CRUISE_LINES_BY_STYLE[winner] || [])
+                    : [];
+                const recommended = recommendedKeys
+                    .map(k => (typeof CRUISE_LINES !== 'undefined' ? CRUISE_LINES[k] : null))
+                    .filter(Boolean);
+
+                if (recommended.length) {
+                    document.getElementById('quizResultFeeling').textContent = recommended[0].feeling || '';
+                    const lines = recommended.map(line => `
+                        <article class="quiz-line-card">
+                            <figure class="quiz-line-img"><img src="${line.image}" alt="${line.name}" loading="lazy"></figure>
+                            <div class="quiz-line-body">
+                                <h4 class="quiz-line-name">${line.name}</h4>
+                                <p class="quiz-line-tagline">${line.tagline}</p>
+                                <ul class="quiz-line-meta">
+                                    <li><span>Passengers:</span> ${line.passengers}</li>
+                                    <li><span>From:</span> ${line.priceFrom}</li>
+                                </ul>
+                                <p class="quiz-line-perks"><strong>Wander by Wilson perk:</strong> ${line.perks}</p>
+                            </div>
+                        </article>
+                    `).join('');
+                    document.getElementById('quizResultLines').innerHTML =
+                        `<p class="quiz-result-rec-label">Cruise lines we&rsquo;d recommend</p>${lines}`;
+                } else {
+                    // No partner cruise lines yet for this style (river/charter) — show inquiry message
+                    document.getElementById('quizResultFeeling').textContent =
+                        'We work with a curated network of river and charter partners. Tell us a bit about your trip and we&rsquo;ll match you with the right one.';
+                    document.getElementById('quizResultLines').innerHTML = '';
+                }
+
+                show('result');
+            };
+
+            // ── Interactions ────────────────────────────────────
+            root.addEventListener('click', (e) => {
+                const action = e.target.closest('[data-quiz-action]')?.dataset.quizAction;
+                if (action === 'start') {
+                    currentQ = 0;
+                    Object.keys(scores).forEach(k => scores[k] = 0);
+                    history.length = 0;
+                    renderQuestion(currentQ);
+                    show('question');
+                }
+                if (action === 'back') {
+                    if (history.length) {
+                        const last = history.pop();
+                        // Subtract that answer's weights
+                        Object.entries(last.weights).forEach(([s, w]) => scores[s] -= w);
+                        currentQ--;
+                        renderQuestion(currentQ);
+                    }
+                }
+                if (action === 'restart') {
+                    currentQ = 0;
+                    Object.keys(scores).forEach(k => scores[k] = 0);
+                    history.length = 0;
+                    show('intro');
+                }
+                // Option click
+                const optBtn = e.target.closest('.quiz-option');
+                if (optBtn) {
+                    const idx = parseInt(optBtn.dataset.opt, 10);
+                    const weights = QUESTIONS[currentQ].options[idx].weights;
+                    Object.entries(weights).forEach(([s, w]) => scores[s] += w);
+                    history.push({ q: currentQ, weights });
+                    currentQ++;
+                    if (currentQ >= QUESTIONS.length) renderResult();
+                    else renderQuestion(currentQ);
+                }
+            });
+        })();
 
         (function navToggle() {
             const toggle = document.getElementById('navToggle');
