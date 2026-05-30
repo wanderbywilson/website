@@ -885,17 +885,26 @@ button {
     transform: scale(1.2);
 }
 
-/* Cruise logos (square / tall) — bumped further for visual parity */
+/* Cruise logos (square / compact) — bumped for visual parity with wide wordmarks */
 .marquee-item[data-brand="oceania"] img,
 .marquee-item[data-brand="quark"] img,
 .marquee-item[data-brand="ritz-yacht"] img,
+.marquee-item[data-brand="four-seasons"] img,
 .marquee-item[data-brand="explora"] img,
 .marquee-item[data-brand="seabourn"] img,
 .marquee-item[data-brand="lindblad"] img,
 .marquee-item[data-brand="windstar"] img,
 .marquee-item[data-brand="uniworld"] img,
 .marquee-item[data-brand="amawaterways"] img {
-    transform: scale(1.4);
+    transform: scale(1.55);
+}
+
+/* Wide horizontal wordmarks — pulled in slightly so they don't dominate */
+.marquee-item[data-brand="viking"] img,
+.marquee-item[data-brand="regent"] img,
+.marquee-item[data-brand="silversea"] img,
+.marquee-item[data-brand="crystal"] img {
+    transform: scale(0.85);
 }
 
 /* Text fallback (for brands without a logo file yet) — fits the same cell */
@@ -7770,14 +7779,14 @@ body.is-home {
     position: relative;
     max-width: 860px;
     margin: 0 auto 48px;
-    /* Ritz Luminara Beach House pool — golden-hour, deck + ocean.
-       Softer dark gradient (top/bottom) lets the warm pool light come through. */
+    /* Explora III in Vietnam's Ha Long Bay — karst islands, calm jade water.
+       Soft dark gradient (top/bottom) keeps headlines + options legible. */
     background-image:
         linear-gradient(180deg,
-            rgba(30, 53, 82, 0.62) 0%,
-            rgba(30, 53, 82, 0.42) 45%,
-            rgba(30, 53, 82, 0.62) 100%),
-        url('/cruise-images/ritz-carlton-yacht/03-luminara-pool.jpg');
+            rgba(30, 53, 82, 0.58) 0%,
+            rgba(30, 53, 82, 0.38) 45%,
+            rgba(30, 53, 82, 0.58) 100%),
+        url('/cruise-images/explora-journeys/05-halong-bay.jpg');
     background-size: cover;
     background-position: center;
     border: 1px solid rgba(199, 174, 138, 0.32);

@@ -23,6 +23,7 @@ cruise-images/_source-zips/
 cruise-images/*.zip
 cruise-images/*.mov
 cruise-images/EXPLORA II - Mediterranean 4.jpg
+cruise-images/For ETAC*/
 # Raw brand asset drops in partner folders (Ritz EV_*/LU_*, brand logo .eps, etc.)
 cruise-images/**/EV_*
 cruise-images/**/LU_*

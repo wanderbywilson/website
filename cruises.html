@@ -35,7 +35,7 @@
           { "@type": "Offer", "name": "Luxury Ocean Cruises", "description": "A floating luxury hotel. Mediterranean, Caribbean, multi-destination itineraries." },
           { "@type": "Offer", "name": "Expedition & Adventure Cruises", "description": "Galápagos, Antarctica, Peruvian Amazon — remote regions with naturalist guides." },
           { "@type": "Offer", "name": "Private Yacht & Charter Experiences", "description": "Fully bespoke voyages with personalized service and exclusive access." },
-          { "@type": "Offer", "name": "Yacht-Style Cruises by Iconic Hotel Brands", "description": "Four Seasons Yacht, Aman Project Sama, Ritz-Carlton Yacht Collection." }
+          { "@type": "Offer", "name": "Yacht-Style Cruises by Iconic Hotel Brands", "description": "Four Seasons Yacht, Aman's new Amangati, Ritz-Carlton Yacht Collection." }
         ]
       }
     }
@@ -43,7 +43,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=226">
+    <link rel="stylesheet" href="/styles.css?v=227">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -144,7 +144,7 @@
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>Pre- and post-cruise hotel arrangements and private transfers</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>Private welcome receptions and VIP shore excursions</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>One point of contact &mdash; before, during, and after your trip</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span>Complimentary planning assistance &mdash; <em>no booking fee</em></span></li>
+                <li><span class="cruise-check" aria-hidden="true">✓</span><span>Complimentary booking assistance</span></li>
             </ul>
         </div>
     </section>
@@ -157,20 +157,20 @@
             <p class="cruise-lines-label">A few of the cruise lines we recommend</p>
             <div class="marquee" data-marquee>
                 <div class="marquee-track">
-                    <span class="marquee-item"><img src="/logos/seabourn.png" alt="Seabourn"></span>
-                    <span class="marquee-item"><img src="/logos/silversea.png" alt="Silversea"></span>
-                    <span class="marquee-item"><img src="/logos/regent.png" alt="Regent Seven Seas Cruises"></span>
-                    <span class="marquee-item"><img src="/logos/viking.png" alt="Viking"></span>
-                    <span class="marquee-item"><img src="/logos/amawaterways.png" alt="AmaWaterways"></span>
-                    <span class="marquee-item"><img src="/logos/uniworld.png" alt="Uniworld Boutique River Cruises"></span>
-                    <span class="marquee-item"><img src="/logos/ritz-yacht.png" alt="Ritz-Carlton Yacht Collection"></span>
-                    <span class="marquee-item"><img src="/logos/four-seasons.png" alt="Four Seasons Yachts"></span>
-                    <span class="marquee-item"><img src="/logos/explora.png" alt="Explora Journeys"></span>
-                    <span class="marquee-item"><img src="/logos/oceania.png" alt="Oceania Cruises"></span>
-                    <span class="marquee-item"><img src="/logos/crystal.png" alt="Crystal Cruises"></span>
-                    <span class="marquee-item"><img src="/logos/windstar.png" alt="Windstar Cruises"></span>
-                    <span class="marquee-item"><img src="/logos/lindblad.png" alt="Lindblad Expeditions"></span>
-                    <span class="marquee-item"><img src="/logos/quark.png" alt="Quark Expeditions"></span>
+                    <span class="marquee-item" data-brand="seabourn"><img src="/logos/seabourn.png" alt="Seabourn"></span>
+                    <span class="marquee-item" data-brand="silversea"><img src="/logos/silversea.png" alt="Silversea"></span>
+                    <span class="marquee-item" data-brand="regent"><img src="/logos/regent.png" alt="Regent Seven Seas Cruises"></span>
+                    <span class="marquee-item" data-brand="viking"><img src="/logos/viking.png" alt="Viking"></span>
+                    <span class="marquee-item" data-brand="amawaterways"><img src="/logos/amawaterways.png" alt="AmaWaterways"></span>
+                    <span class="marquee-item" data-brand="uniworld"><img src="/logos/uniworld.png" alt="Uniworld Boutique River Cruises"></span>
+                    <span class="marquee-item" data-brand="ritz-yacht"><img src="/logos/ritz-yacht.png" alt="Ritz-Carlton Yacht Collection"></span>
+                    <span class="marquee-item" data-brand="four-seasons"><img src="/logos/four-seasons.png" alt="Four Seasons Yachts"></span>
+                    <span class="marquee-item" data-brand="explora"><img src="/logos/explora.png" alt="Explora Journeys"></span>
+                    <span class="marquee-item" data-brand="oceania"><img src="/logos/oceania.png" alt="Oceania Cruises"></span>
+                    <span class="marquee-item" data-brand="crystal"><img src="/logos/crystal.png" alt="Crystal Cruises"></span>
+                    <span class="marquee-item" data-brand="windstar"><img src="/logos/windstar.png" alt="Windstar Cruises"></span>
+                    <span class="marquee-item" data-brand="lindblad"><img src="/logos/lindblad.png" alt="Lindblad Expeditions"></span>
+                    <span class="marquee-item" data-brand="quark"><img src="/logos/quark.png" alt="Quark Expeditions"></span>
                 </div>
             </div>
         </div>
@@ -298,14 +298,14 @@
                 <article class="cruise-style-card cruise-style-card--wide cruise-style-card--signature">
                     <span class="cruise-signature-badge">Our signature offering</span>
                     <figure class="cruise-style-image">
-                        <img src="/cruise-images/four-seasons-yachts/01-main-pool.jpg" alt="Four Seasons Yachts — main pool deck" loading="lazy">
+                        <img src="/cruise-images/four-seasons-yachts/04-funnel-suite.jpg" alt="Four Seasons Yachts — Funnel Suite with Amalfi-coast view through curved floor-to-ceiling windows" loading="lazy">
                     </figure>
                     <div class="cruise-style-body">
                         <p class="cruise-style-want">I love Four Seasons, Aman &amp; Ritz-Carlton.</p>
                         <h3 class="cruise-style-type">Luxury Yacht-Style Cruises</h3>
                         <p class="cruise-style-desc">
                             Yacht-style cruising reimagined by the world&rsquo;s most iconic hotel brands &mdash;
-                            from the Four Seasons Yacht to Aman&rsquo;s Project Sama and Ritz-Carlton&rsquo;s
+                            from the Four Seasons Yacht to Aman&rsquo;s new Amangati and Ritz-Carlton&rsquo;s
                             Evrima. Floating resorts with the comforts of your favorite hotel and the freedom of life at sea.
                         </p>
                         <p class="cruise-signature-note">
