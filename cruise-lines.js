@@ -52,7 +52,7 @@ const CRUISE_LINES = {
     passengers: '298–456 guests',
     crewRatio: 'Approx. 1:1.4',
     priceFrom: 'Premium luxury (varies by ship + itinerary)',
-    image: '/cruise-images/ritz-carlton-yacht/01-luminara.jpg',
+    image: '/cruise-images/ritz-carlton-yacht/01-pitons-st-lucia.jpg',
     region: ['Caribbean', 'Mediterranean', 'Northern Europe', 'Asia'],
     affiliations: ['Virtuoso', 'Marriott STARS'],
     feeling: 'Ritz-Carlton service polish, yacht-scale intimacy. For travelers who want big-name reliability without big-ship feel.'
