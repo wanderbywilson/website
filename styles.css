@@ -6867,6 +6867,29 @@ body.is-home {
     color: var(--gold);
 }
 
+/* "Don't see your hotel?" — pitch + CTA inside the hotel-index hero,
+   replacing the prior 'preferred-partner perks on every stay' microline. */
+.hotels-index-find-yours {
+    margin: 28px auto 0;
+    max-width: 620px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+.hotels-index-find-yours-line {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(15px, 1.5vw, 17px);
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.78);
+    text-wrap: balance;
+}
+.hotels-index-find-yours-cta { display: inline-flex; }
+
 /* ─────────────────────────────────────────────────────────────────────
    PROPERTY HERO OVERLAYS — pilot on borgo-santandrea per UX audit.
    Rate sits under the location kicker (above title). Perks pills sit
@@ -7040,6 +7063,23 @@ body.is-home {
 .is-hotels-index-page .hotels-index-perks-line {
     color: var(--gold-soft, #d4b888);
 }
+
+/* "Don't see your hotel?" find-yours block over the dark hero photo */
+.is-hotels-index-page .hotels-index-find-yours-line {
+    color: rgba(255, 251, 240, 0.92);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.22);
+}
+.is-hotels-index-page .hotels-index-find-yours-cta {
+    color: var(--ivory);
+    border-color: rgba(255, 251, 240, 0.55);
+    background: transparent;
+}
+.is-hotels-index-page .hotels-index-find-yours-cta::after { color: var(--gold-soft); }
+.is-hotels-index-page .hotels-index-find-yours-cta:hover {
+    background: rgba(14, 12, 10, 0.55);
+    border-color: var(--ivory);
+}
+.is-hotels-index-page .hotels-index-find-yours-cta:hover::after { color: var(--ivory); }
 
 /* Inspiration filter pills — make them readable on dark hero */
 .is-inspiration-page .inspo-hero .inspo-filter-group-label {
