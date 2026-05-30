@@ -4774,6 +4774,19 @@ body.is-journeys-index-page { background: var(--paper); }
     text-wrap: pretty;
 }
 
+/* Soft reassurance line under the closing CTA — no booking fee + perks message */
+.services-close-footnote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.6);
+    margin: 28px auto 0;
+    max-width: 560px;
+    text-wrap: balance;
+}
+
 /* Responsive — services page */
 @media (max-width: 900px) {
     .alacarte-grid { grid-template-columns: repeat(2, 1fr); }

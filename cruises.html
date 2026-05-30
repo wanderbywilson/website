@@ -43,7 +43,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=228">
+    <link rel="stylesheet" href="/styles.css?v=229">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -98,21 +98,6 @@
                 <em>to book?</em>
             </h1>
             <p class="services-hero-bleed-sub">That&rsquo;s exactly where we come in.</p>
-        </div>
-    </section>
-
-    <!-- ================================================================
-         Intro band — short value-prop + primary CTA
-         ================================================================ -->
-    <section class="services-intro">
-        <div class="container services-intro-inner">
-            <p class="services-intro-lede">
-                We&rsquo;ll match you with the right cruise line, ship, cabin, and itinerary &mdash;
-                and help you get more from the experience than booking online ever could.
-            </p>
-            <a href="/inquire-trip?type=cruise" class="cta-primary services-intro-cta">
-                <span class="cta-primary-label">Plan My Cruise</span>
-            </a>
         </div>
     </section>
 
@@ -175,65 +160,6 @@
             </div>
         </div>
     </aside>
-
-    <!-- ================================================================
-         FIND YOUR STYLE — interactive matchmaker quiz + style cards
-         ================================================================ -->
-    <section class="cruise-styles" aria-label="Find your style of cruising">
-        <div class="container">
-            <div class="cruise-styles-head">
-                <p class="kicker"><span class="kicker-line"></span><span>The matchmaker</span></p>
-                <h2 class="cruise-styles-title">
-                    Find your style<br>
-                    <em>of cruising.</em>
-                </h2>
-                <p class="cruise-styles-lede">
-                    Most luxury travelers don&rsquo;t know which cruise line fits them. Take the
-                    60-second matchmaker &mdash; we&rsquo;ll show you the cruise type and brands that
-                    best match how you travel.
-                </p>
-            </div>
-
-            <!-- INTERACTIVE QUIZ — 4 questions, scored to map to a style -->
-            <div class="quiz" id="cruiseQuiz">
-                <!-- Intro screen -->
-                <div class="quiz-screen quiz-intro" data-screen="intro">
-                    <p class="quiz-intro-label">60-second cruise matchmaker</p>
-                    <h3 class="quiz-intro-title">Which cruise is <em>right for you?</em></h3>
-                    <p class="quiz-intro-lede">Four quick questions. We&rsquo;ll match you with your cruise style and recommend specific brands.</p>
-                    <button type="button" class="cta-primary quiz-start-btn" data-quiz-action="start">
-                        <span class="cta-primary-label">Take the matchmaker</span>
-                    </button>
-                </div>
-
-                <!-- Question screens injected by JS into here -->
-                <div class="quiz-screen quiz-question" data-screen="question" hidden>
-                    <div class="quiz-progress" id="quizProgress" aria-hidden="true"></div>
-                    <p class="quiz-q-count" id="quizQCount"></p>
-                    <h3 class="quiz-q-title" id="quizQTitle"></h3>
-                    <div class="quiz-options" id="quizOptions"></div>
-                    <button type="button" class="quiz-back" data-quiz-action="back" hidden>&larr; Back</button>
-                </div>
-
-                <!-- Result screen -->
-                <div class="quiz-screen quiz-result" data-screen="result" hidden>
-                    <p class="quiz-result-label">Your match</p>
-                    <h3 class="quiz-result-style" id="quizResultStyle"></h3>
-                    <p class="quiz-result-feeling" id="quizResultFeeling"></p>
-
-                    <div class="quiz-result-lines" id="quizResultLines"></div>
-
-                    <div class="quiz-result-actions">
-                        <a href="/inquire-trip?type=cruise" class="cta-primary">
-                            <span class="cta-primary-label">Plan This Cruise</span>
-                        </a>
-                        <button type="button" class="quiz-restart" data-quiz-action="restart">Retake the quiz</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
     <!-- ================================================================
          RECENT VOYAGES — proof, not navigation. Editorial caption style
@@ -332,6 +258,65 @@
     </section>
 
     <!-- ================================================================
+         FIND YOUR STYLE — interactive matchmaker quiz
+         ================================================================ -->
+    <section class="cruise-styles" aria-label="Find your style of cruising">
+        <div class="container">
+            <div class="cruise-styles-head">
+                <p class="kicker"><span class="kicker-line"></span><span>The matchmaker</span></p>
+                <h2 class="cruise-styles-title">
+                    Find your style<br>
+                    <em>of cruising.</em>
+                </h2>
+                <p class="cruise-styles-lede">
+                    Most luxury travelers don&rsquo;t know which cruise line fits them. Take the
+                    60-second matchmaker &mdash; we&rsquo;ll show you the cruise type and brands that
+                    best match how you travel.
+                </p>
+            </div>
+
+            <!-- INTERACTIVE QUIZ — 4 questions, scored to map to a style -->
+            <div class="quiz" id="cruiseQuiz">
+                <!-- Intro screen -->
+                <div class="quiz-screen quiz-intro" data-screen="intro">
+                    <p class="quiz-intro-label">60-second cruise matchmaker</p>
+                    <h3 class="quiz-intro-title">Which cruise is <em>right for you?</em></h3>
+                    <p class="quiz-intro-lede">Four quick questions. We&rsquo;ll match you with your cruise style and recommend specific brands.</p>
+                    <button type="button" class="cta-primary quiz-start-btn" data-quiz-action="start">
+                        <span class="cta-primary-label">Take the matchmaker</span>
+                    </button>
+                </div>
+
+                <!-- Question screens injected by JS into here -->
+                <div class="quiz-screen quiz-question" data-screen="question" hidden>
+                    <div class="quiz-progress" id="quizProgress" aria-hidden="true"></div>
+                    <p class="quiz-q-count" id="quizQCount"></p>
+                    <h3 class="quiz-q-title" id="quizQTitle"></h3>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <button type="button" class="quiz-back" data-quiz-action="back" hidden>&larr; Back</button>
+                </div>
+
+                <!-- Result screen -->
+                <div class="quiz-screen quiz-result" data-screen="result" hidden>
+                    <p class="quiz-result-label">Your match</p>
+                    <h3 class="quiz-result-style" id="quizResultStyle"></h3>
+                    <p class="quiz-result-feeling" id="quizResultFeeling"></p>
+
+                    <div class="quiz-result-lines" id="quizResultLines"></div>
+
+                    <div class="quiz-result-actions">
+                        <a href="/inquire-trip?type=cruise" class="cta-primary">
+                            <span class="cta-primary-label">Plan This Cruise</span>
+                        </a>
+                        <button type="button" class="quiz-restart" data-quiz-action="restart">Retake the quiz</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================================================================
          COMPARE — operationalizes the brand promise that's in the hero
          ("Same cruise. Same rate. A better experience.") as a 4-row
          side-by-side. Pure type on section bg; no card chrome.
@@ -372,16 +357,17 @@
                     </tr>
                     <tr>
                         <th scope="row" class="cruise-compare-row-label">Support</th>
-                        <td>Their call center.</td>
-                        <td><strong>One advisor, by name</strong> &mdash; from inquiry through disembarkation.</td>
+                        <td>Different call center representatives every time you call.</td>
+                        <td><strong>One advisor</strong> who knows your trip from the first inquiry through embarkation.</td>
                     </tr>
                 </tbody>
             </table>
 
             <p class="cruise-compare-trust">
-                Wander by Wilson is a Virtuoso and SmartFlyer advisor &mdash; preferred-partner status with
-                Ritz-Carlton Yacht Collection, Four Seasons Yachts, Explora Journeys, Aqua Expeditions,
-                Belmond Afloat in France, and more &mdash; and the perks that come with it.
+                Wander by Wilson is a Virtuoso and SmartFlyer advisor with preferred-partner status across
+                many of the world&rsquo;s leading cruise brands, including Ritz-Carlton Yacht Collection,
+                Four Seasons Yachts, Explora Journeys, Aqua Expeditions, Belmond Afloat in France, and more
+                &mdash; often unlocking amenities and experiences not available when booking direct.
             </p>
         </div>
     </section>
@@ -404,6 +390,10 @@
             <a href="/inquire-trip?type=cruise" class="cta-primary">
                 <span class="cta-primary-label">Plan My Cruise</span>
             </a>
+            <p class="services-close-footnote">
+                Cruise bookings are complimentary and include the same rates offered directly by the
+                cruise line &mdash; with our preferred-partner perks added when available.
+            </p>
         </div>
     </section>
 
