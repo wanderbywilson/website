@@ -7806,7 +7806,7 @@ body.is-home {
     position: absolute;
     inset: 0;
     background: url('/cruise-images/aqua-expeditions/04-aqua-nera-golden-hour.jpg') center / cover no-repeat;
-    opacity: 0.22;
+    opacity: 0.13;
     z-index: 0;
     pointer-events: none;
 }
