@@ -518,6 +518,20 @@ button {
 }
 .hero .cta-primary:hover::after { color: var(--ivory); }
 
+/* Quiz CTA — frosted gold-filled button on the dark photo background */
+.quiz .cta-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+.quiz .cta-primary::after { color: var(--ink); }
+.quiz .cta-primary:hover {
+    background: var(--gold-soft);
+    border-color: var(--gold-soft);
+}
+.quiz .cta-primary:hover::after { color: var(--ink); }
+
 /* Secondary CTA — small caps + thin arrow */
 .cta-secondary {
     display: inline-flex;
