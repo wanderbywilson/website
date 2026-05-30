@@ -15,6 +15,9 @@ proposals/
 logos-original-backup/
 Landing Pages/
 
+# Local source image folders (curated copies go into /cruise-images, /property-images, etc.)
+LBB - IMAGE GALLERY/
+
 # OS noise
 .DS_Store
 Thumbs.db
