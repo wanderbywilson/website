@@ -58,6 +58,21 @@ const CRUISE_LINES = {
     feeling: 'Ritz-Carlton service polish, yacht-scale intimacy. For travelers who want big-name reliability without big-ship feel.'
   },
 
+  // ─── RIVER / BARGE ──────────────────────────────────────────────────
+  'belmond-afloat-in-france': {
+    name: 'Belmond — Afloat in France',
+    type: 'river',
+    tagline: 'Hand-crafted barge journeys through Burgundy, Champagne, Canal du Midi, Camargue & Provence',
+    perks: 'Belmond Bellini Club benefits via Virtuoso · pre-arrival concierge to customize each day\'s itinerary, regional excursions, and onboard menus.',
+    passengers: '4–12 guests per barge · 7-barge fleet (Lilas, Fleur de Lys, Amaryllis, Alouette, Napoleon, Pivoine, Coquelicot)',
+    crewRatio: 'Near 1:1 — private-staff feel',
+    priceFrom: 'Charter pricing varies by barge + region (contact for rates)',
+    image: '/cruise-images/belmond-afloat-in-france/01-canal-lilas.jpg',
+    region: ['Burgundy', 'Champagne', 'Canal du Midi', 'Camargue', 'Provence'],
+    affiliations: ['Virtuoso', 'Belmond Bellini Club'],
+    feeling: 'Slow-luxury countryside cruising — your own private château on water. Six unhurried days of regional wine, chef-prepared meals, and the French countryside at five kilometres an hour.'
+  },
+
   // ─── EXPEDITION ─────────────────────────────────────────────────────
   'aqua-expeditions': {
     name: 'Aqua Expeditions',
@@ -67,7 +82,7 @@ const CRUISE_LINES = {
     passengers: '16–40 guests · 6 ships',
     crewRatio: '1:1',
     priceFrom: '$1,200 per person, per day',
-    image: '/cruise-images/four-seasons-yachts/03-marina-platform.jpg',
+    image: '/cruise-images/aqua-expeditions/01-aria-amazon.jpg',
     region: ['Amazon', 'Mekong', 'Galápagos', 'Indonesia', 'Seychelles'],
     affiliations: ['Virtuoso', 'Signature', 'USTOA AECO', 'Ensemble'],
     feeling: 'AMAN-meets-Belmond at sea, in the world\'s wildest places. For travelers who want National Geographic energy with five-star comfort.'
@@ -96,6 +111,6 @@ const CRUISE_LINES_BY_STYLE = {
   'yacht-style':   ['orient-express-sailing-yachts', 'four-seasons-yachts', 'ritz-carlton-yacht-collection'],
   'expedition':    ['aqua-expeditions'],
   'ocean':         ['explora-journeys', 'ritz-carlton-yacht-collection'],
-  'river':         [], // populate when river partners added (Uniworld, AmaWaterways, etc.)
+  'river':         ['belmond-afloat-in-france'],
   'charter':       []  // populate when charter partners added
 };
