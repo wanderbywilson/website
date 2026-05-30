@@ -7533,7 +7533,7 @@ body.is-home {
 /* CRUISE LINES — logo marquee, mirrors the partner-marquee on services */
 .cruise-lines {
     padding: 48px 0 56px;
-    background: var(--bone, #efe7d6);
+    background: var(--paper);
     border-top: 1px solid rgba(199, 174, 138, 0.32);
     border-bottom: 1px solid rgba(199, 174, 138, 0.32);
 }
