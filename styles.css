@@ -3842,7 +3842,7 @@ body.is-journeys-index-page { background: var(--paper); }
 }
 
 .services-hero-bleed-kicker .kicker-line {
-    background: rgba(255, 251, 240, 0.7);
+    background: var(--gold);
 }
 
 .services-hero-bleed-kicker span:last-child {
