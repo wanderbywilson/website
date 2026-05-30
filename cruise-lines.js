@@ -97,7 +97,7 @@ const CRUISE_LINES = {
     passengers: 'Up to 461 suites · 6 ships by 2028',
     crewRatio: 'Cosmopolitan / casual-luxe',
     priceFrom: 'Premium ocean (varies)',
-    image: '/cruise-images/ritz-carlton-yacht/03-luminara.jpg',
+    image: '/cruise-images/explora-journeys/01-amalfi-coast.jpg',
     region: ['Caribbean', 'Mediterranean', 'Americas', 'Worldwide'],
     affiliations: ['Virtuoso'],
     feeling: 'Mandarin-Oriental or One&Only on water. Younger demographic, well-traveled, casual-luxe vibe.'

@@ -18,6 +18,12 @@ Landing Pages/
 # Local source image folders (curated copies go into /cruise-images, /property-images, etc.)
 LBB - IMAGE GALLERY/
 
+# Large cruise partner source drops — curated copies go into /cruise-images/<partner>/
+cruise-images/_source-zips/
+cruise-images/*.zip
+cruise-images/*.mov
+cruise-images/EXPLORA II - Mediterranean 4.jpg
+
 # OS noise
 .DS_Store
 Thumbs.db
