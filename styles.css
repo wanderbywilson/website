@@ -7678,3 +7678,61 @@ body.is-home {
     .cruise-style-card--wide .cruise-style-body { flex: 1 1 auto; padding: 32px; }
     .cruise-style-card--wide .cruise-style-image { min-height: 0; aspect-ratio: 16 / 10; }
 }
+
+/* CRUISE SIGNATURE CARD — yacht-style cruises are the signature offering
+   (deepest preferred-partner perks). Gold accent + badge mirror the
+   pattern from the services-page signature package. */
+.cruise-style-card--signature {
+    position: relative;
+    border-top: 3px solid var(--gold);
+    background: linear-gradient(180deg, rgba(195, 162, 106, 0.10), rgba(195, 162, 106, 0.02) 50%, #FFFFFF);
+}
+
+.cruise-signature-badge {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 2;
+    display: inline-block;
+    padding: 8px 16px 7px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--gold);
+    border-radius: 1px;
+    box-shadow: 0 4px 12px rgba(30, 53, 82, 0.18);
+}
+
+.cruise-signature-note {
+    margin: 20px 0 0;
+    padding: 18px 20px;
+    background: rgba(195, 162, 106, 0.08);
+    border-left: 2px solid var(--gold);
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.82);
+}
+.cruise-signature-note strong {
+    display: block;
+    margin-bottom: 6px;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ink);
+    font-size: 14px;
+    letter-spacing: 0.005em;
+}
+
+@media (max-width: 880px) {
+    .cruise-signature-badge {
+        top: 16px;
+        right: 16px;
+        padding: 6px 12px 5px;
+        font-size: 9px;
+    }
+}
