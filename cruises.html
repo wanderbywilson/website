@@ -43,7 +43,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=227">
+    <link rel="stylesheet" href="/styles.css?v=228">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -232,92 +232,157 @@
                 </div>
             </div>
 
-            <!-- Existing style cards remain BELOW the quiz as "or browse all" -->
-            <p class="cruise-styles-browse-label">Or browse all five cruise styles</p>
-            <div class="cruise-style-grid">
+        </div>
+    </section>
 
-                <article class="cruise-style-card">
-                    <figure class="cruise-style-image">
-                        <img src="/cruise-images/belmond-afloat-in-france/01-canal-lilas.jpg" alt="Belmond Lilas barge cruising a French canal" loading="lazy">
-                    </figure>
-                    <div class="cruise-style-body">
-                        <p class="cruise-style-want">I want Europe without constantly packing.</p>
-                        <h3 class="cruise-style-type">River Cruises</h3>
-                        <p class="cruise-style-desc">
-                            Slow travel through countryside, charming towns, and cultural landmarks &mdash;
-                            unpack once and let the boat carry you. Burgundy &amp; Provence, Amsterdam to Switzerland,
-                            Auxonne to Lyon.
-                        </p>
-                    </div>
-                </article>
+    <!-- ================================================================
+         RECENT VOYAGES — proof, not navigation. Editorial caption style
+         intentionally signals "this is a glimpse" rather than a clickable
+         tile, killing the false-affordance problem the old style cards had.
+         Weighted 2/6 toward signature yacht-style partners.
+         ================================================================ -->
+    <section class="cruise-voyages" aria-label="Recent voyages we've planned">
+        <div class="container">
+            <div class="cruise-voyages-head">
+                <p class="kicker"><span class="kicker-line"></span><span>Recent sailings</span></p>
+                <h2 class="cruise-voyages-title">
+                    Where our clients<br>
+                    <em>are sailing right now.</em>
+                </h2>
+                <p class="cruise-voyages-lede">
+                    A glimpse at recent itineraries &mdash; every one custom-built,
+                    every one with perks you won&rsquo;t find booking direct.
+                </p>
+            </div>
 
-                <article class="cruise-style-card">
-                    <figure class="cruise-style-image">
-                        <img src="/cruise-images/explora-journeys/02-dubrovnik.jpg" alt="Explora Journeys ship anchored at Dubrovnik's old city" loading="lazy">
-                    </figure>
-                    <div class="cruise-style-body">
-                        <p class="cruise-style-want">I want a floating luxury hotel.</p>
-                        <h3 class="cruise-style-type">Ocean Cruises</h3>
-                        <p class="cruise-style-desc">
-                            Boutique ships and premium ocean liners &mdash; see multiple destinations
-                            in style with the comforts of a five-star hotel. Mediterranean, Caribbean,
-                            multi-country itineraries.
-                        </p>
-                    </div>
-                </article>
+            <div class="cruise-voyages-grid">
 
-                <article class="cruise-style-card">
-                    <figure class="cruise-style-image">
-                        <img src="/cruise-images/aqua-expeditions/01-aria-amazon.jpg" alt="Aria Amazon expedition ship on the Peruvian Amazon" loading="lazy">
-                    </figure>
-                    <div class="cruise-style-body">
-                        <p class="cruise-style-want">I want something few people ever experience.</p>
-                        <h3 class="cruise-style-type">Expedition Cruises</h3>
-                        <p class="cruise-style-desc">
-                            Galápagos, Antarctica, Peruvian Amazon &mdash; remote regions with naturalist
-                            guides, wildlife sightings, and immersive adventure, all without sacrificing comfort.
-                        </p>
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/ritz-carlton-yacht/04-terrace-suite.jpg" alt="Ritz-Carlton Yacht Evrima — Terrace Suite" loading="lazy">
                     </div>
-                </article>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Ritz-Carlton Yacht · Evrima</p>
+                        <p class="voyage-card-itinerary"><em>7 nights · Castries &rarr; Bridgetown · January</em></p>
+                        <p class="voyage-card-perk">Booked with $600 onboard credit + a private Pitons sunset sail.</p>
+                    </figcaption>
+                </figure>
 
-                <article class="cruise-style-card">
-                    <figure class="cruise-style-image">
-                        <img src="/cruise-images/private-yacht-charters/01-cove-anchorage.jpg" alt="Private motor yacht anchored alone in a turquoise Aegean cove" loading="lazy">
-                    </figure>
-                    <div class="cruise-style-body">
-                        <p class="cruise-style-want">I want total privacy.</p>
-                        <h3 class="cruise-style-type">Private Yacht Charters</h3>
-                        <p class="cruise-style-desc">
-                            Fully bespoke voyages with personalized service and exclusive access.
-                            Ideal for milestone celebrations, multi-generational families, or honeymoons
-                            with complete freedom on the water.
-                        </p>
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/four-seasons-yachts/04-funnel-suite.jpg" alt="Four Seasons Yacht — Funnel Suite" loading="lazy">
                     </div>
-                </article>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Four Seasons Yacht</p>
+                        <p class="voyage-card-itinerary"><em>10 nights · Nice &rarr; Civitavecchia · June</em></p>
+                        <p class="voyage-card-perk">Funnel Suite upgrade + chef&rsquo;s-table evening at Mirazur in Menton.</p>
+                    </figcaption>
+                </figure>
 
-                <article class="cruise-style-card cruise-style-card--wide cruise-style-card--signature">
-                    <span class="cruise-signature-badge">Our signature offering</span>
-                    <figure class="cruise-style-image">
-                        <img src="/cruise-images/four-seasons-yachts/04-funnel-suite.jpg" alt="Four Seasons Yachts — Funnel Suite with Amalfi-coast view through curved floor-to-ceiling windows" loading="lazy">
-                    </figure>
-                    <div class="cruise-style-body">
-                        <p class="cruise-style-want">I love Four Seasons, Aman &amp; Ritz-Carlton.</p>
-                        <h3 class="cruise-style-type">Luxury Yacht-Style Cruises</h3>
-                        <p class="cruise-style-desc">
-                            Yacht-style cruising reimagined by the world&rsquo;s most iconic hotel brands &mdash;
-                            from the Four Seasons Yacht to Aman&rsquo;s new Amangati and Ritz-Carlton&rsquo;s
-                            Evrima. Floating resorts with the comforts of your favorite hotel and the freedom of life at sea.
-                        </p>
-                        <p class="cruise-signature-note">
-                            <strong>Where we unlock the deepest perks.</strong> Our preferred-partner
-                            relationships run deepest with these brands &mdash; expect onboard credits,
-                            suite upgrades, hosted experiences, and pre-/post-stay arrangements at
-                            the brand&rsquo;s flagship hotels in port.
-                        </p>
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/belmond-afloat-in-france/02-deck-pool-sunrise.jpg" alt="Belmond Lilas — sunrise deck pool" loading="lazy">
                     </div>
-                </article>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Belmond Lilas · Afloat in France</p>
+                        <p class="voyage-card-itinerary"><em>6 nights · Burgundy canal · May</em></p>
+                        <p class="voyage-card-perk">Private tasting at a Grand Cru estate in Vosne-Roman&eacute;e.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/explora-journeys/03-calanques-provence.jpg" alt="Explora I sailing past the Calanques in Provence" loading="lazy">
+                    </div>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Explora I · Explora Journeys</p>
+                        <p class="voyage-card-itinerary"><em>10 nights · Civitavecchia &rarr; Athens · August</em></p>
+                        <p class="voyage-card-perk">$150 onboard credit + chef&rsquo;s-table evening at Sakura.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/aqua-expeditions/02-aqua-mekong.jpg" alt="Aqua Mekong on the Mekong River" loading="lazy">
+                    </div>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Aqua Mekong · Aqua Expeditions</p>
+                        <p class="voyage-card-itinerary"><em>7 nights · Saigon &rarr; Siem Reap · October</em></p>
+                        <p class="voyage-card-perk">$100 onboard credit + 2-night Aman Phnom Penh pre-cruise stay.</p>
+                    </figcaption>
+                </figure>
+
+                <figure class="voyage-card">
+                    <div class="voyage-card-image">
+                        <img src="/cruise-images/private-yacht-charters/01-cove-anchorage.jpg" alt="Private motor yacht anchored in a turquoise Aegean cove" loading="lazy">
+                    </div>
+                    <figcaption class="voyage-card-body">
+                        <p class="voyage-card-brand">Private motor yacht charter</p>
+                        <p class="voyage-card-itinerary"><em>7 days · Athens &rarr; Mykonos &rarr; Santorini · July</em></p>
+                        <p class="voyage-card-perk">Bespoke menu by onboard chef + private tender for hidden-cove swimming.</p>
+                    </figcaption>
+                </figure>
 
             </div>
+
+            <p class="cruise-voyages-footnote">
+                Itineraries shown are representative recent bookings. Yours will be built around you.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         COMPARE — operationalizes the brand promise that's in the hero
+         ("Same cruise. Same rate. A better experience.") as a 4-row
+         side-by-side. Pure type on section bg; no card chrome.
+         ================================================================ -->
+    <section class="cruise-compare" aria-label="What you get through Wander by Wilson vs. booking direct">
+        <div class="container">
+            <div class="cruise-compare-head">
+                <p class="kicker"><span class="kicker-line"></span><span>What you actually get</span></p>
+                <h2 class="cruise-compare-title">
+                    Same cruise. Same rate.<br>
+                    <em>A better experience.</em>
+                </h2>
+            </div>
+
+            <table class="cruise-compare-table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="cruise-compare-row-label"><span class="visually-hidden">Category</span></th>
+                        <th scope="col">Booking direct</th>
+                        <th scope="col">Through Wander by Wilson</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" class="cruise-compare-row-label">The choice</th>
+                        <td>Dozens of lines, hundreds of ships &mdash; alone with the booking engine.</td>
+                        <td><strong>Matched to the right line</strong> based on how you travel, where you want to go, and who&rsquo;s coming.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="cruise-compare-row-label">Rate</th>
+                        <td>Public-facing rate.</td>
+                        <td><strong>Same rate</strong> &mdash; never marked up.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="cruise-compare-row-label">Amenities</th>
+                        <td>Standard onboard.</td>
+                        <td><strong>Onboard credit, suite upgrades, hosted dinners</strong> where available.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="cruise-compare-row-label">Support</th>
+                        <td>Their call center.</td>
+                        <td><strong>One advisor, by name</strong> &mdash; from inquiry through disembarkation.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="cruise-compare-trust">
+                Wander by Wilson is a Virtuoso and SmartFlyer advisor &mdash; preferred-partner status with
+                Ritz-Carlton Yacht Collection, Four Seasons Yachts, Explora Journeys, Aqua Expeditions,
+                Belmond Afloat in France, and more &mdash; and the perks that come with it.
+            </p>
         </div>
     </section>
 
