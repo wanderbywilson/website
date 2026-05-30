@@ -7791,23 +7791,24 @@ body.is-home {
 
 /* ─────────────────────────────────────────────────────────────────────
    WILSON AMAZON TESTIMONIAL — "From the founder" personal cruise
-   testimonial. Aqua Nera at golden-hour as a section background photo
-   (dark gradient overlay keeps the quote text legible). Wilson's
-   piranha photo sits as a foreground card on the left.
+   testimonial. Matches the homepage "What Booking Online Can't Do"
+   pattern: cream/paper base + a faint Aqua Nera photo wash behind
+   the content (ambient texture, not a dark veil). Text stays dark ink.
    ───────────────────────────────────────────────────────────────────── */
 .cruise-testimonial {
     position: relative;
-    background-image:
-        linear-gradient(180deg,
-            rgba(30, 53, 82, 0.68) 0%,
-            rgba(30, 53, 82, 0.55) 50%,
-            rgba(30, 53, 82, 0.72) 100%),
-        url('/cruise-images/aqua-expeditions/04-aqua-nera-golden-hour.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: var(--ivory, #F7F2EB);
     padding: 110px 0;
-    color: #FFFFFF;
+    overflow: hidden;
+}
+.cruise-testimonial::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('/cruise-images/aqua-expeditions/04-aqua-nera-golden-hour.jpg') center / cover no-repeat;
+    opacity: 0.22;
+    z-index: 0;
+    pointer-events: none;
 }
 .cruise-testimonial-grid {
     display: grid;
@@ -7822,7 +7823,7 @@ body.is-home {
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--bone-warm, #efe7d6);
-    box-shadow: 0 32px 72px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 24px 56px rgba(30, 53, 82, 0.14);
 }
 .cruise-testimonial-image img {
     width: 100%;
@@ -7831,8 +7832,6 @@ body.is-home {
     display: block;
 }
 .cruise-testimonial-body { padding: 0 24px 0 0; }
-.cruise-testimonial-body .kicker { color: rgba(255, 255, 255, 0.85); }
-.cruise-testimonial-body .kicker-line { background: var(--gold); }
 .cruise-testimonial-quote {
     margin: 24px 0 28px;
     padding: 0;
@@ -7842,10 +7841,9 @@ body.is-home {
     font-weight: 300;
     font-size: clamp(20px, 1.9vw, 26px);
     line-height: 1.45;
-    color: #FFFFFF;
+    color: var(--ink);
     letter-spacing: -0.005em;
     text-wrap: balance;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
 }
 .cruise-testimonial-quote p { margin: 0; }
 .cruise-testimonial-attribution {
@@ -7854,14 +7852,13 @@ body.is-home {
     font-weight: 500;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(30, 53, 82, 0.62);
     margin: 0;
     line-height: 1.5;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
 }
 .cruise-testimonial-attribution strong {
     font-weight: 600;
-    color: #FFFFFF;
+    color: var(--ink);
 }
 @media (max-width: 880px) {
     .cruise-testimonial { padding: 72px 0; }
