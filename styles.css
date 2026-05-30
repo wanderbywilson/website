@@ -7753,16 +7753,27 @@ body.is-home {
 }
 
 .quiz {
+    position: relative;
     max-width: 860px;
     margin: 0 auto 48px;
-    background: #FFFFFF;
-    border: 1px solid rgba(199, 174, 138, 0.45);
+    /* Dreamy horizon photo background — overlaid with dark gradient for legibility */
+    background-image:
+        linear-gradient(180deg,
+            rgba(30, 53, 82, 0.72) 0%,
+            rgba(30, 53, 82, 0.60) 45%,
+            rgba(30, 53, 82, 0.72) 100%),
+        url('/cruise-images/quiz-bg/01-dreamy-horizon.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(199, 174, 138, 0.32);
     border-top: 3px solid var(--gold);
-    padding: 64px 56px;
-    box-shadow: 0 24px 56px rgba(30, 53, 82, 0.06);
+    padding: 72px 56px;
+    box-shadow: 0 24px 56px rgba(30, 53, 82, 0.18);
+    color: #FFFFFF;
+    overflow: hidden;
 }
 
-.quiz-screen { min-height: 320px; }
+.quiz-screen { min-height: 320px; position: relative; z-index: 1; }
 
 /* Intro screen */
 .quiz-intro { text-align: center; }
@@ -7781,9 +7792,10 @@ body.is-home {
     font-variation-settings: "opsz" 96;
     font-size: clamp(28px, 3vw, 40px);
     line-height: 1.1;
-    color: var(--ink);
+    color: #FFFFFF;
     margin: 0 0 16px;
     text-wrap: balance;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 .quiz-intro-title em { font-style: italic; color: var(--gold); font-weight: 300; }
 .quiz-intro-lede {
@@ -7792,10 +7804,11 @@ body.is-home {
     font-weight: 300;
     font-size: 16px;
     line-height: 1.6;
-    color: rgba(30, 53, 82, 0.72);
+    color: rgba(255, 255, 255, 0.88);
     max-width: 520px;
     margin: 0 auto 32px;
     text-wrap: balance;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
 }
 .quiz-start-btn { display: inline-flex; }
 
@@ -7809,7 +7822,7 @@ body.is-home {
 .quiz-dot {
     width: 32px;
     height: 3px;
-    background: rgba(199, 174, 138, 0.32);
+    background: rgba(255, 255, 255, 0.28);
     transition: background 0.3s ease;
 }
 .quiz-dot.is-active { background: var(--gold); }
@@ -7820,7 +7833,7 @@ body.is-home {
     font-weight: 500;
     letter-spacing: 0.32em;
     text-transform: uppercase;
-    color: rgba(30, 53, 82, 0.55);
+    color: rgba(255, 255, 255, 0.62);
     margin: 0 0 14px;
     text-align: center;
 }
@@ -7830,10 +7843,11 @@ body.is-home {
     font-variation-settings: "opsz" 96;
     font-size: clamp(24px, 2.6vw, 32px);
     line-height: 1.2;
-    color: var(--ink);
+    color: #FFFFFF;
     margin: 0 0 32px;
     text-align: center;
     text-wrap: balance;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 
 .quiz-options { display: grid; gap: 12px; }
@@ -7842,20 +7856,24 @@ body.is-home {
     text-align: left;
     cursor: pointer;
     padding: 18px 22px;
-    background: var(--paper);
-    border: 1px solid rgba(199, 174, 138, 0.42);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 2px;
     font-family: var(--font-serif);
     font-weight: 300;
     font-size: 16px;
     line-height: 1.45;
     color: var(--ink);
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(30, 53, 82, 0.12);
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
 }
 .quiz-option:hover {
-    background: rgba(195, 162, 106, 0.06);
+    background: #FFFFFF;
     border-color: var(--gold);
     transform: translateX(2px);
+    box-shadow: 0 8px 24px rgba(30, 53, 82, 0.22);
 }
 
 .quiz-back {
@@ -7869,7 +7887,7 @@ body.is-home {
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(30, 53, 82, 0.55);
+    color: rgba(255, 255, 255, 0.7);
     padding: 8px 0;
 }
 .quiz-back:hover { color: var(--gold); }
@@ -7891,8 +7909,9 @@ body.is-home {
     font-variation-settings: "opsz" 96;
     font-size: clamp(28px, 3vw, 40px);
     line-height: 1.15;
-    color: var(--ink);
+    color: #FFFFFF;
     margin: 0 0 18px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
 }
 .quiz-result-feeling {
     font-family: var(--font-serif);
@@ -7900,10 +7919,11 @@ body.is-home {
     font-weight: 300;
     font-size: 16px;
     line-height: 1.55;
-    color: rgba(30, 53, 82, 0.72);
+    color: rgba(255, 255, 255, 0.86);
     max-width: 560px;
     margin: 0 auto 36px;
     text-wrap: balance;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
 }
 
 .quiz-result-rec-label {
@@ -8006,7 +8026,7 @@ body.is-home {
     font-weight: 500;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(30, 53, 82, 0.6);
+    color: rgba(255, 255, 255, 0.75);
     padding: 8px 0;
     text-decoration: underline;
     text-underline-offset: 4px;
