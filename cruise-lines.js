@@ -35,7 +35,7 @@ const CRUISE_LINES = {
     type: 'yacht-style',
     tagline: 'Four Seasons hospitality, reimagined at sea',
     perks: '$600+ onboard credit.',
-    passengers: 'Only 95 suites · 222 guests onboard',
+    passengers: '222 guests · only 95 suites onboard',
     crewRatio: 'Approx. 1:1',
     priceFrom: '$1,800 per person, per night',
     image: '/cruise-images/four-seasons-yachts/01-main-pool.jpg',
@@ -117,6 +117,21 @@ const CRUISE_LINES = {
     feeling: 'Mandarin-Oriental or One&Only on water. Younger demographic, well-traveled, casual-luxe vibe.'
   },
 
+  // ─── PRIVATE YACHT CHARTER ──────────────────────────────────────────
+  'private-yacht-charters': {
+    name: 'Private Yacht Charters',
+    type: 'charter',
+    tagline: 'Bespoke charters across the Mediterranean, Caribbean, and beyond',
+    perks: 'Fully customized itinerary, dedicated crew, and exclusive use of the yacht.',
+    passengers: 'Typically 6–12 guests · full private crew',
+    crewRatio: 'Near 1:1 — private crew',
+    priceFrom: 'Charter pricing varies by vessel + region (contact for rates)',
+    image: '/cruise-images/private-yacht-charters/02-greek-cove.jpg',
+    region: ['Mediterranean', 'Caribbean', 'Worldwide'],
+    affiliations: ['Direct broker relationships'],
+    feeling: 'Total privacy on the water — the yacht, the route, the menu, the people. Yours alone.'
+  },
+
   // ─── add more cruise lines here as Wilson adds partners ──
 };
 
@@ -125,6 +140,6 @@ const CRUISE_LINES_BY_STYLE = {
   'yacht-style':   ['orient-express-sailing-yachts', 'four-seasons-yachts', 'ritz-carlton-yacht-collection'],
   'expedition':    ['aqua-expeditions'],
   'ocean':         ['explora-journeys', 'ritz-carlton-yacht-collection'],
-  'river':         ['belmond-afloat-in-france', 'riverside-luxury-cruises'],
-  'charter':       []  // populate when charter partners added
+  'river':         ['riverside-luxury-cruises', 'belmond-afloat-in-france'],
+  'charter':       ['private-yacht-charters']
 };
