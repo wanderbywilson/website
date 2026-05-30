@@ -7537,6 +7537,13 @@ body.is-home {
     border-top: 1px solid rgba(199, 174, 138, 0.32);
     border-bottom: 1px solid rgba(199, 174, 138, 0.32);
 }
+
+/* Cruises page closing CTA — override the shared .services-close sand bg
+   with crisp white to match the rest of the cruises page palette */
+.is-cruises-page .services-close {
+    background: var(--paper);
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+}
 .cruise-lines-label {
     text-align: center;
     font-family: var(--font-sans);
