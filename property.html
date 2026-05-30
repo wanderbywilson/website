@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=215">
+    <link rel="stylesheet" href="/styles.css?v=216">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -335,7 +335,7 @@
                 if (detail.bookingUrl && detail.bookingUrl !== '#') {
                     bookCta.href = detail.bookingUrl;
                 } else {
-                    bookCta.href = 'inquire-hotel.html?hotel=' + encodeURIComponent(slug);
+                    bookCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
                     bookCta.removeAttribute('target');
                     bookCta.removeAttribute('rel');
                     // Swap label so it's clear this is the inquiry path, not direct booking
@@ -404,7 +404,7 @@
                 // 3. Soft CTA bottom-right of hero
                 const heroCta = document.getElementById('propertyHeroCta');
                 document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about ' + nameText;
-                heroCta.href = 'inquire-hotel.html?hotel=' + encodeURIComponent(slug);
+                heroCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
                 heroCta.hidden = false;
 
                 // Ideal-for — advisor's qualifying read on who fits this property
