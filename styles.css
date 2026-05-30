@@ -7431,80 +7431,136 @@ body.is-home {
 }
 
 /* ─────────────────────────────────────────────────────────────────────
-   CRUISES PAGE — onboard perks + 4 voyage categories + iconic brands
-   Visual language matches services.html (Fraunces serif, gold accents).
+   CRUISES PAGE — v2: conversion-focused rewrite
+   Sections: hero · intro · WHY · cruise-lines marquee · styles grid · close
    ───────────────────────────────────────────────────────────────────── */
 
-/* Perks band */
-.cruise-perks {
-    padding: 96px 0 56px;
-    background: var(--paper);
-}
-.cruise-perks-inner { max-width: 880px; margin: 0 auto; text-align: center; }
-.cruise-perks .kicker { justify-content: center; margin-bottom: 24px; }
-
-.cruise-perks-title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-variation-settings: "opsz" 96;
-    font-size: clamp(34px, 3.4vw, 48px);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
-    color: var(--ink);
-    margin: 0 0 20px;
-    text-wrap: balance;
-}
-.cruise-perks-title em { font-style: italic; color: var(--gold); font-weight: 300; }
-
-.cruise-perks-lede {
+/* Hero subline — italic script under the headline */
+.services-hero-bleed-sub {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(16px, 1.4vw, 19px);
-    line-height: 1.55;
-    color: rgba(30, 53, 82, 0.72);
-    margin: 0 auto 40px;
-    max-width: 680px;
-    text-wrap: balance;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.4;
+    color: rgba(255, 251, 240, 0.9);
+    margin: 16px 0 0;
+    letter-spacing: 0.01em;
 }
 
-.cruise-perks-list {
+/* WHY BOOK THROUGH US — the conversion section */
+.cruise-why {
+    padding: 96px 0;
+    background: var(--paper);
+}
+.cruise-why-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 72px;
+    align-items: start;
+}
+.cruise-why-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(34px, 3.6vw, 50px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 24px 0 18px;
+    text-wrap: balance;
+}
+.cruise-why-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+
+.cruise-why-tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.4;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 0 22px;
+}
+.cruise-why-tagline strong {
+    font-weight: 400;
+    color: var(--ink);
+    font-style: normal;
+}
+
+.cruise-why-prose {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0;
+}
+
+.cruise-why-list {
     list-style: none;
     padding: 0;
-    margin: 0 auto;
-    max-width: 640px;
-    text-align: left;
+    margin: 0;
+    border-left: 1px solid rgba(199, 174, 138, 0.45);
+    padding-left: 36px;
 }
-.cruise-perks-list li {
-    position: relative;
-    padding: 14px 0 14px 30px;
+.cruise-why-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
     font-family: var(--font-serif);
     font-weight: 300;
     font-size: 15px;
     line-height: 1.55;
     color: rgba(30, 53, 82, 0.85);
-    border-bottom: 1px solid rgba(199, 174, 138, 0.28);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.22);
 }
-.cruise-perks-list li:last-child { border-bottom: none; }
-.cruise-perks-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 12px;
-    height: 1px;
-    background: var(--gold);
-    transform: translateY(-50%);
+.cruise-why-list li:last-child { border-bottom: none; }
+.cruise-why-list li em { font-style: italic; color: var(--gold); }
+.cruise-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--gold);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 2px;
 }
 
-/* Voyages — 4-up grid of cruise categories */
-.cruise-voyages {
-    padding: 72px 0 96px;
+/* CRUISE LINES — logo marquee, mirrors the partner-marquee on services */
+.cruise-lines {
+    padding: 48px 0 56px;
     background: var(--bone, #efe7d6);
+    border-top: 1px solid rgba(199, 174, 138, 0.32);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.32);
 }
-.cruise-voyages .kicker { margin-bottom: 24px; }
+.cruise-lines-label {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 28px;
+}
 
-.cruise-voyages-title {
+/* CRUISE STYLES — 4 cards in a 2×2 + 1 wide row at bottom */
+.cruise-styles {
+    padding: 96px 0;
+    background: var(--paper);
+}
+.cruise-styles-head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 64px;
+}
+.cruise-styles-head .kicker { justify-content: center; margin-bottom: 24px; }
+
+.cruise-styles-title {
     font-family: var(--font-serif);
     font-weight: 400;
     font-variation-settings: "opsz" 96;
@@ -7512,134 +7568,106 @@ body.is-home {
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--ink);
-    margin: 0 0 56px;
+    margin: 0 0 20px;
     text-wrap: balance;
 }
-.cruise-voyages-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+.cruise-styles-title em { font-style: italic; color: var(--gold); font-weight: 300; }
 
-.cruise-voyage-grid {
+.cruise-styles-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.7);
+    margin: 0;
+    text-wrap: pretty;
+}
+
+.cruise-style-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
 }
-.cruise-voyage-card {
+.cruise-style-card {
+    display: flex;
+    flex-direction: column;
     background: #FFFFFF;
-    border: 1px solid rgba(199, 174, 138, 0.45);
-    padding: 36px 32px;
+    border: 1px solid rgba(199, 174, 138, 0.32);
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-soft, ease), box-shadow 0.4s ease;
 }
-.cruise-voyage-num {
-    font-family: var(--font-sans);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
+.cruise-style-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 56px rgba(30, 53, 82, 0.12);
+}
+.cruise-style-card--wide { grid-column: 1 / -1; flex-direction: row; }
+.cruise-style-card--wide .cruise-style-image {
+    flex: 1 1 50%;
+    aspect-ratio: auto;
+    min-height: 320px;
+}
+.cruise-style-card--wide .cruise-style-body {
+    flex: 1 1 50%;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cruise-style-image {
+    margin: 0;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bone-warm, #efe7d6);
+}
+.cruise-style-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease-out, ease);
+}
+.cruise-style-card:hover .cruise-style-image img { transform: scale(1.04); }
+
+.cruise-style-body {
+    padding: 32px 32px 36px;
+}
+.cruise-style-want {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(15px, 1.3vw, 17px);
+    line-height: 1.4;
     color: var(--gold);
-    margin: 0 0 14px;
+    margin: 0 0 12px;
 }
-.cruise-voyage-name {
+.cruise-style-type {
     font-family: var(--font-serif);
     font-weight: 400;
     font-variation-settings: "opsz" 80;
-    font-size: clamp(22px, 2vw, 26px);
-    line-height: 1.2;
-    letter-spacing: -0.005em;
-    color: var(--ink);
-    margin: 0 0 14px;
-    text-wrap: balance;
-}
-.cruise-voyage-desc {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.55;
-    color: rgba(30, 53, 82, 0.78);
-    margin: 0 0 22px;
-}
-.cruise-voyage-sample-label {
-    font-family: var(--font-sans);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin: 0 0 10px;
-}
-.cruise-voyage-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.cruise-voyage-list li {
-    font-family: var(--font-serif);
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.5;
-    color: rgba(30, 53, 82, 0.82);
-    padding: 8px 0;
-    border-top: 1px solid rgba(199, 174, 138, 0.25);
-}
-.cruise-voyage-list li:first-child { border-top: none; padding-top: 4px; }
-.cruise-voyage-list li span {
-    color: rgba(30, 53, 82, 0.55);
-    font-style: italic;
-}
-
-/* Iconic brands band */
-.cruise-brands {
-    padding: 72px 0;
-    background: var(--paper);
-    text-align: center;
-}
-.cruise-brands-inner { max-width: 880px; margin: 0 auto; }
-.cruise-brands .kicker { justify-content: center; margin-bottom: 24px; }
-
-.cruise-brands-title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-variation-settings: "opsz" 96;
-    font-size: clamp(28px, 2.8vw, 38px);
+    font-size: clamp(22px, 2.2vw, 28px);
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: var(--ink);
-    margin: 0 0 20px;
-    text-wrap: balance;
+    margin: 0 0 14px;
 }
-.cruise-brands-title em { font-style: italic; color: var(--gold); font-weight: 300; }
-
-.cruise-brands-lede {
+.cruise-style-desc {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: 15px;
-    line-height: 1.65;
-    color: rgba(30, 53, 82, 0.75);
-    margin: 0 auto 36px;
-    max-width: 720px;
-    text-wrap: balance;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0;
 }
 
-.cruise-brands-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-}
-.cruise-brand-pill {
-    padding: 10px 22px;
-    font-family: var(--font-sans);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink);
-    background: transparent;
-    border: 1px solid rgba(30, 53, 82, 0.32);
-    border-radius: 999px;
-}
-
-@media (max-width: 768px) {
-    .cruise-voyage-grid { grid-template-columns: 1fr; gap: 20px; }
-    .cruise-voyage-card { padding: 28px 24px; }
-    .cruise-perks { padding: 72px 0 40px; }
-    .cruise-voyages { padding: 56px 0 72px; }
-    .cruise-brands { padding: 56px 0; }
+@media (max-width: 880px) {
+    .cruise-why { padding: 72px 0; }
+    .cruise-why-grid { grid-template-columns: 1fr; gap: 40px; }
+    .cruise-why-list { border-left: none; padding-left: 0; border-top: 1px solid rgba(199, 174, 138, 0.45); padding-top: 16px; }
+    .cruise-styles { padding: 72px 0; }
+    .cruise-style-grid { grid-template-columns: 1fr; gap: 24px; }
+    .cruise-style-card--wide { flex-direction: column; }
+    .cruise-style-card--wide .cruise-style-image,
+    .cruise-style-card--wide .cruise-style-body { flex: 1 1 auto; padding: 32px; }
+    .cruise-style-card--wide .cruise-style-image { min-height: 0; aspect-ratio: 16 / 10; }
 }
