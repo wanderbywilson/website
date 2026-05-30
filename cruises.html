@@ -43,7 +43,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=230">
+    <link rel="stylesheet" href="/styles.css?v=231">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -162,6 +162,18 @@
     </aside>
 
     <!-- ================================================================
+         Inline CTA band between logo marquee and proof grid — gives
+         scrollers an immediate path to inquire without going to the matchmaker.
+         ================================================================ -->
+    <section class="cruise-cta-band">
+        <div class="container cruise-cta-band-inner">
+            <a href="/inquire-trip?type=cruise" class="cta-primary">
+                <span class="cta-primary-label">Plan My Cruise</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================================================================
          RECENT VOYAGES — proof, not navigation. Editorial caption style
          intentionally signals "this is a glimpse" rather than a clickable
          tile, killing the false-affordance problem the old style cards had.
@@ -248,6 +260,31 @@
             <p class="cruise-voyages-footnote">
                 Itineraries shown are representative recent bookings. Yours will be built around you.
             </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         FROM THE FOUNDER — Wilson's personal cruise testimonial.
+         Photo + pulled quote. Builds advisor credibility right before
+         the matchmaker quiz asks the visitor to engage.
+         ================================================================ -->
+    <section class="cruise-testimonial" aria-label="From Wilson">
+        <div class="container cruise-testimonial-grid">
+            <figure class="cruise-testimonial-image">
+                <img src="/cruise-images/wilson-amazon/01-piranha-aqua-nera.jpg" alt="Wilson Schubert piranha fishing on the Amazon aboard Aqua Nera" loading="lazy">
+            </figure>
+            <div class="cruise-testimonial-body">
+                <p class="kicker"><span class="kicker-line"></span><span>Recently aboard</span></p>
+                <blockquote class="cruise-testimonial-quote">
+                    <p>&ldquo;This was one of those trips that stays with you. Piranha fishing at midday,
+                    pink dolphins at dawn, candlelit dinners on Aqua Nera at night. The Amazon at this
+                    level isn&rsquo;t something you can put together yourself &mdash; and that&rsquo;s
+                    exactly the kind of trip we love planning for our clients.&rdquo;</p>
+                </blockquote>
+                <p class="cruise-testimonial-attribution">
+                    <strong>Wilson Schubert</strong> &middot; aboard Aqua Nera &middot; Peruvian Amazon
+                </p>
+            </div>
         </div>
     </section>
 
@@ -367,6 +404,76 @@
     </section>
 
     <!-- ================================================================
+         FAQ — handles last objections (cost, fees, scope) before the
+         closing CTA. Uses the same details/summary pattern as services.
+         ================================================================ -->
+    <section class="faq cruise-faq">
+        <div class="container">
+            <p class="kicker"><span class="kicker-line"></span><span>Questions</span></p>
+            <h2 class="section-headline">The things people<br><em>most often ask.</em></h2>
+
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Does it cost more to book through Wander by Wilson?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        No. You pay the same rate as booking direct with the cruise line &mdash; often
+                        with onboard credits, suite upgrades, or hosted experiences layered on top.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Can you help with flights and hotels too?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        Yes. We coordinate the whole trip &mdash; flights, pre/post-cruise hotel stays,
+                        private transfers, and shore excursions. One advisor, one itinerary.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Do you charge planning fees for cruises?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        Cruise bookings are complimentary. For more involved itineraries &mdash; multi-stop
+                        land programs, custom private touring, or large-group logistics &mdash; we may quote
+                        a planning fee. We&rsquo;ll always be transparent about it up front.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Can you help choose between cruise lines?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        Absolutely. That&rsquo;s where we add the most value &mdash; matching your travel
+                        style, preferred regions, and who&rsquo;s coming to the line, ship, cabin, and
+                        itinerary that actually fits.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Do you only book luxury cruises?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        Primarily, yes. We focus on the cruise lines where our preferred-partner status
+                        unlocks meaningful perks for clients.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
          Closing CTA — final inquiry conversion
          ================================================================ -->
     <section class="services-close">
@@ -428,12 +535,41 @@
         </div>
     </footer>
 
+    <!-- ================================================================
+         Sticky CTA — appears after user scrolls past hero, hides near
+         the closing CTA section so it doesn't compete with itself.
+         ================================================================ -->
+    <a href="/inquire-trip?type=cruise" class="sticky-cta" id="cruiseStickyCta" aria-label="Plan my cruise">
+        <span class="sticky-cta-label">Plan My Cruise</span>
+        <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+            <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+        </svg>
+    </a>
+
     <script src="/cruise-lines.js?v=5"></script>
     <script>
         const header = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
             header.classList.toggle('is-scrolled', window.scrollY > 24);
         }, { passive: true });
+
+        // ── STICKY CTA — show past hero, hide near closing CTA ───────
+        (function stickyCta() {
+            const cta = document.getElementById('cruiseStickyCta');
+            if (!cta) return;
+            const hero    = document.querySelector('.services-hero-bleed');
+            const closing = document.querySelector('.services-close');
+            const heroH   = () => (hero ? hero.offsetHeight : 600);
+            function update() {
+                const scrolled = window.scrollY;
+                const closingRect = closing ? closing.getBoundingClientRect() : null;
+                const inClosing   = closingRect && closingRect.top < window.innerHeight - 80;
+                cta.classList.toggle('is-visible', scrolled > heroH() * 0.6 && !inClosing);
+            }
+            update();
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update, { passive: true });
+        })();
 
         // ── MATCHMAKER QUIZ ──────────────────────────────────────────
         // 4 questions, each option carries weights for the 5 cruise styles.
