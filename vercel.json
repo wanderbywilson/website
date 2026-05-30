@@ -2,6 +2,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/cruises.html",
+      "destination": "/cruises",
+      "permanent": true
+    },
+    {
       "source": "/property.html",
       "has": [
         {
@@ -658,6 +663,10 @@
     {
       "source": "/post/:slug([a-z0-9-]+)",
       "destination": "/post.html?slug=:slug"
+    },
+    {
+      "source": "/cruises",
+      "destination": "/cruises.html"
     }
   ]
 }

@@ -7429,3 +7429,217 @@ body.is-home {
     white-space: nowrap;
     border: 0;
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   CRUISES PAGE — onboard perks + 4 voyage categories + iconic brands
+   Visual language matches services.html (Fraunces serif, gold accents).
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Perks band */
+.cruise-perks {
+    padding: 96px 0 56px;
+    background: var(--paper);
+}
+.cruise-perks-inner { max-width: 880px; margin: 0 auto; text-align: center; }
+.cruise-perks .kicker { justify-content: center; margin-bottom: 24px; }
+
+.cruise-perks-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(34px, 3.4vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0 0 20px;
+    text-wrap: balance;
+}
+.cruise-perks-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+
+.cruise-perks-lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.72);
+    margin: 0 auto 40px;
+    max-width: 680px;
+    text-wrap: balance;
+}
+
+.cruise-perks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 640px;
+    text-align: left;
+}
+.cruise-perks-list li {
+    position: relative;
+    padding: 14px 0 14px 30px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.85);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.28);
+}
+.cruise-perks-list li:last-child { border-bottom: none; }
+.cruise-perks-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background: var(--gold);
+    transform: translateY(-50%);
+}
+
+/* Voyages — 4-up grid of cruise categories */
+.cruise-voyages {
+    padding: 72px 0 96px;
+    background: var(--bone, #efe7d6);
+}
+.cruise-voyages .kicker { margin-bottom: 24px; }
+
+.cruise-voyages-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(38px, 4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 56px;
+    text-wrap: balance;
+}
+.cruise-voyages-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+
+.cruise-voyage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+}
+.cruise-voyage-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(199, 174, 138, 0.45);
+    padding: 36px 32px;
+}
+.cruise-voyage-num {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 14px;
+}
+.cruise-voyage-name {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 80;
+    font-size: clamp(22px, 2vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin: 0 0 14px;
+    text-wrap: balance;
+}
+.cruise-voyage-desc {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(30, 53, 82, 0.78);
+    margin: 0 0 22px;
+}
+.cruise-voyage-sample-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 10px;
+}
+.cruise-voyage-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.cruise-voyage-list li {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.82);
+    padding: 8px 0;
+    border-top: 1px solid rgba(199, 174, 138, 0.25);
+}
+.cruise-voyage-list li:first-child { border-top: none; padding-top: 4px; }
+.cruise-voyage-list li span {
+    color: rgba(30, 53, 82, 0.55);
+    font-style: italic;
+}
+
+/* Iconic brands band */
+.cruise-brands {
+    padding: 72px 0;
+    background: var(--paper);
+    text-align: center;
+}
+.cruise-brands-inner { max-width: 880px; margin: 0 auto; }
+.cruise-brands .kicker { justify-content: center; margin-bottom: 24px; }
+
+.cruise-brands-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(28px, 2.8vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 20px;
+    text-wrap: balance;
+}
+.cruise-brands-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+
+.cruise-brands-lede {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.75);
+    margin: 0 auto 36px;
+    max-width: 720px;
+    text-wrap: balance;
+}
+
+.cruise-brands-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+.cruise-brand-pill {
+    padding: 10px 22px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid rgba(30, 53, 82, 0.32);
+    border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+    .cruise-voyage-grid { grid-template-columns: 1fr; gap: 20px; }
+    .cruise-voyage-card { padding: 28px 24px; }
+    .cruise-perks { padding: 72px 0 40px; }
+    .cruise-voyages { padding: 56px 0 72px; }
+    .cruise-brands { padding: 56px 0; }
+}
