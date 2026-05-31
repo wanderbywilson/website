@@ -3960,8 +3960,13 @@ body.is-journeys-index-page { background: var(--paper); }
 }
 
 .compare-flag {
-    display: inline-block;
-    align-self: flex-start;
+    /* Float above the card's top edge so the N° + name on the signature
+       column still align with the other three columns. */
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
     font-family: var(--font-sans);
     font-size: 9px;
     font-weight: 500;
@@ -3969,9 +3974,9 @@ body.is-journeys-index-page { background: var(--paper); }
     text-transform: uppercase;
     color: var(--paper);
     background: var(--gold);
-    padding: 5px 10px 4px;
-    margin-bottom: 12px;
+    padding: 5px 12px 4px;
     border-radius: 1px;
+    white-space: nowrap;
 }
 
 .compare-num {
@@ -3995,6 +4000,8 @@ body.is-journeys-index-page { background: var(--paper); }
     margin: 0 0 8px;
     letter-spacing: -0.005em;
 }
+/* Italic accent word (Stay / Escape / Journey) in gold so it pops */
+.compare-name em { color: var(--gold); font-style: italic; }
 
 .compare-best {
     font-family: var(--font-serif);
@@ -4431,6 +4438,8 @@ body.is-journeys-index-page { background: var(--paper); }
     margin: 0 0 12px;
     text-wrap: balance;
 }
+/* Italic accent word (Stay / Escape / Journey) in gold to match compare grid */
+.package-name em { color: var(--gold); font-style: italic; }
 
 .package-tagline {
     font-family: var(--font-serif);
