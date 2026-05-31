@@ -187,15 +187,155 @@
             .wg-perks-strip { padding: 64px 0; }
         }
 
-        /* Closing CTA — two-button stack */
+        /* "Wander by Wilson exclusives" eyebrow above perks list */
+        .wg-perks-eyebrow {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            color: var(--gold-soft, #d6b787);
+            margin: 0 0 18px;
+        }
+
+        /* No bullet variant for the perks disclaimer line */
+        .wg-perks-ul li.wg-perks-disclaimer {
+            padding-left: 0;
+            font-size: 13px;
+            font-style: italic;
+            color: rgba(243, 237, 226, 0.6);
+            margin-top: 6px;
+        }
+        .wg-perks-ul li.wg-perks-disclaimer::before { content: none; }
+
+        /* Partner-logos marquee — light background under perks strip */
+        .wg-partners {
+            background: var(--paper-cream, #f7f1e6);
+            padding: 48px 0;
+            border-bottom: 1px solid rgba(199, 174, 138, 0.18);
+        }
+        .wg-partners-head {
+            text-align: center;
+            margin: 0 0 28px;
+        }
+        .wg-partners-head .kicker {
+            justify-content: center;
+        }
+        .wg-partners-head .kicker-line { background: var(--gold); }
+        .wg-partners-eyebrow {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 15px;
+            color: rgba(30, 53, 82, 0.7);
+            margin: 14px 0 0;
+        }
+
+        /* 4-step process grid — force one row on desktop so 04 doesn't orphan */
+        .wg-process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 36px 28px;
+            margin-top: 48px;
+        }
+        @media (max-width: 980px) {
+            .wg-process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+        }
+        @media (max-width: 560px) {
+            .wg-process-grid { grid-template-columns: 1fr; gap: 28px; }
+        }
+
+        /* Testimonials / client photos — gallery of recent trips */
+        .wg-testimonials {
+            padding: 96px 0 80px;
+            background: #fff;
+        }
+        .wg-testimonials-head {
+            max-width: 720px;
+            margin: 0 auto 56px;
+            text-align: center;
+        }
+        .wg-testimonials-head .kicker { justify-content: center; }
+        .wg-testimonials-title {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(34px, 4vw, 48px);
+            line-height: 1.1;
+            color: var(--ink);
+            margin: 14px 0 16px;
+            letter-spacing: -0.012em;
+        }
+        .wg-testimonials-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .wg-testimonials-lede {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 17px;
+            line-height: 1.55;
+            color: rgba(30, 53, 82, 0.7);
+            margin: 0;
+        }
+        .wg-testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 28px;
+        }
+        @media (max-width: 900px) {
+            .wg-testimonials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+            .wg-testimonials { padding: 72px 0 60px; }
+        }
+        @media (max-width: 560px) {
+            .wg-testimonials-grid { grid-template-columns: 1fr; gap: 28px; }
+        }
+        .wg-testimonial-card {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .wg-testimonial-photo {
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            background: var(--bone-warm, #efe7d6);
+        }
+        .wg-testimonial-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s var(--ease-out);
+        }
+        .wg-testimonial-card:hover .wg-testimonial-photo img { transform: scale(1.03); }
+        .wg-testimonial-cap {
+            padding: 16px 4px 0;
+        }
+        .wg-testimonial-name {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin: 0 0 4px;
+        }
+        .wg-testimonial-context {
+            display: block;
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 14px;
+            color: rgba(30, 53, 82, 0.62);
+            line-height: 1.4;
+        }
+
+        /* Closing CTA — stacked vertically (not side-by-side) */
         .wg-close-actions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 18px 32px;
+            flex-direction: column;
+            gap: 22px;
             align-items: center;
-            justify-content: center;
-            margin: 30px 0 18px;
+            margin: 32px 0 18px;
         }
+        .wg-close-actions .cta-secondary { margin-top: 4px; }
     </style>
 </head>
 <body class="is-cruises-page">
@@ -263,31 +403,31 @@
                 </figure>
             </div>
             <div class="founder-copy-col">
-                <p class="kicker"><span class="kicker-line"></span><span>A note from me</span></p>
+                <p class="kicker"><span class="kicker-line"></span><span>A note from Wilson</span></p>
                 <h2 class="founder-title">
                     Thank you for trusting<br>
-                    <em>me with your trip.</em>
+                    <em>us with your trip.</em>
                 </h2>
                 <div class="founder-prose">
                     <p>
                         Whether this is the first time we&rsquo;re working together or one of
-                        many, I&rsquo;m so glad you&rsquo;re here. This guide is a quick walk-through
-                        of what I offer, how I plan, and what to expect at every step &mdash;
-                        meant to be a useful reference, not homework.
+                        many, we&rsquo;re so glad you&rsquo;re here. This guide is a quick
+                        walk-through of what we offer, how we plan, and what to expect at
+                        every step &mdash; meant to be a useful reference, not homework.
                     </p>
                     <p>
-                        As a SmartFlyer agency and Virtuoso member, I have access to exclusive
-                        perks at the hotels you love &mdash; room upgrades, resort credits,
-                        daily breakfast, early check-in / late check-out, and amenities you
-                        wouldn&rsquo;t get booking direct. <strong>If you&rsquo;ve already booked
-                        somewhere on your own and want me to layer those perks onto your stay,
-                        just forward me the confirmation.</strong> Truly &mdash; I love doing
-                        this for clients.
+                        As an affiliate of SmartFlyer and a Virtuoso member, we have access
+                        to exclusive perks at the hotels you love &mdash; room upgrades,
+                        resort credits, daily breakfast, early check-in / late check-out,
+                        and amenities you wouldn&rsquo;t get booking direct.
+                        <strong>If you&rsquo;ve already booked somewhere on your own and want
+                        us to layer those perks onto your stay, just forward us the
+                        confirmation.</strong> Truly &mdash; we love doing this for clients.
                     </p>
                     <p>
-                        When you&rsquo;re ready, the next step is a 30-minute intro call so I
-                        can hear what you&rsquo;re dreaming up. You can book that directly on
-                        my calendar below.
+                        When you&rsquo;re ready, the next step is a 30-minute intro call so
+                        we can hear what you&rsquo;re dreaming up. You can book that directly
+                        on the calendar below.
                     </p>
                 </div>
                 <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary founder-cta">
@@ -306,7 +446,7 @@
                 <p class="kicker"><span class="kicker-line"></span><span>What you get with us</span></p>
                 <h2 class="cruise-why-title">
                     Curated. Collaborative.<br>
-                    <em>Considered.</em>
+                    <em>Effortless.</em>
                 </h2>
                 <p class="cruise-why-prose">
                     A full-service, modern travel agency for travelers who care about how
@@ -314,8 +454,8 @@
                 </p>
             </div>
             <ul class="cruise-why-list">
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>Smartflyer</strong> &mdash; a Virtuoso agency, top-producing in the world</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>Smartflyer Rising Star</strong>, 2023 &amp; 2024</span></li>
+                <li><span class="cruise-check" aria-hidden="true">✓</span><span>An affiliate of <strong>SmartFlyer</strong> &mdash; a Virtuoso agency, top-producing in the world</span></li>
+                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>SmartFlyer Rising Star</strong>, 2023 &amp; 2024</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>Preferred-partner status with the world&rsquo;s leading hotel collections</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>One advisor by name, before &middot; during &middot; after every trip</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>Hotel bookings are <em>complimentary</em> &mdash; same rate as direct, with perks added</span></li>
@@ -393,11 +533,11 @@
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/cruise-images/four-seasons-yachts/01-main-pool.jpg" alt="Four Seasons Yacht pool deck — private charter" loading="lazy">
+                        <img src="/cruise-images/private-yacht-charters/01-cove-anchorage.jpg" alt="Private motor yacht anchored in a Mediterranean cove" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">06 &middot; Private charters</p>
-                        <p class="voyage-card-perk">Private jets, helicopters, and yachts &mdash; arranged for those moments when the journey itself is the point.</p>
+                        <p class="voyage-card-perk">Private jets, helicopters, and motor yachts &mdash; arranged for those moments when the journey itself is the point.</p>
                     </figcaption>
                 </figure>
             </div>
@@ -418,7 +558,7 @@
                 <p class="wg-perks-lede">
                     If you&rsquo;ve already booked one of our preferred-partner hotels on your
                     own, send the confirmation to
-                    <a href="mailto:wilson.schubert@smartflyer.com">wilson.schubert@smartflyer.com</a>
+                    <a href="mailto:wilson@wanderbywilson.com">wilson@wanderbywilson.com</a>
                     and we&rsquo;ll see if we can attach our exclusive amenities to your existing
                     booking &mdash; <strong>complimentary.</strong>
                 </p>
@@ -428,19 +568,108 @@
                     immediately VIP you with the hotel.
                 </p>
             </div>
-            <ul class="wg-perks-ul" aria-label="Perks added to your existing booking">
-                <li>Daily breakfast for two</li>
-                <li>$100+ resort or food &amp; beverage credit</li>
-                <li>Room upgrade on arrival</li>
-                <li>Early check-in &amp; late check-out</li>
-                <li>VIP status flagged with the hotel directly</li>
-                <li style="font-size:13px;font-style:italic;color:rgba(243,237,226,0.6);padding-left:0;">(All subject to availability and brand terms.)</li>
-            </ul>
+            <div>
+                <p class="wg-perks-eyebrow">Wander by Wilson exclusives</p>
+                <ul class="wg-perks-ul" aria-label="Perks added to your existing booking">
+                    <li>Daily breakfast for two</li>
+                    <li>$100+ resort or food &amp; beverage credit</li>
+                    <li>Room upgrade on arrival</li>
+                    <li>Early check-in &amp; late check-out</li>
+                    <li>VIP status flagged with the hotel directly</li>
+                    <li class="wg-perks-disclaimer">All subject to availability and brand terms.</li>
+                </ul>
+            </div>
         </div>
     </section>
 
     <!-- ================================================================
-         Our process — 4 steps
+         Preferred-partner logos marquee — under perks strip
+         ================================================================ -->
+    <section class="wg-partners" aria-label="Our preferred-partner hotel brands">
+        <div class="container wg-partners-head">
+            <p class="kicker"><span class="kicker-line"></span><span>Where these perks apply</span></p>
+            <p class="wg-partners-eyebrow">Hotel collections we have preferred-partner status with.</p>
+        </div>
+        <div class="benefits-marquee">
+            <div class="marquee" data-marquee>
+                <div class="marquee-track">
+                    <span class="marquee-item"><img src="logos/four-seasons.png" alt="Four Seasons Preferred Partner"></span>
+                    <span class="marquee-item"><img src="logos/bellini-club.png" alt="Bellini Club by Belmond"></span>
+                    <span class="marquee-item"><img src="logos/aman.png" alt="Aman"></span>
+                    <span class="marquee-item" data-brand="rosewood"><img src="logos/rosewood-elite.png" alt="Rosewood Elite"></span>
+                    <span class="marquee-item marquee-item--text">Pearl Partner &mdash; Oetker Collection</span>
+                    <span class="marquee-item"><img src="logos/one-only.png" alt="One&amp;Only Resorts"></span>
+                    <span class="marquee-item"><img src="logos/mandarin-fan-club.png" alt="Mandarin Oriental Fan Club"></span>
+                    <span class="marquee-item"><img src="logos/peninsula.png" alt="The Peninsula PenClub"></span>
+                    <span class="marquee-item"><img src="logos/virtuoso.png" alt="Virtuoso Member"></span>
+                    <span class="marquee-item marquee-item--text">Montage</span>
+                    <span class="marquee-item"><img src="logos/diamond-club.png" alt="Diamond Club Dorchester Collection"></span>
+                    <span class="marquee-item"><img src="logos/jumeirah.png" alt="Jumeirah Passport to Luxury"></span>
+                    <span class="marquee-item"><img src="logos/leading-hotels.png" alt="The Leading Hotels of the World"></span>
+                    <span class="marquee-item"><img src="logos/hilton-luxury.png" alt="Hilton for Luxury"></span>
+                    <span class="marquee-item"><img src="logos/ihg.png" alt="IHG Hotels &amp; Resorts"></span>
+                    <span class="marquee-item"><img src="logos/hyatt-prive.png" alt="Hyatt Privé"></span>
+                    <span class="marquee-item" data-brand="marriott"><img src="logos/marriott-stars.png" alt="Marriott STARS | Luminous"></span>
+                    <span class="marquee-item"><img src="logos/relais-chateaux.png" alt="Relais &amp; Châteaux"></span>
+                    <span class="marquee-item" data-brand="ritz-yacht"><img src="logos/ritz-yacht.png" alt="The Ritz-Carlton Yacht Collection"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Social proof / recent trips — photo gallery from real clients
+         (Photos to be saved at the referenced paths — see notes.)
+         ================================================================ -->
+    <section class="wg-testimonials" aria-label="Recent trips by Wander by Wilson clients">
+        <div class="container">
+            <div class="wg-testimonials-head">
+                <p class="kicker"><span class="kicker-line"></span><span>Our travelers</span></p>
+                <h2 class="wg-testimonials-title">
+                    Where we&rsquo;ve been<br>
+                    <em>sending them.</em>
+                </h2>
+                <p class="wg-testimonials-lede">
+                    A glimpse of recent trips we&rsquo;ve designed &mdash; from Capri to St. Lucia
+                    and everywhere in between.
+                </p>
+            </div>
+            <div class="wg-testimonials-grid">
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-01-capri-yacht.jpg" alt="Clients on a private motor yacht in front of the Faraglioni rocks, Capri" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">Capri, Italy</span>
+                        <span class="wg-testimonial-context">Private yacht charter &middot; Faraglioni rocks</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-02-pitons-stlucia.jpg" alt="Clients at Sugar Beach with the Pitons in the background, St. Lucia" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">St. Lucia</span>
+                        <span class="wg-testimonial-context">Sugar Beach &middot; The Pitons</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-03-placeholder.jpg" alt="Wander by Wilson client trip" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">Coming soon</span>
+                        <span class="wg-testimonial-context">A recent trip from the Wander archive</span>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Our process — 4 steps (4-col grid so 04 doesn't orphan on its own row)
          ================================================================ -->
     <section class="cruise-styles" aria-label="Our process">
         <div class="container">
@@ -456,32 +685,32 @@
                 </p>
             </div>
 
-            <div class="cruise-voyages-grid" style="margin-top:48px;">
+            <div class="wg-process-grid">
                 <figure class="voyage-card">
-                    <figcaption class="voyage-card-body" style="padding:32px 28px;">
+                    <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">01 &middot; Let&rsquo;s get started</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">A short questionnaire, then a complimentary 30-minute call so we understand your travel style, preferences, and any special requests. Then we send our agreement and the link to pay the planning fee.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">We are all about planning the perfect trip for YOU, so let&rsquo;s get to know each other! We will send you a short questionnaire and ask you to schedule a complimentary call to better understand your travel style, preferences, and any special requests. If we are a good fit for each other, we will send you our agreement &amp; link to pay our design fee to get started!</p>
                     </figcaption>
                 </figure>
 
                 <figure class="voyage-card">
-                    <figcaption class="voyage-card-body" style="padding:32px 28px;">
+                    <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">02 &middot; The fun part</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">We design a custom itinerary &mdash; recommending the right accommodations, activities, and experiences &mdash; and fine-tune it together until it feels exactly right.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">Now&rsquo;s the time to design the trip of your dreams! We design a custom itinerary &mdash; recommending the right accommodations, activities, and experiences &mdash; and fine-tune it together until it feels exactly right.</p>
                     </figcaption>
                 </figure>
 
                 <figure class="voyage-card">
-                    <figcaption class="voyage-card-body" style="padding:32px 28px;">
+                    <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">03 &middot; Time to book</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">We handle all your reservations and walk you through deposits, cancellation policies, and timing. Before, during, and after &mdash; we&rsquo;re here.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">Once we have designed the perfect itinerary, we handle all your reservations and walk you through deposits, cancellation policies, and timing. Before, during, and after &mdash; we&rsquo;re here.</p>
                     </figcaption>
                 </figure>
 
                 <figure class="voyage-card">
-                    <figcaption class="voyage-card-body" style="padding:32px 28px;">
+                    <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">04 &middot; Bon voyage</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">Confirmations and a digital itinerary in one place. We &ldquo;VIP&rdquo; you with every hotel so they know an extra-special guest is on their way.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">It&rsquo;s time to send you off on the getaway of a lifetime, and we will make sure you are prepared &amp; ready to go! We will provide you with all of your confirmations and a personalized digital itinerary. We &ldquo;VIP&rdquo; you with every hotel so they know an extra-special guest is on their way.</p>
                     </figcaption>
                 </figure>
             </div>
@@ -542,7 +771,7 @@
                             <li>Air-desk support for flight bookings</li>
                         </ul>
                         <div class="wg-tier-foot">
-                            <p class="wg-tier-price">From <em>$250</em> planning fee</p>
+                            <p class="wg-tier-price">From <em>$250</em> design fee</p>
                             <p class="wg-tier-budget">Trip budget from $5,000.</p>
                             <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
                                 <span>Book a 30-min call</span>
@@ -570,7 +799,7 @@
                             <li>Air-desk support for flight bookings</li>
                         </ul>
                         <div class="wg-tier-foot">
-                            <p class="wg-tier-price">From <em>$500</em> planning fee</p>
+                            <p class="wg-tier-price">From <em>$500</em> design fee</p>
                             <p class="wg-tier-budget">Trip budget from $15,000.</p>
                             <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
                                 <span>Book a 30-min call</span>
@@ -584,9 +813,11 @@
             </div>
 
             <p class="cruise-voyages-footnote" style="margin-top:32px;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.6;">
-                Planning fees are determined by the scope of the trip &mdash; the number of
-                travelers and rooms required. Starting rates are for two travelers. If a
-                new destination is selected mid-planning, a new planning fee may apply.
+                Design fees are determined by the scope of the trip &mdash; the number of
+                travelers and rooms required. Starting rates are for two travelers.
+            </p>
+            <p class="cruise-voyages-footnote" style="margin-top:10px;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.6;">
+                If a new destination is selected mid-planning, a new design fee may apply.
             </p>
         </div>
     </section>
@@ -683,7 +914,7 @@
                     </summary>
                     <p class="faq-a">
                         If it&rsquo;s one of our preferred-partner properties, forward the confirmation
-                        to <a href="mailto:wilson.schubert@smartflyer.com" style="color:var(--gold);">wilson.schubert@smartflyer.com</a>
+                        to <a href="mailto:wilson@wanderbywilson.com" style="color:var(--gold);">wilson@wanderbywilson.com</a>
                         and we&rsquo;ll attach our exclusive amenities &mdash; complimentary. We do this
                         all the time and the hotel typically welcomes it.
                     </p>
@@ -695,7 +926,9 @@
                         <span class="faq-chevron" aria-hidden="true">+</span>
                     </summary>
                     <p class="faq-a">
-                        Yes &mdash; rough guidance, excluding international flights:
+                        Rough guidance for our <strong>Signature Journey</strong> full-service
+                        itineraries &mdash; two travelers, with hotels, transfers, and experiences
+                        included (excluding international flights):
                         <br><br>
                         &middot; Europe: from $15,000 / week<br>
                         &middot; Africa &amp; Safari: from $20,000 for a 10-night luxury safari<br>
@@ -724,7 +957,7 @@
                 <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary">
                     <span class="cta-primary-label">Book a 30-min intro call</span>
                 </a>
-                <a href="mailto:wilson.schubert@smartflyer.com?subject=Hi%20Wilson%20%E2%80%94%20a%20quick%20note" class="cta-secondary">
+                <a href="mailto:wilson@wanderbywilson.com?subject=Hi%20Wilson%20%E2%80%94%20a%20quick%20note" class="cta-secondary">
                     <span>Send a quick note</span>
                     <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
@@ -733,6 +966,8 @@
             </div>
             <p class="services-close-footnote">
                 Prefer to save a copy? <a href="/welcome-guide.pdf" style="color:var(--gold);">Download the PDF version &rarr;</a>
+                <!-- TODO: generate a PDF export of THIS landing page (currently points
+                     to the old 11-page guide); see tasks list. -->
             </p>
         </div>
     </section>
