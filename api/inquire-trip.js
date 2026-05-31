@@ -73,9 +73,9 @@ module.exports = async (req, res) => {
     apiKey,
     to: clientEmail,
     toName: clientName || clientEmail,
-    sender: { name: 'Wilson Schubert · Wander by Wilson', email: 'forms@wanderbywilson.com' },
+    sender: { name: 'Wilson Schubert', email: 'wilson@wanderbywilson.com' },
     replyTo: { email: 'wilson@wanderbywilson.com', name: 'Wilson Schubert' },
-    subject: 'Thank you for reaching out — Wander by Wilson',
+    subject: 'Thank you for your inquiry!',
     html: clientHtml
   });
   if (!clientResult.ok) {

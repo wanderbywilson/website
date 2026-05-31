@@ -75,11 +75,10 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
 }
 
 /**
- * Build the HTML receipt email the CLIENT receives — warm thank-you
- * from Wilson (she/her), 48-hour reply expectation, link to the
- * welcome guide, and a recap of what they submitted so they have a
- * record. Reply-To goes straight to wilson@ so any reply lands in
- * Wilson's inbox directly.
+ * Build the HTML receipt email the CLIENT receives — warm note from
+ * Wilson (she/her) with the Calendly CTA front-and-center and a
+ * secondary link to the welcome guide. Reply-To goes straight to
+ * wilson@ so any reply lands in Wilson's inbox directly.
  */
 function buildClientReceiptHTML({ formType, fields, clientName }) {
   // Same labeled-row pattern as the owner email
@@ -106,14 +105,9 @@ function buildClientReceiptHTML({ formType, fields, clientName }) {
     formType === 'cruise'      ? 'YOUR CRUISE INQUIRY' :
                                  'YOUR HOTEL INQUIRY';
 
-  const inquiryDescriptor =
-    formType === 'custom_trip' ? 'trip inquiry' :
-    formType === 'cruise'      ? 'cruise inquiry' :
-                                 'hotel booking inquiry';
-
   return `<!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Thank you for reaching out — Wander by Wilson</title></head>
+<head><meta charset="UTF-8"><title>Thank you for your inquiry — Wander by Wilson</title></head>
 <body style="margin:0;padding:0;background:${BRAND_PAPER};font-family:Georgia,serif;">
   <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${BRAND_PAPER};padding:48px 16px;">
     <tr><td align="center">
@@ -127,27 +121,73 @@ function buildClientReceiptHTML({ formType, fields, clientName }) {
         <!-- Title band -->
         <tr><td style="padding:40px 40px 12px 40px;">
           <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:${BRAND_GOLD};margin-bottom:14px;">${kicker}</div>
-          <div style="font-family:Georgia,serif;font-size:30px;font-weight:400;color:${BRAND_BLUE};line-height:1.2;">Thank you for<br><em style="color:${BRAND_GOLD};font-style:italic;">reaching out.</em></div>
+          <div style="font-family:Georgia,serif;font-size:30px;font-weight:400;color:${BRAND_BLUE};line-height:1.2;">Let&rsquo;s plan something<br><em style="color:${BRAND_GOLD};font-style:italic;">extraordinary.</em></div>
         </td></tr>
 
-        <!-- Body copy -->
+        <!-- Body copy — Wilson's voice -->
         <tr><td style="padding:24px 40px 0 40px;">
           <p style="font-family:Georgia,serif;font-size:16px;color:${BRAND_BLUE};line-height:1.65;margin:0 0 18px 0;">${greeting}</p>
-          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 18px 0;">
-            We&rsquo;ve just received your ${inquiryDescriptor} and we&rsquo;re so glad you reached out. We&rsquo;ll personally review the details you shared and follow up within <strong style="color:${BRAND_BLUE};">48 hours</strong> with next steps.
+
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 16px 0;">
+            Thank you so much for taking the time to send me your trip details!
           </p>
-          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 26px 0;">
-            In the meantime, our welcome guide walks through how we work together, the services we offer, and what to expect at every stage of planning.
+
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 16px 0;">
+            Now that I have a high-level overview of what you are looking for, I would love to connect to ensure that I fully understand your vision.
+          </p>
+
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 16px 0;">
+            Please click the link below to select a time that works best for us to chat. These initial introduction calls are short but sweet and should take no more than 30 minutes. I will review your &ldquo;must-haves&rdquo;, discuss travel logistics, and answer any specific questions you may have about the trip and our process.
+          </p>
+
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 26px 0;">
+            Before the call, please review our <a href="https://www.wanderbywilson.com/welcome-guide" style="color:${BRAND_BLUE};text-decoration:underline;">Welcome Guide</a> to learn about what you can expect when working with us.
           </p>
         </td></tr>
 
-        <!-- Welcome guide CTA -->
-        <tr><td style="padding:0 40px 36px 40px;">
-          <table role="presentation" cellpadding="0" cellspacing="0">
-            <tr><td style="background:${BRAND_BLUE};padding:16px 32px;">
-              <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:Georgia,serif;font-style:italic;font-size:17px;color:${BRAND_IVORY};text-decoration:none;letter-spacing:0.01em;">Read the welcome guide &rarr;</a>
+        <!-- PRIMARY CTA: LET'S CHAT! -->
+        <tr><td style="padding:0 40px 12px 40px;text-align:center;">
+          <table role="presentation" cellpadding="0" cellspacing="0" align="center">
+            <tr><td style="background:${BRAND_BLUE};padding:18px 44px;">
+              <a href="https://calendly.com/wilson-schubert/30min" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${BRAND_IVORY};text-decoration:none;letter-spacing:0.04em;">LET&rsquo;S CHAT! &nbsp;&rarr;</a>
             </td></tr>
           </table>
+        </td></tr>
+
+        <!-- Sub-CTA: Welcome guide link -->
+        <tr><td style="padding:8px 40px 32px 40px;text-align:center;">
+          <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.28em;text-transform:uppercase;color:${BRAND_GOLD};text-decoration:none;border-bottom:1px solid ${BRAND_GOLD};padding-bottom:3px;">Read the welcome guide &rarr;</a>
+        </td></tr>
+
+        <!-- After-CTA copy -->
+        <tr><td style="padding:0 40px 0 40px;">
+          <p style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:#7A8499;line-height:1.65;margin:0 0 22px 0;text-align:center;">
+            Once you schedule the call, the system will send you a calendar invite.
+          </p>
+        </td></tr>
+
+        <!-- Prep list -->
+        <tr><td style="padding:0 40px 0 40px;">
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 12px 0;">
+            In preparation for the call, please consider:
+          </p>
+          <ul style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 22px 0;padding-left:22px;">
+            <li style="margin-bottom:6px;">Your main goals for the trip</li>
+            <li style="margin-bottom:6px;">Your travel dates (and if they are flexible based on the time of year)</li>
+            <li style="margin-bottom:6px;">The overall ideal budget</li>
+          </ul>
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 16px 0;">
+            Our goal is to create a collaborative relationship with each client, and this is most successful when I understand what we will both need from each other.
+          </p>
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 30px 0;">
+            I can&rsquo;t wait to get started on an awesome concept for you!
+          </p>
+        </td></tr>
+
+        <!-- Sign-off -->
+        <tr><td style="padding:0 40px 30px 40px;">
+          <p style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:${BRAND_BLUE};line-height:1.3;margin:0 0 4px 0;">Wilson</p>
+          <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#7A8499;margin:0;">Founder &middot; Wander by Wilson</p>
         </td></tr>
 
         <!-- Submission recap header -->
@@ -161,13 +201,6 @@ function buildClientReceiptHTML({ formType, fields, clientName }) {
           <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
             ${rows}
           </table>
-        </td></tr>
-
-        <!-- Sign-off -->
-        <tr><td style="padding:8px 40px 36px 40px;">
-          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 6px 0;">Talk soon,</p>
-          <p style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:${BRAND_BLUE};line-height:1.3;margin:0 0 4px 0;">Wilson</p>
-          <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#7A8499;margin:0;">Founder &middot; Wander by Wilson</p>
         </td></tr>
 
         <!-- Footer -->
