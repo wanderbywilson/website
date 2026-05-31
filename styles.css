@@ -315,6 +315,39 @@ button {
     pointer-events: none;
 }
 
+/* Extra-dim layer that only fades in when one of the three brightest video
+   slides is active (Capri 01, Amalfi 02, Tuscany 07) — needed so the gold
+   "deliberately" word stays readable on their pale stone + bright-sky
+   palettes. Opacity transition matches the video crossfade so the dim
+   layer comes and goes smoothly with the rotation. */
+.hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(14, 12, 10, 0.32) 0%,
+            rgba(14, 12, 10, 0.22) 50%,
+            rgba(14, 12, 10, 0.12) 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(14, 12, 10, 0.30) 0%,
+            rgba(14, 12, 10, 0.14) 55%,
+            rgba(14, 12, 10, 0)    100%
+        );
+}
+.hero-bg:has(.hero-video[data-index="01"].is-active)::after,
+.hero-bg:has(.hero-video[data-index="02"].is-active)::after,
+.hero-bg:has(.hero-video[data-index="07"].is-active)::after {
+    opacity: 1;
+}
+
 /* ==========================================================================
    Edge rails — editorial sidebar labels
    ========================================================================== */
