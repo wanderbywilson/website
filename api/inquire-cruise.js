@@ -3,6 +3,7 @@
 // so Wilson can hit reply and continue the conversation in their inbox.
 
 const { buildOwnerEmailHTML, buildClientReceiptHTML, sendBrevoEmail } = require('./_brevo');
+const { createEnquiryTask } = require('./_asana');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -81,6 +82,17 @@ module.exports = async (req, res) => {
   });
   if (!clientResult.ok) {
     console.error('Brevo client receipt send failed (non-fatal):', clientResult.error);
+  }
+
+  // 3) Asana task (non-fatal)
+  const asanaResult = await createEnquiryTask({
+    formType: 'cruise',
+    fields: body,
+    clientName,
+    clientEmail
+  });
+  if (!asanaResult.ok) {
+    console.error('Asana task creation failed (non-fatal):', asanaResult.error);
   }
 
   return res.status(200).json({ ok: true });
