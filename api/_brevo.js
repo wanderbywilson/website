@@ -74,6 +74,120 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
 </html>`;
 }
 
+/**
+ * Build the HTML receipt email the CLIENT receives — warm thank-you
+ * from Wilson (she/her), 48-hour reply expectation, link to the
+ * welcome guide, and a recap of what they submitted so they have a
+ * record. Reply-To goes straight to wilson@ so any reply lands in
+ * Wilson's inbox directly.
+ */
+function buildClientReceiptHTML({ formType, fields, clientName }) {
+  // Same labeled-row pattern as the owner email
+  const rows = Object.entries(fields)
+    .filter(([k, v]) => v && !k.startsWith('_') && k !== 'form_type' && k !== 'email' && k !== 'first_name' && k !== 'last_name')
+    .map(([k, v]) => {
+      const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      const value = String(v).replace(/\n/g, '<br>');
+      return `
+        <tr>
+          <td style="padding:12px 0 12px 0;border-bottom:1px solid #E8DFD0;font-family:'Inter',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#7A8499;width:42%;vertical-align:top;">${label}</td>
+          <td style="padding:12px 0 12px 0;border-bottom:1px solid #E8DFD0;font-family:'Inter',sans-serif;font-size:14px;color:${BRAND_BLUE};vertical-align:top;line-height:1.55;">${value}</td>
+        </tr>`;
+    })
+    .join('');
+
+  // First-name greeting (falls back gracefully)
+  const firstName = (fields.first_name || (clientName || '').split(' ')[0] || '').trim();
+  const greeting = firstName ? `Hi ${escapeHtml(firstName)},` : 'Hi there,';
+
+  // Kicker varies by form type so the receipt feels specific
+  const kicker =
+    formType === 'custom_trip' ? 'YOUR TRIP INQUIRY' :
+    formType === 'cruise'      ? 'YOUR CRUISE INQUIRY' :
+                                 'YOUR HOTEL INQUIRY';
+
+  const inquiryDescriptor =
+    formType === 'custom_trip' ? 'trip inquiry' :
+    formType === 'cruise'      ? 'cruise inquiry' :
+                                 'hotel booking inquiry';
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Thank you for reaching out — Wander by Wilson</title></head>
+<body style="margin:0;padding:0;background:${BRAND_PAPER};font-family:Georgia,serif;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${BRAND_PAPER};padding:48px 16px;">
+    <tr><td align="center">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="background:#FFFFFF;border:1px solid #E8DFD0;max-width:600px;">
+
+        <!-- Brand header -->
+        <tr><td style="background:${BRAND_BLUE};padding:32px 40px;text-align:center;">
+          <div style="font-family:Georgia,serif;font-size:18px;font-weight:400;letter-spacing:0.18em;color:${BRAND_IVORY};text-transform:uppercase;">Wander by Wilson</div>
+        </td></tr>
+
+        <!-- Title band -->
+        <tr><td style="padding:40px 40px 12px 40px;">
+          <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:${BRAND_GOLD};margin-bottom:14px;">${kicker}</div>
+          <div style="font-family:Georgia,serif;font-size:30px;font-weight:400;color:${BRAND_BLUE};line-height:1.2;">Thank you for<br><em style="color:${BRAND_GOLD};font-style:italic;">reaching out.</em></div>
+        </td></tr>
+
+        <!-- Body copy -->
+        <tr><td style="padding:24px 40px 0 40px;">
+          <p style="font-family:Georgia,serif;font-size:16px;color:${BRAND_BLUE};line-height:1.65;margin:0 0 18px 0;">${greeting}</p>
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 18px 0;">
+            We&rsquo;ve just received your ${inquiryDescriptor} and we&rsquo;re so glad you reached out. We&rsquo;ll personally review the details you shared and follow up within <strong style="color:${BRAND_BLUE};">48 hours</strong> with next steps.
+          </p>
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 26px 0;">
+            In the meantime, our welcome guide walks through how we work together, the services we offer, and what to expect at every stage of planning.
+          </p>
+        </td></tr>
+
+        <!-- Welcome guide CTA -->
+        <tr><td style="padding:0 40px 36px 40px;">
+          <table role="presentation" cellpadding="0" cellspacing="0">
+            <tr><td style="background:${BRAND_BLUE};padding:16px 32px;">
+              <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:Georgia,serif;font-style:italic;font-size:17px;color:${BRAND_IVORY};text-decoration:none;letter-spacing:0.01em;">Read the welcome guide &rarr;</a>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <!-- Submission recap header -->
+        <tr><td style="padding:8px 40px 0 40px;border-top:1px solid #E8DFD0;">
+          <div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:${BRAND_GOLD};padding-top:28px;margin-bottom:6px;">For your records</div>
+          <div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:#7A8499;margin-bottom:18px;">Here&rsquo;s a copy of what you sent us:</div>
+        </td></tr>
+
+        <!-- Submission recap -->
+        <tr><td style="padding:0 40px 36px 40px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+            ${rows}
+          </table>
+        </td></tr>
+
+        <!-- Sign-off -->
+        <tr><td style="padding:8px 40px 36px 40px;">
+          <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.65;margin:0 0 6px 0;">Talk soon,</p>
+          <p style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:${BRAND_BLUE};line-height:1.3;margin:0 0 4px 0;">Wilson</p>
+          <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#7A8499;margin:0;">Founder &middot; Wander by Wilson</p>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:24px 40px 32px 40px;border-top:1px solid #E8DFD0;text-align:center;">
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:#7A8499;letter-spacing:0.02em;line-height:1.6;">
+            <a href="mailto:wilson@wanderbywilson.com" style="color:${BRAND_GOLD};text-decoration:none;">wilson@wanderbywilson.com</a>
+            &nbsp;&middot;&nbsp;
+            <a href="https://www.wanderbywilson.com" style="color:${BRAND_GOLD};text-decoration:none;">wanderbywilson.com</a>
+            &nbsp;&middot;&nbsp;
+            <a href="https://www.instagram.com/wanderbywilson/" style="color:${BRAND_GOLD};text-decoration:none;">@wanderbywilson</a>
+          </div>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
 /** Tiny HTML-escape so user input can't break the markup */
 function escapeHtml(s) {
   if (!s) return '';
@@ -85,8 +199,13 @@ function escapeHtml(s) {
 /**
  * Send the email via Brevo's transactional API.
  * Returns { ok: true } on success or { ok: false, error: '...' } on failure.
+ *
+ * Optional overrides:
+ *   sender   — { name, email }  default is "Wander by Wilson" <forms@>
+ *   toName   — recipient display name (default "Wilson Schubert" for the
+ *              owner email; for client receipts pass the client's name)
  */
-async function sendBrevoEmail({ apiKey, to, replyTo, subject, html }) {
+async function sendBrevoEmail({ apiKey, to, toName, replyTo, sender, subject, html }) {
   try {
     const r = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -96,8 +215,8 @@ async function sendBrevoEmail({ apiKey, to, replyTo, subject, html }) {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        sender: { name: 'Wander by Wilson', email: 'forms@wanderbywilson.com' },
-        to: [{ email: to, name: 'Wilson Schubert' }],
+        sender: sender || { name: 'Wander by Wilson', email: 'forms@wanderbywilson.com' },
+        to: [{ email: to, name: toName || 'Wilson Schubert' }],
         replyTo: replyTo ? { email: replyTo.email, name: replyTo.name } : undefined,
         subject,
         htmlContent: html
@@ -113,4 +232,4 @@ async function sendBrevoEmail({ apiKey, to, replyTo, subject, html }) {
   }
 }
 
-module.exports = { buildOwnerEmailHTML, sendBrevoEmail, escapeHtml };
+module.exports = { buildOwnerEmailHTML, buildClientReceiptHTML, sendBrevoEmail, escapeHtml };

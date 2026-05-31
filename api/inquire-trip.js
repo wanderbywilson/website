@@ -2,7 +2,7 @@
 // email to Wilson via Brevo. Reply-To is set to the client so Wilson can
 // hit reply and continue the conversation in their inbox.
 
-const { buildOwnerEmailHTML, sendBrevoEmail } = require('./_brevo');
+const { buildOwnerEmailHTML, buildClientReceiptHTML, sendBrevoEmail } = require('./_brevo');
 
 module.exports = async (req, res) => {
   // Basic CORS + method check (we only POST from our own forms)
@@ -38,25 +38,47 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Email is required.' });
   }
 
-  // Build branded HTML email
-  const html = buildOwnerEmailHTML({
+  // Build both emails up front
+  const ownerHtml = buildOwnerEmailHTML({
     formType: 'custom_trip',
     fields: body,
     clientName,
     clientEmail
   });
+  const clientHtml = buildClientReceiptHTML({
+    formType: 'custom_trip',
+    fields: body,
+    clientName
+  });
 
-  const result = await sendBrevoEmail({
+  // 1) Notify Wilson (this is the critical send — if it fails, the form fails)
+  const ownerResult = await sendBrevoEmail({
     apiKey,
     to: 'wilson@wanderbywilson.com',
     replyTo: { email: clientEmail, name: clientName || clientEmail },
     subject: `New trip inquiry — ${clientName || clientEmail}`,
-    html
+    html: ownerHtml
   });
 
-  if (!result.ok) {
-    console.error('Brevo send failed:', result.error);
+  if (!ownerResult.ok) {
+    console.error('Brevo owner send failed:', ownerResult.error);
     return res.status(502).json({ error: 'Failed to send. Please try again or email wilson@wanderbywilson.com directly.' });
+  }
+
+  // 2) Send the client receipt — non-fatal: if this fails, the form
+  //    submission is still considered successful since Wilson got the
+  //    inquiry. We just log the error so it's visible in Vercel logs.
+  const clientResult = await sendBrevoEmail({
+    apiKey,
+    to: clientEmail,
+    toName: clientName || clientEmail,
+    sender: { name: 'Wilson Schubert · Wander by Wilson', email: 'forms@wanderbywilson.com' },
+    replyTo: { email: 'wilson@wanderbywilson.com', name: 'Wilson Schubert' },
+    subject: 'Thank you for reaching out — Wander by Wilson',
+    html: clientHtml
+  });
+  if (!clientResult.ok) {
+    console.error('Brevo client receipt send failed (non-fatal):', clientResult.error);
   }
 
   return res.status(200).json({ ok: true });

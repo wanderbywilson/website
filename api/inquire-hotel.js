@@ -1,7 +1,7 @@
 // POST /api/inquire-hotel — VIP hotel booking inquiry endpoint.
 // Same pattern as inquire-trip but with hotel-specific labeling.
 
-const { buildOwnerEmailHTML, sendBrevoEmail } = require('./_brevo');
+const { buildOwnerEmailHTML, buildClientReceiptHTML, sendBrevoEmail } = require('./_brevo');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -33,24 +33,44 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Email is required.' });
   }
 
-  const html = buildOwnerEmailHTML({
+  const ownerHtml = buildOwnerEmailHTML({
     formType: 'hotel_booking',
     fields: body,
     clientName,
     clientEmail
   });
+  const clientHtml = buildClientReceiptHTML({
+    formType: 'hotel_booking',
+    fields: body,
+    clientName
+  });
 
-  const result = await sendBrevoEmail({
+  // 1) Notify Wilson (critical)
+  const ownerResult = await sendBrevoEmail({
     apiKey,
     to: 'wilson@wanderbywilson.com',
     replyTo: { email: clientEmail, name: clientName || clientEmail },
     subject: `New VIP hotel booking inquiry — ${clientName || clientEmail}`,
-    html
+    html: ownerHtml
   });
 
-  if (!result.ok) {
-    console.error('Brevo send failed:', result.error);
+  if (!ownerResult.ok) {
+    console.error('Brevo owner send failed:', ownerResult.error);
     return res.status(502).json({ error: 'Failed to send. Please try again or email wilson@wanderbywilson.com directly.' });
+  }
+
+  // 2) Client receipt (non-fatal)
+  const clientResult = await sendBrevoEmail({
+    apiKey,
+    to: clientEmail,
+    toName: clientName || clientEmail,
+    sender: { name: 'Wilson Schubert · Wander by Wilson', email: 'forms@wanderbywilson.com' },
+    replyTo: { email: 'wilson@wanderbywilson.com', name: 'Wilson Schubert' },
+    subject: 'Thank you for reaching out — Wander by Wilson',
+    html: clientHtml
+  });
+  if (!clientResult.ok) {
+    console.error('Brevo client receipt send failed (non-fatal):', clientResult.error);
   }
 
   return res.status(200).json({ ok: true });
