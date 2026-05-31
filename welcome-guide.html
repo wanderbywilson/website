@@ -131,12 +131,20 @@
         }
         .wg-perks-strip .kicker > span:not(.kicker-line) { color: rgba(243, 237, 226, 0.62); }
         .wg-perks-strip .kicker-line { background: rgba(199, 174, 138, 0.6); }
+        /* Grid: header sits on top (full-width), then body + exclusives align
+           side-by-side at the same vertical position. */
         .wg-perks-grid {
             display: grid;
             grid-template-columns: 1.05fr 1fr;
-            gap: 64px;
-            align-items: center;
+            grid-template-areas:
+                "header  header"
+                "body    exclusives";
+            gap: 24px 64px;
+            align-items: start;
         }
+        .wg-perks-header { grid-area: header; }
+        .wg-perks-body   { grid-area: body; }
+        .wg-perks-exclusives { grid-area: exclusives; }
         .wg-perks-title {
             font-family: var(--font-serif);
             font-weight: 400;
@@ -183,7 +191,14 @@
         }
 
         @media (max-width: 880px) {
-            .wg-perks-grid { grid-template-columns: 1fr; gap: 36px; }
+            .wg-perks-grid {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "body"
+                    "exclusives";
+                gap: 28px;
+            }
             .wg-perks-strip { padding: 64px 0; }
         }
 
@@ -549,12 +564,14 @@
          ================================================================ -->
     <section class="wg-perks-strip" aria-label="Already booked? We can still add perks.">
         <div class="container wg-perks-grid">
-            <div>
+            <header class="wg-perks-header">
                 <p class="kicker"><span class="kicker-line"></span><span>Already have a reservation?</span></p>
                 <h2 class="wg-perks-title">
                     Forward us your confirmations.<br>
                     <em>We&rsquo;ll add the perks.</em>
                 </h2>
+            </header>
+            <div class="wg-perks-body">
                 <p class="wg-perks-lede">
                     If you&rsquo;ve already booked one of our preferred-partner hotels on your
                     own, send the confirmation to
@@ -568,7 +585,7 @@
                     immediately VIP you with the hotel.
                 </p>
             </div>
-            <div>
+            <div class="wg-perks-exclusives">
                 <p class="wg-perks-eyebrow">Wander by Wilson exclusives</p>
                 <ul class="wg-perks-ul" aria-label="Perks added to your existing booking">
                     <li>Daily breakfast for two</li>
@@ -583,13 +600,9 @@
     </section>
 
     <!-- ================================================================
-         Preferred-partner logos marquee — under perks strip
+         Preferred-partner logos marquee — under perks strip (logos only)
          ================================================================ -->
     <section class="wg-partners" aria-label="Our preferred-partner hotel brands">
-        <div class="container wg-partners-head">
-            <p class="kicker"><span class="kicker-line"></span><span>Where these perks apply</span></p>
-            <p class="wg-partners-eyebrow">Hotel collections we have preferred-partner status with.</p>
-        </div>
         <div class="benefits-marquee">
             <div class="marquee" data-marquee>
                 <div class="marquee-track">
@@ -630,8 +643,8 @@
                     <em>sending them.</em>
                 </h2>
                 <p class="wg-testimonials-lede">
-                    A glimpse of recent trips we&rsquo;ve designed &mdash; from Capri to St. Lucia
-                    and everywhere in between.
+                    A glimpse of recent trips we&rsquo;ve designed &mdash; from the Amalfi Coast
+                    and the Greek islands to private safaris and the Caribbean.
                 </p>
             </div>
             <div class="wg-testimonials-grid">
@@ -647,6 +660,36 @@
 
                 <figure class="wg-testimonial-card">
                     <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-05-amalfi-balcony.jpg" alt="Clients on a cliffside balcony overlooking the Amalfi Coast" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">Amalfi Coast, Italy</span>
+                        <span class="wg-testimonial-context">Cliffside suite views</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-06-lake-como-boat.jpg" alt="Clients on a vintage mahogany boat by the Nesso bridge, Lake Como" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">Lake Como, Italy</span>
+                        <span class="wg-testimonial-context">Mahogany boat &middot; Nesso bridge</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
+                        <img src="/welcome-guide-images/testimonial-07-santorini-sunset.jpg" alt="Clients in Santorini at sunset with the caldera in the background" loading="lazy">
+                    </div>
+                    <figcaption class="wg-testimonial-cap">
+                        <span class="wg-testimonial-name">Santorini, Greece</span>
+                        <span class="wg-testimonial-context">Sunset over the caldera</span>
+                    </figcaption>
+                </figure>
+
+                <figure class="wg-testimonial-card">
+                    <div class="wg-testimonial-photo">
                         <img src="/welcome-guide-images/testimonial-02-pitons-stlucia.jpg" alt="Clients at Sugar Beach with the Pitons in the background, St. Lucia" loading="lazy">
                     </div>
                     <figcaption class="wg-testimonial-cap">
@@ -657,11 +700,11 @@
 
                 <figure class="wg-testimonial-card">
                     <div class="wg-testimonial-photo">
-                        <img src="/welcome-guide-images/testimonial-03-placeholder.jpg" alt="Wander by Wilson client trip" loading="lazy">
+                        <img src="/welcome-guide-images/testimonial-04-safari-rhinos.jpg" alt="Clients on a private safari with two rhinos in the background, Africa" loading="lazy">
                     </div>
                     <figcaption class="wg-testimonial-cap">
-                        <span class="wg-testimonial-name">Coming soon</span>
-                        <span class="wg-testimonial-context">A recent trip from the Wander archive</span>
+                        <span class="wg-testimonial-name">Africa</span>
+                        <span class="wg-testimonial-context">Private safari &middot; Up close with the wild</span>
                     </figcaption>
                 </figure>
             </div>
@@ -689,7 +732,7 @@
                 <figure class="voyage-card">
                     <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">01 &middot; Let&rsquo;s get started</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">We are all about planning the perfect trip for YOU, so let&rsquo;s get to know each other! We will send you a short questionnaire and ask you to schedule a complimentary call to better understand your travel style, preferences, and any special requests. If we are a good fit for each other, we will send you our agreement &amp; link to pay our design fee to get started!</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">We are all about planning the perfect trip for YOU, so let&rsquo;s get to know each other! We will send you a short questionnaire and ask you to schedule a complimentary call to better understand your travel style, preferences, and any special requests.<br><br>If we are a good fit for each other, we will send you our agreement &amp; link to pay our design fee to get started!</p>
                     </figcaption>
                 </figure>
 
@@ -710,7 +753,7 @@
                 <figure class="voyage-card">
                     <figcaption class="voyage-card-body" style="padding:28px 24px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">04 &middot; Bon voyage</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">It&rsquo;s time to send you off on the getaway of a lifetime, and we will make sure you are prepared &amp; ready to go! We will provide you with all of your confirmations and a personalized digital itinerary. We &ldquo;VIP&rdquo; you with every hotel so they know an extra-special guest is on their way.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">It&rsquo;s time to send you off on the getaway of a lifetime, and we will make sure you are prepared &amp; ready to go!<br><br>We will provide you with all of your confirmations and a personalized digital itinerary. We &ldquo;VIP&rdquo; you with every hotel so they know an extra-special guest is on their way.</p>
                     </figcaption>
                 </figure>
             </div>
@@ -757,7 +800,7 @@
                 </figure>
 
                 <!-- Tier 2: Signature Escape -->
-                <figure class="voyage-card wg-tier-card is-featured">
+                <figure class="voyage-card wg-tier-card">
                     <figcaption class="voyage-card-body">
                         <h3 class="wg-tier-name">Signature <em>Escape</em></h3>
                         <p class="wg-tier-for">For travelers heading to a single destination who want guidance &mdash; not a full itinerary.</p>
@@ -783,8 +826,8 @@
                     </figcaption>
                 </figure>
 
-                <!-- Tier 3: Signature Journey -->
-                <figure class="voyage-card wg-tier-card">
+                <!-- Tier 3: Signature Journey — highlighted as the recommended package -->
+                <figure class="voyage-card wg-tier-card is-featured">
                     <figcaption class="voyage-card-body">
                         <h3 class="wg-tier-name">Signature <em>Journey</em></h3>
                         <p class="wg-tier-for">For travelers who want every detail handled, start to finish.</p>
