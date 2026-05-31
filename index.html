@@ -1351,6 +1351,38 @@
             </span>
         </div>
     </footer>
+
+    <!-- ================================================================
+         Sticky CTA — appears after user scrolls past hero, hides when
+         the footer enters the viewport. Mobile-friendly always-on path
+         to inquire. Reuses the .sticky-cta CSS pattern from /cruises.
+         ================================================================ -->
+    <a href="/inquire-trip" class="sticky-cta" id="homeStickyCta" aria-label="Plan a trip">
+        <span class="sticky-cta-label">Plan a trip</span>
+        <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+            <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+        </svg>
+    </a>
+
+    <script>
+        // ── STICKY CTA — show past hero, hide when footer enters viewport ─
+        (function stickyCta() {
+            const cta = document.getElementById('homeStickyCta');
+            if (!cta) return;
+            const hero   = document.querySelector('.hero');
+            const footer = document.querySelector('.site-footer');
+            const heroH  = () => (hero ? hero.offsetHeight : 600);
+            function update() {
+                const scrolled    = window.scrollY;
+                const footerRect  = footer ? footer.getBoundingClientRect() : null;
+                const inFooter    = footerRect && footerRect.top < window.innerHeight - 80;
+                cta.classList.toggle('is-visible', scrolled > heroH() * 0.6 && !inFooter);
+            }
+            update();
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update, { passive: true });
+        })();
+    </script>
     <script>
         // Mobile nav hamburger toggle
         (function navToggle() {
