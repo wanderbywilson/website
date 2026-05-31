@@ -223,27 +223,18 @@
         }
         .wg-perks-ul li.wg-perks-disclaimer::before { content: none; }
 
-        /* Partner-logos marquee — light background under perks strip */
+        /* Partner-logos marquee — light background under perks strip.
+           Overrides the homepage's .benefits-marquee spacing (which assumes
+           a collage above it) so the logos sit flush in our cream strip. */
         .wg-partners {
             background: var(--paper-cream, #f7f1e6);
-            padding: 48px 0;
+            padding: 32px 0;
             border-bottom: 1px solid rgba(199, 174, 138, 0.18);
         }
-        .wg-partners-head {
-            text-align: center;
-            margin: 0 0 28px;
-        }
-        .wg-partners-head .kicker {
-            justify-content: center;
-        }
-        .wg-partners-head .kicker-line { background: var(--gold); }
-        .wg-partners-eyebrow {
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-weight: 300;
-            font-size: 15px;
-            color: rgba(30, 53, 82, 0.7);
-            margin: 14px 0 0;
+        .wg-partners .benefits-marquee {
+            margin-top: 0;
+            padding: 0;
+            border-top: none;
         }
 
         /* 4-step process grid — force one row on desktop so 04 doesn't orphan */
