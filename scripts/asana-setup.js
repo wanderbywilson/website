@@ -84,10 +84,21 @@ async function ensureTags() {
 async function ensureCustomFields() {
   console.log('\n— Custom fields —');
   // Fetch fields currently attached to the project (cheaper than scanning all workspace fields)
-  const settings = await asana(`/projects/${PROJECT_GID}/custom_field_settings?opt_fields=custom_field.name,custom_field.gid,custom_field.resource_subtype`);
-  const projectFields = new Map();
-  for (const s of (settings.data || [])) {
-    if (s.custom_field) projectFields.set(s.custom_field.name.toLowerCase(), s.custom_field);
+  let projectFields;
+  try {
+    const settings = await asana(`/projects/${PROJECT_GID}/custom_field_settings?opt_fields=custom_field.name,custom_field.gid,custom_field.resource_subtype`);
+    projectFields = new Map();
+    for (const s of (settings.data || [])) {
+      if (s.custom_field) projectFields.set(s.custom_field.name.toLowerCase(), s.custom_field);
+    }
+  } catch (e) {
+    if (/402|not available for free users/i.test(e.message)) {
+      console.log('  ⊘ skipped      Custom Fields require a paid Asana plan ($13.49/mo Starter+).');
+      console.log('                Tags + task notes still give you everything else you need.');
+      console.log('                Re-run this script after upgrading if you want to add them later.');
+      return;
+    }
+    throw e;
   }
 
   for (const want of CUSTOM_FIELDS) {
@@ -96,23 +107,31 @@ async function ensureCustomFields() {
       console.log(`  ✓ attached     ${want.name.padEnd(15)} (gid ${attached.gid}, type ${attached.resource_subtype})`);
       continue;
     }
-    // Create the custom field at workspace level
-    const r = await asana('/custom_fields', {
-      method: 'POST',
-      body: JSON.stringify({ data: {
-        name: want.name,
-        resource_subtype: want.type,
-        description: want.description,
-        workspace: WORKSPACE_GID
-      } })
-    });
-    const newGid = r.data.gid;
-    // Then attach to the project
-    await asana(`/projects/${PROJECT_GID}/addCustomFieldSetting`, {
-      method: 'POST',
-      body: JSON.stringify({ data: { custom_field: newGid } })
-    });
-    console.log(`  + created      ${want.name.padEnd(15)} (gid ${newGid}) and attached to project`);
+    try {
+      // Create the custom field at workspace level
+      const r = await asana('/custom_fields', {
+        method: 'POST',
+        body: JSON.stringify({ data: {
+          name: want.name,
+          resource_subtype: want.type,
+          description: want.description,
+          workspace: WORKSPACE_GID
+        } })
+      });
+      const newGid = r.data.gid;
+      // Then attach to the project
+      await asana(`/projects/${PROJECT_GID}/addCustomFieldSetting`, {
+        method: 'POST',
+        body: JSON.stringify({ data: { custom_field: newGid } })
+      });
+      console.log(`  + created      ${want.name.padEnd(15)} (gid ${newGid}) and attached to project`);
+    } catch (e) {
+      if (/402|not available for free users/i.test(e.message)) {
+        console.log(`  ⊘ skipped      ${want.name.padEnd(15)} (paid Asana required)`);
+      } else {
+        throw e;
+      }
+    }
   }
 }
 
