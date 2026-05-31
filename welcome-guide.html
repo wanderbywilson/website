@@ -352,6 +352,38 @@
             margin: 32px 0 18px;
         }
         .wg-close-actions .cta-secondary { margin-top: 4px; }
+
+        /* "Book a 30-min call" CTA — filled navy variant so it pops as the
+           primary action, and force the label onto a single line. Mobile
+           shrinks padding/font so the button stays compact in narrow containers. */
+        .wg-cta-filled {
+            background: var(--ink) !important;
+            border-color: var(--ink) !important;
+            color: #f7f1e6 !important;
+        }
+        .wg-cta-filled .cta-primary-label {
+            color: #f7f1e6;
+            white-space: nowrap;
+        }
+        .wg-cta-filled::after {
+            color: #d6b787 !important;
+        }
+        .wg-cta-filled:hover {
+            background: #142840 !important;
+            border-color: #142840 !important;
+        }
+        .wg-cta-filled:hover::after {
+            color: #f7f1e6 !important;
+            transform: translateX(6px);
+        }
+        @media (max-width: 560px) {
+            .wg-cta-filled {
+                padding: 16px 28px !important;
+            }
+            .wg-cta-filled .cta-primary-label {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body class="is-cruises-page">
@@ -446,8 +478,8 @@
                         on the calendar below.
                     </p>
                 </div>
-                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary founder-cta">
-                    <span class="cta-primary-label">Book a 30-min intro call</span>
+                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary wg-cta-filled founder-cta">
+                    <span class="cta-primary-label">Book a 30-min call</span>
                 </a>
             </div>
         </div>
@@ -660,7 +692,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Capri, Italy</span>
-                                <span class="wg-testimonial-context">Private yacht charter &middot; Faraglioni rocks</span>
                             </figcaption>
                         </figure>
 
@@ -670,7 +701,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Amalfi Coast, Italy</span>
-                                <span class="wg-testimonial-context">Cliffside suite views</span>
                             </figcaption>
                         </figure>
 
@@ -680,7 +710,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Lake Como, Italy</span>
-                                <span class="wg-testimonial-context">Mahogany boat &middot; Nesso bridge</span>
                             </figcaption>
                         </figure>
 
@@ -690,7 +719,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Santorini, Greece</span>
-                                <span class="wg-testimonial-context">Sunset over the caldera</span>
                             </figcaption>
                         </figure>
 
@@ -700,17 +728,15 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">St. Lucia</span>
-                                <span class="wg-testimonial-context">Sugar Beach &middot; The Pitons</span>
                             </figcaption>
                         </figure>
 
                         <figure class="wg-testimonial-card">
                             <div class="wg-testimonial-photo">
-                                <img src="/welcome-guide-images/testimonial-04-safari-rhinos.jpg" alt="Clients on a private safari with two rhinos in the background, Africa" loading="lazy">
+                                <img src="/welcome-guide-images/testimonial-04-safari-jeep.jpg" alt="Clients with their safari vehicle in South Africa" loading="lazy" style="object-position: 32% center;">
                             </div>
                             <figcaption class="wg-testimonial-cap">
-                                <span class="wg-testimonial-name">Africa</span>
-                                <span class="wg-testimonial-context">Private safari &middot; Up close with the wild</span>
+                                <span class="wg-testimonial-name">South Africa</span>
                             </figcaption>
                         </figure>
 
@@ -720,7 +746,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Serengeti, Tanzania</span>
-                                <span class="wg-testimonial-context">Hot-air balloon safari at sunrise</span>
                             </figcaption>
                         </figure>
 
@@ -730,7 +755,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Santorini, Greece</span>
-                                <span class="wg-testimonial-context">Private catamaran day &middot; Caldera coast</span>
                             </figcaption>
                         </figure>
 
@@ -740,7 +764,6 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Thailand</span>
-                                <span class="wg-testimonial-context">Longtail boat &middot; Hidden Andaman lagoon</span>
                             </figcaption>
                         </figure>
 
@@ -750,7 +773,33 @@
                             </div>
                             <figcaption class="wg-testimonial-cap">
                                 <span class="wg-testimonial-name">Florence, Italy</span>
-                                <span class="wg-testimonial-context">Piazzale Michelangelo &middot; Duomo view</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="wg-testimonial-card">
+                            <div class="wg-testimonial-photo">
+                                <img src="/welcome-guide-images/testimonial-12-caribbean-infinity.jpg" alt="Clients at an infinity-pool resort at sunset, Caribbean" loading="lazy">
+                            </div>
+                            <figcaption class="wg-testimonial-cap">
+                                <span class="wg-testimonial-name">Caribbean</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="wg-testimonial-card">
+                            <div class="wg-testimonial-photo">
+                                <img src="/welcome-guide-images/testimonial-13-nz-helicopter.jpg" alt="Client in front of a helicopter on a snowy peak, New Zealand" loading="lazy">
+                            </div>
+                            <figcaption class="wg-testimonial-cap">
+                                <span class="wg-testimonial-name">New Zealand</span>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="wg-testimonial-card">
+                            <div class="wg-testimonial-photo">
+                                <img src="/welcome-guide-images/testimonial-14-sydney-seaplane.jpg" alt="Clients in front of a seaplane on Sydney Harbour, Australia" loading="lazy">
+                            </div>
+                            <figcaption class="wg-testimonial-cap">
+                                <span class="wg-testimonial-name">Sydney, Australia</span>
                             </figcaption>
                         </figure>
                     </div><!-- /.testimonials-track -->
@@ -1048,8 +1097,8 @@
                 Or send a quick note &mdash; we&rsquo;ll reply within 48 hours.
             </p>
             <div class="wg-close-actions">
-                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary">
-                    <span class="cta-primary-label">Book a 30-min intro call</span>
+                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary wg-cta-filled">
+                    <span class="cta-primary-label">Book a 30-min call</span>
                 </a>
                 <a href="mailto:wilson@wanderbywilson.com?subject=Hi%20Wilson%20%E2%80%94%20a%20quick%20note" class="cta-secondary">
                     <span>Send a quick note</span>
