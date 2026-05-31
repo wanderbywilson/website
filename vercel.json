@@ -2,6 +2,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/welcome-guide.html",
+      "destination": "/welcome-guide",
+      "permanent": false
+    },
+    {
       "source": "/cruises.html",
       "destination": "/cruises",
       "permanent": true
@@ -730,6 +735,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/welcome-guide",
+      "destination": "/welcome-guide.html"
+    },
     {
       "source": "/hotels",
       "destination": "/hotels.html"

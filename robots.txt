@@ -13,3 +13,6 @@ Disallow: /brand-kit-print.html
 Disallow: /brandmark-studio.html
 
 Sitemap: https://www.wanderbywilson.com/sitemap.xml
+Disallow: /welcome-guide
+Disallow: /welcome-guide.html
+Disallow: /welcome-guide.pdf
