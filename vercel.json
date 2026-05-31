@@ -768,11 +768,11 @@
     },
     {
       "source": "/hotels/:slug([a-z0-9-]+)",
-      "destination": "/property.html?slug=:slug"
+      "destination": "/hotels/:slug.html"
     },
     {
       "source": "/journeys/:slug([a-z0-9-]+)",
-      "destination": "/journey.html?slug=:slug"
+      "destination": "/journeys/:slug.html"
     },
     {
       "source": "/post/:slug([a-z0-9-]+)",
