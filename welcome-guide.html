@@ -19,6 +19,184 @@
         gtag('js', new Date());
         gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
     </script>
+    <style>
+        /* ─── Welcome-guide-only tweaks ───────────────────────────────── */
+
+        /* Package tier cards — bulleted "what's included" lists */
+        .wg-tier-card .voyage-card-body {
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #fff;
+            border: 1px solid rgba(199, 174, 138, 0.32);
+        }
+        .wg-tier-name {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: 26px;
+            line-height: 1.2;
+            color: var(--ink);
+            margin: 0 0 6px;
+            letter-spacing: -0.005em;
+        }
+        .wg-tier-name em { font-style: italic; font-weight: 300; }
+        .wg-tier-for {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(30, 53, 82, 0.62);
+            margin: 0 0 22px;
+        }
+        .wg-tier-includes {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 28px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--ink);
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .wg-tier-includes li {
+            padding: 10px 0 10px 26px;
+            position: relative;
+            border-bottom: 1px solid rgba(199, 174, 138, 0.2);
+        }
+        .wg-tier-includes li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .wg-tier-includes li:last-child { border-bottom: none; }
+        .wg-tier-foot {
+            margin-top: auto;
+            padding-top: 18px;
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .wg-tier-price {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: 22px;
+            color: var(--ink);
+            margin: 0;
+            line-height: 1.25;
+        }
+        .wg-tier-price em { font-style: italic; font-weight: 300; }
+        .wg-tier-budget {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: rgba(30, 53, 82, 0.6);
+            letter-spacing: 0.02em;
+            margin: 6px 0 0;
+        }
+        .wg-tier-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+            padding-bottom: 3px;
+            transition: color 0.3s var(--ease-out);
+        }
+        .wg-tier-cta:hover { color: var(--ink); }
+        .wg-tier-cta svg { transition: transform 0.4s var(--ease-out); }
+        .wg-tier-cta:hover svg { transform: translateX(3px); }
+
+        /* Featured / center tier accent — escalate the ladder visually */
+        .wg-tier-card.is-featured .voyage-card-body {
+            border-color: var(--gold);
+            box-shadow: 0 12px 32px -18px rgba(199, 174, 138, 0.55);
+        }
+
+        /* "Already booked?" prominent callout */
+        .wg-perks-strip {
+            background: var(--ink);
+            color: #f3ede2;
+            padding: 88px 0;
+            margin: 0;
+        }
+        .wg-perks-strip .kicker > span:not(.kicker-line) { color: rgba(243, 237, 226, 0.62); }
+        .wg-perks-strip .kicker-line { background: rgba(199, 174, 138, 0.6); }
+        .wg-perks-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+        .wg-perks-title {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(34px, 4.2vw, 48px);
+            line-height: 1.1;
+            margin: 14px 0 22px;
+            color: #f7f1e6;
+            letter-spacing: -0.012em;
+        }
+        .wg-perks-title em { font-style: italic; font-weight: 300; color: var(--gold-soft, #d6b787); }
+        .wg-perks-lede {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 1.6;
+            color: rgba(243, 237, 226, 0.85);
+            margin: 0 0 18px;
+        }
+        .wg-perks-lede a { color: var(--gold-soft, #d6b787); border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+        .wg-perks-lede a:hover { color: #f3ede2; }
+        .wg-perks-ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 14px;
+        }
+        .wg-perks-ul li {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #f3ede2;
+            padding-left: 26px;
+            position: relative;
+        }
+        .wg-perks-ul li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--gold-soft, #d6b787);
+            font-size: 14px;
+        }
+
+        @media (max-width: 880px) {
+            .wg-perks-grid { grid-template-columns: 1fr; gap: 36px; }
+            .wg-perks-strip { padding: 64px 0; }
+        }
+
+        /* Closing CTA — two-button stack */
+        .wg-close-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px 32px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0 18px;
+        }
+    </style>
 </head>
 <body class="is-cruises-page">
     <header class="site-header" id="siteHeader">
@@ -51,7 +229,7 @@
     </header>
 
     <!-- ================================================================
-         Hero — warm welcome
+         Hero — softer, personal welcome
          ================================================================ -->
     <section class="services-hero-bleed">
         <div class="services-hero-bleed-bg">
@@ -61,43 +239,82 @@
         <div class="container services-hero-bleed-inner">
             <p class="kicker services-hero-bleed-kicker"><span class="kicker-line"></span><span>A private welcome</span></p>
             <h1 class="services-hero-bleed-title">
-                Welcome to <em>our world.</em>
+                So glad <em>you&rsquo;re here.</em>
             </h1>
             <p class="services-hero-bleed-sub">Your 2026 guide to traveling with us.</p>
         </div>
     </section>
 
     <!-- ================================================================
-         A note from Wilson
+         A note from Wilson — first-person, portrait, signed
          ================================================================ -->
-    <section class="cruise-why" aria-label="Welcome note">
+    <section class="founder" aria-label="A note from Wilson">
+        <div class="container founder-grid">
+            <div class="founder-portrait-col">
+                <figure class="founder-portrait">
+                    <div class="founder-portrait-frame">
+                        <img src="/wilson.jpg?v=4" alt="Wilson Schubert" loading="lazy">
+                    </div>
+                    <span class="founder-script" aria-hidden="true">elevated itineraries.<br>effortless travel.</span>
+                    <figcaption class="founder-portrait-caption">
+                        <span class="founder-portrait-name">Wilson Schubert</span>
+                        <span class="founder-portrait-location">Founder &middot; Wander by Wilson</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="founder-copy-col">
+                <p class="kicker"><span class="kicker-line"></span><span>A note from me</span></p>
+                <h2 class="founder-title">
+                    Thank you for trusting<br>
+                    <em>me with your trip.</em>
+                </h2>
+                <div class="founder-prose">
+                    <p>
+                        Whether this is the first time we&rsquo;re working together or one of
+                        many, I&rsquo;m so glad you&rsquo;re here. This guide is a quick walk-through
+                        of what I offer, how I plan, and what to expect at every step &mdash;
+                        meant to be a useful reference, not homework.
+                    </p>
+                    <p>
+                        As a SmartFlyer agency and Virtuoso member, I have access to exclusive
+                        perks at the hotels you love &mdash; room upgrades, resort credits,
+                        daily breakfast, early check-in / late check-out, and amenities you
+                        wouldn&rsquo;t get booking direct. <strong>If you&rsquo;ve already booked
+                        somewhere on your own and want me to layer those perks onto your stay,
+                        just forward me the confirmation.</strong> Truly &mdash; I love doing
+                        this for clients.
+                    </p>
+                    <p>
+                        When you&rsquo;re ready, the next step is a 30-minute intro call so I
+                        can hear what you&rsquo;re dreaming up. You can book that directly on
+                        my calendar below.
+                    </p>
+                </div>
+                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary founder-cta">
+                    <span class="cta-primary-label">Book a 30-min intro call</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Credentials strip — trust signals
+         ================================================================ -->
+    <section class="cruise-why" aria-label="Credentials">
         <div class="container cruise-why-grid">
             <div class="cruise-why-copy">
-                <p class="kicker"><span class="kicker-line"></span><span>Nice to meet you</span></p>
+                <p class="kicker"><span class="kicker-line"></span><span>What you get with us</span></p>
                 <h2 class="cruise-why-title">
-                    Let&rsquo;s plan something<br>
-                    <em>unforgettable.</em>
+                    Curated. Collaborative.<br>
+                    <em>Considered.</em>
                 </h2>
-                <p class="cruise-why-tagline">
-                    A full-service, modern travel agency. <strong>Curated. Collaborative. Considered.</strong>
-                </p>
                 <p class="cruise-why-prose">
-                    We&rsquo;re so glad you&rsquo;re here. We design custom itineraries and
-                    elevated experiences for travelers who care about how a trip feels, not
-                    just where it goes. As a SmartFlyer agency and Virtuoso member, we&rsquo;re
-                    one of the top-producing luxury travel agencies in the world &mdash;
-                    which means exclusive perks at the hotels you love (room upgrades,
-                    resort credits, daily breakfast, early check-in / late check-out, and
-                    other amenities you wouldn&rsquo;t get booking direct).
-                </p>
-                <p class="cruise-why-prose">
-                    This guide walks through how we work, what we plan, and the kinds of
-                    trips we love designing. Read it once, save it for reference, and reach
-                    out anytime.
+                    A full-service, modern travel agency for travelers who care about how
+                    a trip feels &mdash; not just where it goes.
                 </p>
             </div>
             <ul class="cruise-why-list">
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>Smartflyer</strong> — a Virtuoso agency, top-producing in the world</span></li>
+                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>Smartflyer</strong> &mdash; a Virtuoso agency, top-producing in the world</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>Smartflyer Rising Star</strong>, 2023 &amp; 2024</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>Preferred-partner status with the world&rsquo;s leading hotel collections</span></li>
                 <li><span class="cruise-check" aria-hidden="true">✓</span><span>One advisor by name, before &middot; during &middot; after every trip</span></li>
@@ -107,7 +324,7 @@
     </section>
 
     <!-- ================================================================
-         The services we offer — 6 categories
+         The services we offer — 6 categories with new photo set
          ================================================================ -->
     <section class="cruise-voyages" aria-label="The services we offer">
         <div class="container">
@@ -126,7 +343,7 @@
             <div class="cruise-voyages-grid">
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/property-images/borgo-santandrea/01-premium-pool-suite.jpg" alt="Luxury hotel suite" loading="lazy">
+                        <img src="/property-images/borgo-santandrea/00-suite-801-original.webp" alt="Premier suite at Borgo Santandrea, Amalfi Coast" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">01 &middot; Hotel booking &amp; upgrades</p>
@@ -136,7 +353,7 @@
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/itinerary-images/iconic-greece/00-hero.jpg" alt="Curated itinerary planning" loading="lazy">
+                        <img src="/itinerary-images/iconic-greece/00-hero-day.jpg" alt="Iconic daytime view of Santorini, Greece" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">02 &middot; Full-service itineraries</p>
@@ -146,17 +363,17 @@
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/itinerary-images/classic-japan/00-hero.jpg" alt="Flights and travel logistics" loading="lazy">
+                        <img src="/welcome-guide-images/flights-window-wing.jpg" alt="Airplane wing above the clouds at sunset" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">03 &middot; Flights</p>
-                        <p class="voyage-card-perk">A dedicated air desk with 24/7 support. We know the planes, the routes, the seats to avoid, and the VIP fast-track at every major airport.</p>
+                        <p class="voyage-card-perk">A dedicated air desk with 24/7 support. We know the planes, the routes, the best cabins, and the VIP fast-track at every major airport.</p>
                     </figcaption>
                 </figure>
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/cruise-images/ritz-carlton-yacht/01-pitons-st-lucia.jpg" alt="Ocean and river cruises" loading="lazy">
+                        <img src="/cruise-images/ritz-carlton-yacht/01-pitons-st-lucia.jpg" alt="Yacht-style cruise off the coast of St. Lucia" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">04 &middot; Ocean &amp; river cruises</p>
@@ -166,7 +383,7 @@
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/property-images/eden-rock-st-barths/00-hero.webp" alt="Private villas" loading="lazy">
+                        <img src="/property-images/soneva-fushi/04-accommodation.webp" alt="Soneva Fushi private overwater villa, Maldives" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">05 &middot; Private villas</p>
@@ -176,7 +393,7 @@
 
                 <figure class="voyage-card">
                     <div class="voyage-card-image">
-                        <img src="/cruise-images/private-yacht-charters/02-greek-cove.jpg" alt="Private charters" loading="lazy">
+                        <img src="/cruise-images/four-seasons-yachts/01-main-pool.jpg" alt="Four Seasons Yacht pool deck — private charter" loading="lazy">
                     </div>
                     <figcaption class="voyage-card-body">
                         <p class="voyage-card-brand">06 &middot; Private charters</p>
@@ -184,6 +401,41 @@
                     </figcaption>
                 </figure>
             </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         "Already booked?" prominent dark strip — for returning clients
+         ================================================================ -->
+    <section class="wg-perks-strip" aria-label="Already booked? We can still add perks.">
+        <div class="container wg-perks-grid">
+            <div>
+                <p class="kicker"><span class="kicker-line"></span><span>Already have a reservation?</span></p>
+                <h2 class="wg-perks-title">
+                    Forward us your confirmations.<br>
+                    <em>We&rsquo;ll add the perks.</em>
+                </h2>
+                <p class="wg-perks-lede">
+                    If you&rsquo;ve already booked one of our preferred-partner hotels on your
+                    own, send the confirmation to
+                    <a href="mailto:wilson.schubert@smartflyer.com">wilson.schubert@smartflyer.com</a>
+                    and we&rsquo;ll see if we can attach our exclusive amenities to your existing
+                    booking &mdash; <strong>complimentary.</strong>
+                </p>
+                <p class="wg-perks-lede" style="margin-top:18px;">
+                    Prefer to book yourself? Our DIY tool lets you book Virtuoso hotels on your
+                    own with our perks included &mdash; once you book, we&rsquo;re notified and
+                    immediately VIP you with the hotel.
+                </p>
+            </div>
+            <ul class="wg-perks-ul" aria-label="Perks added to your existing booking">
+                <li>Daily breakfast for two</li>
+                <li>$100+ resort or food &amp; beverage credit</li>
+                <li>Room upgrade on arrival</li>
+                <li>Early check-in &amp; late check-out</li>
+                <li>VIP status flagged with the hotel directly</li>
+                <li style="font-size:13px;font-style:italic;color:rgba(243,237,226,0.6);padding-left:0;">(All subject to availability and brand terms.)</li>
+            </ul>
         </div>
     </section>
 
@@ -198,13 +450,17 @@
                     Four steps<br>
                     <em>to your trip.</em>
                 </h2>
+                <p class="cruise-voyages-lede" style="max-width:620px;margin-top:18px;">
+                    For new clients planning their first trip with us &mdash; here&rsquo;s exactly
+                    what to expect.
+                </p>
             </div>
 
             <div class="cruise-voyages-grid" style="margin-top:48px;">
                 <figure class="voyage-card">
                     <figcaption class="voyage-card-body" style="padding:32px 28px;">
                         <p class="voyage-card-brand" style="color:var(--gold);">01 &middot; Let&rsquo;s get started</p>
-                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">A short questionnaire, then a complimentary call so we understand your travel style, preferences, and any special requests. If we&rsquo;re a good fit, we send our agreement and the link to pay our planning fee.</p>
+                        <p class="voyage-card-perk" style="border-top:none;padding-top:14px;">A short questionnaire, then a complimentary 30-minute call so we understand your travel style, preferences, and any special requests. Then we send our agreement and the link to pay the planning fee.</p>
                     </figcaption>
                 </figure>
 
@@ -233,48 +489,104 @@
     </section>
 
     <!-- ================================================================
-         Planning packages — 3 tiers (uses compare-grid from services page)
+         Planning packages — 3 tiers, card layout with bullets
          ================================================================ -->
-    <section class="cruise-compare" aria-label="Planning packages">
+    <section class="cruise-voyages" aria-label="Planning packages" style="padding-top:24px;">
         <div class="container">
-            <div class="cruise-compare-head">
+            <div class="cruise-voyages-head">
                 <p class="kicker"><span class="kicker-line"></span><span>Planning packages</span></p>
-                <h2 class="cruise-compare-title">
+                <h2 class="cruise-voyages-title">
                     Three ways<br>
                     <em>to work with us.</em>
                 </h2>
+                <p class="cruise-voyages-lede">
+                    Choose the level of support that fits your trip. Each tier builds on the
+                    one before.
+                </p>
             </div>
 
-            <table class="cruise-compare-table">
-                <thead>
-                    <tr>
-                        <th scope="col" class="cruise-compare-row-label"><span class="visually-hidden">Tier</span></th>
-                        <th scope="col">What&rsquo;s included</th>
-                        <th scope="col">Investment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row" class="cruise-compare-row-label">VIP Accommodation</th>
-                        <td>For travelers who already have a plan &mdash; and just want the perks. Hotel or cruise booking management, plus our preferred-partner VIP amenities (breakfast, hotel/spa credits, priority upgrades, early check-in / late check-out where available).</td>
-                        <td><strong>Complimentary.</strong><br>Starting trip budget: $600++/night.</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="cruise-compare-row-label">Vacation Planning</th>
-                        <td>For travelers heading to a single destination who want guidance &mdash; not a full itinerary. 30-min call, custom proposal with 3 hotel options, hotel booking, airport transfers, 1&ndash;2 signature experiences, entry/exit guidance, mobile travel app, airfare support.</td>
-                        <td><strong>$250 planning fee.</strong><br>Starting trip budget: $5,000.</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="cruise-compare-row-label">Full-Service Itinerary</th>
-                        <td>For travelers who want every detail handled, start to finish. Day-by-day itinerary, hotel selection &amp; booking, curated experiences, dining &amp; spa reservations, private transfers throughout, downtime recommendations, in-destination support, airfare support.</td>
-                        <td><strong>From $500 planning fee.</strong><br>Starting trip budget: $15,000.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="cruise-voyages-grid">
 
-            <p class="cruise-compare-trust">
-                If a new destination is selected mid-planning, we reserve the right to charge a new planning fee.
-                More than two travelers or multiple hotel rooms may include an additional fee.
+                <!-- Tier 1: Signature Stay -->
+                <figure class="voyage-card wg-tier-card">
+                    <figcaption class="voyage-card-body">
+                        <h3 class="wg-tier-name">Signature <em>Stay</em></h3>
+                        <p class="wg-tier-for">For travelers who already have a plan &mdash; and just want the perks.</p>
+                        <ul class="wg-tier-includes">
+                            <li>Hotel or cruise booking management</li>
+                            <li>Preferred-partner VIP amenities</li>
+                            <li>Daily breakfast for two</li>
+                            <li>Hotel or spa credit</li>
+                            <li>Priority room upgrade on arrival</li>
+                            <li>Early check-in / late check-out (where available)</li>
+                        </ul>
+                        <div class="wg-tier-foot">
+                            <p class="wg-tier-price"><em>Complimentary.</em></p>
+                            <p class="wg-tier-budget">Trip budget from $600+/night, before taxes &amp; fees.</p>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <!-- Tier 2: Signature Escape -->
+                <figure class="voyage-card wg-tier-card is-featured">
+                    <figcaption class="voyage-card-body">
+                        <h3 class="wg-tier-name">Signature <em>Escape</em></h3>
+                        <p class="wg-tier-for">For travelers heading to a single destination who want guidance &mdash; not a full itinerary.</p>
+                        <ul class="wg-tier-includes">
+                            <li>30-minute intro &amp; strategy call</li>
+                            <li>Custom proposal with 3 hotel options</li>
+                            <li>Hotel booking + airport transfers</li>
+                            <li>1&ndash;2 signature in-destination experiences</li>
+                            <li>Entry, visa &amp; exit guidance</li>
+                            <li>Mobile travel app with itinerary at your fingertips</li>
+                            <li>Air-desk support for flight bookings</li>
+                        </ul>
+                        <div class="wg-tier-foot">
+                            <p class="wg-tier-price">From <em>$250</em> planning fee</p>
+                            <p class="wg-tier-budget">Trip budget from $5,000.</p>
+                            <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
+                                <span>Book a 30-min call</span>
+                                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+                                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <!-- Tier 3: Signature Journey -->
+                <figure class="voyage-card wg-tier-card">
+                    <figcaption class="voyage-card-body">
+                        <h3 class="wg-tier-name">Signature <em>Journey</em></h3>
+                        <p class="wg-tier-for">For travelers who want every detail handled, start to finish.</p>
+                        <ul class="wg-tier-includes">
+                            <li>Day-by-day custom itinerary</li>
+                            <li>Hotel selection &amp; booking across destinations</li>
+                            <li>Curated experiences, guides &amp; private touring</li>
+                            <li>Dining &amp; spa reservations</li>
+                            <li>Private transfers throughout</li>
+                            <li>Downtime &amp; off-itinerary recommendations</li>
+                            <li>In-destination concierge support</li>
+                            <li>Air-desk support for flight bookings</li>
+                        </ul>
+                        <div class="wg-tier-foot">
+                            <p class="wg-tier-price">From <em>$500</em> planning fee</p>
+                            <p class="wg-tier-budget">Trip budget from $15,000.</p>
+                            <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
+                                <span>Book a 30-min call</span>
+                                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
+                                    <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p class="cruise-voyages-footnote" style="margin-top:32px;max-width:760px;margin-left:auto;margin-right:auto;line-height:1.6;">
+                Planning fees are determined by the scope of the trip &mdash; the number of
+                travelers and rooms required. Starting rates are for two travelers. If a
+                new destination is selected mid-planning, a new planning fee may apply.
             </p>
         </div>
     </section>
@@ -282,7 +594,7 @@
     <!-- ================================================================
          À-la-carte services
          ================================================================ -->
-    <section class="cruise-voyages" aria-label="A la carte services" style="padding-top:72px;padding-bottom:72px;">
+    <section class="cruise-voyages" aria-label="A la carte services" style="padding-top:24px;padding-bottom:72px;">
         <div class="container">
             <div class="cruise-voyages-head">
                 <p class="kicker"><span class="kicker-line"></span><span>&Agrave;-la-carte</span></p>
@@ -318,37 +630,7 @@
     </section>
 
     <!-- ================================================================
-         DIY booking + Already booked
-         ================================================================ -->
-    <section class="cruise-testimonial" aria-label="DIY booking and existing reservations">
-        <div class="container cruise-testimonial-grid">
-            <div class="cruise-testimonial-body">
-                <p class="kicker"><span class="kicker-line"></span><span>Self-serve options</span></p>
-                <h2 class="cruise-why-title" style="margin-bottom:20px;">
-                    Already booked?<br>
-                    <em>We can still add perks.</em>
-                </h2>
-                <p class="cruise-why-prose">
-                    <strong>DIY hotel-booking tool.</strong> A self-book tool lets you book Virtuoso
-                    hotels on your own with our extra perks included. Once you book, we&rsquo;re
-                    notified and immediately VIP you with the hotel.
-                </p>
-                <p class="cruise-why-prose">
-                    <strong>Already booked one of our partner hotels directly?</strong> Forward your
-                    confirmation to <a href="mailto:wilson.schubert@smartflyer.com" style="color:var(--gold);">wilson.schubert@smartflyer.com</a>
-                    and we&rsquo;ll see if we can attach our exclusive partner perks to your existing
-                    booking &mdash; complimentary. Daily breakfast for two, $100+ resort credit, room
-                    upgrade on arrival, early check-in / late check-out (all subject to availability).
-                </p>
-            </div>
-            <figure class="cruise-testimonial-image">
-                <img src="/property-images/cap-juluca/01-aerial-maundays-bay.jpg" alt="Aerial view of Cap Juluca, Anguilla" loading="lazy">
-            </figure>
-        </div>
-    </section>
-
-    <!-- ================================================================
-         FAQ — same pattern as services
+         FAQ — trimmed (regional budget detail merged into packages)
          ================================================================ -->
     <section class="faq cruise-faq">
         <div class="container">
@@ -396,18 +678,28 @@
 
                 <details class="faq-item">
                     <summary>
-                        <span class="faq-q">Do you have a trip minimum? Recommended budgets?</span>
+                        <span class="faq-q">What if I&rsquo;ve already booked a hotel on my own?</span>
                         <span class="faq-chevron" aria-hidden="true">+</span>
                     </summary>
                     <p class="faq-a">
-                        We specialize in high-end hotels and custom itineraries. Most properties we
-                        partner with start around <strong>$600 / night</strong> before taxes, and
-                        full-service itineraries typically start at <strong>$15,000 / week for two</strong>
-                        (excluding international flights). For fully customized trips:
+                        If it&rsquo;s one of our preferred-partner properties, forward the confirmation
+                        to <a href="mailto:wilson.schubert@smartflyer.com" style="color:var(--gold);">wilson.schubert@smartflyer.com</a>
+                        and we&rsquo;ll attach our exclusive amenities &mdash; complimentary. We do this
+                        all the time and the hotel typically welcomes it.
+                    </p>
+                </details>
+
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-q">Are there typical trip-budget ranges by destination?</span>
+                        <span class="faq-chevron" aria-hidden="true">+</span>
+                    </summary>
+                    <p class="faq-a">
+                        Yes &mdash; rough guidance, excluding international flights:
                         <br><br>
-                        &middot; Europe: from $15,000 / week, excluding international flights<br>
-                        &middot; Africa &amp; Safari: from $20,000 for a 10-night luxury safari, excluding international flights<br>
-                        &middot; Overwater bungalows: from $15,000 for 8 nights, excluding international flights
+                        &middot; Europe: from $15,000 / week<br>
+                        &middot; Africa &amp; Safari: from $20,000 for a 10-night luxury safari<br>
+                        &middot; Overwater bungalows (Maldives, French Polynesia): from $15,000 for 8 nights
                     </p>
                 </details>
             </div>
@@ -415,7 +707,7 @@
     </section>
 
     <!-- ================================================================
-         Closing CTA
+         Closing CTA — branching: Calendly (primary) + mailto (secondary)
          ================================================================ -->
     <section class="services-close">
         <div class="container services-close-inner">
@@ -425,12 +717,20 @@
                 <em>extraordinary.</em>
             </h2>
             <p class="services-close-lede">
-                Tell us where you&rsquo;re drawn to, who&rsquo;s coming, and when &mdash; and we&rsquo;ll
-                be in touch within 48 hours to get started.
+                When you&rsquo;re ready, the easiest next step is a 30-minute intro call.
+                Or send a quick note &mdash; we&rsquo;ll reply within 48 hours.
             </p>
-            <a href="/inquire-trip" class="cta-primary">
-                <span class="cta-primary-label">Plan My Trip</span>
-            </a>
+            <div class="wg-close-actions">
+                <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary">
+                    <span class="cta-primary-label">Book a 30-min intro call</span>
+                </a>
+                <a href="mailto:wilson.schubert@smartflyer.com?subject=Hi%20Wilson%20%E2%80%94%20a%20quick%20note" class="cta-secondary">
+                    <span>Send a quick note</span>
+                    <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
+                    </svg>
+                </a>
+            </div>
             <p class="services-close-footnote">
                 Prefer to save a copy? <a href="/welcome-guide.pdf" style="color:var(--gold);">Download the PDF version &rarr;</a>
             </p>
