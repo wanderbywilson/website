@@ -776,7 +776,7 @@
     },
     {
       "source": "/post/:slug([a-z0-9-]+)",
-      "destination": "/post.html?slug=:slug"
+      "destination": "/post/:slug.html"
     },
     {
       "source": "/cruises",
