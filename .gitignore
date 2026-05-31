@@ -46,3 +46,4 @@ wbw-server.log
 
 # Claude Code session / local settings
 .claude/
+.vercel

@@ -603,7 +603,7 @@
       "permanent": true
     },
     {
-      "source": "/blog/category/Luxury+Cruises",
+      "source": "/blog/category/Luxury%2BCruises",
       "destination": "/cruises",
       "permanent": true
     },
@@ -623,17 +623,17 @@
       "permanent": true
     },
     {
-      "source": "/blog/category/Destination+Guides",
+      "source": "/blog/category/Destination%2BGuides",
       "destination": "/journeys",
       "permanent": true
     },
     {
-      "source": "/blog/category/Hotel+Spotlight",
+      "source": "/blog/category/Hotel%2BSpotlight",
       "destination": "/hotels",
       "permanent": true
     },
     {
-      "source": "/blog/category/Luxury+Hotel+Reviews",
+      "source": "/blog/category/Luxury%2BHotel%2BReviews",
       "destination": "/hotels",
       "permanent": true
     },
@@ -653,7 +653,7 @@
       "permanent": true
     },
     {
-      "source": "/blog/category/Caribbean+Resorts",
+      "source": "/blog/category/Caribbean%2BResorts",
       "destination": "/hotels",
       "permanent": true
     },
@@ -668,12 +668,12 @@
       "permanent": true
     },
     {
-      "source": "/blog/category/United+States",
+      "source": "/blog/category/United%2BStates",
       "destination": "/hotels",
       "permanent": true
     },
     {
-      "source": "/blog/category/Private+Jets",
+      "source": "/blog/category/Private%2BJets",
       "destination": "/services",
       "permanent": true
     },
