@@ -29,14 +29,16 @@ tpl = TEMPLATE.read_text()
 start = src.find('const ITINERARIES')
 if start == -1:
     raise SystemExit('ITINERARIES not found in data.js')
+end_block = src.find('\n};', start)
+scope = src[start:end_block] if end_block != -1 else src[start:]
 
 itineraries = {}
-for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", src[start:]):
+for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", scope):
     slug = m.group(1)
-    body_start = start + m.end()
-    nxt = re.search(r"\n    '[a-z0-9-]+':\s*\{|\n\};\s*\n", src[body_start:])
-    body_end = body_start + (nxt.start() if nxt else len(src) - body_start)
-    body = src[body_start:body_end]
+    body_start = m.end()
+    nxt = re.search(r"\n    '[a-z0-9-]+':\s*\{", scope[body_start:])
+    body_end = body_start + (nxt.start() if nxt else len(scope) - body_start)
+    body = scope[body_start:body_end]
 
     def grab(field):
         for q in ['"', "'"]:

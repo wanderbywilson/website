@@ -30,19 +30,23 @@ src = DATA.read_text()
 tpl = TEMPLATE.read_text()
 
 # ─── Parse PROPERTIES from data.js ────
-# Find the start of `const PROPERTIES = {`
+# Find the start of `const PROPERTIES = {`  AND bound to its closing `};`
+# so we don't accidentally iterate into ITINERARIES below.
 start = src.find('const PROPERTIES')
 if start == -1:
     raise SystemExit('PROPERTIES not found in data.js')
+end_block = src.find('\n};', start)
+if end_block == -1:
+    raise SystemExit("Could not find PROPERTIES closing '};'")
+scope = src[start:end_block]
 
-# Iterate each property block at 4-space indent
 properties = {}
-for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", src[start:]):
+for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", scope):
     slug = m.group(1)
-    body_start = start + m.end()
-    nxt = re.search(r"\n    '[a-z0-9-]+':\s*\{|\n\};\s*\n", src[body_start:])
-    body_end = body_start + (nxt.start() if nxt else len(src) - body_start)
-    body = src[body_start:body_end]
+    body_start = m.end()
+    nxt = re.search(r"\n    '[a-z0-9-]+':\s*\{", scope[body_start:])
+    body_end = body_start + (nxt.start() if nxt else len(scope) - body_start)
+    body = scope[body_start:body_end]
 
     def grab(field):
         # Try double-quoted, then single-quoted strings
