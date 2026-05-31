@@ -8549,3 +8549,36 @@ body.is-home {
     .quiz-line-img { aspect-ratio: 16 / 9; }
     .quiz-line-body { padding: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE FIXES — 2026-05-31 (Wilson's post-deploy mobile audit)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* #1 Prevent horizontal page scroll on mobile — something inside the page
+   is exceeding 100vw and creating the swipeable-content bug. `clip` is
+   safer than `hidden` because it doesn't break position:sticky. */
+html, body { overflow-x: clip; max-width: 100%; }
+
+/* #2 Cruises testimonial — keep Wilson's head in frame on mobile.
+   The aspect-ratio flips from 3/4 (portrait) to 4/3 (landscape) at <=880px,
+   and her portrait photo gets center-cropped which clips the head. Bias the
+   crop toward the top so her face stays visible. */
+@media (max-width: 880px) {
+    .cruise-testimonial-image img { object-position: center top; }
+}
+
+/* #3 Hide the "same rate. better outcome." script flourish on small phones.
+   The absolutely-positioned script overlaps the "Book a Hotel With Perks"
+   CTA on narrow viewports. Decorative-only — fine to drop on mobile. */
+@media (max-width: 720px) {
+    .collage-script { display: none; }
+}
+
+/* #4 Services "At a glance" compare grid — collapse to 1 column on small
+   phones. The 2-column layout was making each card ~150-180px wide,
+   crushing the "Trip budget from" + dollar values into ugly wraps. */
+@media (max-width: 640px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .compare-col { border-right: none; }
+    .compare-col:not(:last-child) { border-bottom: 1px solid rgba(199, 174, 138, 0.32); }
+}
