@@ -79,23 +79,14 @@
             margin-top: auto;
             padding-top: 18px;
             border-top: 1px solid rgba(199, 174, 138, 0.36);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .wg-tier-price {
-            font-family: var(--font-serif);
-            font-weight: 400;
-            font-size: 22px;
-            color: var(--ink);
-            margin: 0;
-            line-height: 1.25;
-        }
-        .wg-tier-price em { font-style: italic; font-weight: 300; }
-        .wg-tier-budget {
-            font-family: var(--font-sans);
-            font-size: 12px;
-            color: rgba(30, 53, 82, 0.6);
-            letter-spacing: 0.02em;
-            margin: 6px 0 0;
-        }
+        /* Use the same .package-price-row pattern as the services page so the
+           label-first layout is consistent across both. CTA gets extra
+           breathing room below the price rows. */
+        .wg-tier-foot .wg-tier-cta { margin-top: 8px; }
         .wg-tier-cta {
             display: inline-flex;
             align-items: center;
@@ -629,8 +620,14 @@
                             <li>Early check-in / late check-out (where available)</li>
                         </ul>
                         <div class="wg-tier-foot">
-                            <p class="wg-tier-price"><em>Complimentary.</em></p>
-                            <p class="wg-tier-budget">Trip budget from $600+/night, before taxes &amp; fees.</p>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Design fee</span>
+                                <span class="package-price-value package-price-value--free">Complimentary</span>
+                            </div>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Trip investment from</span>
+                                <span class="package-price-value">$600+/night</span>
+                            </div>
                         </div>
                     </figcaption>
                 </figure>
@@ -650,8 +647,14 @@
                             <li>Air-desk support for flight bookings</li>
                         </ul>
                         <div class="wg-tier-foot">
-                            <p class="wg-tier-price">From <em>$250</em> design fee</p>
-                            <p class="wg-tier-budget">Trip budget from $5,000.</p>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Design fee</span>
+                                <span class="package-price-value">From $250</span>
+                            </div>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Trip investment from</span>
+                                <span class="package-price-value">$5,000</span>
+                            </div>
                             <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
                                 <span>Book a 30-min call</span>
                                 <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
@@ -678,8 +681,14 @@
                             <li>Air-desk support for flight bookings</li>
                         </ul>
                         <div class="wg-tier-foot">
-                            <p class="wg-tier-price">From <em>$500</em> design fee</p>
-                            <p class="wg-tier-budget">Trip budget from $15,000.</p>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Design fee</span>
+                                <span class="package-price-value">From $500</span>
+                            </div>
+                            <div class="package-price-row">
+                                <span class="package-price-label">Trip investment from</span>
+                                <span class="package-price-value">$15,000</span>
+                            </div>
                             <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="wg-tier-cta">
                                 <span>Book a 30-min call</span>
                                 <svg width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true">
@@ -1067,7 +1076,7 @@
 
                 <details class="faq-item">
                     <summary>
-                        <span class="faq-q">Are there typical trip-budget ranges by destination?</span>
+                        <span class="faq-q">Are there typical trip-investment ranges by destination?</span>
                         <span class="faq-chevron" aria-hidden="true">+</span>
                     </summary>
                     <p class="faq-a">
