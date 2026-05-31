@@ -1124,11 +1124,6 @@
                     </svg>
                 </a>
             </div>
-            <p class="services-close-footnote">
-                Prefer to save a copy? <a href="/welcome-guide.pdf" style="color:var(--gold);">Download the PDF version &rarr;</a>
-                <!-- TODO: generate a PDF export of THIS landing page (currently points
-                     to the old 11-page guide); see tasks list. -->
-            </p>
         </div>
     </section>
 
@@ -1214,6 +1209,38 @@
         window.addEventListener('scroll', () => {
             header.classList.toggle('is-scrolled', window.scrollY > 24);
         }, { passive: true });
+
+        /* ------------------------------------------------------------------ */
+        /*  GA4 conversion tracking — fires 'generate_lead' for each of the   */
+        /*  three primary CTAs on the welcome guide so they show up as        */
+        /*  conversions in the GA4 reports (after Wilson marks them as such   */
+        /*  under Admin → Events → Mark as conversion).                       */
+        /*                                                                    */
+        /*  cta_label distinguishes which button was clicked:                 */
+        /*    - calendly_intro_call  (Calendly link, 3 places: founder note,  */
+        /*                            tier 2 + 3 footer, closing CTA)          */
+        /*    - mailto_inquiry       ("Send a quick note" mailto + the perks   */
+        /*                            strip "forward your confirmation" link)  */
+        /*    - hotel_inquiry_click  (Signature Stay tier card → /inquire-hotel)*/
+        /* ------------------------------------------------------------------ */
+        (function trackCtaClicks() {
+            if (typeof gtag !== 'function') return;
+            document.addEventListener('click', function(e) {
+                const a = e.target.closest('a');
+                if (!a) return;
+                const href = a.getAttribute('href') || '';
+                let label = null;
+                if (href.includes('calendly.com'))               label = 'calendly_intro_call';
+                else if (href.startsWith('mailto:wilson@wanderbywilson.com')) label = 'mailto_inquiry';
+                else if (href === '/inquire-hotel' || href.endsWith('/inquire-hotel')) label = 'hotel_inquiry_click';
+                if (!label) return;
+                gtag('event', 'generate_lead', {
+                    cta_label:   label,
+                    page_origin: 'welcome_guide',
+                    link_text:   (a.innerText || '').trim().slice(0, 60)
+                });
+            }, { passive: true });
+        })();
 
         /* ------------------------------------------------------------------ */
         /*  "Where we've been sending them" carousel                          */
