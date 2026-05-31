@@ -353,6 +353,25 @@
         }
         .wg-close-actions .cta-secondary { margin-top: 4px; }
 
+        /* Wilson's note section: make both columns equal height so the
+           SF Rising Star badge (under photo) and the "Book a call" button
+           (under prose) sit at the same vertical baseline at the bottom. */
+        .founder-grid { align-items: stretch; }
+        .founder-portrait-col,
+        .founder-copy-col {
+            display: flex;
+            flex-direction: column;
+        }
+        .founder-portrait-col .founder-portrait { align-self: flex-start; }
+        .founder-portrait-col .founder-credential {
+            margin-top: auto;
+            padding-top: 32px;
+        }
+        .founder-copy-col .founder-cta {
+            margin-top: auto;
+            align-self: flex-start;
+        }
+
         /* "Book a 30-min call" CTA — filled navy variant so it pops as the
            primary action, and force the label onto a single line. Mobile
            shrinks padding/font so the button stays compact in narrow containers. */
@@ -449,6 +468,16 @@
                         <span class="founder-portrait-location">Founder &middot; Wander by Wilson</span>
                     </figcaption>
                 </figure>
+
+                <div class="founder-credential">
+                    <img class="founder-credential-badge"
+                         src="/logos/smartflyer-rising-star.png"
+                         alt="Smartflyer Rising Star badge">
+                    <div class="founder-credential-copy">
+                        <span class="founder-credential-eyebrow">Two-time recipient</span>
+                        <span class="founder-credential-title">Smartflyer Rising Star &mdash; &rsquo;23 &amp; &rsquo;24</span>
+                    </div>
+                </div>
             </div>
             <div class="founder-copy-col">
                 <p class="kicker"><span class="kicker-line"></span><span>A note from Wilson</span></p>
@@ -479,46 +508,10 @@
                     </p>
                 </div>
 
-                <div class="founder-credential">
-                    <img class="founder-credential-badge"
-                         src="/logos/smartflyer-rising-star.png"
-                         alt="Smartflyer Rising Star badge">
-                    <div class="founder-credential-copy">
-                        <span class="founder-credential-eyebrow">Two-time recipient</span>
-                        <span class="founder-credential-title">Smartflyer Rising Star &mdash; &rsquo;23 &amp; &rsquo;24</span>
-                    </div>
-                </div>
-
                 <a href="https://calendly.com/wilson-schubert/30min" target="_blank" rel="noopener noreferrer" class="cta-primary wg-cta-filled founder-cta">
                     <span class="cta-primary-label">Book a 30-min call</span>
                 </a>
             </div>
-        </div>
-    </section>
-
-    <!-- ================================================================
-         Credentials strip — trust signals
-         ================================================================ -->
-    <section class="cruise-why" aria-label="Credentials">
-        <div class="container cruise-why-grid">
-            <div class="cruise-why-copy">
-                <p class="kicker"><span class="kicker-line"></span><span>What you get with us</span></p>
-                <h2 class="cruise-why-title">
-                    Curated. Collaborative.<br>
-                    <em>Effortless.</em>
-                </h2>
-                <p class="cruise-why-prose">
-                    A full-service, modern travel agency for travelers who care about how
-                    a trip feels &mdash; not just where it goes.
-                </p>
-            </div>
-            <ul class="cruise-why-list">
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span>An affiliate of <strong>SmartFlyer</strong> &mdash; a Virtuoso agency, top-producing in the world</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span><strong>SmartFlyer Rising Star</strong>, 2023 &amp; 2024</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span>Preferred-partner status with the world&rsquo;s leading hotel collections</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span>One advisor by name, before &middot; during &middot; after every trip</span></li>
-                <li><span class="cruise-check" aria-hidden="true">✓</span><span>Hotel bookings are <em>complimentary</em> &mdash; same rate as direct, with perks added</span></li>
-            </ul>
         </div>
     </section>
 
