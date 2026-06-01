@@ -110,17 +110,30 @@ async function findTagGids(apiKey) {
   return _tagGidByName;
 }
 
-/** Resolve project-attached custom field GIDs by name (cached). */
+/** Resolve project-attached custom field GIDs by name (cached).
+ *  Free-tier Asana returns 402 on this endpoint — treat that as
+ *  "no custom fields available" rather than a hard error, so the
+ *  task still gets created with just tags + section + notes. */
 async function findCustomFieldGids(projectGid, apiKey) {
   if (_customFieldGidByName) return _customFieldGidByName;
-  const data = await asanaFetch(
-    `/projects/${projectGid}/custom_field_settings?opt_fields=custom_field.name,custom_field.gid`,
-    apiKey
-  );
-  _customFieldGidByName = new Map();
-  for (const s of (data.data || [])) {
-    if (s.custom_field) {
-      _customFieldGidByName.set((s.custom_field.name || '').toLowerCase(), s.custom_field.gid);
+  try {
+    const data = await asanaFetch(
+      `/projects/${projectGid}/custom_field_settings?opt_fields=custom_field.name,custom_field.gid`,
+      apiKey
+    );
+    _customFieldGidByName = new Map();
+    for (const s of (data.data || [])) {
+      if (s.custom_field) {
+        _customFieldGidByName.set((s.custom_field.name || '').toLowerCase(), s.custom_field.gid);
+      }
+    }
+  } catch (e) {
+    if (/402|not available for free users/i.test(e.message)) {
+      // Wilson's on the free Asana tier — no custom fields. Cache an
+      // empty map so we don't keep retrying on every form submit.
+      _customFieldGidByName = new Map();
+    } else {
+      throw e;
     }
   }
   return _customFieldGidByName;
