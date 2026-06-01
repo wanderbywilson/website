@@ -75,6 +75,27 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
 }
 
 /**
+ * Build a welcome-guide URL with UTM params for analytics attribution.
+ * GA4 will see these as `client-receipt / email / {form}-inquiry` source
+ * so we can measure click-through per form type.
+ */
+function welcomeGuideUrl(formType) {
+  const campaign =
+    formType === 'hotel_booking' ? 'hotel-inquiry' :
+    formType === 'cruise'        ? 'cruise-inquiry' :
+                                   'trip-inquiry';
+  return `https://www.wanderbywilson.com/welcome-guide?utm_source=client-receipt&utm_medium=email&utm_campaign=${campaign}`;
+}
+
+/** Same idea for the Calendly link — Brevo tracks the click, and if
+ *  Wilson ever upgrades Calendly the UTMs will surface in booking events. */
+function calendlyUrl(formType) {
+  const campaign =
+    formType === 'cruise' ? 'cruise-inquiry' : 'trip-inquiry';
+  return `https://calendly.com/wilson-schubert/30min?utm_source=client-receipt&utm_medium=email&utm_campaign=${campaign}`;
+}
+
+/**
  * Per-form-type body content for the client receipt email. Returns an
  * HTML fragment that fills the middle of the standard template (the
  * outer header/greeting/signature/recap/footer is consistent across
@@ -83,6 +104,8 @@ function buildOwnerEmailHTML({ formType, fields, clientName, clientEmail }) {
  */
 function buildReceiptBody(formType) {
   const BLUE = BRAND_BLUE, GOLD = BRAND_GOLD, IVORY = BRAND_IVORY;
+  const WG_URL = welcomeGuideUrl(formType);
+  const CAL_URL = calendlyUrl(formType);
 
   if (formType === 'hotel_booking') {
     // HOTEL — confirmation-focused, no Calendly CTA (hotel bookings rarely need a call)
@@ -110,7 +133,7 @@ function buildReceiptBody(formType) {
         <tr><td style="padding:0 40px 12px 40px;text-align:center;">
           <table role="presentation" cellpadding="0" cellspacing="0" align="center">
             <tr><td style="background:${BLUE};padding:18px 44px;">
-              <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">Read the welcome guide &nbsp;&rarr;</a>
+              <a href="${WG_URL}" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">Read the welcome guide &nbsp;&rarr;</a>
             </td></tr>
           </table>
         </td></tr>
@@ -153,13 +176,13 @@ function buildReceiptBody(formType) {
         <tr><td style="padding:0 40px 12px 40px;text-align:center;">
           <table role="presentation" cellpadding="0" cellspacing="0" align="center">
             <tr><td style="background:${BLUE};padding:18px 44px;">
-              <a href="https://calendly.com/wilson-schubert/30min" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">LET&rsquo;S CHAT! &nbsp;&rarr;</a>
+              <a href="${CAL_URL}" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">LET&rsquo;S CHAT! &nbsp;&rarr;</a>
             </td></tr>
           </table>
         </td></tr>
 
         <tr><td style="padding:8px 40px 32px 40px;text-align:center;">
-          <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.28em;text-transform:uppercase;color:${GOLD};text-decoration:none;border-bottom:1px solid ${GOLD};padding-bottom:3px;">Read the welcome guide &rarr;</a>
+          <a href="${WG_URL}" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.28em;text-transform:uppercase;color:${GOLD};text-decoration:none;border-bottom:1px solid ${GOLD};padding-bottom:3px;">Read the welcome guide &rarr;</a>
         </td></tr>
 
         <tr><td style="padding:0 40px 0 40px;">
@@ -185,7 +208,7 @@ function buildReceiptBody(formType) {
             Please click the link below to select a time that works best for us to chat. These initial introduction calls are short but sweet and should take no more than 30 minutes. I will review your &ldquo;must-haves&rdquo;, discuss travel logistics, and answer any specific questions you may have about the trip and our process.
           </p>
           <p style="font-family:Georgia,serif;font-size:16px;color:#3D4A60;line-height:1.7;margin:0 0 26px 0;">
-            Before the call, please review our <a href="https://www.wanderbywilson.com/welcome-guide" style="color:${BLUE};text-decoration:underline;">Welcome Guide</a> to learn about what you can expect when working with us.
+            Before the call, please review our <a href="${WG_URL}" style="color:${BLUE};text-decoration:underline;">Welcome Guide</a> to learn about what you can expect when working with us.
           </p>
         </td></tr>
 
@@ -193,13 +216,13 @@ function buildReceiptBody(formType) {
         <tr><td style="padding:0 40px 12px 40px;text-align:center;">
           <table role="presentation" cellpadding="0" cellspacing="0" align="center">
             <tr><td style="background:${BLUE};padding:18px 44px;">
-              <a href="https://calendly.com/wilson-schubert/30min" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">LET&rsquo;S CHAT! &nbsp;&rarr;</a>
+              <a href="${CAL_URL}" style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:${IVORY};text-decoration:none;letter-spacing:0.04em;">LET&rsquo;S CHAT! &nbsp;&rarr;</a>
             </td></tr>
           </table>
         </td></tr>
 
         <tr><td style="padding:8px 40px 32px 40px;text-align:center;">
-          <a href="https://www.wanderbywilson.com/welcome-guide" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.28em;text-transform:uppercase;color:${GOLD};text-decoration:none;border-bottom:1px solid ${GOLD};padding-bottom:3px;">Read the welcome guide &rarr;</a>
+          <a href="${WG_URL}" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.28em;text-transform:uppercase;color:${GOLD};text-decoration:none;border-bottom:1px solid ${GOLD};padding-bottom:3px;">Read the welcome guide &rarr;</a>
         </td></tr>
 
         <tr><td style="padding:0 40px 0 40px;">
