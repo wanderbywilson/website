@@ -155,6 +155,31 @@ function tomorrowISO() {
   return d.toISOString().slice(0, 10);
 }
 
+/** Per-form-type follow-up subtask list. First subtask always due tomorrow. */
+function subtasksForFormType(formType) {
+  const tomorrow = tomorrowISO();
+  if (formType === 'hotel_booking') {
+    return [
+      { name: 'Reply within 48 hours', due_on: tomorrow },
+      { name: 'Confirm availability + apply preferred-partner perks' },
+      { name: 'Send booking confirmation' },
+    ];
+  }
+  if (formType === 'cruise') {
+    return [
+      { name: 'Reply within 48 hours', due_on: tomorrow },
+      { name: `Send Calendly link for intro call (${CALENDLY_URL})` },
+      { name: 'Send cruise recommendations / quote' },
+    ];
+  }
+  // custom_trip (default)
+  return [
+    { name: 'Reply within 48 hours', due_on: tomorrow },
+    { name: `Send Calendly link for intro call (${CALENDLY_URL})` },
+    { name: 'Send proposal' },
+  ];
+}
+
 /** Build the Asana task title to match Wilson's existing pattern. */
 function buildTaskTitle({ clientName, fields }) {
   const name = clientName || '(Unknown)';
@@ -254,13 +279,9 @@ async function createEnquiryTask({ projectGid, fields, clientName, clientEmail, 
     const parentGid = created.data && created.data.gid;
     if (!parentGid) return { ok: false, error: 'Asana returned no task GID' };
 
-    // Create the 3 follow-up subtasks. Run in parallel — they're
-    // independent. Failure on subtask creation doesn't break the parent.
-    const subtasks = [
-      { name: 'Reply within 48 hours',                                                       due_on: tomorrowISO() },
-      { name: `Send Calendly link for intro call (${CALENDLY_URL})` },
-      { name: 'Send proposal' },
-    ];
+    // Create the form-type-specific follow-up subtasks in parallel.
+    // Failure on subtask creation doesn't break the parent.
+    const subtasks = subtasksForFormType(formType);
 
     const subtaskResults = await Promise.allSettled(subtasks.map(st =>
       asanaFetch(`/tasks/${parentGid}/subtasks`, apiKey, {
