@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An Invitation to Italy — Ingram &amp; Criswell · October 2026</title>
+    <meta name="description" content="A nine-night Italy journey prepared for Jennifer Harlow Ingram and Riley Criswell by Wilson Schubert.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="proposal.css">
+</head>
+<body>
+
+    <!-- Floating tool bar (screen only) -->
+    <div class="tools" role="toolbar" aria-label="Proposal tools">
+        <span class="label">For your records</span>
+        <button type="button" class="primary" onclick="window.print()" title="Print or save as PDF — choose 'Save as PDF', margins 'None', and enable 'Background graphics' for the cleanest result.">Save as PDF</button>
+    </div>
+
+    <!-- Page counter pill (screen only) -->
+    <div class="page-counter" id="pageCounter">Page 1 of 10</div>
+
+    <!-- ==================================================================
+         PAGE 1 — COVER
+         ================================================================== -->
+    <section class="page cover">
+        <div class="cover-image"></div>
+        <div class="cover-vignette"></div>
+        <div class="cover-grain"></div>
+
+        <div class="cover-top">
+            <div class="cover-mark">
+                Wander by Wilson
+            </div>
+            <div class="cover-edition">
+                Private Proposal
+            </div>
+        </div>
+
+        <div class="cover-center">
+            <p class="cover-overline">An Invitation to</p>
+            <h1 class="cover-title">Italy</h1>
+            <div class="cover-route">
+                <span>Florence</span>
+                <span class="dot"></span>
+                <span>Tuscany</span>
+                <span class="dot"></span>
+                <span>Rome</span>
+            </div>
+        </div>
+
+        <div class="cover-bottom">
+            <div class="cover-prepared">
+                <div class="cover-prepared-label">Prepared for</div>
+                <div class="cover-prepared-name">
+                    Jennifer Harlow Ingram<br>
+                    &amp; Riley Criswell
+                </div>
+            </div>
+            <div class="cover-advisor">
+                <div class="cover-advisor-label">Prepared by</div>
+                <div class="cover-advisor-name">Wilson Schubert</div>
+                <div class="cover-advisor-affiliation">Smartflyer &middot; Virtuoso</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 2 — TRIP AT A GLANCE (day-by-day summary table)
+         ================================================================== -->
+    <section class="page summary">
+        <div class="page-pad summary-pad">
+            <div class="summary-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Trip at a glance</span></p>
+                <h2 class="title">Nine nights,<br><em>day by day.</em></h2>
+            </div>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th class="col-day">&nbsp;</th>
+                        <th class="col-date">Date</th>
+                        <th class="col-where">Where</th>
+                        <th class="col-summary">Summary</th>
+                        <th class="col-incl">Included</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-day">01</td>
+                        <td class="col-date"><span class="dow">Tue</span> 27 Oct</td>
+                        <td class="col-where">FCO &rarr; <strong>Florence</strong></td>
+                        <td class="col-summary">Arrival at Rome Fiumicino; scenic 3.5-hour private transfer north to Florence. Check in at Hotel Calzaiuoli. Evening free.</td>
+                        <td class="col-incl"><span class="chip">Transfer</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">02</td>
+                        <td class="col-date"><span class="dow">Wed</span> 28 Oct</td>
+                        <td class="col-where"><strong>Florence</strong></td>
+                        <td class="col-summary">Half-day private Food &amp; History tour on foot &mdash; Piazza della Repubblica, the Duomo, Mercato Centrale, and reserved entry to the David. Afternoon free.</td>
+                        <td class="col-incl"><span class="chip">Guide</span><span class="chip">David</span><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">03</td>
+                        <td class="col-date"><span class="dow">Thu</span> 29 Oct</td>
+                        <td class="col-where"><strong>Florence</strong></td>
+                        <td class="col-summary">Open day in Florence.</td>
+                        <td class="col-incl"><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">04</td>
+                        <td class="col-date"><span class="dow">Fri</span> 30 Oct</td>
+                        <td class="col-where"><strong>Florence</strong></td>
+                        <td class="col-summary">Open day in Florence.</td>
+                        <td class="col-incl"><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">05</td>
+                        <td class="col-date"><span class="dow">Sat</span> 31 Oct</td>
+                        <td class="col-where">Florence &rarr; <strong>Tuscany</strong></td>
+                        <td class="col-summary">Private transfer south with a truffle hunt and lunch en route. Check in at Castello di Vicarello.</td>
+                        <td class="col-incl"><span class="chip">Transfer</span><span class="chip">Truffle hunt</span><span class="chip">Lunch</span><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">06</td>
+                        <td class="col-date"><span class="dow">Sun</span> 01 Nov</td>
+                        <td class="col-where"><strong>Tuscany</strong></td>
+                        <td class="col-summary">Open day at Castello di Vicarello.</td>
+                        <td class="col-incl"><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">07</td>
+                        <td class="col-date"><span class="dow">Mon</span> 02 Nov</td>
+                        <td class="col-where">Tuscany &rarr; <strong>Rome</strong></td>
+                        <td class="col-summary">Private cooking class with lunch, then a visit to a Brunello winery, before continuing on to Rome that afternoon. Check in at Umilt&agrave; 36.</td>
+                        <td class="col-incl"><span class="chip">Transfer</span><span class="chip">Cooking class</span><span class="chip">Lunch</span><span class="chip">Brunello</span><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">08</td>
+                        <td class="col-date"><span class="dow">Tue</span> 03 Nov</td>
+                        <td class="col-where"><strong>Rome</strong></td>
+                        <td class="col-summary">Half-day private guided tour of Ancient Rome &mdash; Colosseum, Roman Forum, Circus Maximus, all reserved admissions included. Afternoon free.</td>
+                        <td class="col-incl"><span class="chip">Guide</span><span class="chip">Admissions</span><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">09</td>
+                        <td class="col-date"><span class="dow">Wed</span> 04 Nov</td>
+                        <td class="col-where"><strong>Rome</strong></td>
+                        <td class="col-summary">Open day in Rome.</td>
+                        <td class="col-incl"><span class="chip">Breakfast</span></td>
+                    </tr>
+                    <tr>
+                        <td class="col-day">10</td>
+                        <td class="col-date"><span class="dow">Thu</span> 05 Nov</td>
+                        <td class="col-where"><strong>Rome</strong> &rarr; FCO</td>
+                        <td class="col-summary">One last Roman breakfast; private transfer to Fiumicino in time for your onward flight.</td>
+                        <td class="col-incl"><span class="chip">Transfer</span><span class="chip">Breakfast</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-footer">
+            <span>Trip at a glance</span>
+            <span class="footer-brand">Ingram &amp; Criswell &middot; Italy 2026</span>
+            <span>02 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 4 — PART I DIVIDER: FLORENCE
+         ================================================================== -->
+    <section class="page part">
+        <div class="part-image part-image--florence"></div>
+        <div class="part-vignette"></div>
+
+        <div class="part-tag">
+            <span>Part I of III</span>
+            <span>27 &mdash; 31 October 2026</span>
+        </div>
+
+        <div class="part-content">
+            <div class="part-roman">PART I</div>
+            <h2 class="part-name">Florence</h2>
+            <div class="part-meta">
+                <span>Four nights</span>
+                <span class="dot"></span>
+                <span>Hotel Calzaiuoli</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 5 — FLORENCE DAY-BY-DAY
+         ================================================================== -->
+    <section class="page">
+        <div class="page-pad itinerary-pad">
+            <div class="itinerary-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Day by day</span></p>
+                <h2 class="title">Four days in <em>Florence.</em></h2>
+                <div class="where">Hotel Calzaiuoli &middot; Bargello View Room</div>
+            </div>
+
+            <div class="days">
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Tuesday</div>
+                        <div class="day-date">27</div>
+                        <div class="day-month">October</div>
+                        <div class="day-locale">Florence</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Slow Arrival, Tuscan Dusk</h3>
+                        <p class="day-text">
+                            Touch down at Rome Fiumicino, where your English-speaking driver will be waiting at arrivals.
+                            Settle into a Mercedes sedan for the scenic three-and-a-half-hour drive north into Tuscany.
+                        </p>
+                        <p class="day-text">
+                            Check in to Hotel Calzaiuoli, your home for the next four nights &mdash; a refined four-star
+                            tucked between the Duomo and Piazza della Signoria. The evening is yours to wander.
+                        </p>
+                        <span class="day-tag">Private FCO transfer</span>
+                    </div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Wednesday</div>
+                        <div class="day-date">28</div>
+                        <div class="day-month">October</div>
+                        <div class="day-locale">Florence</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">David, the Duomo, and a Glass of Chianti by Noon</h3>
+                        <p class="day-text">
+                            Meet your private licensed guide in the lobby for a half-day on foot through the city that
+                            birthed the Renaissance. Begin at Piazza della Repubblica, once the site of the Roman forum,
+                            then cross to Piazza del Duomo where your guide will tell you all about its Gothic bell-tower,
+                            Romanesque baptistery, and the great cathedral itself.
+                        </p>
+                        <p class="day-text">
+                            Continue to the Mercato Centrale to sample Tuscany: focaccia, prosciutto and pecorino, a glass
+                            of Chianti &mdash; and, if the spirit moves you, the local lampredotto. Cap the morning at the
+                            Accademia with reserved entry to stand before Michelangelo&rsquo;s David. The afternoon is yours.
+                        </p>
+                        <span class="day-tag">Private guide &middot; David reserved entry</span>
+                    </div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Thu &middot; Fri</div>
+                        <div class="day-date">29&middot;30</div>
+                        <div class="day-month">October</div>
+                        <div class="day-locale">Florence</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Two Days At Leisure</h3>
+                        <p class="day-text">
+                            By design: nothing on the schedule. The most common note I get back from clients is that the
+                            unscheduled days are the ones they remember. Florence in late October rewards aimlessness &mdash;
+                            a stroll through the Oltrano artisan district, leather shopping, a long lunch you didn&rsquo;t
+                            book, the Brancacci frescoes when the school groups thin out at three.
+                        </p>
+                        <span class="day-tag">Open days</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Part I &middot; Florence</span>
+            <span class="footer-brand">Ingram &amp; Criswell &middot; Italy 2026</span>
+            <span>04 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 6 — PART II DIVIDER: TUSCAN COUNTRYSIDE
+         ================================================================== -->
+    <section class="page part">
+        <div class="part-image part-image--tuscany"></div>
+        <div class="part-vignette"></div>
+
+        <div class="part-tag">
+            <span>Part II of III</span>
+            <span>31 October &mdash; 2 November 2026</span>
+        </div>
+
+        <div class="part-content">
+            <div class="part-roman">PART II</div>
+            <h2 class="part-name">Tuscany</h2>
+            <div class="part-meta">
+                <span>Two nights</span>
+                <span class="dot"></span>
+                <span>Castello di Vicarello</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 7 — TUSCANY DAY-BY-DAY
+         ================================================================== -->
+    <section class="page">
+        <div class="page-pad itinerary-pad">
+            <div class="itinerary-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Day by day</span></p>
+                <h2 class="title">Three days in the <em>Maremma.</em></h2>
+                <div class="where">Castello di Vicarello &middot; Suite Levante</div>
+            </div>
+
+            <div class="days">
+                <div class="day day--imaged">
+                    <div class="day-side">
+                        <div class="day-day">Saturday</div>
+                        <div class="day-date">31</div>
+                        <div class="day-month">October</div>
+                        <div class="day-locale">Florence &rarr; Tuscany</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">A Morning Truffle Hunt</h3>
+                        <p class="day-text">
+                            A morning truffle hunt in the Tuscan woods, followed by a leisurely truffle lunch.
+                        </p>
+                        <p class="day-text">
+                            Continue on to Castello di Vicarello, a thousand-year-old hilltop estate in the Maremma.
+                            Your Suite Levante looks out over olive groves and cypress hills.
+                        </p>
+                        <span class="day-tag">Truffle hunt &middot; private transfer</span>
+                    </div>
+                    <div class="day-image" style="background-image: url('images/truffle.jpg');"></div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Sunday</div>
+                        <div class="day-date">01</div>
+                        <div class="day-month">November</div>
+                        <div class="day-locale">Tuscany</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Day at Leisure &mdash; A Day That Belongs to the Castle</h3>
+                        <p class="day-text">
+                            The reason people come back to Vicarello. This is the day the trip stops being a trip.
+                            No driver, no guide, no schedule.
+                        </p>
+                        <p class="day-text">
+                            If you want a half-day excursion &mdash; a Brunello tasting, a horseback ride through the
+                            estate, a long lunch in the garden &mdash; all can be arranged at the hotel.
+                        </p>
+                        <span class="day-tag">Open day</span>
+                    </div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Monday</div>
+                        <div class="day-date">02</div>
+                        <div class="day-month">November</div>
+                        <div class="day-locale">Tuscany &rarr; Rome</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Cooking, Brunello, Onward to Rome</h3>
+                        <p class="day-text">
+                            A private cooking class with lunch, followed by a visit to a Brunello winery, before
+                            continuing on to Rome that afternoon. Check in at Umilt&agrave; 36.
+                        </p>
+                        <span class="day-tag">Cooking class &middot; Brunello tasting &middot; transfer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Part II &middot; Tuscany</span>
+            <span class="footer-brand">Ingram &amp; Criswell &middot; Italy 2026</span>
+            <span>06 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 8 — PART III DIVIDER: ROME
+         ================================================================== -->
+    <section class="page part">
+        <div class="part-image part-image--rome"></div>
+        <div class="part-vignette"></div>
+
+        <div class="part-tag">
+            <span>Part III of III</span>
+            <span>2 &mdash; 5 November 2026</span>
+        </div>
+
+        <div class="part-content">
+            <div class="part-roman">PART III</div>
+            <h2 class="part-name">Rome</h2>
+            <div class="part-meta">
+                <span>Three nights</span>
+                <span class="dot"></span>
+                <span>Umilt&agrave; 36</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 9 — ROME DAY-BY-DAY
+         ================================================================== -->
+    <section class="page">
+        <div class="page-pad itinerary-pad">
+            <div class="itinerary-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Day by day</span></p>
+                <h2 class="title">Three days in the <em>Eternal City.</em></h2>
+                <div class="where">Umilt&agrave; 36 &middot; Superior Room</div>
+            </div>
+
+            <div class="days">
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Tuesday</div>
+                        <div class="day-date">03</div>
+                        <div class="day-month">November</div>
+                        <div class="day-locale">Rome</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">The Colosseum Before the Crowds</h3>
+                        <p class="day-text">
+                            Meet your private licensed guide at the Arch of Constantine for a half-day in the city&rsquo;s
+                            deepest layer. Begin inside the Colosseum, walking the arena where Rome stage-managed its empire;
+                            continue through the Roman Forum, once the social, political, and commercial heart of the world;
+                            and finish at the Circus Maximus, the vast chariot-racing valley still etched into the city&rsquo;s grain.
+                        </p>
+                        <p class="day-text">
+                            All reserved entries are included. The afternoon is yours &mdash; a long lunch in Monti, a walk
+                            to the Pantheon, an evening passeggiata through Trastevere.
+                        </p>
+                        <span class="day-tag">Private guide &middot; reserved admissions</span>
+                    </div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Wednesday</div>
+                        <div class="day-date">04</div>
+                        <div class="day-month">November</div>
+                        <div class="day-locale">Rome</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Day at Leisure &mdash; Rome, on Your Terms</h3>
+                        <p class="day-text">
+                            A second day in Rome, because one is never enough. The Vatican Museums, Galleria Borghese, a
+                            long afternoon at a neighborhood trattoria &mdash; the day is yours.
+                        </p>
+                        <span class="day-tag">Open day</span>
+                    </div>
+                </div>
+
+                <div class="day">
+                    <div class="day-side">
+                        <div class="day-day">Thursday</div>
+                        <div class="day-date">05</div>
+                        <div class="day-month">November</div>
+                        <div class="day-locale">Rome &rarr; FCO</div>
+                    </div>
+                    <div class="day-body">
+                        <h3 class="day-headline">Arrivederci</h3>
+                        <p class="day-text">
+                            One last Roman breakfast. Your driver will meet you in the lobby for the fifty-minute transfer
+                            to Fiumicino in time for your onward flight.
+                        </p>
+                        <span class="day-tag">Private FCO transfer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Part III &middot; Rome</span>
+            <span class="footer-brand">Ingram &amp; Criswell &middot; Italy 2026</span>
+            <span>08 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 10 — WHERE YOU STAY
+         ================================================================== -->
+    <section class="page">
+        <div class="page-pad stays-pad">
+            <div class="stays-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Where you stay</span></p>
+                <h2 class="title">Three properties, each<br><em>chosen for a reason.</em></h2>
+            </div>
+
+            <div class="stays-list">
+                <div class="stay">
+                    <div class="stay-image" style="background-image: url('images/florence-arno.jpg');"></div>
+                    <div class="stay-meta">
+                        <div class="stay-roman">PART I &middot; FOUR NIGHTS</div>
+                        <h3 class="stay-name">Hotel Calzaiuoli</h3>
+                        <div class="stay-loc">Florence &middot; Historic Center</div>
+                        <p class="stay-desc">
+                            A refined four-star tucked between the Duomo and Piazza della Signoria &mdash; the heart of
+                            historic Florence. Your Bargello View room with daily breakfast.
+                        </p>
+                        <div class="stay-amenities">
+                            <span class="stay-amenity">Room upgrade</span>
+                            <span class="stay-amenity">Daily breakfast</span>
+                            <span class="stay-amenity">Early check-in / late check-out*</span>
+                        </div>
+                        <div class="stay-detail">27 &mdash; 31 October &middot; Bargello View Room</div>
+                    </div>
+                </div>
+
+                <div class="stay">
+                    <div class="stay-image" style="background-image: url('images/tuscany-castle.jpg');"></div>
+                    <div class="stay-meta">
+                        <div class="stay-roman">PART II &middot; TWO NIGHTS</div>
+                        <h3 class="stay-name">Castello di Vicarello</h3>
+                        <div class="stay-loc">Maremma, Tuscany &middot; Virtuoso</div>
+                        <p class="stay-desc">
+                            A thousand-year-old hilltop estate where the day&rsquo;s only obligation is dinner. Suite
+                            Levante &mdash; recently renovated, with a king bed and a magnificent green-marble bathroom
+                            &mdash; looks out over olive groves and cypress hills. The infinity pool faces the Maremma.
+                        </p>
+                        <div class="stay-amenities">
+                            <span class="stay-amenity">Upgrade on arrival</span>
+                            <span class="stay-amenity">Daily breakfast for two</span>
+                            <span class="stay-amenity">$100 USD resort credit</span>
+                            <span class="stay-amenity">Early check-in / late check-out*</span>
+                        </div>
+                        <div class="stay-detail">31 October &mdash; 2 November &middot; Suite Levante</div>
+                    </div>
+                </div>
+
+                <div class="stay">
+                    <div class="stay-image" style="background-image: url('images/rome-trevi.jpg');"></div>
+                    <div class="stay-meta">
+                        <div class="stay-roman">PART III &middot; THREE NIGHTS</div>
+                        <h3 class="stay-name">Umilt&agrave; 36</h3>
+                        <div class="stay-loc">Rome &middot; Behind the Trevi</div>
+                        <p class="stay-desc">
+                            A refined boutique five-star tucked on a quiet lane between the Trevi Fountain and the Spanish
+                            Steps. Superior Room with daily breakfast.
+                        </p>
+                        <div class="stay-amenities">
+                            <span class="stay-amenity">Escort to room</span>
+                            <span class="stay-amenity">Daily breakfast</span>
+                            <span class="stay-amenity">Early check-in / late check-out*</span>
+                        </div>
+                        <div class="stay-detail">2 &mdash; 5 November &middot; Superior Room</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Where you stay</span>
+            <span class="footer-brand">*Subject to availability</span>
+            <span>09 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 10 — INCLUSIONS + TOTAL
+         ================================================================== -->
+    <section class="page">
+        <div class="page-pad inclusions-pad">
+            <div class="inclusions-head">
+                <p class="kicker"><span class="kicker-rule"></span><span>Your inclusions</span></p>
+                <h2 class="title">Door to door,<br><em>fully arranged.</em></h2>
+            </div>
+
+            <div class="inclusions-grid">
+                <div class="inc-col">
+                    <h3>Included</h3>
+
+                    <div class="inc-group">
+                        <div class="inc-group-label">Accommodations</div>
+                        <ul class="inc-list">
+                            <li>Four nights at <a href="https://www.hotelcalzaiuoli.it/" target="_blank" rel="noopener" class="hotel-link"><strong>Hotel Calzaiuoli</strong></a>, Florence &mdash; Bargello View room with daily breakfast</li>
+                            <li>Two nights at <a href="https://castellodivicarello.com/" target="_blank" rel="noopener" class="hotel-link"><strong>Castello di Vicarello</strong></a>, Tuscany &mdash; Suite Levante with daily breakfast</li>
+                            <li>Three nights at <a href="https://umilta36.com/" target="_blank" rel="noopener" class="hotel-link"><strong>Umilt&agrave; 36</strong></a>, Rome &mdash; Superior Room with daily breakfast</li>
+                        </ul>
+                    </div>
+
+                    <div class="inc-group">
+                        <div class="inc-group-label">Private Transfers</div>
+                        <ul class="inc-list">
+                            <li>Airport pickup, FCO &rarr; Florence (Mercedes sedan, English-speaking driver)</li>
+                            <li>Florence &rarr; Castello di Vicarello, with truffle hunt and truffle lunch en route</li>
+                            <li>Castello di Vicarello &rarr; Rome, with cooking class, lunch, and Brunello winery en route</li>
+                            <li>Rome &rarr; FCO departure transfer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="inc-col">
+                    <h3>Private Experiences &amp; Amenities</h3>
+
+                    <div class="inc-group">
+                        <div class="inc-group-label">Private Experiences</div>
+                        <ul class="inc-list">
+                            <li>Half-day private Food &amp; History tour of Florence with licensed guide and reserved entry to the Accademia (David)</li>
+                            <li>Truffle hunt followed by a truffle lunch</li>
+                            <li>Private cooking class and lunch in Tuscany</li>
+                            <li>Private guided tour and tasting at a Brunello winery</li>
+                            <li>Half-day private guided tour of Ancient Rome &mdash; Colosseum, Roman Forum, Circus Maximus, all admissions included</li>
+                        </ul>
+                    </div>
+
+                    <div class="inc-group">
+                        <div class="inc-group-label">VIP Amenities</div>
+                        <ul class="inc-list">
+                            <li><strong><a href="https://www.hotelcalzaiuoli.it/" target="_blank" rel="noopener" class="hotel-link">Hotel Calzaiuoli</a>:</strong> room upgrade and early check-in / late check-out (subject to availability)</li>
+                            <li><strong><a href="https://castellodivicarello.com/" target="_blank" rel="noopener" class="hotel-link">Castello di Vicarello</a> (Virtuoso):</strong> upgrade on arrival, daily breakfast for two, $100 USD resort credit, early check-in / late check-out</li>
+                            <li><strong><a href="https://umilta36.com/" target="_blank" rel="noopener" class="hotel-link">Umilt&agrave; 36</a>:</strong> escort to room, early check-in / late check-out (subject to availability)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-bar">
+                <div class="total-bar-label">Total for two travelers &middot; fully arranged</div>
+                <div class="total-bar-amount"><span class="currency">USD</span>12,972</div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Your inclusions &amp; total</span>
+            <span class="footer-brand">Wander by Wilson</span>
+            <span>10 / 10</span>
+        </div>
+    </section>
+
+    <!-- ==================================================================
+         Tiny JS — page counter while scrolling
+         ================================================================== -->
+    <script>
+        (function() {
+            const pages = document.querySelectorAll('.page');
+            const total = pages.length;
+            const counter = document.getElementById('pageCounter');
+            const totalStr = String(total).padStart(2, '0');
+
+            const update = () => {
+                const mid = window.scrollY + window.innerHeight / 2;
+                let current = 1;
+                pages.forEach((p, i) => {
+                    const r = p.getBoundingClientRect();
+                    const top = r.top + window.scrollY;
+                    if (mid >= top) current = i + 1;
+                });
+                counter.textContent = `Page ${String(current).padStart(2, '0')} of ${totalStr}`;
+            };
+
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+    </script>
+</body>
+</html>

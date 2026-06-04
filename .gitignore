@@ -8,8 +8,11 @@ SPL-DEST-07.jpg
 CAR-ACC-SUI-99.jpg
 IMG_7864.JPG
 
-# CLIENT-CONFIDENTIAL — never commit
-proposals/
+# /proposals/ — hidden client proposal pages, same privacy model as the
+# welcome guide: <meta robots noindex,nofollow>, robots.txt Disallow,
+# unguessable slug-based URL, not linked from the public site. These
+# need to be tracked + deployed so Vercel can serve them. If a proposal
+# contains anything truly sensitive, keep it as a Google Doc instead.
 
 # Old backups + experimental landing pages
 logos-original-backup/

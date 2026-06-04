@@ -7,6 +7,11 @@
       "permanent": false
     },
     {
+      "source": "/proposals/charleston-getaway.html",
+      "destination": "/proposals/charleston-getaway",
+      "permanent": false
+    },
+    {
       "source": "/cruises.html",
       "destination": "/cruises",
       "permanent": true
@@ -738,6 +743,10 @@
     {
       "source": "/welcome-guide",
       "destination": "/welcome-guide.html"
+    },
+    {
+      "source": "/proposals/charleston-getaway",
+      "destination": "/proposals/charleston-getaway.html"
     },
     {
       "source": "/hotels",
