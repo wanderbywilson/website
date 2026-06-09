@@ -7280,13 +7280,23 @@ body.is-home {
     padding-bottom: 40px;
 }
 
-/* #31 BORGO/PROPERTY CTA SPACING — pull the bottom-right Inquire CTA up
-   from the hero edge so it doesn't crash into the section break */
+/* #31 PROPERTY HERO CTA — flow it right-aligned BELOW the content instead of
+   absolute bottom-right, so long titles ("Four Seasons Resort Los Cabos") can
+   never collide with the CTA. Paired with a FIXED label ("Inquire about this
+   stay") so the pill no longer grows with the hotel name. */
 .property-hero-cta {
-    bottom: 56px;
-    right: 0;
+    position: static;
+    bottom: auto;
+    right: auto;
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;   /* push to the right edge of the hero block */
+    margin-top: 32px;
 }
-/* Add a touch more padding to property-hero so there's room for CTA */
+@media (max-width: 768px) {
+    .property-hero-cta { margin-left: 0; margin-top: 24px; }
+}
 .property-hero-inner {
     padding-bottom: 32px;
 }

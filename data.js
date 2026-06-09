@@ -837,6 +837,125 @@ const PROPERTIES = {
         idealFor: "Wine enthusiasts curious about Portugal&rsquo;s oldest demarcated region, wellness travelers serious about restoration, and families who&rsquo;d swap a city break for vineyard hikes and tree-climbing across UNESCO terraces.",
         agentTip: "It is absolutely worth it to splurge for a room with a river view.",
         bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/15267218/six-senses-douro-valley'
+    },
+
+    /* ───────────────────────────────────────────────────────────────────
+       AUTO-DRAFTED STUBS — added 2026-06-09 from the "SmartFlyer Quote" scan.
+       Each is draft:true → HIDDEN from the /hotels directory (hotels.html
+       filters drafts) so incomplete pages don't go live. To PUBLISH one:
+         1. Drop photos into property-images/{slug}/ and set heroImage + gallery
+         2. Confirm the perks against SmartFlyer/Virtuoso (these are candidates)
+         3. Paste the Virtuoso / TravelWits bookingUrl (currently '#')
+         4. Add the real rateFrom if you want a starting rate shown
+         5. Delete the `draft: true` line to publish
+       Descriptions are DRAFT copy for Wilson to wordsmith.
+       ─────────────────────────────────────────────────────────────────── */
+
+    'four-seasons-resort-los-cabos': {
+        draft: true,
+        name: 'Four Seasons Resort Los Cabos',
+        location: 'Los Cabos, Mexico',
+        description: "Four Seasons&rsquo; Los Cabos resort sits on the Sea of Cortez at Cabo Del Sol, where the desert meets a rare swimmable stretch of Baja coastline. Low-slung casitas and suites step down toward the water through cactus gardens and a series of pools, joined by championship golf, a spa, and a roster of restaurants spanning coastal-Mexican cooking to wood-fired everything. Warm, polished, and genuinely family-friendly &mdash; classic Four Seasons service set against one of Mexico&rsquo;s most dramatic shorelines.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            '$100 USD food &amp; beverage credit, once per stay',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        bookingUrl: '#'
+    },
+
+    'the-colony-palm-beach': {
+        draft: true,
+        // PHOTOS PENDING — official site is bot-blocked (403). Drop images into
+        // property-images/the-colony-palm-beach/ and add heroImage + gallery.
+        name: 'The Colony Hotel, Palm Beach',
+        location: 'Palm Beach, Florida',
+        rateFrom: '$550 / night',
+        description: "The pink-washed grande dame of Palm Beach, half a block from Worth Avenue and the Atlantic. Opened in 1947 and recently reimagined, The Colony is all British-colonial brio &mdash; lacquered palm-print walls, a palm-shaded pool courtyard, and a supper club that has drawn the island&rsquo;s regulars for generations. Rooms, suites, and poolside villas read bright and preppy-chic, in the high-spirited pinks and greens that made the hotel a Palm Beach icon. The address is the point: you&rsquo;re in the thick of the island&rsquo;s social swirl.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            '$100 USD equivalent property credit, once per stay',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        idealFor: "Girls&rsquo; trips, milestone weekends, and design lovers who want to be in the middle of Palm Beach &mdash; steps from Worth Avenue and the beach, with a poolside scene worth dressing for.",
+        agentTip: "Reserve a poolside cabana and build a night around the supper club &mdash; the live music and cocktails are a Palm Beach institution. Worth Avenue&rsquo;s boutiques are a two-minute stroll, so pack accordingly.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16601416/the-colony-hotel-palm-beach'
+    },
+
+    'casa-di-langa': {
+        name: 'Casa di Langa',
+        location: 'Cerretto Langhe, Piedmont, Italy',
+        rateFrom: '€550 / night',
+        heroImage: '/property-images/casa-di-langa/00-hero.jpg',
+        description: "Among the Langhe hills of Piedmont &mdash; hazelnut groves and Barolo vineyards rolling toward the Alpine skyline &mdash; Casa di Langa is a thirty-nine-room eco-luxe resort built in the image of an ancient Piedmontese farm: brick and half-timber, terracotta and stone, courtyards opening onto cultivated slopes. Opened in 2021 with sustainability woven through every decision, it pairs a serious wine cellar and a region-rooted kitchen with cooking classes, a Wine Academy, truffle hunting, and walks through the estate&rsquo;s gardens and forest. Quietly luxurious, and entirely of its place.",
+        perks: [
+            'Upgrade to the next category, subject to availability',
+            'Early check-in / late check-out, subject to availability',
+            'Personalized welcome note and amenity',
+            '$100 USD equivalent Food &amp; Beverage credit (gratuities, alcohol, and room service excluded)',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/casa-di-langa/01-pool.jpg',
+            '/property-images/casa-di-langa/02-accommodation.jpg',
+            '/property-images/casa-di-langa/03-restaurant.jpg',
+            '/property-images/casa-di-langa/04-spa.jpg'
+        ],
+        idealFor: "Wine lovers and slow-travelers drawn to Barolo and Barbaresco country, design-minded couples, and anyone who measures luxury in silence, long lunches, and a vineyard view rather than a buzzy scene.",
+        agentTip: "Follow the local rhythm &mdash; no more than one winery a day &mdash; and let the estate arrange a morning truffle hunt in the woods or a class in the kitchen garden. Built on sustainability, this is the Langhe at its most considered.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16627144/casa-di-langa'
+    },
+
+    'ambergris-cay': {
+        name: 'Ambergris Cay',
+        location: 'Turks &amp; Caicos',
+        rateFrom: '$2,200 / night',
+        rateNote: 'All-inclusive',
+        heroImage: '/property-images/ambergris-cay/00-hero.jpg',
+        description: "A private island on the southeastern edge of the Turks &amp; Caicos, six hundred miles south of Miami and ringed by the turquoise shallows of the Caicos Banks. Ambergris Cay is all-inclusive in the fullest sense &mdash; beachfront bungalows with heated plunge pools and three- to eleven-bedroom villas, every meal and drink, and complimentary water sports from Hobie Cats and kayaks to snorkeling the reef. Days bend to island time: golf-cart explorations, sunset cruises, deep-sea fishing, and long stretches of empty white sand. Remote, barefoot, and entirely your own.",
+        perks: [
+            'Complimentary sunset cruise for two guests per bedroom, once during stay',
+            'Upgrade to the next category at check-in, subject to availability',
+            'Early check-in / late check-out, subject to availability',
+            '$100 resort credit per room or villa, per stay',
+            'Welcome amenity'
+        ],
+        gallery: [
+            '/property-images/ambergris-cay/01-pool.jpg',
+            '/property-images/ambergris-cay/02-accommodation.jpg',
+            '/property-images/ambergris-cay/03-restaurant.jpg',
+            '/property-images/ambergris-cay/04-spa.jpg'
+        ],
+        idealFor: "Privacy-seekers, honeymooners, and multi-gen families who want a whole island to disappear onto &mdash; all-inclusive and remote, with the reef, the flats, and the water sports thrown in, and not a crowd in sight.",
+        agentTip: "Your round-trip flights from Providenciales are included &mdash; a seamless private-island arrival. Once there, don&rsquo;t miss the floating Hangover Tiki Bar, drifting over the turquoise flats off Little Ambergris Cay.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/18075165/ambergris-cay-turks-and-caicos'
+    },
+
+    'sugar-beach-a-viceroy-resort': {
+        name: 'Sugar Beach, A Viceroy Resort',
+        location: 'Soufri&egrave;re, St. Lucia',
+        rateFrom: '$1,100 / night',
+        heroImage: '/property-images/sugar-beach-a-viceroy-resort/00-hero-beach.jpg',
+        description: "Sugar Beach unfurls across a former 18th-century plantation between St. Lucia&rsquo;s twin Pitons &mdash; one of the Caribbean&rsquo;s most cinematic settings. A white-sand beach below volcanic-green hillsides, with 105 rooms, cottages, and villas scattered up the mountainside and along the shore &mdash; most with private plunge pools and butler service. A Rainforest Spa whose ten treatment rooms are perched in the treetops, five restaurants from beachfront to fine dining, and that Piton view from nearly everywhere. Dramatic, deeply romantic, and a long-running honeymoon favorite.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            '$100 USD equivalent property credit, once per stay',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/sugar-beach-a-viceroy-resort/01-deluxe-cottage.jpg',
+            '/property-images/sugar-beach-a-viceroy-resort/02-restaurant.jpg',
+            '/property-images/sugar-beach-a-viceroy-resort/03-fitness.jpg'
+        ],
+        idealFor: "Honeymooners and romantics after the Caribbean at its most cinematic &mdash; those who&rsquo;d take a plunge-pool villa with a Piton framed in the window over a big-resort scene, with rainforest-spa treehouses and barefoot dinners on the sand to fill the days.",
+        agentTip: "Time a sunset cocktail at the South Pier Bar &mdash; the Pitons turn gold at golden hour &mdash; then book a treetop treatment at the Rainforest Spa. Don&rsquo;t skip the Jetty Burgers or the Cocoa Mill chocolate experience, a nod to the estate&rsquo;s plantation past.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/11245972/sugar-beach-a-viceroy-resort'
     }
 
     /* Add more entries below as Virtuoso URLs + content come in. Shape:
