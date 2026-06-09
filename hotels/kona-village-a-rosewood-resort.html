@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="propertyTitle">Kona Village, A Rosewood Resort — Kona Coast, Hawai&amp;lsquo;i Island | Wander by Wilson</title>
-    <meta name="description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&amp;lsquo;i Island.">
+    <title id="propertyTitle">Kona Village, A Rosewood Resort — Kona Coast, Hawai&lsquo;i Island | Wander by Wilson</title>
+    <meta name="description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&lsquo;i Island.">
     <link rel="canonical" href="https://www.wanderbywilson.com/hotels/kona-village-a-rosewood-resort">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Kona Village, A Rosewood Resort — Kona Coast, Hawai&amp;lsquo;i Island | Wander by Wilson">
-    <meta property="og:description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&amp;lsquo;i Island.">
+    <meta property="og:title" content="Kona Village, A Rosewood Resort — Kona Coast, Hawai&lsquo;i Island | Wander by Wilson">
+    <meta property="og:description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&lsquo;i Island.">
     <meta property="og:image" content="https://www.wanderbywilson.com/property-images/kona-village-a-rosewood-resort/00-hero.jpg">
     <meta property="og:url" content="https://www.wanderbywilson.com/hotels/kona-village-a-rosewood-resort">
     <meta property="og:site_name" content="Wander by Wilson">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Kona Village, A Rosewood Resort — Kona Coast, Hawai&amp;lsquo;i Island | Wander by Wilson">
-    <meta name="twitter:description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&amp;lsquo;i Island.">
+    <meta name="twitter:title" content="Kona Village, A Rosewood Resort — Kona Coast, Hawai&lsquo;i Island | Wander by Wilson">
+    <meta name="twitter:description" content="Sprawling across eighty-one acres on the storied shores of the Kona Coast, Kona Village, A Rosewood Resort is a stunning return to Hawai&lsquo;i Island.">
     <meta name="twitter:image" content="https://www.wanderbywilson.com/property-images/kona-village-a-rosewood-resort/00-hero.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=242">
+    <link rel="stylesheet" href="/styles.css?v=243">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -74,7 +74,7 @@
             <h1 class="property-title" id="propertyName"></h1>
             <div class="property-hero-perks" id="propertyHeroPerks" hidden></div>
             <a class="property-hero-cta" id="propertyHeroCta" href="/inquire-hotel" hidden>
-                <span id="propertyHeroCtaLabel">Inquire about this property</span>
+                <span id="propertyHeroCtaLabel">Inquire about this stay</span>
                 <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/>
                 </svg>
@@ -173,7 +173,7 @@
         </div>
     </section>
 
-    <script src="/data.js?v=61"></script>
+    <script src="/data.js?v=68"></script>
     <script>
         /* ------------------------------------------------------------------
            Property page bootstrap. Data lives in data.js (ATLAS_POINTS + PROPERTIES).
@@ -413,9 +413,9 @@
                 });
                 if (chips.length) heroPerks.hidden = false;
 
-                // 3. Soft CTA bottom-right of hero
+                // 3. Soft CTA below the hero content (right-aligned)
                 const heroCta = document.getElementById('propertyHeroCta');
-                document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about ' + nameText;
+                document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about this stay';
                 heroCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
                 heroCta.hidden = false;
 

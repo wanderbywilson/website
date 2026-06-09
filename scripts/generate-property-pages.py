@@ -63,6 +63,10 @@ for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", scope):
         'heroImage':   grab('heroImage'),
         'description': grab('description'),
         'rateFrom':    grab('rateFrom'),
+        # draft:true is always the FIRST field of an entry — anchor with re.match
+        # so we don't false-match the "delete the `draft: true` line" hint that
+        # sits in the comment inside the preceding entry's parsed body.
+        'draft':       bool(re.match(r"\s*draft:\s*true", body)),
     }
 
 print(f'Parsed {len(properties)} properties from data.js')
@@ -70,7 +74,11 @@ print(f'Parsed {len(properties)} properties from data.js')
 OUT_DIR.mkdir(exist_ok=True)
 
 def html_esc(s):
-    return escape(s, quote=True).replace('&amp;rsquo;', '&rsquo;').replace('&amp;mdash;', '&mdash;').replace('&amp;amp;', '&amp;')
+    # escape() turns every & into &amp; — including the & that begins an
+    # intentional HTML entity (&rsquo; &mdash; &egrave; &amp; &#8217; …).
+    # Restore any &amp;<entity>; back to &<entity>; so titles/OG render the
+    # real character instead of the literal entity text.
+    return re.sub(r'&amp;(#?\w+;)', r'&\1', escape(s, quote=True))
 
 def short_desc(s, max_chars=160):
     """Trim long description to first sentence or ~155 chars for og:description."""
@@ -130,6 +138,9 @@ written = 0
 for slug, prop in properties.items():
     if not prop['name']:
         print(f'  ⚠ skipped {slug}: no name')
+        continue
+    if prop.get('draft'):
+        print(f'  ⊘ skipped {slug}: draft (not published — no static page)')
         continue
     html = replace_head(tpl, prop, slug)
     (OUT_DIR / f'{slug}.html').write_text(html)
