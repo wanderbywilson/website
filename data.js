@@ -851,11 +851,16 @@ const PROPERTIES = {
        Descriptions are DRAFT copy for Wilson to wordsmith.
        ─────────────────────────────────────────────────────────────────── */
 
-    'four-seasons-resort-los-cabos': {
+    'four-seasons-resort-cabo-del-sol': {
         draft: true,
-        name: 'Four Seasons Resort Los Cabos',
-        location: 'Los Cabos, Mexico',
-        description: "Four Seasons&rsquo; Los Cabos resort sits on the Sea of Cortez at Cabo Del Sol, where the desert meets a rare swimmable stretch of Baja coastline. Low-slung casitas and suites step down toward the water through cactus gardens and a series of pools, joined by championship golf, a spa, and a roster of restaurants spanning coastal-Mexican cooking to wood-fired everything. Warm, polished, and genuinely family-friendly &mdash; classic Four Seasons service set against one of Mexico&rsquo;s most dramatic shorelines.",
+        // PHOTOS PENDING — not on SmartFlyer or Virtuoso; official site is bot-blocked (403).
+        // Drop images into property-images/four-seasons-resort-cabo-del-sol/, then add
+        // heroImage + gallery. Not a Virtuoso property → bookingUrl stays '#' (Four Seasons
+        // bookings route through FSPP / the inquiry form, not a Virtuoso self-book link).
+        name: 'Four Seasons Resort Cabo Del Sol',
+        location: 'Cabo San Lucas, Mexico',
+        rateFrom: '$1,650 / night',
+        description: "Four Seasons&rsquo; first resort in Los Cabos, opened in 2024 on a rare swimmable stretch of the Sea of Cortez at Cabo Del Sol. Contemporary and low-slung, it steps down through desert gardens to the water &mdash; multiple pools, a destination spa, and restaurants spanning Mexican coastal cooking to wood-fired everything. Championship golf sits on the doorstep, the beach is calm enough to actually swim (rare for Cabo), and the service is classic Four Seasons polish against one of Baja&rsquo;s most dramatic shorelines.",
         perks: [
             'Upgrade on arrival, subject to availability',
             'Daily breakfast for up to two guests per bedroom',
@@ -863,16 +868,16 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability',
             'Complimentary Wi-Fi'
         ],
+        idealFor: "Families and couples after polished, dependable Four Seasons service and a Cabo beach you can actually swim &mdash; and golfers, with the Sea of Cortez and championship courses on the doorstep.",
+        agentTip: "A genuinely swimmable beach is rare in Los Cabos &mdash; this is one of the few. Book an ocean-view room for the Sea of Cortez sunrise, and leave a morning for golf or a panga out on the water.",
         bookingUrl: '#'
     },
 
     'the-colony-palm-beach': {
-        draft: true,
-        // PHOTOS PENDING — official site is bot-blocked (403). Drop images into
-        // property-images/the-colony-palm-beach/ and add heroImage + gallery.
         name: 'The Colony Hotel, Palm Beach',
         location: 'Palm Beach, Florida',
         rateFrom: '$550 / night',
+        heroImage: '/property-images/the-colony-palm-beach/00-hero.jpg',
         description: "The pink-washed grande dame of Palm Beach, half a block from Worth Avenue and the Atlantic. Opened in 1947 and recently reimagined, The Colony is all British-colonial brio &mdash; lacquered palm-print walls, a palm-shaded pool courtyard, and a supper club that has drawn the island&rsquo;s regulars for generations. Rooms, suites, and poolside villas read bright and preppy-chic, in the high-spirited pinks and greens that made the hotel a Palm Beach icon. The address is the point: you&rsquo;re in the thick of the island&rsquo;s social swirl.",
         perks: [
             'Upgrade on arrival, subject to availability',
@@ -883,7 +888,7 @@ const PROPERTIES = {
         ],
         idealFor: "Girls&rsquo; trips, milestone weekends, and design lovers who want to be in the middle of Palm Beach &mdash; steps from Worth Avenue and the beach, with a poolside scene worth dressing for.",
         agentTip: "Reserve a poolside cabana and build a night around the supper club &mdash; the live music and cocktails are a Palm Beach institution. Worth Avenue&rsquo;s boutiques are a two-minute stroll, so pack accordingly.",
-        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16601416/the-colony-hotel-palm-beach'
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/travel/luxury-hotels/16601416/the-colony-hotel-palm-beach'
     },
 
     'casa-di-langa': {
