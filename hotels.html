@@ -89,6 +89,7 @@
                 <button class="hotels-index-chip" data-q="caribbean">Caribbean</button>
                 <button class="hotels-index-chip" data-q="africa">Africa</button>
                 <button class="hotels-index-chip" data-q="asia">Asia</button>
+                <button class="hotels-index-chip" data-q="pacific">Pacific</button>
                 <button class="hotels-index-chip" data-q="americas">Americas</button>
             </div>
             <p class="hotels-index-count" id="hotelsCount"></p>
@@ -149,7 +150,7 @@
             };
 
             // Map each hotel to a broad destination region so the region chips
-            // (Caribbean/Africa/Asia/Americas) match — those words never appear in
+            // (Caribbean/Africa/Asia/Pacific/Americas) match — those words never appear in
             // the location text itself (e.g. "Turks & Caicos" is not "Caribbean").
             // Country chips (Italy/Greece/France) already match via the location;
             // the Italy tags additionally catch entries whose location omits the
@@ -157,8 +158,9 @@
             const REGIONS = {
                 caribbean: ['anguilla','turks','caicos','providenciales','lucia','barths','west indies','virgin gorda','british virgin','bahamas','antigua','barbuda','nevis','mustique','cayman','grenada','jamaica','barbados'],
                 africa:    ['morocco','madagascar','africa','tanzania','botswana','kenya','namibia','rwanda','seychelles','mauritius','zambia','zimbabwe','mozambique'],
-                asia:      ['maldives','bali','indonesia','thailand','japan','vietnam','cambodia','sri lanka','fiji','australia','bhutan','laos','philippines','singapore','new zealand'],
-                americas:  ['mexico','costa rica','peru','chile','argentina','brazil','utah','florida','hawai','kona','california','colombia','ecuador','belize','united states','patagonia','papagayo','nayarit','cabo'],
+                asia:      ['maldives','bali','indonesia','thailand','japan','vietnam','cambodia','sri lanka','bhutan','laos','philippines','singapore'],
+                pacific:   ['fiji','australia','new zealand','aotearoa','tahiti','bora bora','french polynesia','moorea','samoa','tonga','vanuatu','cook island','new caledonia','hawai','kona'],
+                americas:  ['mexico','costa rica','peru','chile','argentina','brazil','utah','florida','california','colombia','ecuador','belize','united states','patagonia','papagayo','nayarit','cabo'],
                 italy:     ['italy','amalfi','tuscany','sicily','piedmont','langhe','ravello','positano','capri','como','venice','rome','florence'],
                 greece:    ['greece','santorini','mykonos','crete','athens','corfu'],
                 france:    ['france','paris','provence','cote','tropez','cannes'],
