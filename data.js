@@ -856,7 +856,7 @@ const PROPERTIES = {
         // through FSPP / the inquiry form, not a Virtuoso self-book link).
         name: 'Four Seasons Resort Cabo Del Sol',
         location: 'Cabo San Lucas, Mexico',
-        rateFrom: '$1,650 / night',
+        rateFrom: '$800 / night',
         heroImage: '/property-images/four-seasons-resort-cabo-del-sol/00-hero.jpg',
         description: "Four Seasons&rsquo; first resort in Los Cabos, opened in 2024 on a rare swimmable stretch of the Sea of Cortez at Cabo Del Sol. Contemporary and low-slung, it steps down through desert gardens to the water &mdash; multiple pools, a destination spa, and restaurants spanning Mexican coastal cooking to wood-fired everything. Championship golf sits on the doorstep, the beach is calm enough to actually swim (rare for Cabo), and the service is classic Four Seasons polish against one of Baja&rsquo;s most dramatic shorelines.",
         perks: [
