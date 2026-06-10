@@ -100,7 +100,6 @@ ATLAS_POINTS.forEach(p => { if (!p.slug) p.slug = slugify(p.hotel); });
 /* ---------- PROPERTIES (per-slug landing-page content) ------------------ */
 const PROPERTIES = {
     'palm-heights': {
-        draft: true,
         name: 'Palm Heights',
         location: 'Grand Cayman, Cayman Islands',
         rateFrom: '$850 / night',
