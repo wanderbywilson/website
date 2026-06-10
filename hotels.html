@@ -148,6 +148,25 @@
                 return decoder.value.toLowerCase().replace(/[''’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
             };
 
+            // Map each hotel to a broad destination region so the region chips
+            // (Caribbean/Africa/Asia/Americas) match — those words never appear in
+            // the location text itself (e.g. "Turks & Caicos" is not "Caribbean").
+            // Country chips (Italy/Greece/France) already match via the location;
+            // the Italy tags additionally catch entries whose location omits the
+            // country word (e.g. Caruso's "Ravello, Amalfi Coast").
+            const REGIONS = {
+                caribbean: ['anguilla','turks','caicos','providenciales','lucia','barths','west indies','virgin gorda','british virgin','bahamas','antigua','barbuda','nevis','mustique','cayman','grenada','jamaica','barbados'],
+                africa:    ['morocco','madagascar','africa','tanzania','botswana','kenya','namibia','rwanda','seychelles','mauritius','zambia','zimbabwe','mozambique'],
+                asia:      ['maldives','bali','indonesia','thailand','japan','vietnam','cambodia','sri lanka','fiji','australia','bhutan','laos','philippines','singapore','new zealand'],
+                americas:  ['mexico','costa rica','peru','chile','argentina','brazil','utah','florida','hawai','kona','california','colombia','ecuador','belize','united states','patagonia','papagayo','nayarit','cabo'],
+                italy:     ['italy','amalfi','tuscany','sicily','piedmont','langhe','ravello','positano','capri','como','venice','rome','florence'],
+                greece:    ['greece','santorini','mykonos','crete','athens','corfu'],
+                france:    ['france','paris','provence','cote','tropez','cannes'],
+            };
+            const regionTags = (locNorm) => Object.keys(REGIONS)
+                .filter(region => REGIONS[region].some(k => locNorm.indexOf(k) > -1))
+                .join(' ');
+
             // Alphabetical by hotel name (draft stubs from the quote scan are hidden until published)
             const entries = Object.entries(PROPERTIES)
                 .filter(([, p]) => !p.draft)
@@ -159,7 +178,7 @@
                 const a = document.createElement('a');
                 a.className = 'journeys-index-card';
                 a.href = '/hotels/' + slug;
-                a.dataset.search = norm((p.name || '') + ' ' + (p.location || ''));
+                a.dataset.search = norm((p.name || '') + ' ' + (p.location || '')) + ' ' + regionTags(norm(p.location || ''));
                 a.innerHTML =
                     '<figure class="journeys-index-image"><img src="' + p.heroImage + '" alt="' + p.name + '" loading="lazy"></figure>' +
                     '<div class="journeys-index-meta">' +
