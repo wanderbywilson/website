@@ -173,7 +173,7 @@
         </div>
     </section>
 
-    <script src="/data.js?v=71"></script>
+    <script src="/data.js?v=74"></script>
     <script>
         /* ------------------------------------------------------------------
            Property page bootstrap. Data lives in data.js (ATLAS_POINTS + PROPERTIES).
@@ -418,6 +418,11 @@
                 document.getElementById('propertyHeroCtaLabel').textContent = 'Inquire about this stay';
                 heroCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
                 heroCta.hidden = false;
+
+                // Closing CTA ("Book with perks") — mirror the hero CTA so the
+                // hotel-inquiry form lands pre-filled with this property.
+                const closeCta = document.getElementById('propertyCloseCta');
+                if (closeCta) closeCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
 
                 // Ideal-for — advisor's qualifying read on who fits this property
                 if (detail.idealFor) {

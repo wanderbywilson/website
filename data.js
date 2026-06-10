@@ -99,6 +99,32 @@ ATLAS_POINTS.forEach(p => { if (!p.slug) p.slug = slugify(p.hotel); });
 
 /* ---------- PROPERTIES (per-slug landing-page content) ------------------ */
 const PROPERTIES = {
+    'palm-heights': {
+        draft: true,
+        name: 'Palm Heights',
+        location: 'Grand Cayman, Cayman Islands',
+        rateFrom: '$850 / night',
+        heroImage: '/property-images/palm-heights/00-hero-pool.jpg',
+        description: "Palm Heights is a design-world darling on Seven Mile Beach, Grand Cayman, where a famed stretch of Caribbean sand meets 1970s Riviera glamour reimagined for now. Conceived as a generational reboot of a beloved island grande dame, the all-suite hotel trades resort gloss for the feel of a well-traveled private home &mdash; art-filled rooms, ocean views from every suite, and generous living spaces with full kitchens. Days drift between the palm-shaded pools, a serious gym, and the Garden Spa, then unfold across a roster of homegrown restaurants: whole snapper on the plancha at Tillies, Saturday Mambo nights at Paradise Pizza. It is understated glamour with a point of view &mdash; equal parts beach club, culture house, and wellness retreat.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast credit for up to two guests per bedroom (value of up to $100 per day, per bedroom)',
+            '$100 USD equivalent in local currency Resort or Hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/palm-heights/01-suite.jpg',
+            '/property-images/palm-heights/02-garden-terrace.jpg',
+            '/property-images/palm-heights/03-pool.jpg',
+            '/property-images/palm-heights/04-garden-spa.jpg',
+            '/property-images/palm-heights/05-beach-dining.jpg'
+        ],
+        idealFor: "Design lovers, wellness-minded friend groups, and style-set travelers who&rsquo;d trade a polished mega-resort for somewhere with a real point of view &mdash; closer to a creative private members&rsquo; club on the sand than a conventional Caribbean hotel.",
+        agentTip: "Ask us to book a seat right at the plancha grill in Tillies for the whole snapper &mdash; the best perch in the house. And time your stay around a Saturday: Mambo Night at Paradise Pizza is the island&rsquo;s most charming party, so have a go-to karaoke song ready.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16389775/palm-heights'
+    },
+
     'borgo-santandrea': {
         name: 'Borgo Santandrea',
         location: 'Amalfi Coast, Italy',
