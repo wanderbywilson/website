@@ -852,21 +852,24 @@ const PROPERTIES = {
        ─────────────────────────────────────────────────────────────────── */
 
     'four-seasons-resort-cabo-del-sol': {
-        draft: true,
-        // PHOTOS PENDING — not on SmartFlyer or Virtuoso; official site is bot-blocked (403).
-        // Drop images into property-images/four-seasons-resort-cabo-del-sol/, then add
-        // heroImage + gallery. Not a Virtuoso property → bookingUrl stays '#' (Four Seasons
-        // bookings route through FSPP / the inquiry form, not a Virtuoso self-book link).
+        // Not a Virtuoso property → bookingUrl stays '#' (Four Seasons bookings route
+        // through FSPP / the inquiry form, not a Virtuoso self-book link).
         name: 'Four Seasons Resort Cabo Del Sol',
         location: 'Cabo San Lucas, Mexico',
         rateFrom: '$1,650 / night',
+        heroImage: '/property-images/four-seasons-resort-cabo-del-sol/00-hero.jpg',
         description: "Four Seasons&rsquo; first resort in Los Cabos, opened in 2024 on a rare swimmable stretch of the Sea of Cortez at Cabo Del Sol. Contemporary and low-slung, it steps down through desert gardens to the water &mdash; multiple pools, a destination spa, and restaurants spanning Mexican coastal cooking to wood-fired everything. Championship golf sits on the doorstep, the beach is calm enough to actually swim (rare for Cabo), and the service is classic Four Seasons polish against one of Baja&rsquo;s most dramatic shorelines.",
         perks: [
-            'Upgrade on arrival, subject to availability',
-            'Daily breakfast for up to two guests per bedroom',
-            '$100 USD food &amp; beverage credit, once per stay',
-            'Early check-in / late check-out, subject to availability',
-            'Complimentary Wi-Fi'
+            'Guaranteed upgrade at time of booking, subject to availability',
+            'Daily full breakfast for two per bedroom, served in a restaurant or through in-room dining',
+            'Hotel or resort credit, based on room category booked:<br>&bull; Guest rooms &mdash; USD 100 per stay<br>&bull; Suites &amp; specialty suites &mdash; USD 200 per stay<br>&bull; Villas &amp; residence rentals &mdash; USD 200 per bedroom, per stay',
+            'Upgrade of one category, based on availability at time of check-in',
+            'One round-trip airport transfer (SJD or CSL airports)'
+        ],
+        gallery: [
+            '/property-images/four-seasons-resort-cabo-del-sol/01-pool.jpg',
+            '/property-images/four-seasons-resort-cabo-del-sol/02-architecture.jpg',
+            '/property-images/four-seasons-resort-cabo-del-sol/03-golf.jpg'
         ],
         idealFor: "Families and couples after polished, dependable Four Seasons service and a Cabo beach you can actually swim &mdash; and golfers, with the Sea of Cortez and championship courses on the doorstep.",
         agentTip: "A genuinely swimmable beach is rare in Los Cabos &mdash; this is one of the few. Book an ocean-view room for the Sea of Cortez sunrise, and leave a morning for golf or a panga out on the water.",
