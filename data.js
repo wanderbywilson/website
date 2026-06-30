@@ -99,6 +99,111 @@ ATLAS_POINTS.forEach(p => { if (!p.slug) p.slug = slugify(p.hotel); });
 
 /* ---------- PROPERTIES (per-slug landing-page content) ------------------ */
 const PROPERTIES = {
+    'passalacqua': {
+        name: 'Passalacqua',
+        location: 'Moltrasio, Lake Como, Italy',
+        rateFrom: '€1,500 / night',
+        heroImage: '/property-images/passalacqua/00-hero-pool.jpg',
+        description: "Passalacqua is an eighteenth-century villa on the quiet western shore of Lake Como at Moltrasio, reborn as a 24-room hideaway and twice crowned the World’s Best Hotel. From the De Santis family behind <a href=\"/hotels/grand-hotel-tremezzo\">Grand Hotel Tremezzo</a>, it is built around the lost art of villeggiatura &mdash; the unhurried Italian summer retreat &mdash; with seven acres of terraced gardens tumbling to a private jetty, a swimming pool framed by scalloped parasols, and a spa by Tuscan label Seed to Skin. Rooms spread across three historic buildings, layered in frescoes, Murano glass, and antique silk, while a glasshouse lounge dressed by Milanese house La DoubleJ adds a jolt of pattern and color. The service is the headline: famously intuitive, down to a complimentary class or excursion each day.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom (already included in the hotel&rsquo;s rates)',
+            '$100 USD equivalent in local currency Resort or Hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/passalacqua/06-spiaggina.jpg',
+            '/property-images/passalacqua/01-suite-lakeview.jpg',
+            '/property-images/passalacqua/02-grand-salon.jpg',
+            '/property-images/passalacqua/03-greenhouse-lounge.jpg',
+            '/property-images/passalacqua/07-gardens-lake.jpg',
+            '/property-images/passalacqua/04-spa-pool.jpg',
+            '/property-images/passalacqua/05-junior-suite.jpg',
+            '/property-images/passalacqua/08-italian-garden.jpg'
+        ],
+        idealFor: "Couples and honeymooners chasing the most romantic, intuitively staffed stay on the lake, and design lovers who&rsquo;d trade a big-name palace for a jewel-box villa where the staff remembers your name &mdash; and your favorite dish.",
+        agentTip: "Ask for Suite Bellini &mdash; named for the opera composer, it looks straight down the lake. Then use the complimentary class or excursion included each day: time one for a bouquet-arranging session with resident florist Daniela.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16360296/passalacqua'
+    },
+
+    'mandarin-oriental-lago-di-como': {
+        name: 'Mandarin Oriental, Lago di Como',
+        location: 'Blevio, Lake Como, Italy',
+        rateFrom: '€1,100 / night',
+        heroImage: '/property-images/mandarin-oriental-lago-di-como/00-hero.jpg',
+        description: "Mandarin Oriental, Lago di Como unfolds across nine villas and a lakefront botanical garden on the forested shore at Blevio, with the nineteenth-century Villa Roccabruna at its heart. The brand&rsquo;s first Italian resort, it pairs modern Italian elegance with Mandarin Oriental&rsquo;s signature service and the largest spa on the lake. Days orbit the floating infinity pool that hovers over the water, then drift to L&rsquo;ARIA for Italian cooking with a Japanese accent or the easy CO.MO Bar &amp; Bistrot. Quietly contemporary where the lake&rsquo;s grand dames are gilded, it is a calm, design-forward base just ten minutes by boat from Como.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily buffet breakfast for up to two guests per bedroom, served in the restaurant',
+            '$100 USD equivalent credit applicable towards Food &amp; Beverage or spa treatments, per room, per stay (no retail purchase, not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Bookings in Vista Lago Duplex Terrace Suite or higher categories receive an additional $100 credit (for a total of $200 during stay)',
+            'Early check-in / late check-out, subject to availability',
+            'Personalized welcome amenity and note',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/mandarin-oriental-lago-di-como/01-floating-pool.jpg',
+            '/property-images/mandarin-oriental-lago-di-como/02-suite.jpg',
+            '/property-images/mandarin-oriental-lago-di-como/03-spa.jpg',
+            '/property-images/mandarin-oriental-lago-di-como/04-romantic-dinner.jpg',
+            '/property-images/mandarin-oriental-lago-di-como/05-villa-terrace.jpg'
+        ],
+        idealFor: "Couples and wellness-seekers drawn to the lake&rsquo;s biggest spa and that floating infinity pool, plus design-forward travelers who&rsquo;d pick contemporary calm over the gilded grand-hotel look &mdash; with room enough for families and small celebrations.",
+        agentTip: "Catch sunset from the Bistrot terrace with a slice fresh off the &lsquo;Ape Pizza&rsquo; truck, then claim a spot on the floating infinity pool &mdash; the most photographed perch on this stretch of the lake. Booking a lake-view duplex terrace suite or higher unlocks a second resort credit.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/15635590/mandarin-oriental-lago-di-como'
+    },
+
+    'grand-hotel-tremezzo': {
+        name: 'Grand Hotel Tremezzo',
+        location: 'Tremezzina, Lake Como, Italy',
+        rateFrom: '€950 / night',
+        heroImage: '/property-images/grand-hotel-tremezzo/00-hero-gardens.jpg',
+        description: "Grand Hotel Tremezzo is a 1910 Art Nouveau palace on the western shore of Lake Como, gazing straight across the water to Bellagio. Family-run for more than a century, it wears its belle-&eacute;poque glamour with warmth: some eighty rooms and suites in period dress, terraced flowering gardens, a three-level spa, and five restaurants and bars led by La Terrazza Gualtiero Marchesi. Its signature flourish is water itself &mdash; three pools, one of them floating on the lake &mdash; alongside a private sandy shoreline, a flood-lit clay tennis court, and a fleet of vintage wooden water limousines. It is grand-hotel theater, played with genuine Italian heart.",
+        perks: [
+            'Daily breakfast &ldquo;with a view&rdquo; at La Terrazza Gualtiero Marchesi',
+            'Room upgrade on arrival, subject to availability',
+            '$100 USD resort credit per room, per stay',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/grand-hotel-tremezzo/01-floating-pool.jpg',
+            '/property-images/grand-hotel-tremezzo/02-music-salon.jpg',
+            '/property-images/grand-hotel-tremezzo/03-lake-suite.jpg',
+            '/property-images/grand-hotel-tremezzo/04-villa-suite.jpg',
+            '/property-images/grand-hotel-tremezzo/05-terrace-view.jpg'
+        ],
+        idealFor: "Families and couples who want full grand-hotel theater &mdash; three pools, gardens to wander, vintage water limousines &mdash; in the heart of the lake opposite Bellagio, and travelers who&rsquo;d take warm, century-old family hospitality over cool minimalism.",
+        agentTip: "Splurge on a Rooftop Suite for a private terrace and outdoor Jacuzzi above the lake (or a Historic Suite for old-world romance), order the riso, oro e zafferano at La Terrazza Gualtiero Marchesi, and book the hotel&rsquo;s vintage water limousine for a sunset run across to Bellagio.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6164234/grand-hotel-tremezzo'
+    },
+
+    'villa-deste': {
+        name: 'Villa d&rsquo;Este',
+        location: 'Cernobbio, Lake Como, Italy',
+        rateFrom: '€1,150 / night',
+        heroImage: '/property-images/villa-deste/00-hero.jpg',
+        description: "Villa d’Este has presided over the shore at Cernobbio since 1568, when it rose as a cardinal’s summer residence; a luxury hotel since 1873, it became the lake’s address of choice for European aristocracy on the Grand Tour. Set in twenty-five acres of landscaped park, its 151 rooms and four private villas are dressed in antique Renaissance furniture and Como silk, no two alike. The legend rests on grandeur and theater &mdash; the famous heated pool that floats on the lake (the first of its kind), formal dining beneath the striped awnings of the Veranda, and a full beauty centre with tennis, squash, and lakeside trails. This is Old-World Lake Como at its most operatic.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            '$100 USD equivalent in local currency Food &amp; Beverage credit to be utilized during stay',
+            'Bookings in Suites also receive welcome amenities of premium Champagne, fruit bowl, flowers, and friandises',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/villa-deste/01-junior-suite.jpg',
+            '/property-images/villa-deste/02-floating-pool.jpg',
+            '/property-images/villa-deste/03-veranda.jpg',
+            '/property-images/villa-deste/04-spa.jpg'
+        ],
+        idealFor: "Couples and honeymooners after capital-R romance, and multigenerational families who want pomp, history, and twenty-five acres of gardens &mdash; the pick for travelers who&rsquo;d take a frescoed sixteenth-century landmark over anything understated.",
+        agentTip: "Book a Lake View room in the Cardinal Building for the classic Villa d&rsquo;Este picture.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6163938/villa-deste'
+    },
+
     'palm-heights': {
         name: 'Palm Heights',
         location: 'Grand Cayman, Cayman Islands',

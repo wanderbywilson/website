@@ -128,14 +128,14 @@
             setHead('meta[name="description"]', 'content', post.dek || post.title);
             setHead('meta[property="og:title"]', 'content', post.title);
             setHead('meta[property="og:description"]', 'content', post.dek || '');
-            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com/' + post.heroImage);
+            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com' + (post.heroImage||'').replace(/^\/?/, '/'));
             setHead('meta[property="og:url"]', 'content', canonicalUrl);
             setHead('meta[property="og:type"]', 'content', 'article');
             setHead('meta[property="og:site_name"]', 'content', 'Wander by Wilson');
             setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
             setHead('meta[name="twitter:title"]', 'content', post.title);
             setHead('meta[name="twitter:description"]', 'content', post.dek || '');
-            setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com/' + post.heroImage);
+            setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com' + (post.heroImage||'').replace(/^\/?/, '/'));
 
             // BlogPosting + BreadcrumbList JSON-LD for rich results in Google
             const blogSchema = {
@@ -143,7 +143,7 @@
                 '@type': 'BlogPosting',
                 'headline': post.title,
                 'description': post.dek || '',
-                'image': 'https://www.wanderbywilson.com/' + post.heroImage,
+                'image': 'https://www.wanderbywilson.com' + (post.heroImage||'').replace(/^\/?/, '/'),
                 'url': canonicalUrl,
                 'datePublished': post.datePublished || post.date || '',
                 'dateModified': post.dateModified || post.datePublished || post.date || '',

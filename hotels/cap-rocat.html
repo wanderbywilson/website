@@ -173,7 +173,7 @@
         </div>
     </section>
 
-    <script src="/data.js?v=75"></script>
+    <script src="/data.js?v=82"></script>
     <script>
         /* ------------------------------------------------------------------
            Property page bootstrap. Data lives in data.js (ATLAS_POINTS + PROPERTIES).
@@ -230,14 +230,14 @@
             setHead('meta[name="description"]', 'content', ogDesc);
             setHead('meta[property="og:title"]', 'content', nameText);
             setHead('meta[property="og:description"]', 'content', ogDesc);
-            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com/' + heroImage);
+            setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com' + (heroImage||'').replace(/^\/?/, '/'));
             setHead('meta[property="og:url"]', 'content', canonicalUrl);
             setHead('meta[property="og:type"]', 'content', 'website');
             setHead('meta[property="og:site_name"]', 'content', 'Wander by Wilson');
             setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
             setHead('meta[name="twitter:title"]', 'content', nameText);
             setHead('meta[name="twitter:description"]', 'content', ogDesc);
-            setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com/' + heroImage);
+            setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com' + (heroImage||'').replace(/^\/?/, '/'));
 
             // Hotel + BreadcrumbList JSON-LD (SEO structured data — appears in
             // Google rich results, Knowledge Panel, hotel cards)
@@ -247,7 +247,7 @@
                 '@type': 'Hotel',
                 'name': nameText,
                 'url': canonicalUrl,
-                'image': 'https://www.wanderbywilson.com/' + heroImage,
+                'image': 'https://www.wanderbywilson.com' + (heroImage||'').replace(/^\/?/, '/'),
                 'description': ogDesc,
                 'address': { '@type': 'PostalAddress', 'addressLocality': location.replace(/<[^>]+>/g,'') }
             };
