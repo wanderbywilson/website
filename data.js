@@ -987,7 +987,6 @@ const PROPERTIES = {
        run scripts/generate-property-pages.py to publish. ─── */
 
     'four-seasons-resort-orlando': {
-        draft: true,
         // Four Seasons → bookingUrl stays '#' (bookings route through FSPP / the inquiry form, not Virtuoso).
         name: 'Four Seasons Resort Orlando at Walt Disney World Resort',
         location: 'Orlando, Florida',
@@ -1014,7 +1013,6 @@ const PROPERTIES = {
     },
 
     'lovango-resort-beach-club': {
-        draft: true,
         name: 'Lovango Resort &amp; Beach Club',
         location: 'Lovango Cay, U.S. Virgin Islands',
         rateFrom: '$995 / night',
@@ -1041,7 +1039,6 @@ const PROPERTIES = {
     },
 
     'gardena-grodnerhof': {
-        draft: true,
         name: 'Hotel Gardena Gr&ouml;dnerhof',
         location: 'Ortisei, Dolomites, Italy',
         rateFrom: '€750 / night',
@@ -1066,7 +1063,6 @@ const PROPERTIES = {
     },
 
     'casa-angelina': {
-        draft: true,
         name: 'Casa Angelina',
         location: 'Praiano, Amalfi Coast, Italy',
         rateFrom: '€750 / night',
@@ -1092,7 +1088,6 @@ const PROPERTIES = {
     },
 
     'villa-san-michele': {
-        draft: true,
         name: 'Villa San Michele, A Belmond Hotel',
         location: 'Fiesole, Florence, Italy',
         rateFrom: '€1,200 / night',
@@ -1121,7 +1116,6 @@ const PROPERTIES = {
     },
 
     'casa-monti': {
-        draft: true,
         name: 'Casa Monti Roma',
         location: 'Monti, Rome, Italy',
         rateFrom: '€650 / night',
@@ -1148,7 +1142,6 @@ const PROPERTIES = {
     },
 
     'castle-hot-springs': {
-        draft: true,
         name: 'Castle Hot Springs',
         location: 'Morristown, Arizona',
         rateFrom: '$1,650 / night',
@@ -1175,7 +1168,6 @@ const PROPERTIES = {
     },
 
     'cali-mykonos': {
-        draft: true,
         name: 'Cali Mykonos',
         location: 'Kalafatis, Mykonos, Greece',
         rateFrom: '€700 / night',
