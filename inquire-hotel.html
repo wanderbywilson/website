@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=243">
+    <link rel="stylesheet" href="/styles.css?v=244">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -215,6 +215,8 @@
         </div>
     </section>
 
+    <!-- Hotel data (PROPERTIES / ATLAS_POINTS) for slug→name pre-fill -->
+    <script src="/data.js?v=90"></script>
     <script>
         // Header scroll state
         const header = document.getElementById('siteHeader');
@@ -231,6 +233,30 @@
             alreadyBooked.addEventListener('change', syncBookedNote);
             syncBookedNote();
         }
+
+        // Pre-fill the hotel field when arriving from a property page (?hotel=<slug>).
+        // Resolve the slug to the exact brand name via PROPERTIES, then ATLAS_POINTS,
+        // falling back to a de-slugified title if the hotel isn't in the dataset.
+        (function prefillHotel() {
+            const slug = new URLSearchParams(window.location.search).get('hotel');
+            const field = document.getElementById('hotelName');
+            if (!slug || !field) return;
+            let name = '';
+            if (typeof PROPERTIES !== 'undefined' && PROPERTIES[slug]) {
+                name = PROPERTIES[slug].name || '';
+            }
+            if (!name && typeof ATLAS_POINTS !== 'undefined') {
+                const a = ATLAS_POINTS.find(p => p.slug === slug);
+                if (a) name = a.hotel || '';
+            }
+            if (!name) {
+                name = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            }
+            // Decode HTML entities (e.g. &amp;, &ouml;, &rsquo;) for the plain-text input value.
+            const decoder = document.createElement('textarea');
+            decoder.innerHTML = name;
+            field.value = decoder.value;
+        })();
 
         // AJAX submit to /api/inquire-hotel (Vercel serverless → Brevo, branded email to Wilson)
         (function wireForm() {

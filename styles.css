@@ -2251,6 +2251,23 @@ body.is-property-page { background: var(--paper); }
     text-wrap: pretty;
 }
 
+/* Inline links inside property copy — gold + persistent underline so
+   they read clearly as links (underline carries the affordance, not
+   colour alone), darkening to ink on hover/focus. */
+.property-prose a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--gold-faint);
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.property-prose a:hover,
+.property-prose a:focus-visible {
+    color: var(--ink);
+    text-decoration-color: var(--ink);
+}
+
 .property-perks-list {
     list-style: none;
     padding: 0;

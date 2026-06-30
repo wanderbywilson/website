@@ -981,6 +981,225 @@ const PROPERTIES = {
        Descriptions are DRAFT copy for Wilson to wordsmith.
        ─────────────────────────────────────────────────────────────────── */
 
+    /* ─── 2026-06-25 /new-hotel-page build: 8 draft hotels, each with sourced + face-vetted
+       images, original draft copy, candidate perks, and (where on Virtuoso) a booking link.
+       Rates are ESTIMATES; some perks are CANDIDATES — verify, then delete `draft: true` and
+       run scripts/generate-property-pages.py to publish. ─── */
+
+    'four-seasons-resort-orlando': {
+        draft: true,
+        // Four Seasons → bookingUrl stays '#' (bookings route through FSPP / the inquiry form, not Virtuoso).
+        name: 'Four Seasons Resort Orlando at Walt Disney World Resort',
+        location: 'Orlando, Florida',
+        rateFrom: '$725 / night',
+        heroImage: '/property-images/four-seasons-resort-orlando/00-hero.jpg',
+        description: "Four Seasons Resort Orlando at Walt Disney World Resort is Central Florida&rsquo;s only AAA Five Diamond hotel &mdash; a polished home base for a Disney trip, set on its own gated acreage inside Walt Disney World Resort. The five-acre Explorer Island water park, lazy river, and complimentary kids&rsquo; camp keep the days easy, while the rooftop steakhouse Capa frames the Magic Kingdom fireworks at night. Add a 13,000-square-foot spa, a Tom Fazio golf course, and complimentary scheduled transport to the parks, and the formula is Disney by day, grown-up calm by evening. No resort fees.",
+        perks: [
+            'Upgrade on arrival, subject to availability (excludes Suites)',
+            'Daily Buffet breakfast for up to two guests per bedroom, served in the restaurant',
+            '$100 USD equivalent Food &amp; Beverage credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early Check-In / Late Check-Out, subject to availability'
+        ],
+        gallery: [
+            '/property-images/four-seasons-resort-orlando/01-lagoon-pool.jpg',
+            '/property-images/four-seasons-resort-orlando/02-water-park.jpg',
+            '/property-images/four-seasons-resort-orlando/03-magic-kingdom-dusk.jpg',
+            '/property-images/four-seasons-resort-orlando/04-park-view-room.jpg',
+            '/property-images/four-seasons-resort-orlando/05-suite.jpg',
+            '/property-images/four-seasons-resort-orlando/06-oasis-pool.jpg'
+        ],
+        idealFor: "Families who want to do Disney without giving up grown-up polish &mdash; and the couples or friend groups traveling with them, who get a rooftop steakhouse, a serious spa, and an adults-only pool to retreat to once the parks close.",
+        agentTip: "Lean on the complimentary park shuttle rather than driving, and don&rsquo;t miss the hotel&rsquo;s character breakfast at Ravello while you&rsquo;re here.",
+        bookingUrl: '#'
+    },
+
+    'lovango-resort-beach-club': {
+        draft: true,
+        name: 'Lovango Resort &amp; Beach Club',
+        location: 'Lovango Cay, U.S. Virgin Islands',
+        rateFrom: '$995 / night',
+        heroImage: '/property-images/lovango-resort-beach-club/00-hero.jpg',
+        description: "Lovango Resort &amp; Beach Club is a boat-only private-island retreat on Lovango Cay, set between St. Thomas and St. John in the U.S. Virgin Islands. A ten-minute ferry delivers you to luxury glamping tents, hillside treehouses, and villas scattered across the hillside, each with sea views, Matouk linens, and breezy island-modern interiors. At its heart, the USVI&rsquo;s only beach club gathers around a seventy-foot infinity pool, signature blue umbrellas, and some of the best snorkeling in the Caribbean. With waterfront dining, a curated cluster of island shops, and three swimmable beaches, it&rsquo;s barefoot luxury with the polish of a resort and the soul of a hideaway.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            'Resort credit to be utilized during stay',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/lovango-resort-beach-club/01-infinity-pool-beach-club.jpg',
+            '/property-images/lovango-resort-beach-club/02-bay-view-terrace.jpg',
+            '/property-images/lovango-resort-beach-club/03-glamping-tent-deck.jpg',
+            '/property-images/lovango-resort-beach-club/04-treehouse-interior.jpg',
+            '/property-images/lovango-resort-beach-club/05-beach-dinner.jpg',
+            '/property-images/lovango-resort-beach-club/06-balcony-chairs.jpg'
+        ],
+        idealFor: "Honeymooners and barefoot-luxe couples who want a private-island escape without going fully off-grid &mdash; the boat-only access trades effortless arrivals for genuine seclusion, with St. John and St. Thomas still a short ferry away.",
+        agentTip: "Overnight guests get complimentary membership to the Lovango Beach Club &mdash; claim a daybed by the seventy-foot infinity pool early, take the resort&rsquo;s private boat to Honeymoon Beach on St. John for the afternoon.",
+        bookingUrl: '#'
+    },
+
+    'gardena-grodnerhof': {
+        draft: true,
+        name: 'Hotel Gardena Gr&ouml;dnerhof',
+        location: 'Ortisei, Dolomites, Italy',
+        rateFrom: '€750 / night',
+        heroImage: '/property-images/gardena-grodnerhof/00-hero.jpg',
+        description: "Hotel Gardena Gr&ouml;dnerhof is a family-run, five-star Relais &amp; Ch&acirc;teaux retreat in Ortisei, set against the UNESCO-listed peaks of the Val Gardena in Italy&rsquo;s South Tyrol. Across sixty-four rooms and suites finished in warm local timber, the mood is unmistakably alpine yet quietly contemporary, with private balconies framing the village or the surrounding Dolomites. The Michelin-starred Anna Stuben anchors a serious culinary programme, while the Gardena Spa unfolds over multiple floors with an indoor pool and a rooftop whirlpool above the rooftops of Ortisei. Sella Ronda skiing and Seceda&rsquo;s summer trails begin moments from the door.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom, served in the restaurant (already included in property rates)',
+            '$100 USD equivalent hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/gardena-grodnerhof/01-suite-living.jpg',
+            '/property-images/gardena-grodnerhof/02-rooftop-whirlpool.jpg',
+            '/property-images/gardena-grodnerhof/03-spa-pool.jpg',
+            '/property-images/gardena-grodnerhof/04-anna-stuben.jpg'
+        ],
+        idealFor: "Spa-minded couples and food-led travelers who want a refined alpine base with Michelin dining and ski-in convenience &mdash; choosing a warm, family-run house over a polished international resort.",
+        agentTip: "Have the concierge arrange the early-morning helicopter flight to a high-altitude vantage point above the slopes &mdash; you&rsquo;ll be first onto pristine snow as the rising sun lights up the Dolomites. In summer, swap it for the guided late-afternoon walk to a Seceda mountain hut for a sunset toast, with the return by helicopter over the peaks.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16580259/gardena-grodnerhof-hotel-spa'
+    },
+
+    'casa-angelina': {
+        draft: true,
+        name: 'Casa Angelina',
+        location: 'Praiano, Amalfi Coast, Italy',
+        rateFrom: '€750 / night',
+        heroImage: '/property-images/casa-angelina/00-hero.jpg',
+        description: "Casa Angelina is a minimalist, adults-oriented design hotel perched on the cliffs of Praiano, a short drive from Positano&rsquo;s crowds along the Amalfi Coast. Behind its all-white facade, thirty-six light-filled rooms and suites frame sweeping views toward Positano and Capri, while contemporary art and Murano-glass accents lend warmth to the pared-back palette. Days unfold between the sea-facing pool shaded by lemon trees, an Augustinus Bader spa, and a Michelin-starred rooftop restaurant suspended between sky and sea. It is the Amalfi Coast distilled to its calmest, most considered form.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom',
+            '$100 USD equivalent resort or hotel credit to be utilized during stay; stays of 7+ nights receive an additional $200 USD Food &amp; Beverage credit (for a total of $300 during stay)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/casa-angelina/01-angelina-suite.jpg',
+            '/property-images/casa-angelina/02-pool-sea-view.jpg',
+            '/property-images/casa-angelina/03-lemon-pergola-terrace.jpg',
+            '/property-images/casa-angelina/04-spa-treatment-room.jpg',
+            '/property-images/casa-angelina/05-al-fresco-dining.jpg'
+        ],
+        idealFor: "Design lovers and couples drawn to clean, contemporary lines over gilded Amalfi opulence &mdash; and travelers who&rsquo;d happily trade Positano&rsquo;s bustle for a serene, grown-up perch just up the coast.",
+        agentTip: "A complimentary shuttle bus service is available all day long to reach Positano and back &ndash; it&rsquo;s just a ten-minute ride each way. Water taxi services can also be arranged, and they leave directly from the little pier below the hotel.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/15601678/casa-angelina?search=%22amalfi%20coast%22&mode=Gts'
+    },
+
+    'villa-san-michele': {
+        draft: true,
+        name: 'Villa San Michele, A Belmond Hotel',
+        location: 'Fiesole, Florence, Italy',
+        rateFrom: '€1,200 / night',
+        heroImage: '/property-images/villa-san-michele/00-hero.jpg',
+        brandBadge: '/logos/bellini-club.png',
+        brandBadgeAlt: 'Bellini Club by Belmond',
+        description: "On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose fa&ccedil;ade is attributed to Michelangelo. A meticulous restoration has brought the cloisters, frescoed salons, and arched Loggia back to life, pairing centuries of patina with the hand of Tuscan master artisans &mdash; while the gardens drop away in terraces toward the highest pool in the city, its still water set against the whole of the Florentine valley. Days unfold between the rose-scented Renaissance gardens, long lunches beneath the Loggia, and the short shuttle down into the Duomo&rsquo;s shadow. Removed from the crowds yet minutes from the city, it is Florence at its most serene.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Full breakfast daily for up to two guests per bedroom',
+            'Fully flexible Bellini Club hotel credit: $90 USD equivalent per room per stay, or $200 USD equivalent per suite per stay, to be utilized during stay',
+            'A $500 USD equivalent gift voucher when booking a $5,000 USD equivalent or more Belmond holiday, redeemable on your next Belmond experience',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/villa-san-michele/01-infinity-pool-florence-view.jpg',
+            '/property-images/villa-san-michele/02-villa-hillside-twilight.jpg',
+            '/property-images/villa-san-michele/03-frescoed-room-loggia-view.jpg',
+            '/property-images/villa-san-michele/04-garden-terrace-dining.jpg',
+            '/property-images/villa-san-michele/05-cloister-lounge.jpg'
+        ],
+        idealFor: "Couples and culture-minded travelers who want Florence at arm&rsquo;s length and are happy to trade a city-center palazzo for a monastery hideaway with a courtesy shuttle to the Duomo.",
+        agentTip: "For the utmost privacy, ask us about the Limonaia Villa &mdash; the convent&rsquo;s former orangery, tucked into a secluded corner of the gardens with its own terrace and plunge pool.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6163903/villa-san-michele-a-belmond-hotel-florence'
+    },
+
+    'casa-monti': {
+        draft: true,
+        name: 'Casa Monti Roma',
+        location: 'Monti, Rome, Italy',
+        rateFrom: '€650 / night',
+        heroImage: '/property-images/casa-monti/00-hero.jpg',
+        description: "Casa Monti Roma is a 36-room boutique five-star tucked into Monti, Rome&rsquo;s most bohemian quarter, a short walk from the Colosseum and Roman Forum. Designed by Laura Gonzalez for the family-owned Leitmotiv group, its interiors layer hand-painted frescoes, custom furnishings, and a playful French-Italian palette in a spirit of effortless sprezzatura. Days begin with espresso and a pistachio croissant on the fountain-centered patio and end with sundowners on the rooftop, where the city&rsquo;s terracotta skyline unfurls in the golden hour. In between there&rsquo;s a contemporary trattoria of seasonal Roman cooking and the city&rsquo;s first Susanne Kaufmann spa.",
+        perks: [
+            'Complimentary breakfast daily',
+            'Upgrade upon arrival, subject to availability (room to room, suite to suite)',
+            'Early check-in / late check-out, subject to availability',
+            'Welcome amenity',
+            '&euro;100 credit (food &amp; beverage or spa) for a minimum two-night stay',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/casa-monti/01-rooftop-bar.jpg',
+            '/property-images/casa-monti/02-signature-room.jpg',
+            '/property-images/casa-monti/03-roman-suite.jpg',
+            '/property-images/casa-monti/04-fountain-patio.jpg',
+            '/property-images/casa-monti/05-terrace-restaurant.jpg'
+        ],
+        idealFor: "Design-led couples who want an intimate, of-the-moment base in walkable Monti rather than a grand-dame palace on the tourist circuit.",
+        agentTip: "Make time for the rooftop &mdash; go up at golden hour for a cocktail and sweet treats, with the city&rsquo;s rooftops spread out below and the Roman air doing the rest.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/18250929/casa-monti'
+    },
+
+    'castle-hot-springs': {
+        draft: true,
+        name: 'Castle Hot Springs',
+        location: 'Morristown, Arizona',
+        rateFrom: '$1,650 / night',
+        rateNote: 'All-inclusive of meals & most activities',
+        heroImage: '/property-images/castle-hot-springs/00-hero.jpg',
+        description: "Castle Hot Springs is a 1,100-acre desert hideaway tucked into a hidden Sonoran canyon ninety minutes north of Phoenix, where geothermal mineral water has drawn travelers since 1896. The thermal springs cascade through three stone pools at descending temperatures, framed by saguaro, palms, and warm limestone walls. Just 30 adults-only accommodations &mdash; Spring Bungalows with private spring-fed soaking tubs, stargazing Sky View Cabins, and a historic cottage &mdash; scatter across the valley floor. Days move between the via ferrata and slot-canyon hikes and an unhurried surrender to the water, while a working farm supplies the multi-course dinners at Harvest.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests, per bedroom',
+            '$100 USD equivalent resort or hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability'
+        ],
+        gallery: [
+            '/property-images/castle-hot-springs/01-mineral-springs-pool.jpg',
+            '/property-images/castle-hot-springs/02-spring-bungalow.jpg',
+            '/property-images/castle-hot-springs/03-bungalow-soaking-tub.jpg',
+            '/property-images/castle-hot-springs/04-sky-view-cabin.jpg',
+            '/property-images/castle-hot-springs/05-farm-aerial.jpg',
+            '/property-images/castle-hot-springs/06-fire-table-dusk.jpg'
+        ],
+        idealFor: "Wellness-and-adventure couples who would trade a sprawling spa-resort for somewhere remote, historic, and gloriously off-grid &mdash; the kind who want a via ferrata before lunch and a midnight soak under the stars, with no children and almost no cell signal to interrupt either.",
+        agentTip: "Book a Spring Bungalow for the private outdoor tub piped straight from the springs, then slip down to the natural pools before breakfast &mdash; the upper springs are quietest and warmest at first light, before the day&rsquo;s activities begin.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16161185/castle-hot-springs'
+    },
+
+    'cali-mykonos': {
+        draft: true,
+        name: 'Cali Mykonos',
+        location: 'Kalafatis, Mykonos, Greece',
+        rateFrom: '€700 / night',
+        heroImage: '/property-images/cali-mykonos/00-hero.jpg',
+        description: "Cali Mykonos rewrites the island&rsquo;s playbook from a headland above Kalafatis Beach, trading the town crush for a quieter, design-led stretch of the southeast coast. Freestanding whitewashed suites and villas tumble down the cliff in pared-back Cycladic minimalism &mdash; marble, travertine, COCO-MAT linens &mdash; many with their own heated seawater pools. At its heart, a 130-metre infinity pool traces the cliff edge above a private sandy cove, while contemporary Greek cooking, an Apollo cocktail bar, and a serene spa round out the day. This is Mykonos glamour turned down to a whisper.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom, served in the restaurant (already included in property rates)',
+            '$100 USD equivalent Food &amp; Beverage credit to be utilized during stay (not combinable, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/cali-mykonos/01-infinity-pool.jpg',
+            '/property-images/cali-mykonos/02-pool-suite.jpg',
+            '/property-images/cali-mykonos/03-suite.jpg',
+            '/property-images/cali-mykonos/04-cove-beach.jpg',
+            '/property-images/cali-mykonos/05-sunset.jpg'
+        ],
+        idealFor: "Those who would rather drift between a private-pool suite and a cliff-edge infinity pool than queue for a beach club in town.",
+        agentTip: "Time a sunset cocktail at the Apollo Bar, where the light folds behind the mountain &mdash; then have the team arrange a private boat charter from Cali&rsquo;s own dock for a day on the water.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/16900835/cali-mykonos'
+    },
+
     'four-seasons-resort-cabo-del-sol': {
         // Not a Virtuoso property → bookingUrl stays '#' (Four Seasons bookings route
         // through FSPP / the inquiry form, not a Virtuoso self-book link).
