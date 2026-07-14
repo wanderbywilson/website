@@ -5,6 +5,112 @@
  * Hero images = first inline body photo (cleaner than the old Pinterest collages).
  */
 const BLOG_POSTS = {
+    'luxury-cruise-yacht-openings-2026': {
+        title: "Hotels on the Water: 4 New Luxury Cruise and Yacht Openings for 2026",
+        dek: "Four luxury yachts launching in 2026, from a 30-guest expedition vessel to the world's largest sailing yacht. What makes each one worth watching.",
+        heroImage: "/blog-images/luxury-cruise-yacht-openings-2026/hero-amalfi.jpg",
+        date: "July 2026",
+        datePublished: "2026-07-14",
+        readTime: "8 min read",
+        tags: ["Cruises & Yachts"],
+        location: "Worldwide",
+        tripTypes: ["Travel Inspiration", "Travel Guide"],
+        bodyHtml: `
+<figure><img src="/blog-images/luxury-cruise-yacht-openings-2026/hero-amalfi.jpg" alt="A luxury cruise ship anchored in the deep blue sea off the cliffside village of Atrani on Italy's Amalfi Coast" loading="lazy"></figure>
+
+<p>Something has changed in luxury travel at sea. For years, the best cruise lines competed on size: more decks, more restaurants, more passengers. The 2026 launches are going in the opposite direction. The four vessels worth paying attention to this year are smaller, more considered, and designed around the idea that a ship should feel like a great hotel that happens to move.</p>
+
+<p>Each one approaches this differently. One carries 30 guests through Arctic ice. Another has suites larger than most five-star hotel rooms. One sails under three masts and anchors off the Venice Film Festival. The common thread is that none of them feel like a cruise in the traditional sense, and that is precisely the point.</p>
+
+<p>The smallest vessel on this list is also the most remote in its ambitions.</p>
+
+<h2>Aqua Lares: Expedition Travel Without Roughing It</h2>
+
+<figure><img src="/blog-images/luxury-cruise-yacht-openings-2026/aqua-lares-golden-hour.jpg" alt="A small expedition yacht cruising glassy water at golden hour with a guest tender leading the way" loading="lazy"></figure>
+
+<p>Thirty guests. An ice-class hull. Two of the most remote marine environments on the planet. <a href="https://www.virtuoso.com/advisor/wilsschu27955/ships/18392221/aqua-lares" target="_blank" rel="noopener noreferrer">Aqua Lares</a> splits her year between extremes. From <strong>November through April</strong>, she threads through the <strong>Seychelles, Aldabra Atoll, Zanzibar, and coastal Tanzania</strong>, covering waters where giant tortoises outnumber tourists and the reefs are among the least-visited in the Indian Ocean. From <strong>June through September</strong>, she repositions to <strong>Svalbard and the Norwegian Arctic</strong> for polar voyages where the midnight sun turns the ice fields gold. You wake up each morning to a different coastline, chosen by the expedition team based on conditions rather than a fixed itinerary.</p>
+
+<p>What keeps it from feeling rugged is the onboard design: specialist naturalist guides, interiors built with the same care you would expect at a top safari lodge, and diving sites that change daily. No two days look the same.</p>
+
+<p>The Arctic season fills quickly because 30 guests is 30 guests. If Svalbard is on your list, the planning window needs to be generous. For the East Africa sailings, the starboard cabins get the best morning light over Aldabra, which is worth knowing when you are choosing.</p>
+
+<p>Where Aqua Lares is built for explorers willing to trade scale for access, Explora III is designed for travelers who want dramatic landscapes delivered to a suite that feels like home. The shift is from expedition to residence.</p>
+
+<h2>Explora III: Northern Europe from a Floating Residence</h2>
+
+<figure><img src="/blog-images/luxury-cruise-yacht-openings-2026/explora-iii-greenland.jpg" alt="The Explora ship sailing through calm grey waters past rocky islets under a moody Nordic sky" loading="lazy"></figure>
+
+<p><a href="https://www.virtuoso.com/advisor/wilsschu27955/suppliers/16255700/explora-journeys" target="_blank" rel="noopener noreferrer">Explora Journeys</a> launches Explora III in <strong>July 2026</strong>, with an inaugural journey departing July 24. She heads straight for <strong>Iceland, Greenland, and the far reaches of Northern Europe</strong>, destinations where the landscape takes center stage and you want a vessel that lets you absorb it.</p>
+
+<p>That sense of arrival extends to the living spaces. The 461 ocean-front suites start at 35 sqm, each with a private terrace large enough for two chairs and a table. Dining has no fixed seating times and no assigned tables. There is an outdoor pool heated for northern conditions. Swimming while watching glaciers drift past is exactly as surreal as it sounds.</p>
+
+<p>What makes the Northern itineraries worth watching is the contrast. You pull into a Greenlandic fjord at dawn, the water so flat it mirrors the icebergs, then sit down to a breakfast that would hold up at any top European hotel. Raw landscape outside, refined comfort inside. The shore excursions use small groups: private geothermal pools in Iceland, zodiac cruises through Greenlandic ice fields, village visits in the Faroe Islands where the tourist infrastructure barely exists.</p>
+
+<p>Mid-ship Terrace Suites offer the smoothest ride in northern waters, and the Disko Bay shore excursion is worth prioritizing. The small-group zodiac approach means you experience the ice at water level, not from an observation deck.</p>
+
+<p>Explora III brings hotel-level comfort to remote landscapes. Four Seasons takes that same ambition and pairs it with the service DNA of a brand that has spent decades perfecting anticipation.</p>
+
+<h2>Four Seasons Yachts</h2>
+
+<figure><img src="/blog-images/luxury-cruise-yacht-openings-2026/four-seasons-pool-deck.jpg" alt="The teak pool deck of a Four Seasons yacht with rattan loungers, an outdoor bar, and the open ocean beyond" loading="lazy"></figure>
+
+<p><a href="https://www.virtuoso.com/advisor/wilsschu27955/suppliers/16761419/four-seasons-yachts" target="_blank" rel="noopener noreferrer">Four Seasons Yachts</a> launched in <strong>January 2026</strong>, and it is the one our clients ask about most. This is not a licensing deal or a hotel name on someone else's vessel. Four Seasons designed it from scratch with Italian shipyard Fincantieri, applying the same spatial thinking and service model as properties like Four Seasons Grenada, one of our favorite <a href="/post/20-best-all-inclusive-luxury-hotels-in-the-caribbean">Caribbean recommendations</a>.</p>
+
+<p>The numbers tell part of the story. Walk into the entry-level suite and you are standing in 54 sqm (581 sqft) of living space, larger than the top-tier cabin on most luxury cruise lines. We have compared the deck plans. These are genuine living areas, with room to spread out, a proper sitting area, and a bathroom designed for two people. The staff-to-guest ratio is 1:1. One person anticipating your needs before you articulate them.</p>
+
+<p>The same attention to space carries into the rest of the ship. Dining includes an intimate omakase counter and a Mediterranean grill, with no reservations required and no assigned seating. The spa has treatment rooms facing the ocean, and the fitness and yoga spaces occupy prime real estate on the ship rather than being tucked into a lower deck.</p>
+
+<p>One thing worth understanding: this is not an all-inclusive model. Breakfast and non-alcoholic beverages are included. Lunch, dinner, and alcohol are additional. Shore excursions and spa treatments carry separate charges. The quality justifies the approach, but it is worth knowing upfront, especially if you are comparing against lines that bundle more into the fare.</p>
+
+<p>If you are choosing a specific suite, the Funnel Suites, positioned aft with expansive terraces and wake views, are the most compelling spaces onboard. Inaugural-year pricing also tends to run more competitively than subsequent seasons.</p>
+
+<p>Four Seasons brings world-class hotel service to the water. Orient Express arrives with something different entirely: a 140-year legacy of rail craftsmanship, and the ambition to launch the largest sailing yacht ever built.</p>
+
+<h2>Orient Express Corinthian: The World's Largest Sailing Yacht</h2>
+
+<figure><img src="/blog-images/luxury-cruise-yacht-openings-2026/orient-express-dining.jpg" alt="An elegant fine-dining room aboard the Orient Express Corinthian with floor-to-ceiling windows framing a pink sunset over the sea" loading="lazy"></figure>
+
+<p>There are hotel openings, and then there are events. <a href="https://www.virtuoso.com/advisor/wilsschu27955/suppliers/18120473/orient-express-sailing-yachts" target="_blank" rel="noopener noreferrer">Orient Express Sailing Yachts</a> launching the <em>Corinthian</em> in <strong>June 2026</strong> falls firmly in the second category. At 220 meters (722 feet), she is the <strong>world's largest sailing yacht</strong>, powered by SolidSail technology across three functional masts that serve as genuine propulsion, not decoration. When wind conditions allow, the Corinthian runs under sail with zero-emission power, making her one of the most ambitious sustainability commitments in luxury travel at sea. Every detail, from the hull's silhouette to the thread count in the suites, carries the kind of obsessive French craftsmanship that defined the Orient Express name on rail.</p>
+
+<p>Inside, the scale translates to 54 sea-facing suites for 110 guests. <strong>Le SPA by Guerlain</strong> is the only Guerlain spa at sea, with the full product line, signature treatments, and a space designed to make you forget you are on a vessel. <strong>La Table de l'Orient-Express by Yannick Alléno</strong>, the multi-Michelin-starred French chef, anchors the culinary program. Picture a five-course dinner on deck, the sails catching wind overhead, the Mediterranean darkening around you. Theatrical in the best possible way.</p>
+
+<p>What separates Orient Express from the rest of this list is the cultural access. The itineraries are built around events like the <strong>Venice Film Festival</strong> and <strong>Saint-Tropez's Les Voiles regatta</strong>. Sailing into Venice under full mast, stepping off for a private screening, and returning to your suite with the lagoon outside your window is not a cruise itinerary. It is the kind of experience that stays with you.</p>
+
+<p>Her inaugural Mediterranean season runs through summer 2026 before she crosses the Atlantic for a <strong>Caribbean winter season</strong>. If you have been researching <a href="/post/20-best-all-inclusive-luxury-hotels-in-the-caribbean">luxury Caribbean hotels</a> or <a href="/post/top-7-luxury-hotels-in-the-caribbean-for-a-beachfront-honeymoon">beachfront honeymoon resorts</a>, Orient Express offers a way to experience the entire region without choosing just one island. The aft-facing suites with private terraces get the best combination of wake views and sunset light, and the Venice Film Festival sailing in September is likely to be the most popular single itinerary of the year.</p>
+
+<p>Four very different vessels, each worth watching for different reasons. Below are the questions we hear most.</p>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Is a luxury yacht cruise worth it compared to a hotel stay?</h3>
+
+<p>The comparison misses the point. A great hotel grounds you in one destination. A great yacht gives you a new destination every morning with the hotel attached. No packing, no transfers, no checking in and out. Your suite, your service team, and your dining travel with you. The 2026 launches have raised the bar further, with suite sizes and service levels that genuinely rival top land-based properties.</p>
+
+<h3>What is included on Four Seasons Yachts?</h3>
+
+<p>Breakfast, non-alcoholic beverages, and Wi-Fi are included in the base fare. Lunch, dinner, and alcohol are available at additional cost across the onboard restaurants. Shore excursions and spa treatments also carry separate charges. It is not a traditional all-inclusive model, and that is worth factoring in when comparing fares against lines that bundle more.</p>
+
+<h3>What is the best luxury cruise to book for 2026?</h3>
+
+<p>It depends on what you are after. For expedition and wildlife in genuinely remote waters, Aqua Lares. For northern landscapes with residential comfort, Explora III. For best-in-class hotel service at sea, Four Seasons Yachts. For culture, design, and Mediterranean glamour under sail, Orient Express Corinthian.</p>
+
+<h3>How far in advance should we book an inaugural cruise?</h3>
+
+<p>Six to twelve months for most sailings. Specialty voyages like the Orient Express Venice Film Festival sailing and Aqua Lares' Arctic season fill faster due to limited capacity.</p>
+
+<h3>Can we combine a cruise with a land-based honeymoon?</h3>
+
+<p>A Mediterranean sailing pairs well with a few nights in the <a href="/post/the-best-hotels-in-the-french-riviera-for-summer">French Riviera</a> or a <a href="/post/top-7-luxury-hotels-in-the-caribbean-for-a-beachfront-honeymoon">Caribbean resort</a> before or after. The itineraries work well as part of a longer trip, especially if your embarkation port is already a destination worth spending time in.</p>
+
+<h3>What is the difference between a luxury cruise and a luxury yacht?</h3>
+
+<p>Scale, mostly. Traditional luxury cruise ships carry 500 to 900 passengers and offer a wider range of onboard venues. Luxury yachts typically carry under 200 guests and trade variety for intimacy, with higher staff-to-guest ratios and the ability to dock in smaller, less-touristed ports. The four vessels in this post all fall on the yacht side of that spectrum.</p>
+
+<p>We work with all four of these lines through Virtuoso opportunities, which typically include perks like onboard credit, spa treatments, and room upgrades. You can see how they compare on our <a href="/cruises">luxury cruises and yachts</a> page, and if any of these sailings are on your radar, <a href="/inquire-cruise">we are happy to talk through the details</a>.</p>
+
+<p><em>Wander by Wilson specializes in curated hotel bookings, <a href="/inquire-trip">honeymoon planning</a>, and luxury travel at sea.</em></p>
+`
+    },
     'top-honeymoon-destinations-for-june': {
         title: "Best Honeymoon Destinations for June 2026/27",
         dek: "June 2026 is the perfect time for a honeymoon, offering sun-drenched landscapes, dreamy beaches, and exclusive luxury experiences.",
