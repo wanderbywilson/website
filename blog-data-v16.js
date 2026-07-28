@@ -5,6 +5,106 @@
  * Hero images = first inline body photo (cleaner than the old Pinterest collages).
  */
 const BLOG_POSTS = {
+    'best-luxury-honeymoon-trends': {
+        title: "Best Luxury Honeymoon Trends for 2026/27: Where Couples Are Traveling Now",
+        dek: "The luxury honeymoon is evolving. Three trends shaping 2026/27, from two-destination itineraries to private island escapes and wellness-driven trips.",
+        heroImage: "/blog-images/best-luxury-honeymoon-trends/hero-borgo-santandrea-amalfi.jpg",
+        date: "July 2026",
+        datePublished: "2026-07-28",
+        readTime: "7 min read",
+        tags: ["Honeymoon Inspiration", "Luxury Travel Trends & News"],
+        location: "Worldwide",
+        tripTypes: ["Honeymoon", "Travel Inspiration"],
+        bodyHtml: `
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/hero-borgo-santandrea-amalfi.jpg" alt="A whitewashed cliffside suite terrace with a private plunge pool overlooking the Amalfi Coast at Borgo Santandrea" loading="lazy"></figure>
+
+<p>Luxury honeymoons have changed. Not gradually, not in the usual way trends shift, but noticeably, and in a short window. What couples are looking for in 2026/27 is more intentional, more layered, and built around genuine personal interest rather than what photographs well.</p>
+
+<p>The broader travel industry calls this quiet luxury. It shows up as a preference for smaller properties over flagship resorts, for regions over cities, and for experiences that feel found rather than sold. Some couples are splitting their trip across two countries. Others are choosing a single destination for its food, or its landscape, or the simple fact that very few people know about it yet.</p>
+
+<p>Three patterns keep coming up.</p>
+
+<h2>1. Two-Destination Luxury Honeymoon Itineraries for 2026/27</h2>
+
+<p>The single-destination honeymoon is losing ground to something with more shape: two halves, two tempos. The first half somewhere well known and alive with energy, the second half somewhere quieter, less visited, where the days stretch out and you have the place largely to yourself.</p>
+
+<h3>Where to Stay</h3>
+
+<h3>Amalfi Coast to Puglia</h3>
+
+<p>Southern Italy, from roughly <strong>May through early October</strong>, makes the strongest case for this format. The <a href="/post/best-hotels-on-the-amalfi-coast">Amalfi Coast</a> needs no introduction, but the less obvious move is continuing south into Puglia, where the coastline softens, the crowds vanish, and the food gets even better.</p>
+
+<p><a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/16354916/borgo-santandrea" target="_blank" rel="noopener noreferrer">Borgo Santandrea</a> occupies a cliffside between Amalfi and Positano, with a saltwater pool cut directly into the rock face and water access down a private stone path. It feels like staying in someone&rsquo;s beautifully kept coastal villa. From there, <a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/15857415/masseria-torre-maizza-a-rocco-forte-hotel" target="_blank" rel="noopener noreferrer">Masseria Torre Maizza</a> in Puglia makes a natural second act. It is a converted 16th-century farmhouse ringed by olive groves, where the pace drops entirely and evenings wind down with local wine and handmade orecchiette served under a canopy of trees.</p>
+
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/masseria-torre-maizza-puglia.jpg" alt="Navy and white loungers under parasols on the private beach at Masseria Torre Maizza in Puglia" loading="lazy"></figure>
+
+<h3>Other Two-Destination Pairings</h3>
+
+<p>The same structure works across Southeast Asia, where Bali pairs naturally with Sumba or the Gili Islands, and across the <a href="/post/20-best-all-inclusive-luxury-hotels-in-the-caribbean">Caribbean</a>, where a week might begin in St. Barts and finish on the neighboring island, Anguilla.</p>
+
+<p>Two destinations offer range. But some couples want the opposite: a single place that slows everything down.</p>
+
+<h2>2. Wellness Honeymoon Resorts and Spa Retreats for 2026/27</h2>
+
+<p>There is an honest version of the wellness honeymoon gaining traction in 2026/27, and it has nothing to do with juice cleanses or scheduled meditation. Months of wedding planning, family logistics, and accumulated decision fatigue leave most couples genuinely depleted by the time they board their flight. The destinations gaining popularity are the ones designed around rest, quiet, and actual recovery.</p>
+
+<h3>Where to Stay</h3>
+
+<h3>Forestis in the Dolomites</h3>
+
+<p>At 1,800 meters in the South Tyrolean Dolomites, Forestis is a 62-room hotel built into the mountain above Brixen. The silence is immediate. So is the cold, clean air that follows you from the terrace to the spa, where treatments draw on Celtic and Alpine traditions: forest bathing, cold plunges, botanicals gathered from the surrounding woodland. The restaurant serves forest-driven cuisine sourced from regional farms. Picture 62 rooms, no ambient noise, and granite peaks in every direction.</p>
+
+<h3>Il Sereno on Lake Como</h3>
+
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/il-sereno-lake-como.jpg" alt="The lakefront infinity pool and terrace at Il Sereno looking across Lake Como to the mountains beyond" loading="lazy"></figure>
+
+<p><a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/14816473/il-sereno" target="_blank" rel="noopener noreferrer">Il Sereno</a> operates on a completely different frequency. Patricia Urquiola designed the interiors, the Berton al Lago restaurant holds a Michelin star, and the spa runs on treatments by Spa Nuxe. This is not a place to unplug. It is a place to eat extraordinarily well, drink good wine, and let <a href="/post/4-best-luxury-hotels-in-lake-como">Lake Como</a> do the work of restoring you without giving up a single comfort.</p>
+
+<p>Wellness resorts offer seclusion by design. For couples who want that taken further, there are places where seclusion is the entire geography.</p>
+
+<h2>3. Best Private Island Honeymoon Destinations for 2026/27</h2>
+
+<p>Privacy has become one of the most requested elements in honeymoon planning, and the couples asking about private islands tend to have a very clear idea of what they are after. Fewer people. More space. The feeling that the place exists only for them. What that looks like in practice varies widely.</p>
+
+<h3>Where to Stay</h3>
+
+<h3>COMO Parrot Cay in Turks and Caicos</h3>
+
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/como-parrot-cay-turks-and-caicos.jpg" alt="A villa infinity pool at COMO Parrot Cay looking out over low green scrub to the turquoise water beyond" loading="lazy"></figure>
+
+<p>Across 1,000 acres of its own island, <a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/6164164/como-parrot-cay-turks-and-caicos" target="_blank" rel="noopener noreferrer">COMO Parrot Cay</a> manages to be both secluded and polished. A mile-long white sand beach, a COMO Shambhala spa that ranks among the <a href="/post/best-exotic-beach-resorts-and-spas-around-the-world">best exotic beach resorts</a> in this part of the world, and Beach Houses with private plunge pools and direct sand access.</p>
+
+<h3>The Brando in French Polynesia</h3>
+
+<p>A 20-minute private flight from Tahiti drops you on Tetiaroa, a coral atoll that Marlon Brando spent decades protecting from development. <a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/14408960/the-brando" target="_blank" rel="noopener noreferrer">The Brando</a> has 35 villas spread across the Onetahi motu, each with its own plunge pool and beach. The resort holds LEED Platinum certification and runs entirely on renewable energy. Polynesian guides lead naturalist walks across the atoll&rsquo;s 12 motus, through nesting sea turtle colonies and past manta ray channels, in a place where wildlife outnumbers guests by a comfortable margin.</p>
+
+<h3>Islas Secas in Panama</h3>
+
+<p><a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/16220499/islas-secas-private-island-reserve" target="_blank" rel="noopener noreferrer">Islas Secas</a> sits in Panama&rsquo;s Gulf of Chiriqu&iacute;, a 14-island archipelago with just seven solar-powered casitas. Thirteen of those fourteen islands are left entirely untouched. The snorkeling and diving happen in protected marine reserve waters, often with no other boats in sight.</p>
+
+<p>Whichever direction appeals, the finer details tend to be what makes the difference. These are the questions that come up most often.</p>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>What is the best luxury honeymoon destination for 2027?</h3>
+
+<p>That depends entirely on what the trip is for. A mix of culture and coastline points to southern Italy, Amalfi to Puglia. Total seclusion makes The Brando or Islas Secas the strongest options. Post-wedding recovery calls for Forestis in the Dolomites. The right destination is the one that matches what you actually need after the wedding, not what gets the most engagement online.</p>
+
+<h3>How far in advance should we plan a luxury honeymoon?</h3>
+
+<p>Six to nine months is a comfortable window for most properties. Places like The Brando and Nihi Sumba carry limited inventory, and peak-season availability tightens earlier than you might expect. If the wedding falls during European or Caribbean high season, it is worth starting the conversation early.</p>
+
+<h3>What does &ldquo;quiet luxury&rdquo; mean for honeymoons?</h3>
+
+<p>It reflects a move away from honeymoons built for social media and toward trips shaped around the couple. Fewer branded experiences, fewer crowds, more genuine immersion in a place. In practice, that tends to mean smaller properties, longer stays, and destinations chosen for how they feel rather than how they photograph.</p>
+
+<h2>Why Book Through Wander by Wilson</h2>
+
+<p>Most of the properties mentioned above are part of the Virtuoso network, which means access to benefits like complimentary breakfast, room upgrades when available, and property credits that are not offered through standard booking channels. For honeymoons especially, these extras add up quietly. A better room, a late checkout, a dining credit on your last night.</p>
+
+<p>Honeymoon planning is one of our core specialties, and we work with each of these properties directly. If any of this resonates, we would love to help you put it together. <a href="/inquire-trip">Feel free to get in touch</a>.</p>
+`
+    },
     'luxury-cruise-yacht-openings-2026': {
         title: "Hotels on the Water: 4 New Luxury Cruise and Yacht Openings for 2026",
         dek: "Four luxury yachts launching in 2026, from a 30-guest expedition vessel to the world's largest sailing yacht. What makes each one worth watching.",

@@ -31,7 +31,8 @@
 - **Whenever you edit styles.css / data.js / blog-data.js, BUMP `?v=N` across ALL html**, or the browser serves stale cached files.
   - Pattern: `perl -pi -e 's/styles\.css\?v=110/styles.css?v=111/g;' *.html`
 - **HTML files are NOT versioned.** When testing in the browser, append a throwaway `?cb=N` to the URL to force fresh HTML.
-- **Current versions (at this save):** `styles.css?v=137`, `data.js?v=59`, `blog-data.js?v=10`.
+- **Current versions (at this save):** `styles.css?v=244`, `data.js?v=91`, `blog-data-v16.js`.
+  - **Note:** blog data is now cache-busted by FILENAME (`blog-data-v15.js` → `blog-data-v16.js`), not `?v=N`. Bumping it means `git mv` + a perl sweep across all HTML: `grep -rl "blog-data-v16.js" --include="*.html" . | xargs perl -pi -e 's/blog-data-v16\.js/blog-data-v17.js/g'` (48 files).
 
 ## 🚀 SEO foundation (2026-05-28) — DEPLOY-READY FILES
 
