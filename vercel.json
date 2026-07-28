@@ -7,11 +7,6 @@
       "permanent": false
     },
     {
-      "source": "/proposals/charleston-getaway.html",
-      "destination": "/proposals/charleston-getaway",
-      "permanent": false
-    },
-    {
       "source": "/cruises.html",
       "destination": "/cruises",
       "permanent": true
