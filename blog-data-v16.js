@@ -52,6 +52,8 @@ const BLOG_POSTS = {
 
 <h3>Forestis in the Dolomites</h3>
 
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/forestis-dolomites.jpg" alt="First light on the granite peaks of the South Tyrolean Dolomites above the forest line at Forestis" loading="lazy"></figure>
+
 <p>At 1,800 meters in the South Tyrolean Dolomites, Forestis is a 62-room hotel built into the mountain above Brixen. The silence is immediate. So is the cold, clean air that follows you from the terrace to the spa, where treatments draw on Celtic and Alpine traditions: forest bathing, cold plunges, botanicals gathered from the surrounding woodland. The restaurant serves forest-driven cuisine sourced from regional farms. Picture 62 rooms, no ambient noise, and granite peaks in every direction.</p>
 
 <h3>Il Sereno on Lake Como</h3>
@@ -76,9 +78,13 @@ const BLOG_POSTS = {
 
 <h3>The Brando in French Polynesia</h3>
 
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/the-brando-tetiaroa-atoll.jpg" alt="Aerial view of the Tetiaroa atoll, a ring of green motus and turquoise lagoon surrounded by deep blue Pacific" loading="lazy"></figure>
+
 <p>A 20-minute private flight from Tahiti drops you on Tetiaroa, a coral atoll that Marlon Brando spent decades protecting from development. <a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/14408960/the-brando" target="_blank" rel="noopener noreferrer">The Brando</a> has 35 villas spread across the Onetahi motu, each with its own plunge pool and beach. The resort holds LEED Platinum certification and runs entirely on renewable energy. Polynesian guides lead naturalist walks across the atoll&rsquo;s 12 motus, through nesting sea turtle colonies and past manta ray channels, in a place where wildlife outnumbers guests by a comfortable margin.</p>
 
 <h3>Islas Secas in Panama</h3>
+
+<figure><img src="/blog-images/best-luxury-honeymoon-trends/islas-secas-panama.jpg" alt="A thatched clifftop casita with a pool set into the forested headland of the Islas Secas archipelago in Panama" loading="lazy"></figure>
 
 <p><a href="https://www.virtuoso.com/advisor/wilsschu27955/hotels/16220499/islas-secas-private-island-reserve" target="_blank" rel="noopener noreferrer">Islas Secas</a> sits in Panama&rsquo;s Gulf of Chiriqu&iacute;, a 14-island archipelago with just seven solar-powered casitas. Thirteen of those fourteen islands are left entirely untouched. The snorkeling and diving happen in protected marine reserve waters, often with no other boats in sight.</p>
 
