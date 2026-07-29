@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>A Private Proposal — Wander by Wilson</title>
+    <meta name="description" content="A private hotel proposal from Wander by Wilson.">
+
+    <!-- Open Graph (in case the link is shared) — filled per-proposal by JS -->
+    <meta property="og:title"        content="A Private Proposal — Wander by Wilson">
+    <meta property="og:description"  content="A private hotel proposal from Wander by Wilson.">
+    <meta property="og:image"        content="https://www.wanderbywilson.com/welcome-guide-images/og-card.jpg">
+    <meta property="og:type"         content="website">
+    <meta property="og:site_name"    content="Wander by Wilson">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=244">
+
+    <style>
+        /* ─── Proposal-only typography + layout ───────────────────────── */
+
+        .prop-page {
+            background: var(--paper-cream, #f7f1e6);
+            min-height: 100vh;
+        }
+        .prop-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* HERO band */
+        .prop-hero {
+            padding: 96px 0 56px;
+            text-align: center;
+            border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+        }
+        .prop-hero-kicker {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin: 0 0 18px;
+        }
+        .prop-hero-title {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(42px, 6vw, 64px);
+            line-height: 1.05;
+            color: var(--ink);
+            margin: 0 0 22px;
+            letter-spacing: -0.015em;
+        }
+        .prop-hero-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .prop-hero-lede {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: clamp(17px, 1.5vw, 19px);
+            line-height: 1.6;
+            color: rgba(30, 53, 82, 0.78);
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .prop-hero-dates {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 10px 22px;
+            background: #fff;
+            border: 1px solid rgba(199, 174, 138, 0.48);
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+        .prop-hero-prepared {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin: 0 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+        .prop-hero-prepared::before,
+        .prop-hero-prepared::after {
+            content: "";
+            width: 44px;
+            height: 1px;
+            background: rgba(199, 174, 138, 0.6);
+        }
+        .prop-hero-valid {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 13px;
+            color: rgba(30, 53, 82, 0.55);
+            margin: 14px 0 0;
+        }
+
+        /* Discreet PDF button (bottom-right, hidden when printing) */
+        .prop-pdf-btn {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 60;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            background: #fff;
+            border: 1px solid rgba(199, 174, 138, 0.55);
+            color: var(--ink);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(30, 53, 82, 0.08);
+            transition: background .25s ease, color .25s ease;
+        }
+        .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
+
+        /* Print / save-as-PDF */
+        @media print {
+            .prop-pdf-btn, .site-header { display: none !important; }
+            .prop-page { background: #fff; }
+            .prop-hero { padding: 24px 0 32px; }
+            .prop-hotel { padding: 32px 0; }
+            .prop-hotel-grid, .gallery-tile { break-inside: avoid; }
+            .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prop-close { padding: 40px 0; }
+        }
+
+        /* HOTEL CARD */
+        .prop-hotel {
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(199, 174, 138, 0.28);
+        }
+        .prop-hotel:last-of-type { border-bottom: none; }
+
+        .prop-hotel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: center;
+        }
+        .prop-hotel:nth-of-type(even) .prop-hotel-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .prop-hotel:nth-of-type(even) .prop-hotel-image { order: 2; }
+        .prop-hotel:nth-of-type(even) .prop-hotel-body  { order: 1; }
+
+        .prop-hotel-image {
+            aspect-ratio: 3 / 2;
+            overflow: hidden;
+            background: var(--bone-warm, #efe7d6);
+            border: 1px solid rgba(199, 174, 138, 0.32);
+        }
+        .prop-hotel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .prop-hotel-num {
+            font-family: var(--font-sans);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin: 0 0 14px;
+        }
+        .prop-hotel-name {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(32px, 4vw, 42px);
+            line-height: 1.1;
+            color: var(--ink);
+            margin: 0 0 8px;
+            letter-spacing: -0.012em;
+        }
+        .prop-hotel-name em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .prop-hotel-location {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 16px;
+            color: rgba(30, 53, 82, 0.62);
+            margin: 0 0 24px;
+        }
+        .prop-hotel-room {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin: 0 0 6px;
+        }
+        .prop-hotel-rate {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: 28px;
+            color: var(--ink);
+            margin: 0 0 6px;
+            letter-spacing: -0.005em;
+        }
+        .prop-hotel-rate em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .prop-hotel-rate-note {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 13px;
+            color: rgba(30, 53, 82, 0.55);
+            margin: 0 0 28px;
+        }
+        .prop-hotel-desc {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 17px;
+            line-height: 1.7;
+            color: rgba(30, 53, 82, 0.85);
+            margin: 0 0 22px;
+        }
+        .prop-hotel-room-desc {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.65;
+            color: rgba(30, 53, 82, 0.75);
+            margin: 0;
+            padding-top: 22px;
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .prop-hotel-room-desc strong {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Optional per-hotel self-book button (renders only when the hotel
+           has a bookingUrl — Virtuoso / TravelWits). */
+        .prop-hotel-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 28px;
+            padding: 13px 28px;
+            background: var(--ink);
+            color: #f7f1e6;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--ink);
+            transition: background .25s ease, color .25s ease;
+        }
+        .prop-hotel-cta:hover { background: transparent; color: var(--ink); }
+        .prop-hotel-cta svg { transition: transform .25s ease; }
+        .prop-hotel-cta:hover svg { transform: translateX(3px); }
+
+        @media (max-width: 880px) {
+            .prop-hotel-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .prop-hotel:nth-of-type(even) .prop-hotel-image { order: 0; }
+            .prop-hotel:nth-of-type(even) .prop-hotel-body  { order: 0; }
+            .prop-hotel { padding: 56px 0; }
+            .prop-hero { padding: 64px 0 40px; }
+        }
+
+        /* Per-hotel gallery — 2x2 grid of additional photos below the
+           hero+body layout. Reuses .gallery-grid / .gallery-tile from
+           styles.css with a tighter top margin since it lives inside
+           the .prop-hotel section. */
+        .prop-hotel-gallery {
+            margin-top: 56px;
+            padding-top: 0;
+            background: transparent;
+            border-top: none;
+        }
+        .prop-hotel-gallery .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .prop-hotel-gallery .gallery-tile {
+            border-color: rgba(199, 174, 138, 0.22);
+        }
+        @media (max-width: 720px) {
+            .prop-hotel-gallery { margin-top: 36px; }
+            .prop-hotel-gallery .gallery-grid { grid-template-columns: 1fr; gap: 14px; }
+        }
+
+        /* PERKS STRIP — dark band emphasising Virtuoso inclusions */
+        .prop-perks {
+            background: var(--ink);
+            color: #f3ede2;
+            padding: 72px 0;
+            margin-top: 0;
+        }
+        .prop-perks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: center;
+        }
+        .prop-perks-kicker {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            color: rgba(214, 183, 135, 0.95);
+            margin: 0 0 14px;
+        }
+        .prop-perks-title {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(32px, 4vw, 44px);
+            line-height: 1.1;
+            color: #f7f1e6;
+            margin: 0;
+            letter-spacing: -0.012em;
+        }
+        .prop-perks-title em { font-style: italic; font-weight: 300; color: var(--gold-soft, #d6b787); }
+        .prop-perks-intro {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(243, 237, 226, 0.78);
+            margin: 16px 0 0;
+            max-width: 520px;
+        }
+        .prop-perks-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 14px;
+        }
+        .prop-perks-list li {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #f3ede2;
+            padding-left: 28px;
+            position: relative;
+        }
+        .prop-perks-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--gold-soft, #d6b787);
+            font-size: 14px;
+        }
+        @media (max-width: 880px) {
+            .prop-perks-grid { grid-template-columns: 1fr; gap: 32px; }
+        }
+
+        /* CLOSING */
+        .prop-close {
+            padding: 96px 0 120px;
+            text-align: center;
+        }
+        .prop-close-title {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(34px, 4.4vw, 48px);
+            line-height: 1.15;
+            color: var(--ink);
+            margin: 0 0 22px;
+        }
+        .prop-close-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .prop-close-lede {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 1.6;
+            color: rgba(30, 53, 82, 0.78);
+            max-width: 560px;
+            margin: 0 auto 30px;
+        }
+        .prop-close-signature {
+            margin-top: 24px;
+        }
+        .prop-close-signature-name {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 28px;
+            color: var(--ink);
+            margin: 0;
+        }
+        .prop-close-signature-role {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(30, 53, 82, 0.55);
+            margin: 6px 0 0;
+        }
+    </style>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7QN83N7QQS', { anonymize_ip: true });
+    </script>
+</head>
+<body class="prop-page">
+
+    <header class="site-header" id="siteHeader">
+        <div class="container header-inner">
+            <a href="/" class="brand" aria-label="Wander by Wilson — home">
+                <span class="brand-wordmark">Wander by Wilson</span>
+            </a>
+        </div>
+    </header>
+
+    <main id="proposalRoot"></main>
+
+    <script src="/data.js?v=91"></script>
+    <script src="/proposals-data.js?v=91"></script>
+    <script>
+        /* ------------------------------------------------------------------
+           Proposal bootstrap. Static proposals live in proposals-data.js
+           (PROPOSALS); Studio-published ones are fetched from /api/proposals.
+           Hotels optionally pull shared content from PROPERTIES (data.js).
+             /proposals/{id}  or  /proposal.html?id={id}
+           Unknown / missing id → redirect home.
+           ?draft=1   → Studio live-preview mode (renders postMessage data)
+           ?preview=1 → suppresses the first-open notification beacon
+           ------------------------------------------------------------------ */
+        (async function loadProposal() {
+            const params = new URLSearchParams(window.location.search);
+            let id = params.get('id');
+            if (!id) {
+                const m = window.location.pathname.match(/^\/proposals\/([a-z0-9-]+)\/?$/);
+                if (m) id = m[1];
+            }
+            const isDraft   = params.get('draft') === '1';
+            const isPreview = params.get('preview') === '1';
+
+            // Small helpers
+            const decode = (s) => { const t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value; };
+            const strip  = (s) => (s || '').replace(/<[^>]+>/g, '');
+            const lib    = (slug) => (typeof PROPERTIES !== 'undefined' && PROPERTIES[slug]) ? PROPERTIES[slug] : null;
+
+            // ── Head / social meta ────────────────────────────────────────
+            const setMeta = (sel, attr, val) => {
+                let el = document.head.querySelector(sel);
+                if (!el) {
+                    el = document.createElement(sel.split('[')[0]);
+                    const m = sel.match(/\[([^=]+)="([^"]+)"\]/);
+                    if (m) el.setAttribute(m[1], m[2]);
+                    document.head.appendChild(el);
+                }
+                el.setAttribute(attr, val);
+            };
+            function applyMeta(P) {
+                const title   = P.metaTitle || (decode(strip(P.title)).replace(/\.$/, '') + ' — Wander by Wilson');
+                const desc    = P.metaDescription || (P.lede ? strip(decode(P.lede)).slice(0, 160) : 'A private hotel proposal from Wander by Wilson.');
+                const firstHero = P.hotels && P.hotels[0] ? (function (h) {
+                    const base = h.slug ? lib(h.slug) : null;
+                    const src = h.heroImage || (base && base.heroImage) || '';
+                    return src ? new URL(src, window.location.origin).href : '';
+                })(P.hotels[0]) : '';
+                const ogImage = P.ogImage || firstHero || 'https://www.wanderbywilson.com/welcome-guide-images/og-card.jpg';
+                document.title = title;
+                setMeta('meta[name="description"]', 'content', desc);
+                setMeta('meta[property="og:title"]', 'content', title);
+                setMeta('meta[property="og:description"]', 'content', desc);
+                setMeta('meta[property="og:image"]', 'content', ogImage);
+            }
+
+            // ── Resolve a hotel entry against the library (inline overrides win) ──
+            function resolveHotel(h) {
+                const base = h.slug ? lib(h.slug) : null;
+                const libBooking = base && base.bookingUrl && base.bookingUrl !== '#' ? base.bookingUrl : '';
+                return {
+                    name:      h.name      || (base && base.name)        || '',
+                    location:  h.location  || (base && base.location)    || '',
+                    heroImage: h.heroImage || (base && base.heroImage)   || '',
+                    desc:      h.desc      || (base && base.description) || '',
+                    room:      h.room      || '',
+                    rate:      h.rate      || (base && base.rateFrom ? 'From ' + base.rateFrom : ''),
+                    rateNote:  h.rateNote  || '',
+                    roomDescLabel: h.roomDescLabel || '',
+                    roomDesc:  h.roomDesc  || '',
+                    gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
+                    // undefined → inherit the library link; '' (set by the Studio) → no button
+                    bookingUrl: h.bookingUrl !== undefined ? h.bookingUrl : libBooking
+                };
+            }
+
+            const arrow = '<svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/></svg>';
+
+            // ── Section builders ──────────────────────────────────────────
+            function hotelSection(h, i) {
+                const r = resolveHotel(h);
+                const altName = decode(strip(r.name));
+                const num = 'No. ' + String(i + 1).padStart(2, '0');
+                const gallery = (r.gallery && r.gallery.length)
+                    ? '<div class="prop-hotel-gallery"><div class="gallery-grid">' +
+                      r.gallery.map((src, gi) => `<figure class="gallery-tile"><img src="${src}" alt="${altName} — view ${gi + 1}" loading="lazy"></figure>`).join('') +
+                      '</div></div>'
+                    : '';
+                const roomDesc = r.roomDesc
+                    ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}${r.roomDesc}</p>`
+                    : '';
+                const cta = r.bookingUrl
+                    ? `<a class="prop-hotel-cta" href="${r.bookingUrl}" target="_blank" rel="noopener noreferrer">Book this rate ${arrow}</a>`
+                    : '';
+                return `
+                <section class="prop-hotel">
+                    <div class="prop-container">
+                        <div class="prop-hotel-grid">
+                            <figure class="prop-hotel-image">
+                                <img src="${r.heroImage}" alt="${altName} — ${decode(strip(r.location))}">
+                            </figure>
+                            <div class="prop-hotel-body">
+                                <p class="prop-hotel-num">${num}</p>
+                                <h2 class="prop-hotel-name">${r.name}</h2>
+                                <p class="prop-hotel-location">${r.location}</p>
+                                ${r.room ? `<p class="prop-hotel-room">${r.room}</p>` : ''}
+                                ${r.rate ? `<p class="prop-hotel-rate">${r.rate}</p>` : ''}
+                                ${r.rateNote ? `<p class="prop-hotel-rate-note">${r.rateNote}</p>` : ''}
+                                ${r.desc ? `<p class="prop-hotel-desc">${r.desc}</p>` : ''}
+                                ${roomDesc}
+                                ${cta}
+                            </div>
+                        </div>
+                        ${gallery}
+                    </div>
+                </section>`;
+            }
+
+            function perksSection(p) {
+                if (!p) return '';
+                return `
+                <section class="prop-perks">
+                    <div class="prop-container">
+                        <div class="prop-perks-grid">
+                            <div>
+                                <p class="prop-perks-kicker">${p.kicker || 'Included at every hotel'}</p>
+                                <h2 class="prop-perks-title">${p.title || 'Wander by Wilson<br><em>exclusive perks.</em>'}</h2>
+                                ${p.intro ? `<p class="prop-perks-intro">${p.intro}</p>` : ''}
+                            </div>
+                            <ul class="prop-perks-list" aria-label="Inclusions at every hotel">
+                                ${(p.list || []).map(li => `<li>${li}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </section>`;
+            }
+
+            function heroSection(P) {
+                return `
+                <section class="prop-hero">
+                    <div class="prop-container">
+                        ${P.kicker ? `<p class="prop-hero-kicker">${P.kicker}</p>` : ''}
+                        ${P.preparedFor ? `<p class="prop-hero-prepared">Prepared for ${P.preparedFor}</p>` : ''}
+                        <h1 class="prop-hero-title">${P.title || ''}</h1>
+                        ${P.lede ? `<p class="prop-hero-lede">${P.lede}</p>` : ''}
+                        ${P.dates ? `<p class="prop-hero-dates">${P.dates}</p>` : ''}
+                        ${P.validUntil ? `<p class="prop-hero-valid">Rates valid until ${P.validUntil} &mdash; subject to availability thereafter.</p>` : ''}
+                    </div>
+                </section>`;
+            }
+
+            function closeSection(P) {
+                return `
+                <section class="prop-close">
+                    <div class="prop-container">
+                        <h2 class="prop-close-title">${P.closeTitle || 'Just hit reply<br><em>to confirm.</em>'}</h2>
+                        ${P.closeLede ? `<p class="prop-close-lede">${P.closeLede}</p>` : ''}
+                        <div class="prop-close-signature">
+                            <p class="prop-close-signature-name">${P.signatureName || 'Wilson'}</p>
+                            <p class="prop-close-signature-role">${P.signatureRole || 'Founder &middot; Wander by Wilson'}</p>
+                        </div>
+                    </div>
+                </section>`;
+            }
+
+            function render(P) {
+                applyMeta(P);
+                document.getElementById('proposalRoot').innerHTML =
+                    heroSection(P) +
+                    (P.hotels || []).map(hotelSection).join('') +
+                    perksSection(P.perks) +
+                    closeSection(P);
+                if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
+                    const btn = document.createElement('button');
+                    btn.className = 'prop-pdf-btn';
+                    btn.type = 'button';
+                    btn.innerHTML = 'Save as PDF';
+                    btn.addEventListener('click', () => window.print());
+                    document.body.appendChild(btn);
+                }
+            }
+
+            // ── Studio live-preview mode ──────────────────────────────────
+            if (isDraft) {
+                window.addEventListener('message', (e) => {
+                    if (e.origin !== window.location.origin) return;
+                    if (e.data && e.data.type === 'wndr-draft' && e.data.proposal) render(e.data.proposal);
+                });
+                if (window.parent !== window) {
+                    window.parent.postMessage({ type: 'wndr-draft-ready' }, window.location.origin);
+                }
+                return;
+            }
+
+            // ── Resolve the proposal: static file first, then the API ─────
+            let P = (id && typeof PROPOSALS !== 'undefined') ? PROPOSALS[id] : null;
+            let fromApi = false;
+            if (!P && id && /^[a-z0-9-]+$/.test(id)) {
+                try {
+                    const res = await fetch('/api/proposals?id=' + encodeURIComponent(id));
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.proposal) { P = data.proposal; fromApi = true; }
+                    }
+                } catch (e) { /* fall through to redirect */ }
+            }
+            if (!P) { window.location.replace('/'); return; }
+
+            render(P);
+
+            // ── First-open notification beacon (Studio proposals only).
+            //    Skipped for: team browsers (Studio sets wndr-team), ?preview=1
+            //    links, and repeat opens within the same browser session.
+            let isTeam = false;
+            try { isTeam = localStorage.getItem('wndr-team') === '1' || !!sessionStorage.getItem('wndr-viewed-' + id); } catch (e) {}
+            if (fromApi && !isPreview && !isTeam) {
+                try { sessionStorage.setItem('wndr-viewed-' + id, '1'); } catch (e) {}
+                fetch('/api/proposal-viewed', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                }).catch(() => {});
+            }
+        })();
+
+        // Header scroll state (matches the rest of the site)
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('is-scrolled', window.scrollY > 24);
+        }, { passive: true });
+    </script>
+</body>
+</html>

@@ -16,4 +16,3 @@ Sitemap: https://www.wanderbywilson.com/sitemap.xml
 Disallow: /welcome-guide
 Disallow: /welcome-guide.html
 Disallow: /welcome-guide.pdf
-Disallow: /proposals/

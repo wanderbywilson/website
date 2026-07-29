@@ -51,3 +51,4 @@ wbw-server.log
 .claude/
 .vercel
 _originals/
+.env*

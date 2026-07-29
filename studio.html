@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Proposal Studio — Wander by Wilson</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=244">
+
+    <style>
+        :root {
+            --studio-line: rgba(199, 174, 138, 0.4);
+            --studio-line-soft: rgba(199, 174, 138, 0.22);
+        }
+        html, body { height: 100%; }
+        body.studio-page {
+            background: var(--paper-cream, #f7f1e6);
+            margin: 0;
+            font-family: var(--font-sans, 'Inter', sans-serif);
+            color: var(--ink, #1e3552);
+        }
+
+        /* ── Passcode gate ─────────────────────────────────────────────── */
+        .gate {
+            position: fixed; inset: 0; z-index: 100;
+            background: var(--paper-cream, #f7f1e6);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 24px;
+        }
+        .gate-inner { max-width: 380px; width: 100%; }
+        .gate-kicker {
+            font-size: 11px; font-weight: 500; letter-spacing: 0.34em;
+            text-transform: uppercase; color: var(--gold); margin: 0 0 14px;
+        }
+        .gate-title {
+            font-family: var(--font-serif); font-weight: 400;
+            font-size: 38px; line-height: 1.1; margin: 0 0 26px;
+        }
+        .gate-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .gate input {
+            width: 100%; box-sizing: border-box; padding: 14px 18px;
+            border: 1px solid var(--studio-line); background: #fff;
+            font-family: var(--font-sans); font-size: 15px; letter-spacing: 0.2em;
+            text-transform: uppercase; text-align: center; color: var(--ink);
+            outline: none;
+        }
+        .gate input:focus { border-color: var(--gold); }
+        .gate-error { color: #a33; font-size: 13px; min-height: 20px; margin: 10px 0 0; }
+        .gate button { margin-top: 14px; }
+
+        /* ── Shared controls ───────────────────────────────────────────── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 24px; background: var(--ink); color: #f7f1e6;
+            border: 1px solid var(--ink); cursor: pointer;
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            transition: background .2s ease, color .2s ease;
+        }
+        .btn:hover { background: transparent; color: var(--ink); }
+        .btn.btn-ghost { background: transparent; color: var(--ink); border-color: var(--studio-line); }
+        .btn.btn-ghost:hover { border-color: var(--ink); }
+        .btn.btn-small { padding: 8px 14px; font-size: 10px; letter-spacing: 0.16em; }
+        .btn[disabled] { opacity: 0.45; pointer-events: none; }
+
+        label.f-label {
+            display: block; font-size: 10px; font-weight: 500;
+            letter-spacing: 0.22em; text-transform: uppercase;
+            color: rgba(30, 53, 82, 0.6); margin: 0 0 6px;
+        }
+        .f-input, .f-area {
+            width: 100%; box-sizing: border-box;
+            padding: 10px 12px; border: 1px solid var(--studio-line-soft);
+            background: #fff; color: var(--ink);
+            font-family: var(--font-sans); font-size: 14px; font-weight: 300;
+            line-height: 1.5; outline: none;
+        }
+        .f-input:focus, .f-area:focus { border-color: var(--gold); }
+        .f-area { resize: vertical; min-height: 74px; }
+        .f-row { margin: 0 0 16px; }
+        .f-hint { font-size: 11px; color: rgba(30, 53, 82, 0.45); margin: 5px 0 0; line-height: 1.45; }
+        .f-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* ── App layout ────────────────────────────────────────────────── */
+        .studio { display: none; height: 100vh; flex-direction: column; }
+        .studio.is-open { display: flex; }
+
+        .studio-top {
+            display: flex; align-items: center; gap: 16px;
+            padding: 14px 22px; background: #fff;
+            border-bottom: 1px solid var(--studio-line-soft);
+            flex-wrap: wrap;
+        }
+        .studio-brand {
+            font-family: var(--font-serif); font-size: 19px; color: var(--ink);
+            text-decoration: none; white-space: nowrap;
+        }
+        .studio-brand em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .studio-top-spacer { flex: 1; }
+        .studio-status { font-size: 12px; color: rgba(30,53,82,0.55); }
+
+        .studio-main { flex: 1; display: flex; min-height: 0; }
+        .studio-form {
+            width: 470px; min-width: 470px; overflow-y: auto;
+            background: #fff; border-right: 1px solid var(--studio-line-soft);
+            padding: 26px 26px 80px;
+        }
+        .studio-preview { flex: 1; min-width: 0; background: var(--paper-cream); position: relative; }
+        .studio-preview iframe { width: 100%; height: 100%; border: 0; display: block; }
+        .studio-preview-tag {
+            position: absolute; top: 12px; right: 14px; z-index: 5;
+            font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+            background: rgba(30,53,82,0.85); color: #f7f1e6; padding: 5px 10px;
+        }
+
+        .sec { margin: 0 0 34px; }
+        .sec-head {
+            font-family: var(--font-serif); font-size: 22px; font-weight: 400;
+            margin: 0 0 4px;
+        }
+        .sec-head em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .sec-sub { font-size: 12px; color: rgba(30,53,82,0.5); margin: 0 0 18px; line-height: 1.5; }
+        .sec-rule { border: 0; border-top: 1px solid var(--studio-line-soft); margin: 0 0 22px; }
+
+        /* Hotel cards in the form */
+        .hotel-card {
+            border: 1px solid var(--studio-line); background: #fdfbf6;
+            padding: 16px; margin: 0 0 14px;
+        }
+        .hotel-card-top { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .hotel-card-thumb {
+            width: 74px; height: 52px; object-fit: cover; flex: none;
+            border: 1px solid var(--studio-line-soft); background: #eee;
+        }
+        .hotel-card-name { font-family: var(--font-serif); font-size: 17px; margin: 0; line-height: 1.2; }
+        .hotel-card-loc { font-size: 11px; color: rgba(30,53,82,0.55); margin: 2px 0 0; }
+        .hotel-card-actions { margin-left: auto; display: flex; gap: 4px; flex: none; }
+        .icon-btn {
+            width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+            border: 1px solid var(--studio-line-soft); background: #fff; cursor: pointer;
+            color: var(--ink); font-size: 13px; line-height: 1;
+        }
+        .icon-btn:hover { border-color: var(--ink); }
+        .icon-btn.danger:hover { border-color: #a33; color: #a33; }
+        .hotel-card details { margin-top: 10px; }
+        .hotel-card summary {
+            cursor: pointer; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+            color: rgba(30,53,82,0.55);
+        }
+        .hotel-card summary:hover { color: var(--ink); }
+        .hotel-card details[open] summary { margin-bottom: 12px; }
+        .check-row { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; font-weight: 300; }
+        .check-row input { margin-top: 2px; }
+
+        .add-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        /* Library picker modal */
+        .modal-wrap {
+            position: fixed; inset: 0; z-index: 80; display: none;
+            background: rgba(30, 53, 82, 0.45);
+            align-items: center; justify-content: center; padding: 30px;
+        }
+        .modal-wrap.is-open { display: flex; }
+        .modal {
+            background: #fff; width: 100%; max-width: 880px; max-height: 84vh;
+            display: flex; flex-direction: column; padding: 26px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+        }
+        .modal-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+        .modal-title { font-family: var(--font-serif); font-size: 24px; margin: 0; flex: 1; }
+        .modal-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .lib-grid {
+            overflow-y: auto; display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px;
+        }
+        .lib-card {
+            border: 1px solid var(--studio-line-soft); cursor: pointer; background: #fff;
+            padding: 0; text-align: left; font-family: var(--font-sans);
+            transition: border-color .15s ease; position: relative;
+        }
+        .lib-card:hover { border-color: var(--gold); }
+        .lib-card img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+        .lib-card-body { padding: 10px 12px 12px; }
+        .lib-card-name { font-family: var(--font-serif); font-size: 15px; margin: 0; color: var(--ink); line-height: 1.25; }
+        .lib-card-loc { font-size: 11px; color: rgba(30,53,82,0.55); margin: 3px 0 0; }
+        .lib-card.is-added { opacity: 0.45; pointer-events: none; }
+        .lib-card.is-added::after {
+            content: "Added ✓"; position: absolute; top: 8px; right: 8px;
+            background: var(--ink); color: #f7f1e6; font-size: 10px;
+            letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 8px;
+        }
+
+        /* Proposal list modal rows */
+        .plist { overflow-y: auto; }
+        .plist-row {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 4px; border-bottom: 1px solid var(--studio-line-soft);
+        }
+        .plist-title { font-family: var(--font-serif); font-size: 17px; margin: 0; }
+        .plist-meta { font-size: 11.5px; color: rgba(30,53,82,0.55); margin: 3px 0 0; }
+        .plist-viewed { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; flex: none; }
+        .plist-viewed.yes { color: #2c7a4b; }
+        .plist-viewed.no { color: rgba(30,53,82,0.4); }
+        .plist-actions { margin-left: auto; display: flex; gap: 6px; flex: none; }
+        .plist-main { min-width: 0; }
+
+        /* Publish success bar */
+        .pub-bar {
+            display: none; align-items: center; gap: 12px; flex-wrap: wrap;
+            background: #eef5ee; border: 1px solid #bcd8bc; padding: 12px 16px; margin: 0 0 22px;
+            font-size: 13px;
+        }
+        .pub-bar.is-open { display: flex; }
+        .pub-bar a { color: var(--ink); word-break: break-all; }
+
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--ink); color: #f7f1e6; padding: 12px 22px;
+            font-size: 13px; z-index: 120; display: none;
+        }
+
+        @media (max-width: 980px) {
+            .studio-form { width: 100%; min-width: 0; }
+            .studio-preview { display: none; }
+            .studio.show-preview .studio-form { display: none; }
+            .studio.show-preview .studio-preview { display: block; }
+            .mobile-toggle { display: inline-flex !important; }
+        }
+        .mobile-toggle { display: none; }
+    </style>
+</head>
+<body class="studio-page">
+
+    <!-- ── Passcode gate ─────────────────────────────────────────────── -->
+    <div class="gate" id="gate">
+        <form class="gate-inner" id="gateForm">
+            <p class="gate-kicker">Wander by Wilson</p>
+            <h1 class="gate-title">Proposal <em>Studio.</em></h1>
+            <input type="password" id="gateInput" placeholder="Team passcode" autocomplete="current-password" autofocus>
+            <p class="gate-error" id="gateError"></p>
+            <button class="btn" type="submit">Enter the Studio</button>
+        </form>
+    </div>
+
+    <!-- ── App ───────────────────────────────────────────────────────── -->
+    <div class="studio" id="studio">
+        <div class="studio-top">
+            <a class="studio-brand" href="/studio">Proposal <em>Studio</em></a>
+            <button class="btn btn-ghost btn-small" id="btnList" type="button">Your proposals</button>
+            <button class="btn btn-ghost btn-small" id="btnNew" type="button">New proposal</button>
+            <span class="studio-top-spacer"></span>
+            <span class="studio-status" id="statusText">New proposal</span>
+            <button class="btn btn-ghost btn-small mobile-toggle" id="btnMobilePreview" type="button">Preview</button>
+            <button class="btn btn-small" id="btnPublish" type="button">Publish</button>
+        </div>
+
+        <div class="studio-main">
+            <div class="studio-form" id="formPane">
+
+                <div class="pub-bar" id="pubBar">
+                    <span>Live at&nbsp;<a href="#" target="_blank" rel="noopener" id="pubLink"></a></span>
+                    <button class="btn btn-ghost btn-small" id="btnCopyLink" type="button">Copy link</button>
+                </div>
+
+                <!-- Trip -->
+                <section class="sec">
+                    <h2 class="sec-head">The <em>trip.</em></h2>
+                    <p class="sec-sub">Wrap a word in *asterisks* to set it in italic gold, e.g. Your Italian *summer.*</p>
+                    <div class="f-row">
+                        <label class="f-label" for="fPrepared">Prepared for</label>
+                        <input class="f-input" id="fPrepared" placeholder="Jeff &amp; family">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="fTitle">Proposal title</label>
+                        <input class="f-input" id="fTitle" placeholder="Your Italian *summer.*">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="fLede">Intro line</label>
+                        <textarea class="f-area" id="fLede" placeholder="Three hotels along the Amalfi Coast to consider for your stay. Each option includes our exclusive Virtuoso perks at no additional cost."></textarea>
+                    </div>
+                    <div class="f-grid2">
+                        <div class="f-row">
+                            <label class="f-label" for="fDates">Travel dates</label>
+                            <input class="f-input" id="fDates" placeholder="June 4 — June 8, 2026 · 4 nights">
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="fValid">Rates valid until <span style="text-transform:none">(optional)</span></label>
+                            <input class="f-input" id="fValid" placeholder="August 15, 2026">
+                        </div>
+                    </div>
+                </section>
+                <hr class="sec-rule">
+
+                <!-- Hotels -->
+                <section class="sec">
+                    <h2 class="sec-head">The <em>hotels.</em></h2>
+                    <p class="sec-sub">Add from the website library — photos, descriptions and booking links come along automatically. You only fill in the room, dates and rate the client was quoted.</p>
+                    <div id="hotelList"></div>
+                    <div class="add-row">
+                        <button class="btn btn-ghost" id="btnAddLibrary" type="button">+ Add from library</button>
+                        <button class="btn btn-ghost" id="btnAddCustom" type="button">+ Custom hotel</button>
+                    </div>
+                </section>
+                <hr class="sec-rule">
+
+                <!-- Perks -->
+                <section class="sec">
+                    <h2 class="sec-head">The <em>perks.</em></h2>
+                    <p class="sec-sub">Shown as a dark band — the preferred-partner inclusions every option carries.</p>
+                    <div class="f-row">
+                        <label class="f-label" for="fPerksIntro">Intro</label>
+                        <textarea class="f-area" id="fPerksIntro"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="fPerksList">Perks — one per line</label>
+                        <textarea class="f-area" id="fPerksList" style="min-height:120px"></textarea>
+                    </div>
+                </section>
+                <hr class="sec-rule">
+
+                <!-- Closing -->
+                <section class="sec">
+                    <h2 class="sec-head">The <em>close.</em></h2>
+                    <div class="f-row">
+                        <label class="f-label" for="fCloseTitle">Closing headline</label>
+                        <input class="f-input" id="fCloseTitle">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="fCloseLede">Closing line</label>
+                        <textarea class="f-area" id="fCloseLede"></textarea>
+                    </div>
+                    <div class="f-grid2">
+                        <div class="f-row">
+                            <label class="f-label" for="fSigName">Signed by</label>
+                            <input class="f-input" id="fSigName">
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="fSigRole">Role</label>
+                            <input class="f-input" id="fSigRole">
+                        </div>
+                    </div>
+                </section>
+
+                <button class="btn" id="btnPublishBottom" type="button" style="width:100%; justify-content:center">Publish proposal</button>
+            </div>
+
+            <div class="studio-preview" id="previewPane">
+                <span class="studio-preview-tag">Live preview</span>
+                <iframe id="previewFrame" src="/proposal.html?draft=1" title="Proposal preview"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Library picker ────────────────────────────────────────────── -->
+    <div class="modal-wrap" id="libModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h2 class="modal-title">Add from the <em>library.</em></h2>
+                <input class="f-input" id="libSearch" placeholder="Search hotels…" style="max-width:220px">
+                <button class="btn btn-ghost btn-small" data-close="libModal" type="button">Close</button>
+            </div>
+            <div class="lib-grid" id="libGrid"></div>
+        </div>
+    </div>
+
+    <!-- ── Your proposals ────────────────────────────────────────────── -->
+    <div class="modal-wrap" id="listModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h2 class="modal-title">Your <em>proposals.</em></h2>
+                <button class="btn btn-ghost btn-small" data-close="listModal" type="button">Close</button>
+            </div>
+            <div class="plist" id="plist"><p class="sec-sub">Loading…</p></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="/data.js?v=91"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        /* ── Constants / defaults ─────────────────────────────────────── */
+        const DEFAULTS = {
+            perksIntro: 'Each booking is made at the best available rate with our preferred-partner perks layered on top — at no additional cost to you.',
+            perksList: [
+                'Daily breakfast for two',
+                '$100+ hotel, food & beverage, or spa credit',
+                'Priority room upgrade on arrival (subject to availability)',
+                'Early check-in & late check-out (where available)',
+                'VIP recognition with the property before you arrive'
+            ].join('\n'),
+            closeTitle: 'Just hit reply *to confirm.*',
+            closeLede: 'Let me know which option feels right — or if you’d like to see anything else — and I’ll lock in the booking with all the perks attached.',
+            sigName: 'Wilson',
+            sigRole: 'Founder · Wander by Wilson'
+        };
+        const $ = (id) => document.getElementById(id);
+        const lib = (typeof PROPERTIES !== 'undefined') ? PROPERTIES : {};
+
+        /* state.hotels[i]: { slug } for library hotels (plus the variable
+           fields) or { custom:true, name, location, heroImage, galleryText }  */
+        let state = { id: null, hotels: [] };
+        let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
+        let previewReady = false;
+
+        /* ── Tiny helpers ─────────────────────────────────────────────── */
+        const mdEm = (s) => (s || '').trim().replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        const stripHtml = (s) => (s || '').replace(/<[^>]+>/g, '');
+        const esc = (s) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        function toast(msg) {
+            const t = $('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => { t.style.display = 'none'; }, 2600);
+        }
+        async function api(payload) {
+            const res = await fetch('/api/proposals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ passcode }, payload))
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.status === 401) { showGate('Session expired — enter the passcode again.'); throw new Error('unauthorized'); }
+            if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+            return data;
+        }
+
+        /* ── Passcode gate ────────────────────────────────────────────── */
+        function showGate(msg) {
+            $('gate').style.display = 'flex';
+            $('studio').classList.remove('is-open');
+            if (msg) $('gateError').textContent = msg;
+        }
+        function openStudio() {
+            $('gate').style.display = 'none';
+            $('studio').classList.add('is-open');
+            try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
+        }
+        $('gateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = $('gateInput').value.trim();
+            if (!code) return;
+            $('gateError').textContent = '';
+            passcode = code;
+            try {
+                await api({ action: 'auth' });
+                sessionStorage.setItem('wndr-studio-pass', code);
+                openStudio();
+            } catch (err) {
+                if (err.message !== 'unauthorized') $('gateError').textContent = 'That passcode isn’t right — try again.';
+                else $('gateError').textContent = 'That passcode isn’t right — try again.';
+            }
+        });
+        // Silent re-auth if a passcode is stored from this session
+        if (passcode) {
+            api({ action: 'auth' }).then(openStudio).catch(() => showGate(''));
+        }
+
+        /* ── Serialize form state → proposal object ───────────────────── */
+        function serializeHotel(h) {
+            const out = {};
+            if (h.custom) {
+                out.name = mdEm(h.name) || 'New hotel';
+                out.location = (h.location || '').trim();
+                out.heroImage = (h.heroImage || '').trim();
+                out.desc = (h.desc || '').trim();
+                const gal = (h.galleryText || '').split('\n').map(s => s.trim()).filter(Boolean);
+                if (gal.length) out.gallery = gal;
+            } else {
+                out.slug = h.slug;
+                if ((h.desc || '').trim()) out.desc = h.desc.trim();
+            }
+            if ((h.room || '').trim()) out.room = h.room.trim();
+            if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
+            if ((h.rateNote || '').trim()) out.rateNote = h.rateNote.trim();
+            if ((h.roomDesc || '').trim()) {
+                out.roomDesc = h.roomDesc.trim();
+                if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(h.room.trim());
+            }
+            if (h.useBooking) {
+                const url = (h.bookingUrl || '').trim() || (h.slug && lib[h.slug] && lib[h.slug].bookingUrl) || '';
+                if (url && url !== '#') out.bookingUrl = url;
+            } else if (!h.custom) {
+                out.bookingUrl = ''; // suppress the library default
+            }
+            return out;
+        }
+        function serialize() {
+            const title = mdEm($('fTitle').value) || 'Your next <em>escape.</em>';
+            return {
+                metaTitle: stripHtml(title).replace(/\.$/, '') + ' — Wander by Wilson',
+                kicker: 'A private proposal',
+                preparedFor: $('fPrepared').value.trim(),
+                title: title,
+                lede: $('fLede').value.trim(),
+                dates: $('fDates').value.trim(),
+                validUntil: $('fValid').value.trim(),
+                hotels: state.hotels.map(serializeHotel),
+                perks: {
+                    kicker: 'Included at every hotel',
+                    title: 'Wander by Wilson<br><em>exclusive perks.</em>',
+                    intro: $('fPerksIntro').value.trim(),
+                    list: $('fPerksList').value.split('\n').map(s => s.trim()).filter(Boolean)
+                },
+                closeTitle: mdEm($('fCloseTitle').value) || 'Just hit reply <em>to confirm.</em>',
+                closeLede: $('fCloseLede').value.trim(),
+                signatureName: $('fSigName').value.trim() || 'Wilson',
+                signatureRole: $('fSigRole').value.trim() || 'Founder · Wander by Wilson',
+                slugBase: $('fPrepared').value.trim() || stripHtml(title)
+            };
+        }
+
+        /* ── Live preview + autosave ──────────────────────────────────── */
+        const frame = $('previewFrame');
+        window.addEventListener('message', (e) => {
+            if (e.origin !== window.location.origin) return;
+            if (e.data && e.data.type === 'wndr-draft-ready') { previewReady = true; pushPreview(); }
+        });
+        function pushPreview() {
+            if (!previewReady) return;
+            frame.contentWindow.postMessage({ type: 'wndr-draft', proposal: serialize() }, window.location.origin);
+        }
+        let debounceT = null;
+        function onChange() {
+            clearTimeout(debounceT);
+            debounceT = setTimeout(() => {
+                pushPreview();
+                try {
+                    localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, hotels: state.hotels, fields: fieldValues() }));
+                } catch (e) {}
+            }, 250);
+        }
+        document.addEventListener('input', onChange);
+        document.addEventListener('change', onChange);
+
+        const FIELD_IDS = ['fPrepared', 'fTitle', 'fLede', 'fDates', 'fValid', 'fPerksIntro', 'fPerksList', 'fCloseTitle', 'fCloseLede', 'fSigName', 'fSigRole'];
+        function fieldValues() {
+            const out = {};
+            FIELD_IDS.forEach(id => { out[id] = $(id).value; });
+            return out;
+        }
+        function setFields(vals) {
+            FIELD_IDS.forEach(id => { $(id).value = (vals && vals[id] !== undefined) ? vals[id] : ''; });
+        }
+        function applyDefaults() {
+            $('fPerksIntro').value = DEFAULTS.perksIntro;
+            $('fPerksList').value = DEFAULTS.perksList;
+            $('fCloseTitle').value = DEFAULTS.closeTitle;
+            $('fCloseLede').value = DEFAULTS.closeLede;
+            $('fSigName').value = DEFAULTS.sigName;
+            $('fSigRole').value = DEFAULTS.sigRole;
+        }
+
+        /* ── Hotel list UI ────────────────────────────────────────────── */
+        function hotelMeta(h) {
+            if (h.custom) return { name: stripHtml(mdEm(h.name)) || 'New hotel', loc: h.location || '', img: h.heroImage || '' };
+            const b = lib[h.slug] || {};
+            return { name: stripHtml(b.name || h.slug), loc: stripHtml(b.location || ''), img: b.heroImage || '' };
+        }
+        function renderHotels() {
+            const wrap = $('hotelList');
+            wrap.innerHTML = state.hotels.map((h, i) => {
+                const m = hotelMeta(h);
+                const bookingDefault = !h.custom && lib[h.slug] && lib[h.slug].bookingUrl && lib[h.slug].bookingUrl !== '#' ? lib[h.slug].bookingUrl : '';
+                const customFields = h.custom ? `
+                    <div class="f-row"><label class="f-label">Hotel name</label>
+                        <input class="f-input" data-i="${i}" data-k="name" value="${esc(h.name)}" placeholder="Hotel *name*"></div>
+                    <div class="f-row"><label class="f-label">Location line</label>
+                        <input class="f-input" data-i="${i}" data-k="location" value="${esc(h.location)}" placeholder="Positano, Italy · Brand"></div>
+                    <div class="f-row"><label class="f-label">Main photo URL</label>
+                        <input class="f-input" data-i="${i}" data-k="heroImage" value="${esc(h.heroImage)}" placeholder="https://… or /property-images/…"></div>
+                    <div class="f-row"><label class="f-label">Description</label>
+                        <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="A few sentences on why this hotel.">${esc(h.desc)}</textarea></div>
+                    <div class="f-row"><label class="f-label">Gallery photo URLs — one per line (optional)</label>
+                        <textarea class="f-area" data-i="${i}" data-k="galleryText">${esc(h.galleryText)}</textarea></div>` : '';
+                return `
+                <div class="hotel-card" data-card="${i}">
+                    <div class="hotel-card-top">
+                        ${m.img ? `<img class="hotel-card-thumb" src="${esc(m.img)}" alt="">` : '<div class="hotel-card-thumb"></div>'}
+                        <div>
+                            <p class="hotel-card-name">${esc(m.name)}</p>
+                            <p class="hotel-card-loc">${esc(m.loc)}</p>
+                        </div>
+                        <div class="hotel-card-actions">
+                            <button class="icon-btn" data-move="-1" data-i="${i}" title="Move up" type="button">↑</button>
+                            <button class="icon-btn" data-move="1" data-i="${i}" title="Move down" type="button">↓</button>
+                            <button class="icon-btn danger" data-remove="${i}" title="Remove" type="button">✕</button>
+                        </div>
+                    </div>
+                    ${customFields}
+                    <div class="f-grid2">
+                        <div class="f-row"><label class="f-label">Room category</label>
+                            <input class="f-input" data-i="${i}" data-k="room" value="${esc(h.room)}" placeholder="Deluxe Sea View Suite"></div>
+                        <div class="f-row"><label class="f-label">Rate line</label>
+                            <input class="f-input" data-i="${i}" data-k="rate" value="${esc(h.rate)}" placeholder="From *$1,850 / night*"></div>
+                    </div>
+                    <div class="f-row"><label class="f-label">Rate note</label>
+                        <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="For 4 nights, before taxes. Virtuoso perks included."></div>
+                    <details>
+                        <summary>Room description ${h.custom ? '&amp; booking' : '· custom copy · booking'}</summary>
+                        <div class="f-row"><label class="f-label">About the room (optional)</label>
+                            <textarea class="f-area" data-i="${i}" data-k="roomDesc" placeholder="A few lines on the room category you quoted.">${esc(h.roomDesc)}</textarea></div>
+                        ${h.custom ? '' : `
+                        <div class="f-row"><label class="f-label">Custom description (optional — otherwise the website's)</label>
+                            <textarea class="f-area" data-i="${i}" data-k="desc">${esc(h.desc)}</textarea></div>`}
+                        <div class="f-row check-row">
+                            <input type="checkbox" id="book${i}" data-i="${i}" data-k="useBooking" ${h.useBooking ? 'checked' : ''}>
+                            <label for="book${i}">Show a &ldquo;Book this rate&rdquo; button</label>
+                        </div>
+                        <div class="f-row"><label class="f-label">Booking link</label>
+                            <input class="f-input" data-i="${i}" data-k="bookingUrl" value="${esc(h.bookingUrl)}" placeholder="${esc(bookingDefault) || 'https://… (Virtuoso / TravelWits)'}"></div>
+                    </details>
+                </div>`;
+            }).join('') || '<p class="sec-sub" style="margin:0 0 14px">No hotels yet — add your first from the library below.</p>';
+        }
+        $('hotelList').addEventListener('input', (e) => {
+            const i = e.target.dataset.i, k = e.target.dataset.k;
+            if (i === undefined || !k) return;
+            state.hotels[+i][k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+            if (['name', 'location', 'heroImage'].includes(k)) {
+                clearTimeout($('hotelList')._metaT);
+                $('hotelList')._metaT = setTimeout(() => { renderHotels(); }, 900);
+            }
+        });
+        $('hotelList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            if (btn.dataset.remove !== undefined) {
+                state.hotels.splice(+btn.dataset.remove, 1);
+                renderHotels(); onChange();
+            } else if (btn.dataset.move) {
+                const i = +btn.dataset.i, j = i + (+btn.dataset.move);
+                if (j < 0 || j >= state.hotels.length) return;
+                const [h] = state.hotels.splice(i, 1);
+                state.hotels.splice(j, 0, h);
+                renderHotels(); onChange();
+            }
+        });
+
+        /* ── Library picker ───────────────────────────────────────────── */
+        function renderLibrary(filter) {
+            const q = (filter || '').toLowerCase();
+            const added = new Set(state.hotels.filter(h => !h.custom).map(h => h.slug));
+            $('libGrid').innerHTML = Object.entries(lib)
+                .filter(([slug, p]) => !q || (stripHtml(p.name) + ' ' + stripHtml(p.location || '')).toLowerCase().includes(q))
+                .map(([slug, p]) => `
+                    <button class="lib-card ${added.has(slug) ? 'is-added' : ''}" data-slug="${slug}" type="button">
+                        <img src="${esc(p.heroImage)}" alt="" loading="lazy">
+                        <span class="lib-card-body">
+                            <span class="lib-card-name" style="display:block">${stripHtml(p.name)}</span>
+                            <span class="lib-card-loc" style="display:block">${stripHtml(p.location || '')}</span>
+                        </span>
+                    </button>`).join('')
+                || '<p class="sec-sub">No hotels match that search.</p>';
+        }
+        $('libGrid').addEventListener('click', (e) => {
+            const card = e.target.closest('.lib-card');
+            if (!card) return;
+            const slug = card.dataset.slug;
+            const rateFrom = lib[slug] && lib[slug].rateFrom ? 'From *' + stripHtml(lib[slug].rateFrom) + '*' : '';
+            state.hotels.push({ slug, room: '', rate: rateFrom, rateNote: '', roomDesc: '', desc: '', useBooking: false, bookingUrl: '' });
+            renderHotels(); onChange();
+            renderLibrary($('libSearch').value);
+        });
+        $('libSearch').addEventListener('input', () => renderLibrary($('libSearch').value));
+        $('btnAddLibrary').addEventListener('click', () => { renderLibrary(''); $('libSearch').value = ''; $('libModal').classList.add('is-open'); });
+        $('btnAddCustom').addEventListener('click', () => {
+            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', roomDesc: '', useBooking: false, bookingUrl: '' });
+            renderHotels(); onChange();
+        });
+
+        /* ── Modals ───────────────────────────────────────────────────── */
+        document.querySelectorAll('[data-close]').forEach(b =>
+            b.addEventListener('click', () => $(b.dataset.close).classList.remove('is-open')));
+        document.querySelectorAll('.modal-wrap').forEach(m =>
+            m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('is-open'); }));
+
+        /* ── Publish ──────────────────────────────────────────────────── */
+        async function publish() {
+            if (!state.hotels.length) { toast('Add at least one hotel before publishing.'); return; }
+            const btns = [$('btnPublish'), $('btnPublishBottom')];
+            btns.forEach(b => { b.disabled = true; b.textContent = 'Publishing…'; });
+            try {
+                const data = await api({ action: 'save', id: state.id, proposal: serialize() });
+                state.id = data.id;
+                $('statusText').textContent = 'Editing: ' + data.id;
+                $('pubLink').textContent = data.url.replace('https://www.', '');
+                $('pubLink').href = '/proposals/' + data.id + '?preview=1';
+                $('pubBar').classList.add('is-open');
+                $('pubBar')._url = data.url;
+                try { localStorage.removeItem('wndr-studio-draft'); } catch (e) {}
+                toast('Published — the link is live.');
+            } catch (err) {
+                if (err.message !== 'unauthorized') toast('Publish failed: ' + err.message);
+            }
+            btns.forEach((b, i) => { b.disabled = false; b.textContent = i === 0 ? 'Publish' : 'Publish proposal'; });
+        }
+        $('btnPublish').addEventListener('click', publish);
+        $('btnPublishBottom').addEventListener('click', publish);
+        $('btnCopyLink').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText($('pubBar')._url); toast('Link copied.'); }
+            catch (e) { toast($('pubBar')._url); }
+        });
+
+        /* ── New / load / list ────────────────────────────────────────── */
+        function resetForm() {
+            state = { id: null, hotels: [] };
+            setFields({});
+            applyDefaults();
+            renderHotels();
+            $('pubBar').classList.remove('is-open');
+            $('statusText').textContent = 'New proposal';
+            try { localStorage.removeItem('wndr-studio-draft'); } catch (e) {}
+            pushPreview();
+        }
+        $('btnNew').addEventListener('click', () => {
+            if (state.hotels.length && !confirm('Start a fresh proposal? Unpublished changes will be lost.')) return;
+            resetForm();
+        });
+
+        /* Reverse of serialize() — load a published proposal back into the form. */
+        const unEm = (s) => (s || '').replace(/<em>([^<]*)<\/em>/g, '*$1*').replace(/<br\s*\/?>/g, ' ');
+        function loadProposal(id, P) {
+            state = {
+                id,
+                hotels: (P.hotels || []).map(h => {
+                    const isLib = h.slug && lib[h.slug];
+                    return {
+                        custom: !isLib,
+                        slug: h.slug,
+                        name: isLib ? '' : unEm(h.name || ''),
+                        location: h.location || '',
+                        heroImage: isLib ? '' : (h.heroImage || ''),
+                        galleryText: (isLib ? '' : (h.gallery || []).join('\n')),
+                        desc: h.desc || '',
+                        room: h.room || '',
+                        rate: unEm(h.rate || ''),
+                        rateNote: h.rateNote || '',
+                        roomDesc: h.roomDesc || '',
+                        useBooking: !!(h.bookingUrl && h.bookingUrl !== ''),
+                        bookingUrl: h.bookingUrl || ''
+                    };
+                })
+            };
+            setFields({
+                fPrepared: P.preparedFor || '',
+                fTitle: unEm(P.title || ''),
+                fLede: P.lede || '',
+                fDates: P.dates || '',
+                fValid: P.validUntil || '',
+                fPerksIntro: (P.perks && P.perks.intro) || DEFAULTS.perksIntro,
+                fPerksList: (P.perks && P.perks.list ? P.perks.list.join('\n') : DEFAULTS.perksList),
+                fCloseTitle: unEm(P.closeTitle || DEFAULTS.closeTitle),
+                fCloseLede: P.closeLede || DEFAULTS.closeLede,
+                fSigName: P.signatureName || DEFAULTS.sigName,
+                fSigRole: P.signatureRole || DEFAULTS.sigRole
+            });
+            renderHotels();
+            $('statusText').textContent = 'Editing: ' + id;
+            $('pubBar').classList.remove('is-open');
+            pushPreview();
+        }
+
+        async function openList() {
+            $('listModal').classList.add('is-open');
+            $('plist').innerHTML = '<p class="sec-sub">Loading…</p>';
+            try {
+                const data = await api({ action: 'list' });
+                if (!data.proposals.length) {
+                    $('plist').innerHTML = '<p class="sec-sub">Nothing published yet — your proposals will appear here.</p>';
+                    return;
+                }
+                $('plist').innerHTML = data.proposals.map(p => `
+                    <div class="plist-row">
+                        <div class="plist-main">
+                            <p class="plist-title">${esc(p.title || p.id)}</p>
+                            <p class="plist-meta">${esc(p.preparedFor ? 'For ' + p.preparedFor + ' · ' : '')}${p.hotelCount} hotel${p.hotelCount === 1 ? '' : 's'} · updated ${new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                        </div>
+                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}">${p.viewed ? '✓ Opened' : 'Not yet opened'}</span>
+                        <div class="plist-actions">
+                            <button class="btn btn-ghost btn-small" data-edit="${p.id}" type="button">Edit</button>
+                            <button class="btn btn-ghost btn-small" data-copy="${esc(p.url)}" type="button">Copy link</button>
+                            <button class="btn btn-ghost btn-small" data-del="${p.id}" type="button">Delete</button>
+                        </div>
+                    </div>`).join('');
+            } catch (err) {
+                if (err.message !== 'unauthorized') $('plist').innerHTML = '<p class="sec-sub">Couldn’t load the list — ' + esc(err.message) + '</p>';
+            }
+        }
+        $('btnList').addEventListener('click', openList);
+        $('plist').addEventListener('click', async (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            if (btn.dataset.copy) {
+                try { await navigator.clipboard.writeText(btn.dataset.copy); toast('Link copied.'); } catch (err) { toast(btn.dataset.copy); }
+            } else if (btn.dataset.edit) {
+                try {
+                    const data = await api({ action: 'load', id: btn.dataset.edit });
+                    loadProposal(data.id, data.proposal);
+                    $('listModal').classList.remove('is-open');
+                } catch (err) { if (err.message !== 'unauthorized') toast('Couldn’t load: ' + err.message); }
+            } else if (btn.dataset.del) {
+                if (!confirm('Delete this proposal? The client link will stop working.')) return;
+                try {
+                    await api({ action: 'delete', id: btn.dataset.del });
+                    if (state.id === btn.dataset.del) resetForm();
+                    openList();
+                    toast('Deleted.');
+                } catch (err) { if (err.message !== 'unauthorized') toast('Couldn’t delete: ' + err.message); }
+            }
+        });
+
+        /* ── Mobile preview toggle ────────────────────────────────────── */
+        $('btnMobilePreview').addEventListener('click', () => {
+            const s = $('studio');
+            s.classList.toggle('show-preview');
+            $('btnMobilePreview').textContent = s.classList.contains('show-preview') ? 'Build' : 'Preview';
+            if (s.classList.contains('show-preview')) pushPreview();
+        });
+
+        /* ── Boot: restore draft or start fresh ───────────────────────── */
+        applyDefaults();
+        let draft = null;
+        try { draft = JSON.parse(localStorage.getItem('wndr-studio-draft') || 'null'); } catch (e) {}
+        if (draft && (draft.hotels || []).length) {
+            state.id = draft.id || null;
+            state.hotels = draft.hotels;
+            setFields(Object.assign({}, fieldValues(), draft.fields));
+            if (state.id) $('statusText').textContent = 'Editing: ' + state.id;
+            else $('statusText').textContent = 'Draft restored';
+        }
+        renderHotels();
+    })();
+    </script>
+</body>
+</html>
