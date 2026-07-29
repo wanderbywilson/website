@@ -480,6 +480,7 @@
             if ((h.room || '').trim()) out.room = h.room.trim();
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = h.rateNote.trim();
+            if ((h.flight || '').trim()) out.flight = h.flight.trim();
             if ((h.roomDesc || '').trim()) {
                 out.roomDesc = h.roomDesc.trim();
                 if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(h.room.trim());
@@ -603,6 +604,8 @@
                     </div>
                     <div class="f-row"><label class="f-label">Rate note</label>
                         <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="For 4 nights, before taxes. Virtuoso perks included."></div>
+                    <div class="f-row"><label class="f-label">Flight note <span style="text-transform:none">(optional — shows with a ✈ under the rate)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · from $795 pp round-trip"></div>
                     <details>
                         <summary>Room description ${h.custom ? '&amp; booking' : '· custom copy · booking'}</summary>
                         <div class="f-row"><label class="f-label">About the room (optional)</label>
@@ -743,6 +746,7 @@
                         room: h.room || '',
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
+                        flight: h.flight || '',
                         roomDesc: h.roomDesc || '',
                         useBooking: !!(h.bookingUrl && h.bookingUrl !== ''),
                         bookingUrl: h.bookingUrl || ''

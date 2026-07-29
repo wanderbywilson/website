@@ -228,6 +228,25 @@
             color: rgba(30, 53, 82, 0.55);
             margin: 0 0 28px;
         }
+        .prop-hotel-flight {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 9px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: rgba(30, 53, 82, 0.7);
+            background: #fff;
+            border: 1px solid rgba(199, 174, 138, 0.32);
+            padding: 8px 14px;
+            margin: 0 0 24px;
+        }
+        .prop-hotel-flight::before {
+            content: "✈";
+            color: var(--gold);
+            font-size: 13px;
+        }
         .prop-hotel-desc {
             font-family: var(--font-serif);
             font-weight: 300;
@@ -514,6 +533,7 @@
                     room:      h.room      || '',
                     rate:      h.rate      || (base && base.rateFrom ? 'From ' + base.rateFrom : ''),
                     rateNote:  h.rateNote  || '',
+                    flight:    h.flight    || '',
                     roomDescLabel: h.roomDescLabel || '',
                     roomDesc:  h.roomDesc  || '',
                     gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
@@ -554,6 +574,7 @@
                                 ${r.room ? `<p class="prop-hotel-room">${r.room}</p>` : ''}
                                 ${r.rate ? `<p class="prop-hotel-rate">${r.rate}</p>` : ''}
                                 ${r.rateNote ? `<p class="prop-hotel-rate-note">${r.rateNote}</p>` : ''}
+                                ${r.flight ? `<p class="prop-hotel-flight">${r.flight}</p>` : ''}
                                 ${r.desc ? `<p class="prop-hotel-desc">${r.desc}</p>` : ''}
                                 ${roomDesc}
                                 ${cta}
