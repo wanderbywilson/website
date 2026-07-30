@@ -524,33 +524,44 @@
             api({ action: 'auth' }).then(openStudio).catch(() => showGate(''));
         }
 
+        /* ── Auto-capitalization (Wilson's rule): lowercase proper nouns
+           get corrected on the proposal — "passalacqua" → "Passalacqua",
+           "the apfels" → "The Apfels". Words that already contain any
+           uppercase (McAllister, SPA) are left untouched. ─────────────── */
+        const titleWords = (s) => (s || '').replace(/[\p{L}\p{M}][\p{L}\p{M}'’-]*/gu, (w) =>
+            w === w.toLowerCase()
+                ? w.replace(/^[\p{L}]/u, c => c.toUpperCase()).replace(/(['’-])([\p{L}])/gu, (m, p, c) => p + c.toUpperCase())
+                : w);
+        const sentenceCap = (s) => (s || '').replace(/^((?:<[^>]+>|\s|["“‘'«*])*)([\p{L}])/u, (m, pre, c) => pre + c.toUpperCase());
+        const sentenceCapLines = (s) => (s || '').split('\n').map(sentenceCap).join('\n');
+
         /* ── Serialize form state → proposal object ───────────────────── */
         function serializeHotel(h) {
             const out = {};
             if (h.custom) {
-                out.name = mdEm(h.name) || 'New hotel';
-                out.location = (h.location || '').trim();
+                out.name = mdEm(titleWords(h.name)) || 'New hotel';
+                out.location = titleWords((h.location || '').trim());
                 out.heroImage = (h.heroImage || '').trim();
-                out.desc = (h.desc || '').trim();
+                out.desc = sentenceCap((h.desc || '').trim());
                 const gal = (h.galleryText || '').split('\n').map(s => s.trim()).filter(Boolean);
                 if (gal.length) out.gallery = gal;
             } else {
                 out.slug = h.slug;
-                if ((h.desc || '').trim()) out.desc = h.desc.trim();
+                if ((h.desc || '').trim()) out.desc = sentenceCap(h.desc.trim());
             }
-            if ((h.room || '').trim()) out.room = h.room.trim();
+            if ((h.room || '').trim()) out.room = titleWords(h.room.trim());
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
-            if ((h.rateNote || '').trim()) out.rateNote = h.rateNote.trim();
+            if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
             if ((h.flight || '').trim()) out.flight = h.flight.trim();
-            if ((h.flightDetails || '').trim()) out.flightDetails = h.flightDetails.trim();
-            if ((h.deposit || '').trim()) out.deposit = h.deposit.trim();
-            if ((h.cancellation || '').trim()) out.cancellation = h.cancellation.trim();
+            if ((h.flightDetails || '').trim()) out.flightDetails = sentenceCapLines(h.flightDetails.trim());
+            if ((h.deposit || '').trim()) out.deposit = sentenceCap(h.deposit.trim());
+            if ((h.cancellation || '').trim()) out.cancellation = sentenceCap(h.cancellation.trim());
             if ((h.roomDesc || '').trim()) {
-                out.roomDesc = h.roomDesc.trim();
-                if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(h.room.trim());
+                out.roomDesc = sentenceCap(h.roomDesc.trim());
+                if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(titleWords(h.room.trim()));
             }
             if (h.usePerks) {
-                const lines = (h.perksText || '').split('\n').map(s => s.trim()).filter(Boolean);
+                const lines = (h.perksText || '').split('\n').map(s => s.trim()).filter(Boolean).map(sentenceCap);
                 if (lines.length) out.perksList = lines;
             }
             if (h.useBooking) {
@@ -562,21 +573,21 @@
             return out;
         }
         function serialize() {
-            const title = mdEm($('fTitle').value) || 'Your next <em>escape.</em>';
+            const title = sentenceCap(mdEm($('fTitle').value)) || 'Your next <em>escape.</em>';
             return {
                 metaTitle: stripHtml(title).replace(/\.$/, '') + ' — Wander by Wilson',
                 kicker: 'A private proposal',
-                preparedFor: $('fPrepared').value.trim(),
+                preparedFor: titleWords($('fPrepared').value.trim()),
                 title: title,
-                lede: $('fLede').value.trim(),
-                dates: $('fDates').value.trim(),
-                validUntil: $('fValid').value.trim(),
+                lede: sentenceCap($('fLede').value.trim()),
+                dates: sentenceCap($('fDates').value.trim()),
+                validUntil: sentenceCap($('fValid').value.trim()),
                 hotels: state.hotels.map(serializeHotel),
                 // no global perks band — amenities live on each hotel card
-                closeTitle: mdEm($('fCloseTitle').value) || 'Just hit reply <em>to confirm.</em>',
-                closeLede: $('fCloseLede').value.trim(),
-                signatureName: $('fSigName').value.trim() || 'Wilson',
-                signatureRole: $('fSigRole').value.trim() || 'Founder · Wander by Wilson',
+                closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || 'Just hit reply <em>to confirm.</em>',
+                closeLede: sentenceCap($('fCloseLede').value.trim()),
+                signatureName: titleWords($('fSigName').value.trim()) || 'Wilson',
+                signatureRole: sentenceCap($('fSigRole').value.trim()) || 'Founder · Wander by Wilson',
                 slugBase: $('fPrepared').value.trim() || stripHtml(title)
             };
         }
