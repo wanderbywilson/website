@@ -372,21 +372,6 @@
                 </section>
                 <hr class="sec-rule">
 
-                <!-- Perks -->
-                <section class="sec">
-                    <h2 class="sec-head">The <em>perks.</em></h2>
-                    <p class="sec-sub">Shown as a dark band — the preferred-partner inclusions every option carries.</p>
-                    <div class="f-row">
-                        <label class="f-label" for="fPerksIntro">Intro</label>
-                        <textarea class="f-area" id="fPerksIntro"></textarea>
-                    </div>
-                    <div class="f-row">
-                        <label class="f-label" for="fPerksList">Perks — one per line <span style="text-transform:none">(leave empty to hide this band; per-hotel amenities live on each hotel card)</span></label>
-                        <textarea class="f-area" id="fPerksList" style="min-height:120px"></textarea>
-                    </div>
-                </section>
-                <hr class="sec-rule">
-
                 <!-- Closing -->
                 <section class="sec">
                     <h2 class="sec-head">The <em>close.</em></h2>
@@ -471,14 +456,6 @@
 
         /* ── Constants / defaults ─────────────────────────────────────── */
         const DEFAULTS = {
-            perksIntro: 'Each booking is made at the best available rate with our preferred-partner perks layered on top — at no additional cost to you.',
-            perksList: [
-                'Daily breakfast for two',
-                '$100+ hotel, food & beverage, or spa credit',
-                'Priority room upgrade on arrival (subject to availability)',
-                'Early check-in & late check-out (where available)',
-                'VIP recognition with the property before you arrive'
-            ].join('\n'),
             closeTitle: 'Just hit reply *to confirm.*',
             closeLede: 'Let me know which option feels right — or if you’d like to see anything else — and I’ll lock in the booking with all the perks attached.',
             sigName: 'Wilson',
@@ -595,16 +572,7 @@
                 dates: $('fDates').value.trim(),
                 validUntil: $('fValid').value.trim(),
                 hotels: state.hotels.map(serializeHotel),
-                perks: (function () {
-                    const list = $('fPerksList').value.split('\n').map(s => s.trim()).filter(Boolean);
-                    if (!list.length) return undefined; // empty list → no band on the page
-                    return {
-                        kicker: 'Included at every hotel',
-                        title: 'Wander by Wilson<br><em>exclusive amenities.</em>',
-                        intro: $('fPerksIntro').value.trim(),
-                        list
-                    };
-                })(),
+                // no global perks band — amenities live on each hotel card
                 closeTitle: mdEm($('fCloseTitle').value) || 'Just hit reply <em>to confirm.</em>',
                 closeLede: $('fCloseLede').value.trim(),
                 signatureName: $('fSigName').value.trim() || 'Wilson',
@@ -656,7 +624,7 @@
         document.addEventListener('input', onChange);
         document.addEventListener('change', onChange);
 
-        const FIELD_IDS = ['fPrepared', 'fTitle', 'fLede', 'fDates', 'fValid', 'fPerksIntro', 'fPerksList', 'fCloseTitle', 'fCloseLede', 'fSigName', 'fSigRole'];
+        const FIELD_IDS = ['fPrepared', 'fTitle', 'fLede', 'fDates', 'fValid', 'fCloseTitle', 'fCloseLede', 'fSigName', 'fSigRole'];
         function fieldValues() {
             const out = {};
             FIELD_IDS.forEach(id => { out[id] = $(id).value; });
@@ -666,8 +634,6 @@
             FIELD_IDS.forEach(id => { $(id).value = (vals && vals[id] !== undefined) ? vals[id] : ''; });
         }
         function applyDefaults() {
-            $('fPerksIntro').value = DEFAULTS.perksIntro;
-            $('fPerksList').value = DEFAULTS.perksList;
             $('fCloseTitle').value = DEFAULTS.closeTitle;
             $('fCloseLede').value = DEFAULTS.closeLede;
             $('fSigName').value = DEFAULTS.sigName;
@@ -1042,8 +1008,6 @@
                 fLede: P.lede || '',
                 fDates: P.dates || '',
                 fValid: P.validUntil || '',
-                fPerksIntro: (P.perks && P.perks.intro) || DEFAULTS.perksIntro,
-                fPerksList: (P.perks && P.perks.list ? P.perks.list.join('\n') : DEFAULTS.perksList),
                 fCloseTitle: unEm(P.closeTitle || DEFAULTS.closeTitle),
                 fCloseLede: P.closeLede || DEFAULTS.closeLede,
                 fSigName: P.signatureName || DEFAULTS.sigName,
