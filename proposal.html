@@ -134,46 +134,128 @@
 
         /* Print / save-as-PDF */
         @media print {
-            .prop-pdf-btn, .site-header { display: none !important; }
+            .prop-pdf-btn, .site-header, .prop-carousel-btn, .prop-carousel-dots { display: none !important; }
             .prop-page { background: #fff; }
             .prop-hero { padding: 24px 0 32px; }
-            .prop-hotel { padding: 32px 0; }
-            .prop-hotel-grid, .gallery-tile { break-inside: avoid; }
-            .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prop-hotel { break-inside: avoid; }
+            .prop-hotel-visual-inner { position: static; height: 340px; }
+            .prop-hotel-body { padding: 24px 28px; }
+            .prop-carousel img { opacity: 0; }
+            .prop-carousel img.is-active { opacity: 1; }
+            .prop-perks, .prop-hotel-visual-overlay { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .prop-close { padding: 40px 0; }
         }
 
-        /* HOTEL CARD */
+        /* HOTEL SECTIONS — split "lookbook" layout: full-bleed photo pinned
+           on the left, content scrolling on the right. As one option scrolls
+           away, the next option's photo takes over. */
         .prop-hotel {
-            padding: 80px 0;
-            border-bottom: 1px solid rgba(199, 174, 138, 0.28);
-        }
-        .prop-hotel:last-of-type { border-bottom: none; }
-
-        .prop-hotel-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 56px;
-            align-items: center;
+            border-bottom: none;
+            padding: 0;
         }
-        .prop-hotel:nth-of-type(even) .prop-hotel-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-        .prop-hotel:nth-of-type(even) .prop-hotel-image { order: 2; }
-        .prop-hotel:nth-of-type(even) .prop-hotel-body  { order: 1; }
-
-        .prop-hotel-image {
-            aspect-ratio: 3 / 2;
+        .prop-hotel-visual { position: relative; }
+        .prop-hotel-visual-inner {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
-            background: var(--bone-warm, #efe7d6);
-            border: 1px solid rgba(199, 174, 138, 0.32);
         }
-        .prop-hotel-image img {
+        .prop-hotel-visual-inner img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
+        .prop-hotel-visual-overlay {
+            position: absolute;
+            inset: auto 0 0 0;
+            padding: 140px 44px 44px;
+            background: linear-gradient(to top, rgba(20, 33, 51, 0.62), rgba(20, 33, 51, 0));
+        }
+        .prop-hotel-visual-overlay .prop-hotel-num {
+            color: rgba(247, 241, 230, 0.9);
+            margin-bottom: 10px;
+        }
+        .prop-hotel-visual-name {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-size: clamp(34px, 3.4vw, 52px);
+            line-height: 1.05;
+            color: #f7f1e6;
+            margin: 0;
+            letter-spacing: -0.012em;
+            text-wrap: balance;
+        }
+        .prop-hotel-body {
+            padding: 104px 64px 104px 64px;
+            max-width: 620px;
+            justify-self: start;
+        }
+        .prop-hotel + .prop-hotel .prop-hotel-body { border-top: 1px solid rgba(199, 174, 138, 0.0); }
+
+        /* 3-photo click-through carousel in the content panel */
+        .prop-carousel {
+            position: relative;
+            aspect-ratio: 3 / 2;
+            overflow: hidden;
+            background: var(--bone-warm, #efe7d6);
+            border: 1px solid rgba(199, 174, 138, 0.32);
+            margin: 0 0 26px;
+        }
+        .prop-carousel img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity .45s ease;
+        }
+        .prop-carousel img.is-active { opacity: 1; }
+        .prop-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(247, 241, 230, 0.92);
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(30, 53, 82, 0.18);
+            transition: background .2s ease;
+        }
+        .prop-carousel-btn:hover { background: #fff; }
+        .prop-carousel-btn.prev { left: 14px; }
+        .prop-carousel-btn.next { right: 14px; }
+        .prop-carousel-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+        }
+        .prop-carousel-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(247, 241, 230, 0.55);
+            transition: background .2s ease, transform .2s ease;
+        }
+        .prop-carousel-dots span.is-active { background: #f7f1e6; transform: scale(1.25); }
 
         .prop-hotel-num {
             font-family: var(--font-sans);
@@ -381,37 +463,31 @@
         .prop-hotel-cta svg { transition: transform .25s ease; }
         .prop-hotel-cta:hover svg { transform: translateX(3px); }
 
-        @media (max-width: 880px) {
-            .prop-hotel-grid {
-                grid-template-columns: 1fr;
-                gap: 28px;
+        @media (max-width: 980px) {
+            .prop-hotel { grid-template-columns: 1fr; }
+            .prop-hotel-visual-inner {
+                position: relative;
+                height: 58vh;
+                min-height: 340px;
             }
-            .prop-hotel:nth-of-type(even) .prop-hotel-image { order: 0; }
-            .prop-hotel:nth-of-type(even) .prop-hotel-body  { order: 0; }
-            .prop-hotel { padding: 56px 0; }
+            .prop-hotel-visual-overlay { padding: 90px 24px 26px; }
+            .prop-hotel-body {
+                padding: 44px 24px 64px;
+                max-width: none;
+            }
             .prop-hero { padding: 64px 0 40px; }
         }
 
-        /* Per-hotel gallery — 2x2 grid of additional photos below the
-           hero+body layout. Reuses .gallery-grid / .gallery-tile from
-           styles.css with a tighter top margin since it lives inside
-           the .prop-hotel section. */
-        .prop-hotel-gallery {
-            margin-top: 56px;
-            padding-top: 0;
-            background: transparent;
-            border-top: none;
+        /* Draft mode — click-to-edit affordances (Studio live preview only) */
+        body.is-draft [data-edit] { cursor: text; }
+        body.is-draft [data-edit]:hover {
+            outline: 1.5px dashed rgba(199, 174, 138, 0.85);
+            outline-offset: 3px;
         }
-        .prop-hotel-gallery .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .prop-hotel-gallery .gallery-tile {
-            border-color: rgba(199, 174, 138, 0.22);
-        }
-        @media (max-width: 720px) {
-            .prop-hotel-gallery { margin-top: 36px; }
-            .prop-hotel-gallery .gallery-grid { grid-template-columns: 1fr; gap: 14px; }
+        body.is-draft [data-edit]:focus {
+            outline: 1.5px solid var(--gold);
+            outline-offset: 3px;
+            background: rgba(255, 255, 255, 0.45);
         }
 
         /* PERKS STRIP — dark band emphasising Virtuoso inclusions */
@@ -630,23 +706,30 @@
 
             const arrow = '<svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/></svg>';
 
+            // Click-to-edit marker (Studio live preview only)
+            const E = (path) => isDraft ? ` contenteditable="true" data-edit="${path}"` : '';
+
             // ── Section builders ──────────────────────────────────────────
             function hotelSection(h, i) {
                 const r = resolveHotel(h);
                 const altName = decode(strip(r.name));
                 const num = 'No. ' + String(i + 1).padStart(2, '0');
-                const gallery = (r.gallery && r.gallery.length)
-                    ? '<div class="prop-hotel-gallery"><div class="gallery-grid">' +
-                      r.gallery.map((src, gi) => `<figure class="gallery-tile"><img src="${src}" alt="${altName} — view ${gi + 1}" loading="lazy"></figure>`).join('') +
-                      '</div></div>'
+                const shots = (r.gallery || []).slice(0, 3);
+                const carousel = shots.length
+                    ? `<div class="prop-carousel">
+                        ${shots.map((src, gi) => `<img src="${src}" alt="${altName} — view ${gi + 1}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
+                        <button class="prop-carousel-btn prev" type="button" aria-label="Previous photo">&#8592;</button>
+                        <button class="prop-carousel-btn next" type="button" aria-label="Next photo">&#8594;</button>
+                        <div class="prop-carousel-dots">${shots.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
+                       </div>`
                     : '';
                 const roomDesc = r.roomDesc
-                    ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}${r.roomDesc}</p>`
+                    ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span></p>`
                     : '';
                 const finePrint = (r.deposit || r.cancellation)
                     ? `<div class="prop-hotel-fineprint">
-                        ${r.deposit ? `<p><strong>Deposit</strong>${r.deposit}</p>` : ''}
-                        ${r.cancellation ? `<p><strong>Cancellation</strong>${r.cancellation}</p>` : ''}
+                        ${r.deposit ? `<p><strong>Deposit</strong><span${E(`hotels.${i}.deposit`)}>${r.deposit}</span></p>` : ''}
+                        ${r.cancellation ? `<p><strong>Cancellation</strong><span${E(`hotels.${i}.cancellation`)}>${r.cancellation}</span></p>` : ''}
                        </div>`
                     : '';
                 const hotelPerks = (r.perksList && r.perksList.length)
@@ -659,27 +742,27 @@
                     : '';
                 return `
                 <section class="prop-hotel">
-                    <div class="prop-container">
-                        <div class="prop-hotel-grid">
-                            <figure class="prop-hotel-image">
-                                <img src="${r.heroImage}" alt="${altName} — ${decode(strip(r.location))}">
-                            </figure>
-                            <div class="prop-hotel-body">
+                    <div class="prop-hotel-visual">
+                        <div class="prop-hotel-visual-inner">
+                            <img src="${r.heroImage}" alt="${altName} — ${decode(strip(r.location))}">
+                            <div class="prop-hotel-visual-overlay">
                                 <p class="prop-hotel-num">${num}</p>
-                                <h2 class="prop-hotel-name">${r.name}</h2>
-                                <p class="prop-hotel-location">${r.location}</p>
-                                ${r.room ? `<p class="prop-hotel-room">${r.room}</p>` : ''}
-                                ${r.rate ? `<p class="prop-hotel-rate">${r.rate}</p>` : ''}
-                                ${r.rateNote ? `<p class="prop-hotel-rate-note">${r.rateNote}</p>` : ''}
-                                ${r.flight ? `<p class="prop-hotel-flight">${r.flight}</p>` : ''}
-                                ${r.desc ? `<p class="prop-hotel-desc">${r.desc}</p>` : ''}
-                                ${roomDesc}
-                                ${hotelPerks}
-                                ${finePrint}
-                                ${cta}
+                                <h2 class="prop-hotel-visual-name">${r.name}</h2>
                             </div>
                         </div>
-                        ${gallery}
+                    </div>
+                    <div class="prop-hotel-body">
+                        <p class="prop-hotel-location">${r.location}</p>
+                        ${carousel}
+                        ${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
+                        ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
+                        ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
+                        ${r.flight ? `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>` : ''}
+                        ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
+                        ${roomDesc}
+                        ${hotelPerks}
+                        ${finePrint}
+                        ${cta}
                     </div>
                 </section>`;
             }
@@ -708,11 +791,11 @@
                 <section class="prop-hero">
                     <div class="prop-container">
                         ${P.kicker ? `<p class="prop-hero-kicker">${P.kicker}</p>` : ''}
-                        ${P.preparedFor ? `<p class="prop-hero-prepared">Prepared for ${P.preparedFor}</p>` : ''}
-                        <h1 class="prop-hero-title">${P.title || ''}</h1>
-                        ${P.lede ? `<p class="prop-hero-lede">${P.lede}</p>` : ''}
-                        ${P.dates ? `<p class="prop-hero-dates">${P.dates}</p>` : ''}
-                        ${P.validUntil ? `<p class="prop-hero-valid">Rates valid until ${P.validUntil} &mdash; subject to availability thereafter.</p>` : ''}
+                        ${P.preparedFor ? `<p class="prop-hero-prepared">Prepared for <span${E('preparedFor')}>${P.preparedFor}</span></p>` : ''}
+                        <h1 class="prop-hero-title"${E('title')}>${P.title || ''}</h1>
+                        ${P.lede ? `<p class="prop-hero-lede"${E('lede')}>${P.lede}</p>` : ''}
+                        ${P.dates ? `<p class="prop-hero-dates"${E('dates')}>${P.dates}</p>` : ''}
+                        ${P.validUntil ? `<p class="prop-hero-valid">Rates valid until <span${E('validUntil')}>${P.validUntil}</span> &mdash; subject to availability thereafter.</p>` : ''}
                     </div>
                 </section>`;
             }
@@ -721,14 +804,33 @@
                 return `
                 <section class="prop-close">
                     <div class="prop-container">
-                        <h2 class="prop-close-title">${P.closeTitle || 'Just hit reply<br><em>to confirm.</em>'}</h2>
-                        ${P.closeLede ? `<p class="prop-close-lede">${P.closeLede}</p>` : ''}
+                        <h2 class="prop-close-title"${E('closeTitle')}>${P.closeTitle || 'Just hit reply<br><em>to confirm.</em>'}</h2>
+                        ${P.closeLede ? `<p class="prop-close-lede"${E('closeLede')}>${P.closeLede}</p>` : ''}
                         <div class="prop-close-signature">
                             <p class="prop-close-signature-name">${P.signatureName || 'Wilson'}</p>
                             <p class="prop-close-signature-role">${P.signatureRole || 'Founder &middot; Wander by Wilson'}</p>
                         </div>
                     </div>
                 </section>`;
+            }
+
+            function initCarousels() {
+                document.querySelectorAll('.prop-carousel').forEach(c => {
+                    const imgs = [...c.querySelectorAll('img')];
+                    if (imgs.length < 2) {
+                        c.querySelectorAll('.prop-carousel-btn, .prop-carousel-dots').forEach(x => x.remove());
+                        return;
+                    }
+                    const dots = [...c.querySelectorAll('.prop-carousel-dots span')];
+                    let i = 0;
+                    const show = (n) => {
+                        i = (n + imgs.length) % imgs.length;
+                        imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
+                        dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+                    };
+                    c.querySelector('.prev').addEventListener('click', () => show(i - 1));
+                    c.querySelector('.next').addEventListener('click', () => show(i + 1));
+                });
             }
 
             function render(P) {
@@ -740,6 +842,7 @@
                     perksSection(P.perks) +
                     photoNote +
                     closeSection(P);
+                initCarousels();
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
                     btn.className = 'prop-pdf-btn';
@@ -752,9 +855,21 @@
 
             // ── Studio live-preview mode ──────────────────────────────────
             if (isDraft) {
+                document.body.classList.add('is-draft');
                 window.addEventListener('message', (e) => {
                     if (e.origin !== window.location.origin) return;
                     if (e.data && e.data.type === 'wndr-draft' && e.data.proposal) render(e.data.proposal);
+                });
+                // Click-to-edit: report edited text back to the Studio on blur.
+                document.addEventListener('focusout', (ev) => {
+                    const el = ev.target && ev.target.closest ? ev.target.closest('[data-edit]') : null;
+                    if (!el) return;
+                    const value = el.innerHTML
+                        .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
+                        .replace(/<div>/gi, '<br>')
+                        .replace(/<\/div>/gi, '')
+                        .trim();
+                    window.parent.postMessage({ type: 'wndr-edit', path: el.dataset.edit, value }, window.location.origin);
                 });
                 if (window.parent !== window) {
                     window.parent.postMessage({ type: 'wndr-draft-ready' }, window.location.origin);

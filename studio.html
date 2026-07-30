@@ -175,6 +175,31 @@
         .quote-drop.is-over { border-color: var(--gold); background: #fdfbf6; }
         .quote-drop.is-busy { opacity: 0.6; pointer-events: none; }
         .quote-drop u { text-underline-offset: 2px; }
+        .ai-bar {
+            position: sticky;
+            bottom: -80px; /* formPane has 80px bottom padding */
+            background: #fff;
+            border-top: 1px solid var(--studio-line-soft);
+            padding: 14px 0 16px;
+            margin-top: 26px;
+        }
+        .ai-input-row { display: flex; gap: 8px; }
+        .ai-input-row .f-input { flex: 1; }
+        .ai-result {
+            background: #fdfbf6;
+            border: 1px solid var(--studio-line);
+            padding: 14px 16px;
+            margin: 0 0 12px;
+        }
+        .ai-text {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.55;
+            margin: 0 0 12px;
+            white-space: pre-wrap;
+        }
+        .ai-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
         .add-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -366,10 +391,29 @@
                 </section>
 
                 <button class="btn" id="btnPublishBottom" type="button" style="width:100%; justify-content:center">Publish proposal</button>
+
+                <!-- AI writing assistant — trip-level copy only (titles, intros,
+                     closings). It will not write hotel descriptions: those must
+                     stay verbatim from official sources. -->
+                <div class="ai-bar">
+                    <div class="ai-result" id="aiResult" hidden>
+                        <p class="ai-text" id="aiText"></p>
+                        <div class="ai-actions">
+                            <button class="btn btn-ghost btn-small" data-ai="fTitle" type="button">Use as title</button>
+                            <button class="btn btn-ghost btn-small" data-ai="fLede" type="button">Use as intro</button>
+                            <button class="btn btn-ghost btn-small" data-ai="fCloseLede" type="button">Use as closing</button>
+                            <button class="btn btn-ghost btn-small" data-ai="copy" type="button">Copy</button>
+                        </div>
+                    </div>
+                    <form class="ai-input-row" id="aiForm">
+                        <input class="f-input" id="aiInput" placeholder="✨ Ask AI to write something — “a title for a romantic Amalfi honeymoon”">
+                        <button class="btn btn-small" type="submit" id="aiAsk">Ask</button>
+                    </form>
+                </div>
             </div>
 
             <div class="studio-preview" id="previewPane">
-                <span class="studio-preview-tag">Live preview</span>
+                <span class="studio-preview-tag">Live preview &mdash; click any text to edit it</span>
                 <iframe id="previewFrame" src="/proposal.html?draft=1" title="Proposal preview"></iframe>
             </div>
         </div>
@@ -550,9 +594,34 @@
 
         /* ── Live preview + autosave ──────────────────────────────────── */
         const frame = $('previewFrame');
+        function saveDraft() {
+            try {
+                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, hotels: state.hotels, fields: fieldValues() }));
+            } catch (e) {}
+        }
+        const stripTags = (s) => { const t = document.createElement('div'); t.innerHTML = s || ''; return t.textContent.trim(); };
+        /* Inline edits made directly in the live preview flow back here. */
+        function applyEdit(path, value) {
+            const m = path.match(/^hotels\.(\d+)\.(\w+)$/);
+            if (m && state.hotels[+m[1]]) {
+                const k = m[2];
+                state.hotels[+m[1]][k] =
+                    (k === 'rate') ? unEm(value) :
+                    (k === 'desc' || k === 'roomDesc') ? value.trim() :
+                    stripTags(value);
+                renderHotels();
+            } else {
+                const map = { title: ['fTitle', 1], preparedFor: ['fPrepared', 0], lede: ['fLede', 0], dates: ['fDates', 0], validUntil: ['fValid', 0], closeTitle: ['fCloseTitle', 1], closeLede: ['fCloseLede', 0] };
+                const t = map[path];
+                if (t) $(t[0]).value = t[1] ? unEm(value) : stripTags(value);
+            }
+            saveDraft();
+        }
         window.addEventListener('message', (e) => {
             if (e.origin !== window.location.origin) return;
-            if (e.data && e.data.type === 'wndr-draft-ready') { previewReady = true; pushPreview(); }
+            if (!e.data) return;
+            if (e.data.type === 'wndr-draft-ready') { previewReady = true; pushPreview(); }
+            if (e.data.type === 'wndr-edit' && typeof e.data.path === 'string') applyEdit(e.data.path, e.data.value || '');
         });
         function pushPreview() {
             if (!previewReady) return;
@@ -561,12 +630,7 @@
         let debounceT = null;
         function onChange() {
             clearTimeout(debounceT);
-            debounceT = setTimeout(() => {
-                pushPreview();
-                try {
-                    localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, hotels: state.hotels, fields: fieldValues() }));
-                } catch (e) {}
-            }, 250);
+            debounceT = setTimeout(() => { pushPreview(); saveDraft(); }, 250);
         }
         document.addEventListener('input', onChange);
         document.addEventListener('change', onChange);
@@ -935,6 +999,43 @@
                     openList();
                     toast('Deleted.');
                 } catch (err) { if (err.message !== 'unauthorized') toast('Couldn’t delete: ' + err.message); }
+            }
+        });
+
+        /* ── AI writing assistant ─────────────────────────────────────── */
+        $('aiForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const q = $('aiInput').value.trim();
+            if (!q) return;
+            const btn = $('aiAsk');
+            btn.disabled = true; btn.textContent = '…';
+            try {
+                const res = await fetch('/api/studio-ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode, request: q, proposal: serialize() })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+                $('aiResult').hidden = false;
+                $('aiText').textContent = data.text || '';
+                $('aiResult').dataset.text = data.text || '';
+            } catch (err) {
+                toast(err.message || 'AI request failed.');
+            }
+            btn.disabled = false; btn.textContent = 'Ask';
+        });
+        $('aiResult').addEventListener('click', async (e) => {
+            const b = e.target.closest('button');
+            if (!b) return;
+            const text = ($('aiResult').dataset.text || '').trim();
+            if (!text) return;
+            if (b.dataset.ai === 'copy') {
+                try { await navigator.clipboard.writeText(text); toast('Copied.'); } catch (err) { toast(text); }
+            } else {
+                $(b.dataset.ai).value = text;
+                onChange();
+                toast('Inserted — tweak it however you like.');
             }
         });
 
