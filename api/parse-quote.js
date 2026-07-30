@@ -22,7 +22,7 @@ const SCHEMA = {
         cancellation: { type: 'string', description: 'Cancellation policy exactly as stated. Empty string if not shown.' },
         dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11 – 15, 2026". Empty string if not shown.' },
         flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · from $795 pp round-trip". Empty string for hotel quotes.' },
-        flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary, one leg per line with dates, times, duration, stops, then a final line with fare options and prices exactly as shown, e.g. "Outbound Wed, Nov 11 · American · DFW 7:26 AM – PLS 2:24 PM · 5h 58m · 1 stop (MIA)\\nReturn Sun, Nov 15 · ...\\nEconomy from $795 pp · Main Cabin $915". Empty string for hotel quotes.' }
+        flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary in this exact multiline format (blank line between sections; NEVER include emissions/CO2 info):\n"Outbound · Wed, Nov 11\nAmerican · DFW 5:00 AM – AXA 2:57 PM\n7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)\n\nReturn · Sun, Nov 15\nAmerican · AXA 3:37 PM – DFW 9:50 PM\n8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)\n\nFares\nMain Cabin $1,526 pp · Main Plus $1,768 pp"\nInclude the exact layover duration and airport when shown. All values verbatim from the screenshot. Empty string for hotel quotes.' }
     },
     required: ['room', 'rate', 'rateNote', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
     additionalProperties: false
