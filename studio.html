@@ -968,7 +968,7 @@
                             <p class="plist-title">${esc(p.title || p.id)}</p>
                             <p class="plist-meta">${esc(p.preparedFor ? 'For ' + p.preparedFor + ' · ' : '')}${p.hotelCount} hotel${p.hotelCount === 1 ? '' : 's'} · updated ${new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                         </div>
-                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}">${p.viewed ? '✓ Opened' : 'Not yet opened'}</span>
+                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}" ${p.firstViewedAt ? `title="First opened ${new Date(p.firstViewedAt).toLocaleString()}"` : ''}>${p.viewed ? ('✓ Opened' + (p.views > 1 ? ' · ' + p.views + ' views' : '')) : 'Not yet opened'}</span>
                         <div class="plist-actions">
                             <button class="btn btn-ghost btn-small" data-edit="${p.id}" type="button">Edit</button>
                             <button class="btn btn-ghost btn-small" data-copy="${esc(p.url)}" type="button">Copy link</button>

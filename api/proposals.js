@@ -81,9 +81,21 @@ module.exports = async (req, res) => {
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX_PATH)) || {};
             const viewBlobs = await blobList('views/');
-            const viewed = new Set(viewBlobs.map(b => (b.pathname.match(/^views\/(.+)\.json$/) || [])[1]).filter(Boolean));
+            const viewIds = viewBlobs
+                .map(b => (b.pathname.match(/^views\/(.+)\.json$/) || [])[1])
+                .filter(id => id && index[id]);
+            const views = {};
+            await Promise.all(viewIds.map(async (id) => {
+                views[id] = await blobGetJSON(`views/${id}.json`).catch(() => null);
+            }));
             const items = Object.entries(index)
-                .map(([id, meta]) => ({ id, ...meta, viewed: viewed.has(id), url: `${SITE}/proposals/${id}` }))
+                .map(([id, meta]) => ({
+                    id, ...meta,
+                    viewed: !!views[id],
+                    views: views[id] ? views[id].count || 0 : 0,
+                    firstViewedAt: views[id] ? views[id].firstViewedAt || null : null,
+                    url: `${SITE}/proposals/${id}`
+                }))
                 .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
             return res.status(200).json({ ok: true, proposals: items });
         }

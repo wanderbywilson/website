@@ -241,6 +241,20 @@
             transition: background .2s ease, transform .2s ease;
         }
         .prop-carousel-dots span.is-active { background: #f7f1e6; transform: scale(1.25); }
+        .prop-carousel-count {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            z-index: 3;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: #f7f1e6;
+            background: rgba(20, 33, 51, 0.55);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
 
         .prop-hotel-num {
             font-family: var(--font-sans);
@@ -699,13 +713,14 @@
                 const r = resolveHotel(h);
                 const altName = decode(strip(r.name));
                 const num = 'No. ' + String(i + 1).padStart(2, '0');
-                const shots = (r.gallery || []).slice(0, 3);
+                const shots = r.gallery || [];
                 const carousel = shots.length
                     ? `<div class="prop-carousel">
                         ${shots.map((src, gi) => `<img src="${src}" alt="${altName} — view ${gi + 1}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
                         <button class="prop-carousel-btn prev" type="button" aria-label="Previous photo">&#8592;</button>
                         <button class="prop-carousel-btn next" type="button" aria-label="Next photo">&#8594;</button>
                         <div class="prop-carousel-dots">${shots.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
+                        ${shots.length > 1 ? `<span class="prop-carousel-count">1 / ${shots.length}</span>` : ''}
                        </div>`
                     : '';
                 const roomDesc = r.roomDesc
@@ -805,11 +820,13 @@
                         return;
                     }
                     const dots = [...c.querySelectorAll('.prop-carousel-dots span')];
+                    const count = c.querySelector('.prop-carousel-count');
                     let i = 0;
                     const show = (n) => {
                         i = (n + imgs.length) % imgs.length;
                         imgs.forEach((im, k) => im.classList.toggle('is-active', k === i));
                         dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+                        if (count) count.textContent = (i + 1) + ' / ' + imgs.length;
                     };
                     c.querySelector('.prev').addEventListener('click', () => show(i - 1));
                     c.querySelector('.next').addEventListener('click', () => show(i + 1));
