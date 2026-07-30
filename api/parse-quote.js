@@ -20,9 +20,11 @@ const SCHEMA = {
         rateNote: { type: 'string', description: 'What the rate includes and the rate-plan name, verbatim facts only, e.g. "Includes room, taxes, service charge & facility fee · Beach Escape rate with daily breakfast". Empty string if not shown.' },
         deposit: { type: 'string', description: 'Deposit terms exactly as stated, e.g. "50% of the stay charged at booking." Empty string if not shown.' },
         cancellation: { type: 'string', description: 'Cancellation policy exactly as stated. Empty string if not shown.' },
-        dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11 – 15, 2026". Empty string if not shown.' }
+        dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11 – 15, 2026". Empty string if not shown.' },
+        flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · from $795 pp round-trip". Empty string for hotel quotes.' },
+        flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary, one leg per line with dates, times, duration, stops, then a final line with fare options and prices exactly as shown, e.g. "Outbound Wed, Nov 11 · American · DFW 7:26 AM – PLS 2:24 PM · 5h 58m · 1 stop (MIA)\\nReturn Sun, Nov 15 · ...\\nEconomy from $795 pp · Main Cabin $915". Empty string for hotel quotes.' }
     },
-    required: ['room', 'rate', 'rateNote', 'deposit', 'cancellation', 'dates'],
+    required: ['room', 'rate', 'rateNote', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
     additionalProperties: false
 };
 
@@ -70,7 +72,7 @@ module.exports = async (req, res) => {
                     role: 'user',
                     content: [
                         { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-                        { type: 'text', text: 'This is a screenshot of a hotel rate quote for a travel advisor. Extract the fields exactly as written in the screenshot — copy values verbatim, never invent, estimate, or embellish anything. If a field is not visible in the screenshot, return an empty string for it.' }
+                        { type: 'text', text: 'This is a screenshot for a travel advisor — either a HOTEL rate quote (room, rate, deposit, cancellation) or a FLIGHT itinerary/pricing screenshot (e.g. Google Flights). Extract the fields exactly as written — copy values verbatim, never invent, estimate, or embellish anything. For hotel quotes fill the hotel fields and leave flight fields empty; for flight screenshots fill flight + flightDetails and leave hotel fields empty. If a field is not visible, return an empty string for it.' }
                     ]
                 }]
             })

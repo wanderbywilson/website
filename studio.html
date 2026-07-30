@@ -545,6 +545,7 @@
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = h.rateNote.trim();
             if ((h.flight || '').trim()) out.flight = h.flight.trim();
+            if ((h.flightDetails || '').trim()) out.flightDetails = h.flightDetails.trim();
             if ((h.deposit || '').trim()) out.deposit = h.deposit.trim();
             if ((h.cancellation || '').trim()) out.cancellation = h.cancellation.trim();
             if ((h.roomDesc || '').trim()) {
@@ -704,6 +705,8 @@
                         <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="For 4 nights, before taxes. Virtuoso perks included."></div>
                     <div class="f-row"><label class="f-label">Flight note <span style="text-transform:none">(optional — shows with a ✈ under the rate)</span></label>
                         <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · from $795 pp round-trip"></div>
+                    <div class="f-row"><label class="f-label">Flight details <span style="text-transform:none">(optional — client can expand the ✈ chip to read these; drop a Google Flights screenshot to fill)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="flightDetails" placeholder="Outbound Wed, Nov 11 · American · DFW 7:26 AM – PLS 2:24 PM · 5h 58m · 1 stop (MIA)&#10;Return Sun, Nov 15 · American · PLS 1:01 PM – DFW 7:15 PM · 7h 14m · 1 stop (MIA)&#10;Economy from $795 pp · Main Cabin $915 · Main Plus $1,065">${esc(h.flightDetails)}</textarea></div>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Deposit</label>
                             <input class="f-input" data-i="${i}" data-k="deposit" value="${esc(h.deposit)}" placeholder="50% of the stay charged at booking."></div>
@@ -767,6 +770,8 @@
             if (f.rateNote) h.rateNote = f.rateNote;
             if (f.deposit) h.deposit = f.deposit;
             if (f.cancellation) h.cancellation = f.cancellation;
+            if (f.flight) h.flight = f.flight;
+            if (f.flightDetails) h.flightDetails = f.flightDetails;
             if (f.dates && !$('fDates').value.trim()) $('fDates').value = f.dates;
             renderHotels(); onChange();
         }
@@ -924,6 +929,7 @@
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
                         flight: h.flight || '',
+                        flightDetails: h.flightDetails || '',
                         deposit: h.deposit || '',
                         cancellation: h.cancellation || '',
                         usePerks: !!(h.perksList && h.perksList.length),

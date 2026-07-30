@@ -146,7 +146,9 @@
             .prop-carousel { max-width: 420px; break-inside: avoid; }
             .prop-carousel img { position: absolute; opacity: 0; }
             .prop-carousel img.is-active { opacity: 1; }
-            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc { break-inside: avoid; }
+            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc, .prop-hotel-flightwrap { break-inside: avoid; }
+            .prop-flight-details[hidden] { display: block !important; }
+            .prop-flight-caret { display: none; }
             .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
             .prop-close { padding: 40px 0; }
         }
@@ -327,6 +329,29 @@
             content: "✈";
             color: var(--gold);
             font-size: 13px;
+        }
+        button.prop-hotel-flight { cursor: pointer; text-align: left; }
+        .prop-flight-caret {
+            margin-left: 4px;
+            color: var(--gold);
+            font-size: 10px;
+            transition: transform .2s ease;
+            display: inline-block;
+        }
+        .prop-hotel-flightwrap.is-open .prop-flight-caret { transform: rotate(180deg); }
+        .prop-hotel-flightwrap { margin: 0 0 24px; }
+        .prop-hotel-flightwrap .prop-hotel-flight { margin-bottom: 0; }
+        .prop-flight-details {
+            border: 1px solid rgba(199, 174, 138, 0.32);
+            border-top: none;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 12.5px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: rgba(30, 53, 82, 0.75);
+            white-space: pre-line;
         }
         .prop-hotel-desc {
             font-family: var(--font-serif);
@@ -691,6 +716,7 @@
                     rate:      h.rate      || (base && base.rateFrom ? 'From ' + base.rateFrom : ''),
                     rateNote:  h.rateNote  || '',
                     flight:    h.flight    || '',
+                    flightDetails: h.flightDetails || '',
                     roomDescLabel: h.roomDescLabel || '',
                     roomDesc:  h.roomDesc  || '',
                     deposit:   h.deposit   || '',
@@ -754,7 +780,12 @@
                         ${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
                         ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
                         ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
-                        ${r.flight ? `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>` : ''}
+                        ${r.flight ? (r.flightDetails
+                            ? `<div class="prop-hotel-flightwrap">
+                                <button class="prop-hotel-flight prop-flight-toggle" type="button" aria-expanded="false"><span${E(`hotels.${i}.flight`)}>${r.flight}</span><span class="prop-flight-caret">&#9662;</span></button>
+                                <div class="prop-flight-details" hidden${E(`hotels.${i}.flightDetails`)}>${r.flightDetails}</div>
+                               </div>`
+                            : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
                         ${carousel}
                         ${roomDesc}
@@ -830,6 +861,16 @@
                     };
                     c.querySelector('.prev').addEventListener('click', () => show(i - 1));
                     c.querySelector('.next').addEventListener('click', () => show(i + 1));
+                });
+                document.querySelectorAll('.prop-flight-toggle').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const wrap = btn.closest('.prop-hotel-flightwrap');
+                        const panel = wrap.querySelector('.prop-flight-details');
+                        const open = panel.hasAttribute('hidden');
+                        if (open) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', '');
+                        wrap.classList.toggle('is-open', open);
+                        btn.setAttribute('aria-expanded', String(open));
+                    });
                 });
             }
 

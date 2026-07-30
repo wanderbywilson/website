@@ -31,8 +31,10 @@ async function blobPutJSON(pathname, obj) {
 }
 
 // Read JSON; returns null when the blob doesn't exist.
+// The unique query param defeats the CDN's edge cache so publishes/deletes
+// are visible immediately (these are tiny JSON files — caching buys nothing).
 async function blobGetJSON(pathname) {
-    const res = await fetch(`${STORE_HOST}/${pathname}`, {
+    const res = await fetch(`${STORE_HOST}/${pathname}?nc=${Date.now()}-${Math.random().toString(36).slice(2)}`, {
         headers: { 'Authorization': `Bearer ${token()}` }
     });
     if (res.status === 404 || res.status === 403) return null;
