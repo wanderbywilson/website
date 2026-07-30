@@ -15,6 +15,8 @@
 const SCHEMA = {
     type: 'object',
     properties: {
+        name: { type: 'string', description: 'Official hotel name exactly as shown in the screenshot, e.g. "Il Borro". Empty string if not shown.' },
+        location: { type: 'string', description: 'Town/region, country as shown, e.g. "San Giustino Valdarno, Tuscany, Italy". Empty string if not shown.' },
         room: { type: 'string', description: 'Room category marketing name ONLY, max 6 words, e.g. "Prestige Suite Borgo" — never the GDS spec dump ("1 Double Bed-50-70SQM-Minibar-..."). Empty string if not shown.' },
         roomDesc: { type: 'string', description: 'If the screenshot lists room features/size: ONE readable sentence, max ~35 words, with those exact features. No amenities, no occupancy codes. Empty string otherwise.' },
         rate: { type: 'string', description: 'STRICT: total + stay length, max 30 characters, e.g. "$4,340.09 · 3-night total" — nothing else, no breakdowns, no currency conversions. Empty string if not shown.' },
@@ -26,7 +28,7 @@ const SCHEMA = {
         flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · from $795 pp round-trip". Empty string for hotel quotes.' },
         flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary in this exact multiline format (blank line between sections; NEVER include emissions/CO2 info):\n"Outbound · Wed, Nov 11\nAmerican · DFW 5:00 AM – AXA 2:57 PM\n7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)\n\nReturn · Sun, Nov 15\nAmerican · AXA 3:37 PM – DFW 9:50 PM\n8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)\n\nFares\nMain Cabin $1,526 pp · Main Plus $1,768 pp"\nInclude the exact layover duration and airport when shown. All values verbatim from the screenshot. Empty string for hotel quotes.' }
     },
-    required: ['room', 'roomDesc', 'rate', 'rateNote', 'perks', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
+    required: ['name', 'location', 'room', 'roomDesc', 'rate', 'rateNote', 'perks', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
     additionalProperties: false
 };
 
