@@ -155,6 +155,26 @@
         .hotel-card details[open] summary { margin-bottom: 12px; }
         .check-row { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; font-weight: 300; }
         .check-row input { margin-top: 2px; }
+        .perks-box .f-area {
+            background: #fdfbf6;
+            border-color: var(--studio-line);
+            box-shadow: inset 0 1px 5px rgba(30, 53, 82, 0.07);
+        }
+        .quote-drop {
+            border: 1.5px dashed var(--studio-line);
+            background: #fff;
+            padding: 12px 14px;
+            margin: 0 0 14px;
+            font-size: 12px;
+            font-weight: 300;
+            color: rgba(30, 53, 82, 0.65);
+            line-height: 1.5;
+            cursor: pointer;
+            transition: border-color .15s ease, background .15s ease;
+        }
+        .quote-drop.is-over { border-color: var(--gold); background: #fdfbf6; }
+        .quote-drop.is-busy { opacity: 0.6; pointer-events: none; }
+        .quote-drop u { text-underline-offset: 2px; }
 
         .add-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -298,7 +318,7 @@
                 <!-- Hotels -->
                 <section class="sec">
                     <h2 class="sec-head">The <em>hotels.</em></h2>
-                    <p class="sec-sub">Add from the website library — photos, descriptions and booking links come along automatically. You only fill in the room, dates and rate the client was quoted.</p>
+                    <p class="sec-sub">Add from the website library — photos, descriptions and amenities come along automatically. You only fill in the room, rate and policies from the quote (or drop a screenshot of it). <strong>Never write or embellish hotel copy:</strong> descriptions must come from our website, the hotel&rsquo;s own site, or its Virtuoso page — exactly as written.</p>
                     <div id="hotelList"></div>
                     <div class="add-row">
                         <button class="btn btn-ghost" id="btnAddLibrary" type="button">+ Add from library</button>
@@ -316,7 +336,7 @@
                         <textarea class="f-area" id="fPerksIntro"></textarea>
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="fPerksList">Perks — one per line</label>
+                        <label class="f-label" for="fPerksList">Perks — one per line <span style="text-transform:none">(leave empty to hide this band; per-hotel amenities live on each hotel card)</span></label>
                         <textarea class="f-area" id="fPerksList" style="min-height:120px"></textarea>
                     </div>
                 </section>
@@ -481,9 +501,15 @@
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = h.rateNote.trim();
             if ((h.flight || '').trim()) out.flight = h.flight.trim();
+            if ((h.deposit || '').trim()) out.deposit = h.deposit.trim();
+            if ((h.cancellation || '').trim()) out.cancellation = h.cancellation.trim();
             if ((h.roomDesc || '').trim()) {
                 out.roomDesc = h.roomDesc.trim();
                 if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(h.room.trim());
+            }
+            if (h.usePerks) {
+                const lines = (h.perksText || '').split('\n').map(s => s.trim()).filter(Boolean);
+                if (lines.length) out.perksList = lines;
             }
             if (h.useBooking) {
                 const url = (h.bookingUrl || '').trim() || (h.slug && lib[h.slug] && lib[h.slug].bookingUrl) || '';
@@ -504,12 +530,16 @@
                 dates: $('fDates').value.trim(),
                 validUntil: $('fValid').value.trim(),
                 hotels: state.hotels.map(serializeHotel),
-                perks: {
-                    kicker: 'Included at every hotel',
-                    title: 'Wander by Wilson<br><em>exclusive perks.</em>',
-                    intro: $('fPerksIntro').value.trim(),
-                    list: $('fPerksList').value.split('\n').map(s => s.trim()).filter(Boolean)
-                },
+                perks: (function () {
+                    const list = $('fPerksList').value.split('\n').map(s => s.trim()).filter(Boolean);
+                    if (!list.length) return undefined; // empty list → no band on the page
+                    return {
+                        kicker: 'Included at every hotel',
+                        title: 'Wander by Wilson<br><em>exclusive amenities.</em>',
+                        intro: $('fPerksIntro').value.trim(),
+                        list
+                    };
+                })(),
                 closeTitle: mdEm($('fCloseTitle').value) || 'Just hit reply <em>to confirm.</em>',
                 closeLede: $('fCloseLede').value.trim(),
                 signatureName: $('fSigName').value.trim() || 'Wilson',
@@ -571,14 +601,14 @@
                 const m = hotelMeta(h);
                 const bookingDefault = !h.custom && lib[h.slug] && lib[h.slug].bookingUrl && lib[h.slug].bookingUrl !== '#' ? lib[h.slug].bookingUrl : '';
                 const customFields = h.custom ? `
-                    <div class="f-row"><label class="f-label">Hotel name</label>
-                        <input class="f-input" data-i="${i}" data-k="name" value="${esc(h.name)}" placeholder="Hotel *name*"></div>
+                    <div class="f-row"><label class="f-label">Hotel name — official name, exactly as the hotel writes it</label>
+                        <input class="f-input" data-i="${i}" data-k="name" value="${esc(h.name)}" placeholder="Rock House"></div>
                     <div class="f-row"><label class="f-label">Location line</label>
                         <input class="f-input" data-i="${i}" data-k="location" value="${esc(h.location)}" placeholder="Positano, Italy · Brand"></div>
                     <div class="f-row"><label class="f-label">Main photo URL</label>
                         <input class="f-input" data-i="${i}" data-k="heroImage" value="${esc(h.heroImage)}" placeholder="https://… or /property-images/…"></div>
-                    <div class="f-row"><label class="f-label">Description</label>
-                        <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="A few sentences on why this hotel.">${esc(h.desc)}</textarea></div>
+                    <div class="f-row"><label class="f-label">Description — paste verbatim from the hotel&rsquo;s website or its Virtuoso page</label>
+                        <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="Paste the property overview exactly as the hotel or Virtuoso writes it — never write your own.">${esc(h.desc)}</textarea></div>
                     <div class="f-row"><label class="f-label">Gallery photo URLs — one per line (optional)</label>
                         <textarea class="f-area" data-i="${i}" data-k="galleryText">${esc(h.galleryText)}</textarea></div>` : '';
                 return `
@@ -596,6 +626,10 @@
                         </div>
                     </div>
                     ${customFields}
+                    <div class="quote-drop" data-drop="${i}">
+                        📷 <strong>Drop a screenshot of the quote here</strong> (or click to browse) &mdash; room, rate, deposit &amp; cancellation fill in automatically, copied exactly as written. You can always type instead.
+                        <input type="file" accept="image/*" class="quote-file" data-i="${i}" hidden>
+                    </div>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Room category</label>
                             <input class="f-input" data-i="${i}" data-k="room" value="${esc(h.room)}" placeholder="Deluxe Sea View Suite"></div>
@@ -606,6 +640,18 @@
                         <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="For 4 nights, before taxes. Virtuoso perks included."></div>
                     <div class="f-row"><label class="f-label">Flight note <span style="text-transform:none">(optional — shows with a ✈ under the rate)</span></label>
                         <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · from $795 pp round-trip"></div>
+                    <div class="f-grid2">
+                        <div class="f-row"><label class="f-label">Deposit</label>
+                            <input class="f-input" data-i="${i}" data-k="deposit" value="${esc(h.deposit)}" placeholder="50% of the stay charged at booking."></div>
+                        <div class="f-row"><label class="f-label">Cancellation</label>
+                            <input class="f-input" data-i="${i}" data-k="cancellation" value="${esc(h.cancellation)}" placeholder="Cancel 30 days before arrival to avoid penalty."></div>
+                    </div>
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="perks${i}" data-i="${i}" data-k="usePerks" ${h.usePerks ? 'checked' : ''}>
+                        <label for="perks${i}">Include preferred-partner amenities on this hotel</label>
+                    </div>
+                    ${h.usePerks ? `<div class="f-row perks-box"><label class="f-label">Amenities — one per line (edit to match the quote)</label>
+                        <textarea class="f-area" data-i="${i}" data-k="perksText" style="min-height:118px">${esc(h.perksText)}</textarea></div>` : ''}
                     <details>
                         <summary>Room description ${h.custom ? '&amp; booking' : '· custom copy · booking'}</summary>
                         <div class="f-row"><label class="f-label">About the room (optional)</label>
@@ -627,6 +673,7 @@
             const i = e.target.dataset.i, k = e.target.dataset.k;
             if (i === undefined || !k) return;
             state.hotels[+i][k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+            if (k === 'usePerks') { renderHotels(); return; }
             if (['name', 'location', 'heroImage'].includes(k)) {
                 clearTimeout($('hotelList')._metaT);
                 $('hotelList')._metaT = setTimeout(() => { renderHotels(); }, 900);
@@ -645,6 +692,71 @@
                 state.hotels.splice(j, 0, h);
                 renderHotels(); onChange();
             }
+        });
+
+        /* ── Quote-screenshot reader ──────────────────────────────────── */
+        function fillFromQuote(i, f) {
+            const h = state.hotels[i];
+            const wrapMoney = (s) => s.replace(/([$€£]\s?[\d,.]+)/, '*$1*');
+            if (f.room) h.room = f.room;
+            if (f.rate) h.rate = wrapMoney(f.rate);
+            if (f.rateNote) h.rateNote = f.rateNote;
+            if (f.deposit) h.deposit = f.deposit;
+            if (f.cancellation) h.cancellation = f.cancellation;
+            if (f.dates && !$('fDates').value.trim()) $('fDates').value = f.dates;
+            renderHotels(); onChange();
+        }
+        function readQuoteScreenshot(i, file) {
+            if (!file || !file.type.startsWith('image/')) { toast('That doesn’t look like an image.'); return; }
+            const img = new Image();
+            img.onload = async () => {
+                const MAX = 1800;
+                const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                const b64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+                URL.revokeObjectURL(img.src);
+                const drop = document.querySelector(`.quote-drop[data-drop="${i}"]`);
+                if (drop) { drop.classList.add('is-busy'); drop.textContent = '⏳ Reading the screenshot…'; }
+                try {
+                    const res = await fetch('/api/parse-quote', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ passcode, image: b64, mediaType: 'image/jpeg' })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+                    fillFromQuote(i, data.fields || {});
+                    toast('Screenshot read — double-check every field against the quote.');
+                } catch (err) {
+                    renderHotels();
+                    toast(err.message || 'Couldn’t read the screenshot — type the fields in manually.');
+                }
+            };
+            img.onerror = () => toast('Couldn’t open that image.');
+            img.src = URL.createObjectURL(file);
+        }
+        $('hotelList').addEventListener('change', (e) => {
+            if (e.target.classList.contains('quote-file') && e.target.files && e.target.files[0]) {
+                readQuoteScreenshot(+e.target.dataset.i, e.target.files[0]);
+            }
+        });
+        $('hotelList').addEventListener('click', (e) => {
+            const drop = e.target.closest('.quote-drop');
+            if (drop && !e.target.classList.contains('quote-file')) drop.querySelector('.quote-file').click();
+        });
+        ['dragover', 'dragleave', 'drop'].forEach(evt => {
+            $('hotelList').addEventListener(evt, (e) => {
+                const drop = e.target.closest('.quote-drop');
+                if (!drop) return;
+                e.preventDefault();
+                drop.classList.toggle('is-over', evt === 'dragover');
+                if (evt === 'drop' && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    readQuoteScreenshot(+drop.dataset.drop, e.dataTransfer.files[0]);
+                }
+            });
         });
 
         /* ── Library picker ───────────────────────────────────────────── */
@@ -668,14 +780,15 @@
             if (!card) return;
             const slug = card.dataset.slug;
             const rateFrom = lib[slug] && lib[slug].rateFrom ? 'From *' + stripHtml(lib[slug].rateFrom) + '*' : '';
-            state.hotels.push({ slug, room: '', rate: rateFrom, rateNote: '', roomDesc: '', desc: '', useBooking: false, bookingUrl: '' });
+            const libPerks = (lib[slug] && lib[slug].perks) ? lib[slug].perks.join('\n') : '';
+            state.hotels.push({ slug, room: '', rate: rateFrom, rateNote: '', flight: '', roomDesc: '', desc: '', usePerks: !!libPerks, perksText: libPerks, useBooking: false, bookingUrl: '' });
             renderHotels(); onChange();
             renderLibrary($('libSearch').value);
         });
         $('libSearch').addEventListener('input', () => renderLibrary($('libSearch').value));
         $('btnAddLibrary').addEventListener('click', () => { renderLibrary(''); $('libSearch').value = ''; $('libModal').classList.add('is-open'); });
         $('btnAddCustom').addEventListener('click', () => {
-            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', roomDesc: '', useBooking: false, bookingUrl: '' });
+            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', flight: '', roomDesc: '', usePerks: false, perksText: '', useBooking: false, bookingUrl: '' });
             renderHotels(); onChange();
         });
 
@@ -747,6 +860,10 @@
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
                         flight: h.flight || '',
+                        deposit: h.deposit || '',
+                        cancellation: h.cancellation || '',
+                        usePerks: !!(h.perksList && h.perksList.length),
+                        perksText: (h.perksList || []).join('\n'),
                         roomDesc: h.roomDesc || '',
                         useBooking: !!(h.bookingUrl && h.bookingUrl !== ''),
                         bookingUrl: h.bookingUrl || ''

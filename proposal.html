@@ -276,6 +276,88 @@
             margin-bottom: 8px;
         }
 
+        /* Per-hotel preferred-partner amenities (renders when perksList set) */
+        .prop-hotel-perks {
+            margin: 22px 0 0;
+            padding-top: 22px;
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .prop-hotel-perks strong {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 12px;
+        }
+        .prop-hotel-perks ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+        .prop-hotel-perks li {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.5;
+            color: rgba(30, 53, 82, 0.8);
+            padding-left: 24px;
+            position: relative;
+        }
+        .prop-hotel-perks li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 1px;
+            color: var(--gold);
+            font-size: 12px;
+        }
+
+        /* Per-hotel deposit & cancellation fine print */
+        .prop-hotel-fineprint {
+            margin: 22px 0 0;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(199, 174, 138, 0.28);
+            display: grid;
+            gap: 10px;
+        }
+        .prop-hotel-fineprint p {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: rgba(30, 53, 82, 0.7);
+            margin: 0;
+        }
+        .prop-hotel-fineprint strong {
+            font-family: var(--font-sans);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(30, 53, 82, 0.55);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Photo-accuracy disclaimer (auto-rendered above the closing section) */
+        .prop-photo-note {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 13px;
+            color: rgba(30, 53, 82, 0.5);
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 40px 24px 0;
+        }
+
         /* Optional per-hotel self-book button (renders only when the hotel
            has a bookingUrl — Virtuoso / TravelWits). */
         .prop-hotel-cta {
@@ -536,6 +618,10 @@
                     flight:    h.flight    || '',
                     roomDescLabel: h.roomDescLabel || '',
                     roomDesc:  h.roomDesc  || '',
+                    deposit:   h.deposit   || '',
+                    cancellation: h.cancellation || '',
+                    perksList: h.perksList || [],
+                    perksLabel: h.perksLabel || 'Preferred-partner amenities &mdash; included',
                     gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
                     // undefined → inherit the library link; '' (set by the Studio) → no button
                     bookingUrl: h.bookingUrl !== undefined ? h.bookingUrl : libBooking
@@ -557,6 +643,17 @@
                 const roomDesc = r.roomDesc
                     ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}${r.roomDesc}</p>`
                     : '';
+                const finePrint = (r.deposit || r.cancellation)
+                    ? `<div class="prop-hotel-fineprint">
+                        ${r.deposit ? `<p><strong>Deposit</strong>${r.deposit}</p>` : ''}
+                        ${r.cancellation ? `<p><strong>Cancellation</strong>${r.cancellation}</p>` : ''}
+                       </div>`
+                    : '';
+                const hotelPerks = (r.perksList && r.perksList.length)
+                    ? `<div class="prop-hotel-perks"><strong>${r.perksLabel}</strong><ul>` +
+                      r.perksList.map(li => `<li>${li}</li>`).join('') +
+                      '</ul></div>'
+                    : '';
                 const cta = r.bookingUrl
                     ? `<a class="prop-hotel-cta" href="${r.bookingUrl}" target="_blank" rel="noopener noreferrer">Book this rate ${arrow}</a>`
                     : '';
@@ -577,6 +674,8 @@
                                 ${r.flight ? `<p class="prop-hotel-flight">${r.flight}</p>` : ''}
                                 ${r.desc ? `<p class="prop-hotel-desc">${r.desc}</p>` : ''}
                                 ${roomDesc}
+                                ${hotelPerks}
+                                ${finePrint}
                                 ${cta}
                             </div>
                         </div>
@@ -634,10 +733,12 @@
 
             function render(P) {
                 applyMeta(P);
+                const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || 'Photography is provided by each property. Actual rooms may differ from the images shown.'}</p>`;
                 document.getElementById('proposalRoot').innerHTML =
                     heroSection(P) +
                     (P.hotels || []).map(hotelSection).join('') +
                     perksSection(P.perks) +
+                    photoNote +
                     closeSection(P);
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
@@ -692,11 +793,9 @@
             }
         })();
 
-        // Header scroll state (matches the rest of the site)
-        const header = document.getElementById('siteHeader');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('is-scrolled', window.scrollY > 24);
-        }, { passive: true });
+        // Keep the Wander by Wilson logo header visible at all times on proposals
+        // (the solid "scrolled" treatment from styles.css, applied permanently).
+        document.getElementById('siteHeader').classList.add('is-scrolled');
     </script>
 </body>
 </html>
