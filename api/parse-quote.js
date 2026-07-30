@@ -15,16 +15,18 @@
 const SCHEMA = {
     type: 'object',
     properties: {
-        room: { type: 'string', description: 'Room or suite category name exactly as written, e.g. "Oceanfront One Bedroom". Empty string if not shown.' },
-        rate: { type: 'string', description: 'The quoted price with currency symbol and what it covers, concisely, e.g. "$8,128 · 4-night total". Use the exact number shown; drop trailing .00. Empty string if not shown.' },
-        rateNote: { type: 'string', description: 'What the rate includes and the rate-plan name, verbatim facts only, e.g. "Includes room, taxes, service charge & facility fee · Beach Escape rate with daily breakfast". Empty string if not shown.' },
-        deposit: { type: 'string', description: 'Deposit terms exactly as stated, e.g. "50% of the stay charged at booking." Empty string if not shown.' },
-        cancellation: { type: 'string', description: 'Cancellation policy exactly as stated. Empty string if not shown.' },
+        room: { type: 'string', description: 'The room category MARKETING NAME ONLY, e.g. "Prestige Suite Borgo" or "Oceanfront One Bedroom" — never the GDS spec dump ("1 Double Bed-50-70SQM-Minibar-..."). Empty string if not shown.' },
+        roomDesc: { type: 'string', description: 'If the screenshot lists room features/size: one readable sentence with those exact features, e.g. "50–70 sqm with a living room, sofa, fireplace and desk; bath and/or shower; one extra bed possible (charges apply)." Facts verbatim, prose readable. Empty string otherwise.' },
+        rate: { type: 'string', description: 'Final total + stay length ONLY, e.g. "$4,340.09 · 3-night total". Nothing else. Empty string if not shown.' },
+        rateNote: { type: 'string', description: 'ONE short line: taxes/fees status, rate-plan name if any, property-currency total if shown, e.g. "Includes taxes & fees · property-currency total €3,815.00". NOT the amenities list. Empty string if not shown.' },
+        perks: { type: 'array', items: { type: 'string' }, description: 'Included amenities as short elegant bullets, e.g. "Upgrade on arrival (subject to availability)", "Daily breakfast for up to two guests per bedroom", "$100 USD hotel credit toward wine tours, tastings & spa". NEVER include a personalized note/amenity from the agent or advisor (it is a surprise). Empty array if none.' },
+        deposit: { type: 'string', description: 'Deposit terms decoded into plain English with exact terms, e.g. "Guarantee required — a credit card holds the reservation; nothing is charged at booking." Empty string if not shown.' },
+        cancellation: { type: 'string', description: 'Cancellation policy decoded from GDS shorthand into plain English with the exact deadline and penalty, e.g. "Free cancellation until 6:00 PM hotel time on September 14, 2026; after that the full stay, including taxes and fees, is charged." Facts unchanged. Empty string if not shown.' },
         dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11 – 15, 2026". Empty string if not shown.' },
         flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · from $795 pp round-trip". Empty string for hotel quotes.' },
         flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary in this exact multiline format (blank line between sections; NEVER include emissions/CO2 info):\n"Outbound · Wed, Nov 11\nAmerican · DFW 5:00 AM – AXA 2:57 PM\n7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)\n\nReturn · Sun, Nov 15\nAmerican · AXA 3:37 PM – DFW 9:50 PM\n8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)\n\nFares\nMain Cabin $1,526 pp · Main Plus $1,768 pp"\nInclude the exact layover duration and airport when shown. All values verbatim from the screenshot. Empty string for hotel quotes.' }
     },
-    required: ['room', 'rate', 'rateNote', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
+    required: ['room', 'roomDesc', 'rate', 'rateNote', 'perks', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
     additionalProperties: false
 };
 
@@ -72,7 +74,7 @@ module.exports = async (req, res) => {
                     role: 'user',
                     content: [
                         { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-                        { type: 'text', text: 'This is a screenshot for a travel advisor — either a HOTEL rate quote (room, rate, deposit, cancellation) or a FLIGHT itinerary/pricing screenshot (e.g. Google Flights). Extract the fields exactly as written — copy values verbatim, never invent, estimate, or embellish anything. For hotel quotes fill the hotel fields and leave flight fields empty; for flight screenshots fill flight + flightDetails and leave hotel fields empty. If a field is not visible, return an empty string for it.' }
+                        { type: 'text', text: 'This is a screenshot for a luxury travel advisor — either a HOTEL rate quote (often GDS/Virtuoso system output) or a FLIGHT itinerary/pricing screenshot (e.g. Google Flights). Two rules: (1) every FACT — number, date, name, term, inclusion — must come from the screenshot exactly; never invent, estimate, or embellish. (2) The FORMATTING must be client-ready: decode GDS/system shorthand into clear, elegant English; change notation, never facts. Amenities go in the perks array, not the rate note. For hotel quotes leave the flight fields empty; for flight screenshots fill flight + flightDetails and leave hotel fields and perks empty. Empty string/array for anything not visible.' }
                     ]
                 }]
             })

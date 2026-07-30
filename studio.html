@@ -793,8 +793,10 @@
             const h = state.hotels[i];
             const wrapMoney = (s) => s.replace(/([$€£]\s?[\d,.]+)/, '*$1*');
             if (f.room) h.room = f.room;
+            if (f.roomDesc) h.roomDesc = f.roomDesc;
             if (f.rate) h.rate = wrapMoney(f.rate);
             if (f.rateNote) h.rateNote = f.rateNote;
+            if (Array.isArray(f.perks) && f.perks.length) { h.usePerks = true; h.perksText = f.perks.join('\n'); }
             if (f.deposit) h.deposit = f.deposit;
             if (f.cancellation) h.cancellation = f.cancellation;
             if (f.flight) h.flight = f.flight;
@@ -838,22 +840,29 @@
            its answer here. No API key involved. */
         const CLAUDE_PROMPT = [
             'You are helping a Wander by Wilson team member fill our Proposal Studio from a screenshot.',
-            'The attached screenshot is either a HOTEL rate quote or a FLIGHT itinerary (e.g. Google Flights).',
-            'Extract ONLY what is visible, copied verbatim — never invent, estimate, or embellish anything (compliance requirement).',
-            'Reply with ONLY this JSON block, using empty strings for anything not shown:',
+            'The attached screenshot is either a HOTEL rate quote (often GDS/Virtuoso system output) or a FLIGHT itinerary (e.g. Google Flights).',
+            '',
+            'Two rules, both mandatory:',
+            '1. Every FACT — number, date, name, term, inclusion — must come from the screenshot exactly. Never invent, estimate, or embellish (compliance requirement).',
+            '2. But the FORMATTING must be client-ready: decode GDS/system shorthand into clear, elegant English a luxury-travel client would read. Change notation, never facts.',
+            '',
+            'Reply with ONLY this JSON block, empty strings/arrays for anything not shown:',
             '',
             '{',
-            '  "room": "room/suite category exactly as written",',
-            '  "rate": "price + what it covers, e.g. $8,128 \\u00b7 4-night total",',
-            '  "rateNote": "what the rate includes + rate-plan name, verbatim facts only",',
-            '  "deposit": "deposit terms exactly as stated",',
-            '  "cancellation": "cancellation policy exactly as stated",',
+            '  "room": "the room category MARKETING NAME ONLY, e.g. Prestige Suite Borgo — drop spec dumps like 1 Double Bed-50-70SQM-Minibar-...",',
+            '  "roomDesc": "if the screenshot lists room features/size, one readable sentence with those exact features, e.g. 50\\u201370 sqm with a living room, sofa, fireplace and desk; bath and/or shower; one extra bed possible (charges apply). Else empty.",',
+            '  "rate": "final total + stay length ONLY, e.g. $4,340.09 \\u00b7 3-night total",',
+            '  "rateNote": "ONE short line: taxes/fees status, rate-plan name if any, property-currency total if shown, e.g. Includes taxes & fees \\u00b7 property-currency total \\u20ac3,815.00. NOT the amenities list.",',
+            '  "perks": ["each included amenity as a short elegant bullet, e.g. Upgrade on arrival (subject to availability)", "Daily breakfast for up to two guests per bedroom", "$100 USD hotel credit toward wine tours, tastings & spa (no cash value if unredeemed)"],',
+            '  "deposit": "plain English, exact terms, e.g. Guarantee required \\u2014 a credit card holds the reservation; nothing is charged at booking.",',
+            '  "cancellation": "plain English with the exact deadline and penalty, e.g. Free cancellation until 6:00 PM hotel time on September 14, 2026; after that the full stay, including taxes and fees, is charged.",',
             '  "dates": "stay dates as shown, e.g. November 11 \\u2013 15, 2026",',
             '  "flight": "flight screenshots only: one-line summary, e.g. DFW \\u21c4 Providenciales \\u00b7 American \\u00b7 1 stop (MIA) \\u00b7 \\u22486\\u20137 hrs \\u00b7 from $795 pp round-trip",',
             '  "flightDetails": "flight screenshots only, multiline with \\\\n:\\nOutbound \\u00b7 day, date\\nAirline \\u00b7 DEP time \\u2013 ARR time\\nduration \\u00b7 stops \\u00b7 exact layover duration + airport\\n\\nReturn \\u00b7 ...same...\\n\\nFares\\nfare options with prices. Never include emissions/CO2 info."',
             '}',
             '',
-            'Hotel quote: leave the two flight fields empty. Flight screenshot: leave the hotel fields empty.'
+            'Also: NEVER include a "personalized note from the agent/advisor" amenity in perks (it is meant to be a surprise for the client). Skip generic filler like Free Wi-Fi only if space demands; keep every amenity with monetary or experiential value.',
+            'Hotel quote: leave the two flight fields empty. Flight screenshot: leave the hotel fields and perks empty.'
         ].join('\n');
         $('hotelList').addEventListener('change', (e) => {
             if (e.target.classList.contains('quote-file') && e.target.files && e.target.files[0]) {
