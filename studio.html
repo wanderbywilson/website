@@ -175,6 +175,26 @@
         .quote-drop.is-over { border-color: var(--gold); background: #fdfbf6; }
         .quote-drop.is-busy { opacity: 0.6; pointer-events: none; }
         .quote-drop u { text-underline-offset: 2px; }
+        .claude-row {
+            font-size: 11.5px;
+            font-weight: 300;
+            color: rgba(30, 53, 82, 0.6);
+            margin: -6px 0 14px;
+            line-height: 1.5;
+        }
+        .linklike {
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+            font-weight: 500;
+            color: var(--gold);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+        }
+        .linklike:hover { color: var(--ink); }
+        .claude-paste .f-area { min-height: 90px; background: #fdfbf6; }
         .ai-bar {
             position: sticky;
             bottom: -80px; /* formPane has 80px bottom padding */
@@ -695,6 +715,13 @@
                         📷 <strong>Drop a screenshot of the quote here</strong> (or click to browse) &mdash; room, rate, deposit &amp; cancellation fill in automatically, copied exactly as written. You can always type instead.
                         <input type="file" accept="image/*" class="quote-file" data-i="${i}" hidden>
                     </div>
+                    <div class="claude-row">
+                        Free option: <button class="linklike" data-copyprompt="${i}" type="button">copy the Claude prompt</button>, give it to your own Claude with the screenshot, then
+                        <button class="linklike" data-pastebox="${i}" type="button">paste Claude&rsquo;s answer</button>
+                    </div>
+                    <div class="f-row claude-paste" data-pastefor="${i}" hidden>
+                        <textarea class="f-area" data-pastearea="${i}" placeholder='Paste the block your Claude replied with — it starts with { and ends with } — and the fields above fill in.'></textarea>
+                    </div>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Room category</label>
                             <input class="f-input" data-i="${i}" data-k="room" value="${esc(h.room)}" placeholder="Deluxe Sea View Suite"></div>
@@ -807,10 +834,58 @@
             img.onerror = () => toast('Couldn’t open that image.');
             img.src = URL.createObjectURL(file);
         }
+        /* Free path: the team's own Claude reads the screenshot; they paste
+           its answer here. No API key involved. */
+        const CLAUDE_PROMPT = [
+            'You are helping a Wander by Wilson team member fill our Proposal Studio from a screenshot.',
+            'The attached screenshot is either a HOTEL rate quote or a FLIGHT itinerary (e.g. Google Flights).',
+            'Extract ONLY what is visible, copied verbatim — never invent, estimate, or embellish anything (compliance requirement).',
+            'Reply with ONLY this JSON block, using empty strings for anything not shown:',
+            '',
+            '{',
+            '  "room": "room/suite category exactly as written",',
+            '  "rate": "price + what it covers, e.g. $8,128 \\u00b7 4-night total",',
+            '  "rateNote": "what the rate includes + rate-plan name, verbatim facts only",',
+            '  "deposit": "deposit terms exactly as stated",',
+            '  "cancellation": "cancellation policy exactly as stated",',
+            '  "dates": "stay dates as shown, e.g. November 11 \\u2013 15, 2026",',
+            '  "flight": "flight screenshots only: one-line summary, e.g. DFW \\u21c4 Providenciales \\u00b7 American \\u00b7 1 stop (MIA) \\u00b7 \\u22486\\u20137 hrs \\u00b7 from $795 pp round-trip",',
+            '  "flightDetails": "flight screenshots only, multiline with \\\\n:\\nOutbound \\u00b7 day, date\\nAirline \\u00b7 DEP time \\u2013 ARR time\\nduration \\u00b7 stops \\u00b7 exact layover duration + airport\\n\\nReturn \\u00b7 ...same...\\n\\nFares\\nfare options with prices. Never include emissions/CO2 info."',
+            '}',
+            '',
+            'Hotel quote: leave the two flight fields empty. Flight screenshot: leave the hotel fields empty.'
+        ].join('\n');
         $('hotelList').addEventListener('change', (e) => {
             if (e.target.classList.contains('quote-file') && e.target.files && e.target.files[0]) {
                 readQuoteScreenshot(+e.target.dataset.i, e.target.files[0]);
             }
+        });
+        $('hotelList').addEventListener('click', async (e) => {
+            const copyBtn = e.target.closest('[data-copyprompt]');
+            if (copyBtn) {
+                try { await navigator.clipboard.writeText(CLAUDE_PROMPT); toast('Prompt copied — paste it into any Claude chat along with the screenshot.'); }
+                catch (err) { window.prompt('Copy this prompt:', CLAUDE_PROMPT); }
+                return;
+            }
+            const pasteBtn = e.target.closest('[data-pastebox]');
+            if (pasteBtn) {
+                const box = document.querySelector(`.claude-paste[data-pastefor="${pasteBtn.dataset.pastebox}"]`);
+                box.hidden = !box.hidden;
+                if (!box.hidden) box.querySelector('textarea').focus();
+            }
+        });
+        $('hotelList').addEventListener('input', (e) => {
+            const area = e.target.closest('[data-pastearea]');
+            if (!area) return;
+            const raw = area.value;
+            const start = raw.indexOf('{'), end = raw.lastIndexOf('}');
+            if (start === -1 || end <= start) return; // keep waiting for a full block
+            try {
+                const fields = JSON.parse(raw.slice(start, end + 1));
+                const i = +area.dataset.pastearea;
+                fillFromQuote(i, fields);
+                toast('Filled in from Claude’s answer — double-check every field against the quote.');
+            } catch (err) { /* not valid yet — user may still be pasting */ }
         });
         $('hotelList').addEventListener('click', (e) => {
             const drop = e.target.closest('.quote-drop');
