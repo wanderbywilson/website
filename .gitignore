@@ -52,3 +52,6 @@ wbw-server.log
 .vercel
 _originals/
 .env*
+
+# Hotel-page drafts awaiting Wilson's approval — never deployed
+drafts/
