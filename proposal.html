@@ -23,9 +23,11 @@
         /* ─── Proposal-only typography + layout ───────────────────────── */
 
         .prop-page {
-            background: var(--paper-cream, #f7f1e6);
+            background: #fff;
             min-height: 100vh;
         }
+        .prop-hero { background: var(--paper-cream, #f7f1e6); }
+        .prop-hotel--cream { background: var(--paper-cream, #f7f1e6); }
         .prop-container {
             max-width: 1180px;
             margin: 0 auto;
@@ -92,6 +94,7 @@
             justify-content: center;
             gap: 18px;
         }
+        .prop-hero-prepared-inner { white-space: nowrap; }
         .prop-hero-prepared::before,
         .prop-hero-prepared::after {
             content: "";
@@ -132,17 +135,19 @@
         }
         .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
 
-        /* Print / save-as-PDF */
+        /* Print / save-as-PDF — one hotel per page */
         @media print {
             .prop-pdf-btn, .site-header, .prop-carousel-btn, .prop-carousel-dots { display: none !important; }
-            .prop-page { background: #fff; }
+            .prop-page, .prop-hero, .prop-hotel--cream { background: #fff; }
             .prop-hero { padding: 24px 0 32px; }
-            .prop-hotel { break-inside: avoid; }
-            .prop-hotel-visual-inner { position: static; height: 340px; }
-            .prop-hotel-body { padding: 24px 28px; }
-            .prop-carousel img { opacity: 0; }
+            .prop-hotel { display: block; break-before: page; }
+            .prop-hotel-visual-inner { position: static; height: 300px; }
+            .prop-hotel-body { padding: 22px 0 0; max-width: none; }
+            .prop-carousel { max-width: 420px; break-inside: avoid; }
+            .prop-carousel img { position: absolute; opacity: 0; }
             .prop-carousel img.is-active { opacity: 1; }
-            .prop-perks, .prop-hotel-visual-overlay { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc { break-inside: avoid; }
+            .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
             .prop-close { padding: 40px 0; }
         }
 
@@ -168,26 +173,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-        }
-        .prop-hotel-visual-overlay {
-            position: absolute;
-            inset: auto 0 0 0;
-            padding: 140px 44px 44px;
-            background: linear-gradient(to top, rgba(20, 33, 51, 0.62), rgba(20, 33, 51, 0));
-        }
-        .prop-hotel-visual-overlay .prop-hotel-num {
-            color: rgba(247, 241, 230, 0.9);
-            margin-bottom: 10px;
-        }
-        .prop-hotel-visual-name {
-            font-family: var(--font-serif);
-            font-weight: 400;
-            font-size: clamp(34px, 3.4vw, 52px);
-            line-height: 1.05;
-            color: #f7f1e6;
-            margin: 0;
-            letter-spacing: -0.012em;
-            text-wrap: balance;
         }
         .prop-hotel-body {
             padding: 104px 64px 104px 64px;
@@ -741,24 +726,22 @@
                     ? `<a class="prop-hotel-cta" href="${r.bookingUrl}" target="_blank" rel="noopener noreferrer">Book this rate ${arrow}</a>`
                     : '';
                 return `
-                <section class="prop-hotel">
+                <section class="prop-hotel${i % 2 ? ' prop-hotel--cream' : ''}">
                     <div class="prop-hotel-visual">
                         <div class="prop-hotel-visual-inner">
                             <img src="${r.heroImage}" alt="${altName} — ${decode(strip(r.location))}">
-                            <div class="prop-hotel-visual-overlay">
-                                <p class="prop-hotel-num">${num}</p>
-                                <h2 class="prop-hotel-visual-name">${r.name}</h2>
-                            </div>
                         </div>
                     </div>
                     <div class="prop-hotel-body">
+                        <p class="prop-hotel-num">${num}</p>
+                        <h2 class="prop-hotel-name">${r.name}</h2>
                         <p class="prop-hotel-location">${r.location}</p>
-                        ${carousel}
                         ${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
                         ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
                         ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
                         ${r.flight ? `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>` : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
+                        ${carousel}
                         ${roomDesc}
                         ${hotelPerks}
                         ${finePrint}
@@ -791,7 +774,7 @@
                 <section class="prop-hero">
                     <div class="prop-container">
                         ${P.kicker ? `<p class="prop-hero-kicker">${P.kicker}</p>` : ''}
-                        ${P.preparedFor ? `<p class="prop-hero-prepared">Prepared for <span${E('preparedFor')}>${P.preparedFor}</span></p>` : ''}
+                        ${P.preparedFor ? `<p class="prop-hero-prepared"><span class="prop-hero-prepared-inner">Prepared for <span${E('preparedFor')}>${P.preparedFor}</span></span></p>` : ''}
                         <h1 class="prop-hero-title"${E('title')}>${P.title || ''}</h1>
                         ${P.lede ? `<p class="prop-hero-lede"${E('lede')}>${P.lede}</p>` : ''}
                         ${P.dates ? `<p class="prop-hero-dates"${E('dates')}>${P.dates}</p>` : ''}
