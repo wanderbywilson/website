@@ -1166,9 +1166,13 @@
             if (line) lines.push(line);
             return lines;
         }
-        function drawWrapped(ctx, text, x, y, maxW, lh, align) {
+        function drawWrapped(ctx, text, x, y, maxW, lh, align, maxLines) {
             ctx.textAlign = align || 'left';
-            const lines = wrapLines(ctx, text, maxW);
+            let lines = wrapLines(ctx, text, maxW);
+            if (maxLines && lines.length > maxLines) {
+                lines = lines.slice(0, maxLines);
+                lines[maxLines - 1] = lines[maxLines - 1].replace(/[,\s]+\S*$/, '') + '…';
+            }
             lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
             return y + lines.length * lh;
         }
@@ -1236,13 +1240,21 @@
             if (loc.length > 36) loc = loc.slice(0, 36).replace(/[,\s]+\S*$/, '') + '…';
             kicker(ctx, 'No. 0' + (i + 1) + '   ·   ' + loc, 110, 880, GOLD, 25);
             ctx.font = '400 64px Fraunces'; ctx.fillStyle = INK;
-            let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72);
+            let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72, 'left', 2);
             y += 14;
+            // Cap the description so nothing ever collides with the rate line
+            // or the wordmark at the bottom of the slide.
+            const lineBudget = Math.max(1, Math.floor(((m.showRates && h.rateLine ? 1150 : 1215) - y) / 46));
             ctx.font = '300 32px Inter'; ctx.fillStyle = 'rgba(30,53,82,0.82)';
-            y = drawWrapped(ctx, h.socialLine, 110, y, 860, 46);
+            y = drawWrapped(ctx, h.socialLine, 110, y, 860, 46, 'left', lineBudget);
             if (m.showRates && h.rateLine) {
-                ctx.font = 'italic 300 34px Fraunces'; ctx.fillStyle = GOLD;
-                drawWrapped(ctx, h.rateLine, 110, y + 36, 860, 44);
+                let fs = 34;
+                ctx.font = 'italic 300 ' + fs + 'px Fraunces';
+                while (fs > 24 && ctx.measureText(h.rateLine).width > 640) {
+                    fs -= 2; ctx.font = 'italic 300 ' + fs + 'px Fraunces';
+                }
+                ctx.fillStyle = GOLD; ctx.textAlign = 'left';
+                ctx.fillText(h.rateLine, 110, Math.min(y + 40, 1235));
             }
             wordmark(ctx, SL_W - 110, SL_H - 80, 'rgba(30,53,82,0.5)', 'right');
             return c;
