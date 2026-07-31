@@ -144,21 +144,22 @@
             .prop-pdf-btn, .site-header, .prop-carousel { display: none !important; }
             .prop-page, .prop-hero, .prop-hotel--cream { background: #fff; }
 
-            /* Cover */
-            .prop-hero { padding: 40px 0 24px; border-bottom: none; }
+            /* Cover — vertically centered so the page reads as a deliberate title page */
+            .prop-hero { padding: 0; border-bottom: none; min-height: 8.6in;
+                display: flex; align-items: center; justify-content: center; }
 
             /* One page per hotel */
             .prop-hotel { display: block; break-before: page; }
-            .prop-hotel-visual-inner { position: static; height: 2.35in; }
-            .prop-hotel-body { padding: 12px 0 0; max-width: none; }
+            .prop-hotel-visual-inner { position: static; height: 2.1in; }
+            .prop-hotel-body { padding: 10px 0 0; max-width: none; }
 
             /* Identity block spans the page… */
             .prop-hotel-body { column-count: 2; column-gap: 0.4in; }
             .prop-hotel-num, .prop-hotel-name, .prop-hotel-location,
-            .prop-hotel-room, .prop-hotel-rate, .prop-hotel-rate-note,
-            .prop-hotel-flightwrap, p.prop-hotel-flight { column-span: all; }
-            /* …then desc / room / amenities / fine print flow in 2 columns */
-            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc { break-inside: avoid; }
+            .prop-hotel-room, .prop-hotel-rate, .prop-hotel-rate-note { column-span: all; }
+            /* …then flights / desc / room / amenities / fine print flow in 2 columns */
+            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc,
+            .prop-hotel-flightwrap, p.prop-hotel-flight { break-inside: avoid; }
 
             /* Compact type */
             .prop-hotel-num { margin-bottom: 6px; }
@@ -167,13 +168,13 @@
             .prop-hotel-room { font-size: 9.5px; margin-bottom: 4px; }
             .prop-hotel-rate { font-size: 18px; margin-bottom: 4px; }
             .prop-hotel-rate-note { font-size: 10px; margin-bottom: 10px; }
-            .prop-hotel-flightwrap, p.prop-hotel-flight { margin-bottom: 12px; }
-            button.prop-hotel-flight, p.prop-hotel-flight { font-size: 9px; padding: 5px 9px; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { margin-bottom: 10px; }
+            button.prop-hotel-flight, p.prop-hotel-flight { font-size: 8.5px; padding: 4px 8px; }
             .prop-flight-open { display: none; }
-            .prop-flight-details { padding: 4px 10px 8px; font-size: 8.5px; line-height: 1.5; }
-            .prop-flight-details .pfd-label { font-size: 7.5px; margin: 7px 0 1px; }
+            .prop-flight-details { padding: 2px 8px 6px; font-size: 8px; line-height: 1.45; }
+            .prop-flight-details .pfd-label { font-size: 7px; margin: 6px 0 1px; }
             .prop-flight-details[hidden] { display: block !important; }
-            .prop-hotel-desc { font-size: 10.5px; line-height: 1.55; margin-bottom: 10px; }
+            .prop-hotel-desc { font-size: 10px; line-height: 1.5; margin-bottom: 10px; }
             .prop-hotel-room-desc { font-size: 9.5px; line-height: 1.5; padding-top: 10px; margin-bottom: 10px; }
             .prop-hotel-room-desc strong { font-size: 8px; margin-bottom: 4px; }
             .prop-hotel-perks { margin-top: 10px; padding-top: 10px; }
