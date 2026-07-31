@@ -1025,7 +1025,12 @@
             //    Skipped for: team browsers (Studio sets wndr-team), ?preview=1
             //    links, and repeat opens within the same browser session.
             let isTeam = false;
-            try { isTeam = localStorage.getItem('wndr-team') === '1' || !!sessionStorage.getItem('wndr-viewed-' + id); } catch (e) {}
+            try {
+                // A preview visit marks this browser as team so later opens of
+                // the clean link (e.g. printing to PDF) never count as a view.
+                if (isPreview) localStorage.setItem('wndr-team', '1');
+                isTeam = localStorage.getItem('wndr-team') === '1' || !!sessionStorage.getItem('wndr-viewed-' + id);
+            } catch (e) {}
             if (fromApi && !isPreview && !isTeam) {
                 try { sessionStorage.setItem('wndr-viewed-' + id, '1'); } catch (e) {}
                 fetch('/api/proposal-viewed', {
