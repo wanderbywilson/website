@@ -135,72 +135,6 @@
         }
         .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
 
-        /* Print / save-as-PDF — each hotel is exactly ONE page:
-           short photo banner, identity block full-width, then the details
-           flow in two tight columns. Carousel is hidden (the banner already
-           shows the property). */
-        @media print {
-            @page { margin: 0.45in 0.5in; }
-            .prop-pdf-btn, .site-header, .prop-carousel { display: none !important; }
-            .prop-page, .prop-hero, .prop-hotel--cream { background: #fff; }
-
-            /* Cover — vertically centered so the page reads as a deliberate title page */
-            .prop-hero { padding: 0; border-bottom: none; min-height: 8.6in;
-                display: flex; align-items: center; justify-content: center; }
-
-            /* One page per hotel — explicit grid so nothing spills or gets clipped:
-               photo top-left, identity beside it, flights full-width, then
-               desc | room and amenities | fine print in fixed cells. */
-            .prop-hotel { display: grid; grid-template-columns: 1fr 1fr;
-                column-gap: 0.32in; grid-auto-rows: min-content; align-items: start;
-                break-before: page; break-inside: avoid; }
-            .prop-hotel-visual { grid-column: 1; grid-row: 1 / span 6; padding-right: 0; }
-            .prop-hotel-visual-inner { position: static; height: 3in; }
-            .prop-hotel-body { display: contents; }
-            .prop-hotel-num { grid-column: 2; grid-row: 1; }
-            .prop-hotel-name { grid-column: 2; grid-row: 2; }
-            .prop-hotel-location { grid-column: 2; grid-row: 3; }
-            .prop-hotel-room { grid-column: 2; grid-row: 4; }
-            .prop-hotel-rate { grid-column: 2; grid-row: 5; }
-            .prop-hotel-rate-note { grid-column: 2; grid-row: 6; }
-            .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 7; margin-top: 12px; }
-            .prop-hotel-desc { grid-column: 1; grid-row: 8; margin-top: 12px; }
-            .prop-hotel-room-desc { grid-column: 2; grid-row: 8; margin-top: 12px; }
-            .prop-hotel-perks { grid-column: 1; grid-row: 9; }
-            .prop-hotel-fineprint { grid-column: 2; grid-row: 9; }
-
-            /* Compact type */
-            .prop-hotel-num { margin-bottom: 6px; }
-            .prop-hotel-name { font-size: 24px; margin-bottom: 4px; }
-            .prop-hotel-location { font-size: 12px; margin-bottom: 12px; }
-            .prop-hotel-room { font-size: 9.5px; margin-bottom: 4px; }
-            .prop-hotel-rate { font-size: 18px; margin-bottom: 4px; }
-            .prop-hotel-rate-note { font-size: 10px; margin-bottom: 10px; }
-            .prop-hotel-flightwrap, p.prop-hotel-flight { margin-bottom: 10px; }
-            button.prop-hotel-flight, p.prop-hotel-flight { font-size: 8.5px; padding: 4px 8px; }
-            .prop-flight-open { display: none; }
-            .prop-flight-details { padding: 2px 8px 6px; font-size: 8px; line-height: 1.45; }
-            .prop-flight-details .pfd-label { font-size: 7px; margin: 6px 0 1px; }
-            .prop-flight-details[hidden] { display: block !important; }
-            .prop-hotel-desc { font-size: 10px; line-height: 1.5; margin-bottom: 10px; }
-            .prop-hotel-room-desc { font-size: 9.5px; line-height: 1.5; padding-top: 10px; margin-bottom: 10px; }
-            .prop-hotel-room-desc strong { font-size: 8px; margin-bottom: 4px; }
-            .prop-hotel-perks { margin-top: 10px; padding-top: 10px; }
-            .prop-hotel-perks strong { font-size: 8px; margin-bottom: 6px; }
-            .prop-hotel-perks ul { gap: 3px; }
-            .prop-hotel-perks li { font-size: 9.5px; line-height: 1.4; padding-left: 16px; }
-            .prop-hotel-perks li::before { font-size: 9px; }
-            .prop-hotel-fineprint { margin-top: 10px; padding: 8px 12px; gap: 6px; }
-            .prop-hotel-fineprint p { font-size: 9px; line-height: 1.45; }
-            .prop-hotel-fineprint strong { font-size: 7.5px; margin-bottom: 1px; }
-            .prop-hotel-cta { display: none; }
-
-            /* Closing gets its own tidy final page */
-            .prop-photo-note { break-before: page; padding-top: 60px; }
-            .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
-            .prop-close { padding: 30px 0 0; }
-        }
-
         /* HOTEL SECTIONS — split "lookbook" layout: full-bleed photo pinned
            on the left, content scrolling on the right. As one option scrolls
            away, the next option's photo takes over. */
@@ -701,6 +635,71 @@
             text-transform: uppercase;
             color: rgba(30, 53, 82, 0.55);
             margin: 6px 0 0;
+        }
+        /* Print / save-as-PDF — each hotel is exactly ONE page:
+           short photo banner, identity block full-width, then the details
+           flow in two tight columns. Carousel is hidden (the banner already
+           shows the property). */
+        @media print {
+            @page { margin: 0.45in 0.5in; }
+            .prop-pdf-btn, .site-header, .prop-carousel { display: none !important; }
+            .prop-page, .prop-hero, .prop-hotel--cream { background: #fff; }
+
+            /* Cover — vertically centered so the page reads as a deliberate title page */
+            .prop-hero { padding: 0; border-bottom: none; min-height: 8.6in;
+                display: flex; align-items: center; justify-content: center; }
+
+            /* One page per hotel — explicit grid so nothing spills or gets clipped:
+               photo top-left, identity beside it, flights full-width, then
+               desc | room and amenities | fine print in fixed cells. */
+            .prop-hotel { display: grid; grid-template-columns: 1fr 1fr;
+                column-gap: 0.32in; grid-auto-rows: min-content; align-items: start;
+                break-before: page; break-inside: avoid; }
+            .prop-hotel-visual { grid-column: 1; grid-row: 1 / span 6; padding-right: 0; }
+            .prop-hotel-visual-inner { position: static; height: 3in; }
+            .prop-hotel-body { display: contents; }
+            .prop-hotel-num { grid-column: 2; grid-row: 1; }
+            .prop-hotel-name { grid-column: 2; grid-row: 2; }
+            .prop-hotel-location { grid-column: 2; grid-row: 3; }
+            .prop-hotel-room { grid-column: 2; grid-row: 4; }
+            .prop-hotel-rate { grid-column: 2; grid-row: 5; }
+            .prop-hotel-rate-note { grid-column: 2; grid-row: 6; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 7; margin-top: 12px; }
+            .prop-hotel-desc { grid-column: 1; grid-row: 8; margin-top: 12px; }
+            .prop-hotel-room-desc { grid-column: 2; grid-row: 8; margin-top: 12px; }
+            .prop-hotel-perks { grid-column: 1; grid-row: 9; }
+            .prop-hotel-fineprint { grid-column: 2; grid-row: 9; }
+
+            /* Compact type */
+            .prop-hotel-num { margin-bottom: 6px; }
+            .prop-hotel-name { font-size: 24px; margin-bottom: 4px; }
+            .prop-hotel-location { font-size: 12px; margin-bottom: 12px; }
+            .prop-hotel-room { font-size: 9.5px; margin-bottom: 4px; }
+            .prop-hotel-rate { font-size: 18px; margin-bottom: 4px; }
+            .prop-hotel-rate-note { font-size: 10px; margin-bottom: 10px; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { margin-bottom: 10px; }
+            button.prop-hotel-flight, p.prop-hotel-flight { font-size: 8.5px; padding: 4px 8px; }
+            .prop-flight-open { display: none; }
+            .prop-flight-details { padding: 2px 8px 6px; font-size: 8px; line-height: 1.45; }
+            .prop-flight-details .pfd-label { font-size: 7px; margin: 6px 0 1px; }
+            .prop-flight-details[hidden] { display: block !important; }
+            .prop-hotel-desc { font-size: 10px; line-height: 1.5; margin-bottom: 10px; }
+            .prop-hotel-room-desc { font-size: 9.5px; line-height: 1.5; padding-top: 10px; margin-bottom: 10px; }
+            .prop-hotel-room-desc strong { font-size: 8px; margin-bottom: 4px; }
+            .prop-hotel-perks { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-perks strong { font-size: 8px; margin-bottom: 6px; }
+            .prop-hotel-perks ul { gap: 3px; }
+            .prop-hotel-perks li { font-size: 9.5px; line-height: 1.4; padding-left: 16px; }
+            .prop-hotel-perks li::before { font-size: 9px; }
+            .prop-hotel-fineprint { margin-top: 10px; padding: 8px 12px; gap: 6px; }
+            .prop-hotel-fineprint p { font-size: 9px; line-height: 1.45; }
+            .prop-hotel-fineprint strong { font-size: 7.5px; margin-bottom: 1px; }
+            .prop-hotel-cta { display: none; }
+
+            /* Closing gets its own tidy final page */
+            .prop-photo-note { break-before: page; padding-top: 60px; }
+            .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
+            .prop-close { padding: 30px 0 0; }
         }
     </style>
 
