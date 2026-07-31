@@ -148,18 +148,26 @@
             .prop-hero { padding: 0; border-bottom: none; min-height: 8.6in;
                 display: flex; align-items: center; justify-content: center; }
 
-            /* One page per hotel */
-            .prop-hotel { display: block; break-before: page; }
-            .prop-hotel-visual-inner { position: static; height: 2.1in; }
-            .prop-hotel-body { padding: 10px 0 0; max-width: none; }
-
-            /* Identity block spans the page… */
-            .prop-hotel-body { column-count: 2; column-gap: 0.4in; }
-            .prop-hotel-num, .prop-hotel-name, .prop-hotel-location,
-            .prop-hotel-room, .prop-hotel-rate, .prop-hotel-rate-note { column-span: all; }
-            /* …then flights / desc / room / amenities / fine print flow in 2 columns */
-            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc,
-            .prop-hotel-flightwrap, p.prop-hotel-flight { break-inside: avoid; }
+            /* One page per hotel — explicit grid so nothing spills or gets clipped:
+               photo top-left, identity beside it, flights full-width, then
+               desc | room and amenities | fine print in fixed cells. */
+            .prop-hotel { display: grid; grid-template-columns: 1fr 1fr;
+                column-gap: 0.32in; grid-auto-rows: min-content; align-items: start;
+                break-before: page; break-inside: avoid; }
+            .prop-hotel-visual { grid-column: 1; grid-row: 1 / span 6; padding-right: 0; }
+            .prop-hotel-visual-inner { position: static; height: 3in; }
+            .prop-hotel-body { display: contents; }
+            .prop-hotel-num { grid-column: 2; grid-row: 1; }
+            .prop-hotel-name { grid-column: 2; grid-row: 2; }
+            .prop-hotel-location { grid-column: 2; grid-row: 3; }
+            .prop-hotel-room { grid-column: 2; grid-row: 4; }
+            .prop-hotel-rate { grid-column: 2; grid-row: 5; }
+            .prop-hotel-rate-note { grid-column: 2; grid-row: 6; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 7; margin-top: 12px; }
+            .prop-hotel-desc { grid-column: 1; grid-row: 8; margin-top: 12px; }
+            .prop-hotel-room-desc { grid-column: 2; grid-row: 8; margin-top: 12px; }
+            .prop-hotel-perks { grid-column: 1; grid-row: 9; }
+            .prop-hotel-fineprint { grid-column: 2; grid-row: 9; }
 
             /* Compact type */
             .prop-hotel-num { margin-bottom: 6px; }
