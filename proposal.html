@@ -655,20 +655,15 @@
             .prop-hotel { display: grid; grid-template-columns: 1fr 1fr;
                 column-gap: 0.32in; grid-auto-rows: min-content; align-items: start;
                 break-before: page; break-inside: avoid; }
-            .prop-hotel-visual { grid-column: 1; grid-row: 1 / span 6; padding-right: 0; }
+            .prop-hotel-visual { grid-column: 1; grid-row: 1; padding-right: 0; }
             .prop-hotel-visual-inner { position: static; height: 3in; }
             .prop-hotel-body { display: contents; }
-            .prop-hotel-num { grid-column: 2; grid-row: 1; }
-            .prop-hotel-name { grid-column: 2; grid-row: 2; }
-            .prop-hotel-location { grid-column: 2; grid-row: 3; }
-            .prop-hotel-room { grid-column: 2; grid-row: 4; }
-            .prop-hotel-rate { grid-column: 2; grid-row: 5; }
-            .prop-hotel-rate-note { grid-column: 2; grid-row: 6; }
-            .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 7; margin-top: 12px; }
-            .prop-hotel-desc { grid-column: 1; grid-row: 8; margin-top: 12px; }
-            .prop-hotel-room-desc { grid-column: 2; grid-row: 8; margin-top: 12px; }
-            .prop-hotel-perks { grid-column: 1; grid-row: 9; }
-            .prop-hotel-fineprint { grid-column: 2; grid-row: 9; }
+            .prop-hotel-ident { grid-column: 2; grid-row: 1; align-self: center; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 2; margin-top: 12px; }
+            .prop-hotel-desc { grid-column: 1; grid-row: 3; margin-top: 12px; }
+            .prop-hotel-room-desc { grid-column: 2; grid-row: 3; margin-top: 12px; }
+            .prop-hotel-perks { grid-column: 1; grid-row: 4; }
+            .prop-hotel-fineprint { grid-column: 2; grid-row: 4; }
 
             /* Compact type */
             .prop-hotel-num { margin-bottom: 6px; }
@@ -864,12 +859,14 @@
                         </div>
                     </div>
                     <div class="prop-hotel-body">
+                        <div class="prop-hotel-ident">
                         <p class="prop-hotel-num">${num}</p>
                         <h2 class="prop-hotel-name">${r.name}</h2>
                         <p class="prop-hotel-location">${r.location}</p>
                         ${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
                         ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
                         ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
+                        </div>
                         ${r.flight ? (r.flightDetails
                             ? `<div class="prop-hotel-flightwrap">
                                 <button class="prop-hotel-flight prop-flight-toggle" type="button" aria-expanded="false"><span${E(`hotels.${i}.flight`)}>${r.flight}</span><span class="prop-flight-open">Flight details <span class="prop-flight-caret">&#9662;</span></span></button>
