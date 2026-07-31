@@ -94,6 +94,7 @@ module.exports = async (req, res) => {
                     viewed: !!views[id],
                     views: views[id] ? views[id].count || 0 : 0,
                     firstViewedAt: views[id] ? views[id].firstViewedAt || null : null,
+                    lastViewedAt: views[id] ? views[id].lastViewedAt || null : null,
                     url: `${SITE}/proposals/${id}`
                 }))
                 .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));

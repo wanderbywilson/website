@@ -267,7 +267,7 @@
         }
         .plist-title { font-family: var(--font-serif); font-size: 17px; margin: 0; }
         .plist-meta { font-size: 11.5px; color: rgba(30,53,82,0.55); margin: 3px 0 0; }
-        .plist-viewed { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; flex: none; }
+        .plist-viewed { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; flex: none; text-align: right; line-height: 1.7; }
         .plist-viewed.yes { color: #2c7a4b; }
         .plist-viewed.no { color: rgba(30,53,82,0.4); }
         .plist-actions { margin-left: auto; display: flex; gap: 6px; flex: none; }
@@ -1045,7 +1045,9 @@
                             <p class="plist-title">${esc(p.title || p.id)}</p>
                             <p class="plist-meta">${esc(p.preparedFor ? 'For ' + p.preparedFor + ' · ' : '')}${p.hotelCount} hotel${p.hotelCount === 1 ? '' : 's'} · updated ${new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                         </div>
-                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}" ${p.firstViewedAt ? `title="First opened ${new Date(p.firstViewedAt).toLocaleString()}"` : ''}>${p.viewed ? ('✓ Opened' + (p.views > 1 ? ' · ' + p.views + ' views' : '')) : 'Not yet opened'}</span>
+                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}" ${p.firstViewedAt ? `title="First opened ${new Date(p.firstViewedAt).toLocaleString()}"` : ''}>${p.viewed
+                            ? ('✓ Opened' + (p.views > 1 ? ' · ' + p.views + ' views' : '') + (p.lastViewedAt ? '<br>last viewed ' + new Date(p.lastViewedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''))
+                            : 'Not yet opened'}</span>
                         <div class="plist-actions">
                             <button class="btn btn-ghost btn-small" data-edit="${p.id}" type="button">Edit</button>
                             <button class="btn btn-ghost btn-small" data-copy="${esc(p.url)}" type="button">Copy link</button>
