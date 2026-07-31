@@ -474,6 +474,7 @@
                         <button class="btn btn-small" id="sDownload" type="button">Download slides</button>
                         <button class="btn btn-ghost btn-small" id="sCopyCaption" type="button">Copy caption</button>
                         <button class="btn btn-ghost btn-small" id="sRefresh" type="button">Update preview</button>
+                        <button class="btn btn-ghost btn-small" id="sRefill" type="button">Refill from proposal</button>
                     </div>
                     <p class="social-note">Downloads one .zip with numbered 1080 × 1350 PNGs + the caption. The formula never includes the client's name — the QA check above flags anything off, but still give every slide a once-over before posting.</p>
                 </div>
@@ -1441,6 +1442,12 @@
             renderSocial();
         });
         $('sRefresh').addEventListener('click', () => { $('sCaption').value = buildCaption(); renderSocial(); });
+        $('sRefill').addEventListener('click', () => {
+            if (!confirm('Refill every field from the current proposal? Your edits in this panel will be replaced.')) return;
+            social.forId = state.id || 'draft';
+            prefillSocial();
+            renderSocial();
+        });
         let socialT = null;
         $('socialModal').addEventListener('input', (e) => {
             if (e.target.id === 'sCaption') return;
