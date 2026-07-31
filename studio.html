@@ -213,6 +213,21 @@
         .modal-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
         .modal-title { font-family: var(--font-serif); font-size: 24px; margin: 0; flex: 1; }
         .modal-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+
+        /* ── Social composer ───────────────────────────────────────────── */
+        .modal.social-modal { max-width: 1180px; }
+        .social-body { display: grid; grid-template-columns: 400px 1fr; gap: 24px; min-height: 0; flex: 1; }
+        .social-fields { overflow-y: auto; padding-right: 6px; }
+        .social-preview-col { display: flex; flex-direction: column; min-width: 0; }
+        .slide-strip {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px; overflow-y: auto; align-content: start; flex: 1;
+            background: var(--paper-cream); padding: 14px; border: 1px solid var(--studio-line-soft);
+        }
+        .slide-strip canvas { width: 100%; height: auto; display: block; box-shadow: 0 4px 14px rgba(30,53,82,0.12); }
+        .social-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+        .social-note { font-size: 11px; color: rgba(30,53,82,0.5); line-height: 1.5; margin: 12px 0 0; }
+        @media (max-width: 900px) { .social-body { grid-template-columns: 1fr; } }
         .lib-grid {
             overflow-y: auto; display: grid;
             grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px;
@@ -292,6 +307,7 @@
             <a class="studio-brand" href="/studio">Proposal <em>Studio</em></a>
             <button class="btn btn-ghost btn-small" id="btnList" type="button">Your proposals</button>
             <button class="btn btn-ghost btn-small" id="btnNew" type="button">New proposal</button>
+            <button class="btn btn-ghost btn-small" id="btnSocial" type="button">Create social post</button>
             <span class="studio-top-spacer"></span>
             <span class="studio-status" id="statusText">New proposal</span>
             <button class="btn btn-ghost btn-small mobile-toggle" id="btnMobilePreview" type="button">Preview</button>
@@ -401,6 +417,60 @@
                 <button class="btn btn-ghost btn-small" data-close="listModal" type="button">Close</button>
             </div>
             <div class="plist" id="plist"><p class="sec-sub">Loading…</p></div>
+        </div>
+    </div>
+
+    <!-- ── Social composer — formula-driven Instagram carousel ───────── -->
+    <div class="modal-wrap" id="socialModal">
+        <div class="modal social-modal">
+            <div class="modal-head">
+                <h2 class="modal-title">Create a <em>social post.</em></h2>
+                <button class="btn btn-ghost btn-small" data-close="socialModal" type="button">Close</button>
+            </div>
+            <div class="social-body">
+                <div class="social-fields">
+                    <div class="f-row">
+                        <label class="f-label" for="sHook">Cover line</label>
+                        <textarea class="f-area" id="sHook" rows="2"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="sBriefIntro">The brief — intro line</label>
+                        <textarea class="f-area" id="sBriefIntro" rows="2"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="sBrief">The brief — one point per line</label>
+                        <textarea class="f-area" id="sBrief" rows="5"></textarea>
+                        <p class="f-hint">What the client was looking for — from the inquiry &amp; intake call, in your words. No client names.</p>
+                    </div>
+                    <div id="sHotelLines"></div>
+                    <div class="f-row">
+                        <label class="f-label"><input type="checkbox" id="sShowRates" checked style="margin-right:6px; vertical-align:-2px"> Show the quoted rate on each hotel slide</label>
+                    </div>
+                    <div class="f-grid2">
+                        <div class="f-row">
+                            <label class="f-label" for="sCtaTitle">Closing slide — title</label>
+                            <textarea class="f-area" id="sCtaTitle" rows="2"></textarea>
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="sCtaSub">Closing slide — line</label>
+                            <textarea class="f-area" id="sCtaSub" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="sCaption">Instagram caption</label>
+                        <textarea class="f-area" id="sCaption" rows="9"></textarea>
+                    </div>
+                </div>
+                <div class="social-preview-col">
+                    <div class="slide-strip" id="slideStrip"><p class="sec-sub" style="grid-column:1/-1">Building preview…</p></div>
+                    <div class="social-actions">
+                        <button class="btn btn-small" id="sDownload" type="button">Download slides</button>
+                        <button class="btn btn-ghost btn-small" id="sCopyCaption" type="button">Copy caption</button>
+                        <button class="btn btn-ghost btn-small" id="sRefresh" type="button">Update preview</button>
+                    </div>
+                    <p class="social-note">1080 × 1350 PNGs, ready to upload in order. The formula never includes the client's name — still, give every slide a once-over before posting.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1037,6 +1107,269 @@
                     toast('Deleted.');
                 } catch (err) { if (err.message !== 'unauthorized') toast('Couldn’t delete: ' + err.message); }
             }
+        });
+
+        /* ── Social composer — turns the current proposal into an IG
+              carousel with a fixed formula: cover → the brief → one slide
+              per hotel → closing. Everything is drawn on canvas from the
+              proposal data (no AI, no cost) and downloads as 1080×1350
+              PNGs plus a ready caption. ─────────────────────────────── */
+        const SL_W = 1080, SL_H = 1350;
+        const INK = '#1e3552', CREAM = '#f7f1e6', GOLD = '#c7ae8a';
+        const social = { forId: undefined };
+
+        const deEnt = (s) => { const t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value; };
+        const plain = (s) => deEnt(stripHtml(s || '')).replace(/\s+/g, ' ').trim();
+        const firstSentence = (s, max) => {
+            const t = plain(s);
+            let out = (t.match(/^.*?[.!?](?=\s|$)/) || [t])[0].trim();
+            if (out.length > max) out = out.slice(0, max).replace(/\s+\S*$/, '') + '…';
+            return out;
+        };
+        const imgSrc = (u) => {
+            if (!u) return u;
+            if (/^https?:\/\//i.test(u) && !u.includes(location.hostname)) return '/api/img?u=' + encodeURIComponent(u);
+            return u;
+        };
+        function loadImg(src) {
+            return new Promise((resolve) => {
+                const im = new Image();
+                im.crossOrigin = 'anonymous';
+                im.onload = () => resolve(im);
+                im.onerror = () => resolve(null);
+                im.src = imgSrc(src);
+            });
+        }
+        function coverDraw(ctx, im, x, y, w, h) {
+            if (!im) { ctx.fillStyle = '#d8d3c8'; ctx.fillRect(x, y, w, h); return; }
+            const s = Math.max(w / im.width, h / im.height);
+            const dw = im.width * s, dh = im.height * s;
+            ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+            ctx.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+            ctx.restore();
+        }
+        function wrapLines(ctx, text, maxW) {
+            const words = (text || '').split(/\s+/).filter(Boolean);
+            const lines = []; let line = '';
+            for (const w of words) {
+                const test = line ? line + ' ' + w : w;
+                if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+                else line = test;
+            }
+            if (line) lines.push(line);
+            return lines;
+        }
+        function drawWrapped(ctx, text, x, y, maxW, lh, align) {
+            ctx.textAlign = align || 'left';
+            const lines = wrapLines(ctx, text, maxW);
+            lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
+            return y + lines.length * lh;
+        }
+        function kicker(ctx, text, x, y, color, size, align) {
+            ctx.font = `500 ${size || 26}px Inter`;
+            ctx.fillStyle = color;
+            ctx.textAlign = align || 'left';
+            ctx.fillText(text.toUpperCase().split('').join('  '), x, y);
+        }
+        const wordmark = (ctx, x, y, color, align) => kicker(ctx, 'Wander by Wilson', x, y, color, 24, align);
+
+        function newSlide() {
+            const c = document.createElement('canvas');
+            c.width = SL_W; c.height = SL_H;
+            const ctx = c.getContext('2d');
+            ctx.textBaseline = 'alphabetic';
+            return [c, ctx];
+        }
+
+        async function slideCover(m) {
+            const [c, ctx] = newSlide();
+            const im = await loadImg(m.coverImage);
+            coverDraw(ctx, im, 0, 0, SL_W, SL_H);
+            const g = ctx.createLinearGradient(0, 0, 0, SL_H);
+            g.addColorStop(0, 'rgba(30,53,82,0.30)');
+            g.addColorStop(0.45, 'rgba(30,53,82,0.05)');
+            g.addColorStop(1, 'rgba(30,53,82,0.82)');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, SL_W, SL_H);
+            wordmark(ctx, SL_W / 2, 96, CREAM, 'center');
+            kicker(ctx, 'A client story', SL_W / 2, 1010, GOLD, 26, 'center');
+            ctx.font = '400 82px Fraunces';
+            ctx.fillStyle = CREAM;
+            const endY = drawWrapped(ctx, m.hook, SL_W / 2, 1105, 900, 92, 'center');
+            ctx.fillStyle = GOLD; ctx.fillRect(SL_W / 2 - 40, endY - 62 + 40, 80, 3);
+            ctx.font = '300 30px Inter'; ctx.fillStyle = CREAM;
+            ctx.fillText('Swipe for the shortlist', SL_W / 2, endY + 32);
+            return c;
+        }
+
+        async function slideBrief(m) {
+            const [c, ctx] = newSlide();
+            ctx.fillStyle = CREAM; ctx.fillRect(0, 0, SL_W, SL_H);
+            kicker(ctx, 'The brief', 110, 190, GOLD, 28);
+            ctx.font = '300 56px Fraunces'; ctx.fillStyle = INK;
+            let y = drawWrapped(ctx, m.briefIntro, 110, 290, 860, 70);
+            y += 50;
+            ctx.font = '300 34px Inter';
+            for (const b of m.brief) {
+                ctx.fillStyle = GOLD; ctx.font = '400 30px Inter'; ctx.fillText('✦', 110, y);
+                ctx.fillStyle = INK; ctx.font = '300 34px Inter';
+                y = drawWrapped(ctx, b, 165, y, 800, 46) + 26;
+            }
+            wordmark(ctx, SL_W / 2, SL_H - 90, INK, 'center');
+            return c;
+        }
+
+        async function slideHotel(h, i, m) {
+            const [c, ctx] = newSlide();
+            ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, SL_W, SL_H);
+            const im = await loadImg(h.heroImage);
+            coverDraw(ctx, im, 0, 0, SL_W, 780);
+            kicker(ctx, 'No. 0' + (i + 1) + '   ·   ' + plain(h.location), 110, 880, GOLD, 25);
+            ctx.font = '400 64px Fraunces'; ctx.fillStyle = INK;
+            let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72);
+            y += 14;
+            ctx.font = '300 32px Inter'; ctx.fillStyle = 'rgba(30,53,82,0.82)';
+            y = drawWrapped(ctx, h.socialLine, 110, y, 860, 46);
+            if (m.showRates && h.rateLine) {
+                ctx.font = 'italic 300 34px Fraunces'; ctx.fillStyle = GOLD;
+                drawWrapped(ctx, h.rateLine, 110, y + 36, 860, 44);
+            }
+            wordmark(ctx, SL_W - 110, SL_H - 80, 'rgba(30,53,82,0.5)', 'right');
+            return c;
+        }
+
+        async function slideCTA(m) {
+            const [c, ctx] = newSlide();
+            ctx.fillStyle = INK; ctx.fillRect(0, 0, SL_W, SL_H);
+            ctx.font = '400 78px Fraunces'; ctx.fillStyle = CREAM;
+            const endY = drawWrapped(ctx, m.ctaTitle, SL_W / 2, 560, 860, 90, 'center');
+            ctx.fillStyle = GOLD; ctx.fillRect(SL_W / 2 - 40, endY - 50 + 20, 80, 3);
+            ctx.font = '300 34px Inter'; ctx.fillStyle = 'rgba(247,241,230,0.9)';
+            drawWrapped(ctx, m.ctaSub, SL_W / 2, endY + 40, 780, 50, 'center');
+            kicker(ctx, '@wanderbywilson', SL_W / 2, SL_H - 170, GOLD, 28, 'center');
+            wordmark(ctx, SL_W / 2, SL_H - 100, 'rgba(247,241,230,0.65)', 'center');
+            return c;
+        }
+
+        function socialModel() {
+            const P = serialize();
+            // Resolve library slugs the same way the proposal page does.
+            const hotels = P.hotels.map(h => {
+                const base = h.slug && lib[h.slug] ? lib[h.slug] : null;
+                return {
+                    ...h,
+                    name: h.name || (base && base.name) || '',
+                    location: h.location || (base && base.location) || '',
+                    heroImage: h.heroImage || (base && base.heroImage) || '',
+                    desc: h.desc || (base && base.description) || ''
+                };
+            }).filter(h => h.name);
+            return { P, hotels };
+        }
+
+        function prefillSocial() {
+            const { P, hotels } = socialModel();
+            $('sHook').value = plain(P.title).replace(/\.$/, '') + '.';
+            $('sBriefIntro').value = plain(P.lede).split(/(?<=[.!?])\s/)[0] || 'Here’s what they were dreaming of.';
+            $('sBrief').value = '';
+            $('sCtaTitle').value = 'Which one would you pick?';
+            $('sCtaSub').value = 'Tell us the occasion — we design the shortlist, with preferred-partner amenities included on every booking.';
+            const wrap = $('sHotelLines');
+            wrap.innerHTML = hotels.map((h, i) => `
+                <div class="f-row">
+                    <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
+                    <textarea class="f-area" data-sline="${i}" rows="2">${esc(firstSentence(h.desc, 150))}</textarea>
+                </div>`).join('');
+            $('sCaption').value = buildCaption();
+        }
+
+        function buildCaption() {
+            const { P, hotels } = socialModel();
+            const briefBits = $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean);
+            return [
+                plain($('sHook').value),
+                '',
+                'The brief: ' + [$('sBriefIntro').value.trim(), ...briefBits].filter(Boolean).join(' · '),
+                '',
+                'The shortlist:',
+                ...hotels.map((h, i) => `0${i + 1} ${plain(h.name)} — ${plain(h.location)}`),
+                '',
+                'Every option includes our preferred-partner amenities — upgrades, resort credits, daily breakfast — at no additional cost.',
+                '',
+                'Which one would you pick? 👇',
+                '',
+                '#luxurytravel #traveladvisor #virtuoso #travelplanner #luxuryhotels #wanderbywilson'
+            ].join('\n');
+        }
+
+        function collectSocial() {
+            const { P, hotels } = socialModel();
+            const lines = Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value.trim());
+            return {
+                coverImage: hotels[0] ? hotels[0].heroImage : '',
+                hook: $('sHook').value.trim(),
+                briefIntro: $('sBriefIntro').value.trim(),
+                brief: $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean),
+                showRates: $('sShowRates').checked,
+                ctaTitle: $('sCtaTitle').value.trim(),
+                ctaSub: $('sCtaSub').value.trim(),
+                hotels: hotels.map((h, i) => ({
+                    ...h,
+                    socialLine: lines[i] || firstSentence(h.desc, 150),
+                    rateLine: [plain(h.room), plain(h.rate).replace(/\*/g, '')].filter(Boolean).join(' · ')
+                }))
+            };
+        }
+
+        let socialCanvases = [];
+        async function renderSocial() {
+            const strip = $('slideStrip');
+            strip.innerHTML = '<p class="sec-sub" style="grid-column:1/-1">Building preview…</p>';
+            try { await document.fonts.ready; await Promise.all([
+                document.fonts.load('400 82px Fraunces'), document.fonts.load('300 56px Fraunces'),
+                document.fonts.load('italic 300 34px Fraunces'), document.fonts.load('300 34px Inter'),
+                document.fonts.load('500 26px Inter')
+            ]); } catch (e) {}
+            const m = collectSocial();
+            const slides = [await slideCover(m), await slideBrief(m)];
+            for (let i = 0; i < m.hotels.length; i++) slides.push(await slideHotel(m.hotels[i], i, m));
+            slides.push(await slideCTA(m));
+            socialCanvases = slides;
+            strip.innerHTML = '';
+            slides.forEach(c => strip.appendChild(c));
+        }
+
+        $('btnSocial').addEventListener('click', () => {
+            if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
+            $('socialModal').classList.add('is-open');
+            if (social.forId !== (state.id || 'draft')) {
+                social.forId = state.id || 'draft';
+                prefillSocial();
+            }
+            renderSocial();
+        });
+        $('sRefresh').addEventListener('click', () => { $('sCaption').value = buildCaption(); renderSocial(); });
+        let socialT = null;
+        $('socialModal').addEventListener('input', (e) => {
+            if (e.target.id === 'sCaption') return;
+            clearTimeout(socialT);
+            socialT = setTimeout(() => { $('sCaption').value = buildCaption(); renderSocial(); }, 900);
+        });
+        $('sCopyCaption').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText($('sCaption').value); toast('Caption copied.'); }
+            catch (e) { toast('Select and copy the caption by hand.'); }
+        });
+        $('sDownload').addEventListener('click', async () => {
+            if (!socialCanvases.length) await renderSocial();
+            for (let i = 0; i < socialCanvases.length; i++) {
+                const blob = await new Promise(r => socialCanvases[i].toBlob(r, 'image/png'));
+                if (!blob) { toast('Slide ' + (i + 1) + ' failed to export — check the photo loads.'); continue; }
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'social-slide-' + String(i + 1).padStart(2, '0') + '.png';
+                document.body.appendChild(a); a.click(); a.remove();
+                await new Promise(r => setTimeout(r, 350));
+            }
+            toast('Slides downloaded — upload them in order.');
         });
 
         /* ── Mobile preview toggle ────────────────────────────────────── */
