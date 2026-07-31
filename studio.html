@@ -1293,7 +1293,8 @@
                     name: h.name || (base && base.name) || '',
                     location: h.location || (base && base.location) || '',
                     heroImage: h.heroImage || (base && base.heroImage) || '',
-                    desc: h.desc || (base && base.description) || ''
+                    desc: h.desc || (base && base.description) || '',
+                    socialHook: h.socialHook || (base && base.socialHook) || ''
                 };
             }).filter(h => h.name);
             return { P, hotels };
