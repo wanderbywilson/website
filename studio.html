@@ -1244,7 +1244,7 @@
             y += 14;
             // Cap the description so nothing ever collides with the rate line
             // or the wordmark at the bottom of the slide.
-            const lineBudget = Math.max(1, Math.floor(((m.showRates && h.rateLine ? 1150 : 1215) - y) / 46));
+            const lineBudget = Math.max(1, Math.floor(((m.showRates && h.rateLine ? 1190 : 1235) - y) / 46));
             ctx.font = '300 32px Inter'; ctx.fillStyle = 'rgba(30,53,82,0.82)';
             y = drawWrapped(ctx, h.socialLine, 110, y, 860, 46, 'left', lineBudget);
             if (m.showRates && h.rateLine) {
