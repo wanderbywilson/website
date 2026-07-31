@@ -135,22 +135,61 @@
         }
         .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
 
-        /* Print / save-as-PDF — one hotel per page */
+        /* Print / save-as-PDF — each hotel is exactly ONE page:
+           short photo banner, identity block full-width, then the details
+           flow in two tight columns. Carousel is hidden (the banner already
+           shows the property). */
         @media print {
-            .prop-pdf-btn, .site-header, .prop-carousel-btn, .prop-carousel-dots { display: none !important; }
+            @page { margin: 0.45in 0.5in; }
+            .prop-pdf-btn, .site-header, .prop-carousel { display: none !important; }
             .prop-page, .prop-hero, .prop-hotel--cream { background: #fff; }
-            .prop-hero { padding: 24px 0 32px; }
+
+            /* Cover */
+            .prop-hero { padding: 40px 0 24px; border-bottom: none; }
+
+            /* One page per hotel */
             .prop-hotel { display: block; break-before: page; }
-            .prop-hotel-visual-inner { position: static; height: 300px; }
-            .prop-hotel-body { padding: 22px 0 0; max-width: none; }
-            .prop-carousel { max-width: 420px; break-inside: avoid; }
-            .prop-carousel img { position: absolute; opacity: 0; }
-            .prop-carousel img.is-active { opacity: 1; }
-            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc, .prop-hotel-flightwrap { break-inside: avoid; }
+            .prop-hotel-visual-inner { position: static; height: 2.35in; }
+            .prop-hotel-body { padding: 12px 0 0; max-width: none; }
+
+            /* Identity block spans the page… */
+            .prop-hotel-body { column-count: 2; column-gap: 0.4in; }
+            .prop-hotel-num, .prop-hotel-name, .prop-hotel-location,
+            .prop-hotel-room, .prop-hotel-rate, .prop-hotel-rate-note,
+            .prop-hotel-flightwrap, p.prop-hotel-flight { column-span: all; }
+            /* …then desc / room / amenities / fine print flow in 2 columns */
+            .prop-hotel-fineprint, .prop-hotel-perks, .prop-hotel-room-desc { break-inside: avoid; }
+
+            /* Compact type */
+            .prop-hotel-num { margin-bottom: 6px; }
+            .prop-hotel-name { font-size: 24px; margin-bottom: 4px; }
+            .prop-hotel-location { font-size: 12px; margin-bottom: 12px; }
+            .prop-hotel-room { font-size: 9.5px; margin-bottom: 4px; }
+            .prop-hotel-rate { font-size: 18px; margin-bottom: 4px; }
+            .prop-hotel-rate-note { font-size: 10px; margin-bottom: 10px; }
+            .prop-hotel-flightwrap, p.prop-hotel-flight { margin-bottom: 12px; }
+            button.prop-hotel-flight, p.prop-hotel-flight { font-size: 9px; padding: 5px 9px; }
+            .prop-flight-open { display: none; }
+            .prop-flight-details { padding: 4px 10px 8px; font-size: 8.5px; line-height: 1.5; }
+            .prop-flight-details .pfd-label { font-size: 7.5px; margin: 7px 0 1px; }
             .prop-flight-details[hidden] { display: block !important; }
-            .prop-flight-caret { display: none; }
+            .prop-hotel-desc { font-size: 10.5px; line-height: 1.55; margin-bottom: 10px; }
+            .prop-hotel-room-desc { font-size: 9.5px; line-height: 1.5; padding-top: 10px; margin-bottom: 10px; }
+            .prop-hotel-room-desc strong { font-size: 8px; margin-bottom: 4px; }
+            .prop-hotel-perks { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-perks strong { font-size: 8px; margin-bottom: 6px; }
+            .prop-hotel-perks ul { gap: 3px; }
+            .prop-hotel-perks li { font-size: 9.5px; line-height: 1.4; padding-left: 16px; }
+            .prop-hotel-perks li::before { font-size: 9px; }
+            .prop-hotel-fineprint { margin-top: 10px; padding: 8px 12px; gap: 6px; }
+            .prop-hotel-fineprint p { font-size: 9px; line-height: 1.45; }
+            .prop-hotel-fineprint strong { font-size: 7.5px; margin-bottom: 1px; }
+            .prop-hotel-cta { display: none; }
+
+            /* Closing gets its own tidy final page */
+            .prop-photo-note { break-before: page; padding-top: 60px; }
             .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
-            .prop-close { padding: 40px 0; }
+            .prop-close { padding: 30px 0 0; }
         }
 
         /* HOTEL SECTIONS — split "lookbook" layout: full-bleed photo pinned
