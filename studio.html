@@ -555,10 +555,17 @@
            get corrected on the proposal — "passalacqua" → "Passalacqua",
            "the apfels" → "The Apfels". Words that already contain any
            uppercase (McAllister, SPA) are left untouched. ─────────────── */
-        const titleWords = (s) => (s || '').replace(/[\p{L}\p{M}][\p{L}\p{M}'’-]*/gu, (w) =>
-            w === w.toLowerCase()
-                ? w.replace(/^[\p{L}]/u, c => c.toUpperCase()).replace(/(['’-])([\p{L}])/gu, (m, p, c) => p + c.toUpperCase())
-                : w);
+        const titleWords = (s) => {
+            // Protect HTML entities (&amp; &middot; …) so their names don't get
+            // "capitalized" into invalid entities like &Amp;.
+            const ents = [];
+            const prot = (s || '').replace(/&[a-z#0-9]+;/gi, m => { ents.push(m); return '\u0001' + (ents.length - 1) + '\u0002'; });
+            const out = prot.replace(/[\p{L}\p{M}][\p{L}\p{M}'’-]*/gu, (w) =>
+                w === w.toLowerCase()
+                    ? w.replace(/^[\p{L}]/u, c => c.toUpperCase()).replace(/(['’-])([\p{L}])/gu, (m, p, c) => p + c.toUpperCase())
+                    : w);
+            return out.replace(/\u0001(\d+)\u0002/g, (m, i) => ents[+i]);
+        };
         const sentenceCap = (s) => (s || '').replace(/^((?:<[^>]+>|\s|["“‘'«*])*)([\p{L}])/u, (m, pre, c) => pre + c.toUpperCase());
         const sentenceCapLines = (s) => (s || '').split('\n').map(sentenceCap).join('\n');
 
@@ -1223,7 +1230,11 @@
             ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, SL_W, SL_H);
             const im = await loadImg(h.heroImage);
             coverDraw(ctx, im, 0, 0, SL_W, 780);
-            kicker(ctx, 'No. 0' + (i + 1) + '   ·   ' + plain(h.location), 110, 880, GOLD, 25);
+            // Keep the kicker to the island/location itself (drop "· Brand"
+            // suffixes) and never let it run off the slide.
+            let loc = plain(h.location).split('·')[0].trim();
+            if (loc.length > 36) loc = loc.slice(0, 36).replace(/[,\s]+\S*$/, '') + '…';
+            kicker(ctx, 'No. 0' + (i + 1) + '   ·   ' + loc, 110, 880, GOLD, 25);
             ctx.font = '400 64px Fraunces'; ctx.fillStyle = INK;
             let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72);
             y += 14;
