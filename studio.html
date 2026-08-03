@@ -261,6 +261,7 @@
         .hd-actions { display: flex; gap: 10px; margin: 18px 0; flex-wrap: wrap; }
         /* Blog editor */
         .blog-split { display: grid; grid-template-columns: minmax(380px, 520px) 1fr; height: calc(100vh - 57px); }
+        .blog-split[hidden] { display: none; }
         .blog-form { overflow-y: auto; padding: 26px 28px 60px; }
         .blog-preview { position: relative; }
         .blog-preview iframe { width: 100%; height: 100%; border: 0; background: #fff; }
@@ -411,13 +412,77 @@
 
         <!-- ── Hotel-page drafts ─────────────────────────────────────── -->
         <div class="view" id="viewHotels">
-            <div class="dash">
+            <div class="dash" id="hotelDraftListWrap">
                 <div class="dash-head">
                     <h1 class="dash-title">Hotel page <em>drafts.</em></h1>
-                    <p class="dash-sub">Pages Claude has drafted for hotels we quoted that aren&rsquo;t on the site yet. Review, then mark <strong>Ready to publish</strong> — ready pages go live with the next daily publish run.</p>
+                    <p class="dash-sub">Pages Claude has drafted for hotels we quoted that aren&rsquo;t on the site yet. Click one to see it exactly as it would appear on the website, edit anything, then mark <strong>Ready to publish</strong> — ready pages go live with the next daily publish run.</p>
                 </div>
                 <div id="hotelDraftList"><p class="dash-empty">Loading…</p></div>
-                <div id="hotelDraftDetail" hidden></div>
+            </div>
+            <div class="blog-split" id="hotelDraftEditor" hidden>
+                <div class="blog-form">
+                    <div class="dash-head" style="margin-bottom:18px">
+                        <h1 class="dash-title" id="hdTitle">Hotel <em>draft.</em></h1>
+                        <p class="dash-sub" id="hdStatusLine"></p>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdName">Hotel name</label>
+                        <input class="f-input" id="hdName">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdLocation">Location line</label>
+                        <input class="f-input" id="hdLocation">
+                    </div>
+                    <div class="f-grid2">
+                        <div class="f-row">
+                            <label class="f-label" for="hdRateFrom">Rate from</label>
+                            <input class="f-input" id="hdRateFrom" placeholder="€1,270 / night">
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="hdBooking">Virtuoso booking URL <span style="text-transform:none">(optional)</span></label>
+                            <input class="f-input" id="hdBooking" placeholder="https://www.virtuoso.com/…">
+                        </div>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdDesc">Description — verbatim from the hotel or Virtuoso, never our own words</label>
+                        <textarea class="f-area" id="hdDesc" style="min-height:120px"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdPerks">Preferred-partner amenities — one per line</label>
+                        <textarea class="f-area" id="hdPerks" style="min-height:100px"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdIdealFor">Ideal for <span style="text-transform:none">(optional — your qualifying read)</span></label>
+                        <textarea class="f-area" id="hdIdealFor"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdAgentTip">Advisor tip <span style="text-transform:none">(optional)</span></label>
+                        <textarea class="f-area" id="hdAgentTip"></textarea>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdHero">Hero image URL</label>
+                        <input class="f-input" id="hdHero">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="hdGallery">Gallery image URLs — one per line</label>
+                        <textarea class="f-area" id="hdGallery" style="min-height:100px"></textarea>
+                    </div>
+                    <details style="margin: 6px 0 14px">
+                        <summary style="cursor:pointer; font-size:13px; color:rgba(30,53,82,0.65)">Claude&rsquo;s sourcing notes for this draft</summary>
+                        <div class="hd-notes" id="hdNotes" style="margin-top:10px"></div>
+                    </details>
+                    <div class="blog-actions">
+                        <button class="btn" id="hdSave" type="button">Save changes</button>
+                        <button class="btn btn-ghost" id="hdReady" type="button">Ready to publish</button>
+                        <button class="btn btn-ghost" id="hdBackBtn" type="button">All drafts</button>
+                        <button class="btn btn-ghost danger" id="hdDelete" type="button">Delete draft</button>
+                    </div>
+                    <p class="social-note">Ready drafts go live at wanderbywilson.com/hotels/{slug} with the next daily publish run (8&nbsp;AM) and the status flips to Published here.</p>
+                </div>
+                <div class="studio-preview blog-preview">
+                    <span class="studio-preview-tag">Live preview — exactly how the page will look</span>
+                    <iframe id="hotelFrame" src="/hotel-preview.html?draft=1" title="Hotel page preview"></iframe>
+                </div>
             </div>
         </div>
 
@@ -792,41 +857,71 @@
             if (bl) { openBlogEditor(bl.dataset.openblog); return; }
         });
 
-        /* ── Hotel-page drafts ────────────────────────────────────────── */
-        let hotelDraftId = null;
+        /* ── Hotel-page drafts — edit the fields, see the real page ───── */
+        let hotelDraftId = null, hotelDraftDoc = null, hdT = null;
+        function hdEntryFromForm() {
+            return {
+                name: $('hdName').value.trim(),
+                location: $('hdLocation').value.trim(),
+                rateFrom: $('hdRateFrom').value.trim(),
+                heroImage: $('hdHero').value.trim(),
+                description: $('hdDesc').value.trim(),
+                perks: $('hdPerks').value.split('\n').map(s => s.trim()).filter(Boolean),
+                gallery: $('hdGallery').value.split('\n').map(s => s.trim()).filter(Boolean),
+                idealFor: $('hdIdealFor').value.trim(),
+                agentTip: $('hdAgentTip').value.trim(),
+                bookingUrl: $('hdBooking').value.trim()
+            };
+        }
+        function hdPushPreview() {
+            const fw = $('hotelFrame').contentWindow;
+            if (fw) fw.postMessage({ type: 'wndr-hotel-draft', slug: hotelDraftId || 'draft-hotel', detail: hdEntryFromForm() }, '*');
+        }
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'wndr-hotel-ready' && !$('hotelDraftEditor').hidden) hdPushPreview();
+        });
+        function hdReloadPreview() {
+            try { $('hotelFrame').contentWindow.location.reload(); }
+            catch (err) { $('hotelFrame').src = '/hotel-preview.html?draft=1&r=' + Date.now(); }
+        }
+        function hdStatusLine() {
+            $('hdStatusLine').innerHTML = STATUS_CHIP[hotelDraftDoc.status] || STATUS_CHIP['in-review'];
+            $('hdReady').textContent = hotelDraftDoc.status === 'ready' ? 'Back to review' : 'Ready to publish';
+        }
         async function openHotelDraft(id) {
             showView('hotels');
-            $('hotelDraftList').hidden = true;
-            const box = $('hotelDraftDetail');
-            box.hidden = false;
-            box.innerHTML = '<p class="dash-empty">Loading…</p>';
+            $('hotelDraftListWrap').hidden = true;
+            $('hotelDraftEditor').hidden = false;
             try {
                 const { doc } = await contentApi({ action: 'load', kind: 'hoteldraft', id });
                 hotelDraftId = id;
-                box.innerHTML = `
-                    <button class="btn btn-ghost btn-small" data-hdback type="button">&larr; All drafts</button>
-                    <div class="dash-card" style="margin-top:14px">
-                        <div class="dash-card-head">
-                            <h2>${esc(doc.name || id)}</h2>
-                            ${STATUS_CHIP[doc.status] || STATUS_CHIP['in-review']}
-                        </div>
-                        <p class="dash-sub">${esc(doc.location || '')}</p>
-                        <div class="hd-detail-imgs">${(doc.images || []).map(u => `<img src="${esc(u)}" alt="" loading="lazy">`).join('')}</div>
-                        <div class="hd-notes">${esc(doc.notes || '(no notes)')}</div>
-                        <div class="hd-actions">
-                            ${doc.status === 'ready'
-                                ? '<button class="btn btn-ghost" data-hdstatus="in-review" type="button">Back to review</button>'
-                                : '<button class="btn" data-hdstatus="ready" type="button">Ready to publish</button>'}
-                            <button class="btn btn-ghost danger" data-hddelete type="button">Delete draft</button>
-                        </div>
-                        <p class="social-note">Ready drafts go live on the site with the next daily publish run — the status flips to Published here once it&rsquo;s up.</p>
-                    </div>`;
-            } catch (err) { box.innerHTML = '<p class="dash-empty">Couldn’t load that draft.</p>'; }
+                hotelDraftDoc = doc;
+                const e0 = doc.entry || {
+                    name: doc.name || '', location: doc.location || '', rateFrom: '',
+                    heroImage: doc.heroImage || '', description: '',
+                    perks: [], gallery: (doc.images || []).filter(u => u !== doc.heroImage),
+                    idealFor: '', agentTip: '', bookingUrl: ''
+                };
+                $('hdTitle').innerHTML = esc(deEnt(e0.name || id)) + ' <em>draft.</em>';
+                $('hdName').value = e0.name || '';
+                $('hdLocation').value = e0.location || '';
+                $('hdRateFrom').value = e0.rateFrom || '';
+                $('hdBooking').value = e0.bookingUrl || '';
+                $('hdDesc').value = deEnt(e0.description || '');
+                $('hdPerks').value = (e0.perks || []).join('\n');
+                $('hdIdealFor').value = deEnt(e0.idealFor || '');
+                $('hdAgentTip').value = deEnt(e0.agentTip || '');
+                $('hdHero').value = e0.heroImage || '';
+                $('hdGallery').value = (e0.gallery || []).join('\n');
+                $('hdNotes').textContent = doc.notes || '(no notes)';
+                hdStatusLine();
+                hdReloadPreview();
+            } catch (err) { toast('Couldn’t load that draft.'); showHotelDraftList(); }
         }
         async function showHotelDraftList() {
-            $('hotelDraftDetail').hidden = true;
+            $('hotelDraftEditor').hidden = true;
+            $('hotelDraftListWrap').hidden = false;
             const list = $('hotelDraftList');
-            list.hidden = false;
             list.innerHTML = '<p class="dash-empty">Loading…</p>';
             try {
                 const { items } = await contentApi({ action: 'list', kind: 'hoteldraft' });
@@ -840,23 +935,41 @@
                     </button>`).join('') : '<p class="dash-empty">No drafts right now.</p>';
             } catch (err) { list.innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; }
         }
-        document.addEventListener('click', async (e) => {
-            if (e.target.closest('[data-hdback]')) { showHotelDraftList(); return; }
-            const st = e.target.closest('[data-hdstatus]');
-            if (st && hotelDraftId) {
-                try {
-                    await contentApi({ action: 'setstatus', kind: 'hoteldraft', id: hotelDraftId, status: st.dataset.hdstatus });
-                    toast(st.dataset.hdstatus === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Moved back to review.');
-                    openHotelDraft(hotelDraftId);
-                } catch (err) { toast('Couldn’t update the status.'); }
-                return;
-            }
-            if (e.target.closest('[data-hddelete]') && hotelDraftId) {
-                if (!confirm('Delete this hotel-page draft? Claude can always re-create it.')) return;
-                try { await contentApi({ action: 'delete', kind: 'hoteldraft', id: hotelDraftId }); toast('Draft deleted.'); showHotelDraftList(); }
-                catch (err) { toast('Couldn’t delete it.'); }
-            }
+        async function saveHotelDraft(newStatus) {
+            const entry = hdEntryFromForm();
+            if (!entry.name) { toast('The hotel needs a name.'); return; }
+            hotelDraftDoc = Object.assign({}, hotelDraftDoc, {
+                slug: hotelDraftId,
+                name: entry.name,
+                location: entry.location,
+                heroImage: entry.heroImage,
+                images: [entry.heroImage].concat(entry.gallery).filter(Boolean),
+                entry,
+                status: newStatus || hotelDraftDoc.status || 'in-review'
+            });
+            await contentApi({ action: 'save', kind: 'hoteldraft', id: hotelDraftId, doc: hotelDraftDoc,
+                meta: { name: entry.name, location: entry.location, status: hotelDraftDoc.status, heroImage: entry.heroImage } });
+            hdStatusLine();
+        }
+        $('hdSave').addEventListener('click', async () => {
+            try { await saveHotelDraft(); toast('Draft saved.'); }
+            catch (err) { toast('Couldn’t save: ' + err.message); }
         });
+        $('hdReady').addEventListener('click', async () => {
+            const to = hotelDraftDoc.status === 'ready' ? 'in-review' : 'ready';
+            try {
+                await saveHotelDraft(to);
+                toast(to === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Moved back to review.');
+            } catch (err) { toast('Couldn’t update: ' + err.message); }
+        });
+        $('hdBackBtn').addEventListener('click', showHotelDraftList);
+        $('hdDelete').addEventListener('click', async () => {
+            if (!confirm('Delete this hotel-page draft? Claude can always re-create it.')) return;
+            try { await contentApi({ action: 'delete', kind: 'hoteldraft', id: hotelDraftId }); toast('Draft deleted.'); showHotelDraftList(); }
+            catch (err) { toast('Couldn’t delete it.'); }
+        });
+        ['hdName', 'hdLocation', 'hdRateFrom', 'hdBooking', 'hdDesc', 'hdPerks', 'hdIdealFor', 'hdAgentTip', 'hdHero', 'hdGallery'].forEach(id =>
+            $(id).addEventListener('input', () => { clearTimeout(hdT); hdT = setTimeout(hdReloadPreview, 900); }));
 
         /* ── Blog editor ──────────────────────────────────────────────── */
         let blogId = null, blogStatus = 'draft', blogReady = false;
