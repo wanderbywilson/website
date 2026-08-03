@@ -96,10 +96,23 @@
         </div>
     </section>
 
-    <script src="/blog-data-v16.js"></script>
+    <script src="/blog-data-v17.js"></script>
     <script>
         (function loadPost() {
             const params = new URLSearchParams(window.location.search);
+
+            // Draft mode — the Studio's blog editor posts drafts in and this
+            // page renders them exactly as a published article would look.
+            if (params.get('draft') === '1') {
+                window.addEventListener('message', (e) => {
+                    if (!e.data || e.data.type !== 'wndr-blog-draft' || !e.data.post) return;
+                    document.getElementById('articleTags').innerHTML = '';
+                    renderPost(e.data.post, e.data.post.slug || 'draft');
+                });
+                if (window.parent !== window) window.parent.postMessage({ type: 'wndr-blog-ready' }, '*');
+                return;
+            }
+
             let slug = params.get('slug');
             if (!slug) {
                 // Clean URLs (/hotels/borgo-santandrea etc.) — extract slug from path
@@ -109,7 +122,10 @@
             const post = (slug && typeof BLOG_POSTS !== 'undefined') ? BLOG_POSTS[slug] : null;
 
             if (!post) { window.location.replace('/inspiration'); return; }
+            renderPost(post, slug);
+        })();
 
+        function renderPost(post, slug) {
             document.title = post.title + ' | Wander by Wilson';
 
             // Per-post SEO: canonical URL, meta description, OG tags
@@ -189,7 +205,7 @@
                 li.appendChild(a);
                 tagsEl.appendChild(li);
             });
-        })();
+        }
 
         // Header scroll state
         const header = document.getElementById('siteHeader');
