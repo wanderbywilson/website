@@ -668,6 +668,7 @@
                         <summary style="cursor:pointer; font-size:13px; color:rgba(30,53,82,0.65)">Claude&rsquo;s sourcing notes for this draft</summary>
                         <div class="hd-notes" id="hdNotes" style="margin-top:10px"></div>
                     </details>
+                    <div class="social-qa has-issues" id="hdPlaceholderWarn" hidden></div>
                     <div class="blog-actions">
                         <button class="btn" id="hdSave" type="button">Save changes</button>
                         <button class="btn btn-ghost" id="hdReady" type="button">Ready to publish</button>
@@ -1465,6 +1466,7 @@
                 $('hdGallery').value = (e0.gallery || []).join('\n');
                 $('hdNotes').textContent = doc.notes || '(no notes)';
                 hdIdealCheck();
+                hdPlaceholderCheck();
                 hdStatusLine();
                 hdReloadPreview();
             } catch (err) { toast('Couldn’t load that draft.'); showHotelDraftList(); }
@@ -1508,6 +1510,7 @@
         });
         $('hdReady').addEventListener('click', async () => {
             const to = hotelDraftDoc.status === 'ready' ? 'in-review' : 'ready';
+            if (to === 'ready' && !hdPlaceholderCheck()) { toast('Placeholder text can’t go live — see the warning above.'); return; }
             try {
                 await saveHotelDraft(to);
                 toast(to === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Moved back to review.');
@@ -1537,6 +1540,24 @@
             el.style.color = (tooLong || tooMany) ? '#96650a' : '';
         }
         $('hdIdealFor').addEventListener('input', hdIdealCheck);
+
+        /* No page field may ship placeholder text — "TODO", "TBD", "before
+           publishing". Empty is fine (the page hides it); a placeholder is not. */
+        const PLACEHOLDER_RE = /\b(TODO|TBD|FIXME|XXX)\b|before publishing|\[[^\]]*\bfill\b[^\]]*\]|\bplaceholder\b/i;
+        function hdPlaceholderCheck() {
+            const fields = { hdName: 'Hotel name', hdLocation: 'Location', hdRateFrom: 'Rate from',
+                hdDesc: 'Description', hdPerks: 'Amenities', hdIdealFor: 'Best for',
+                hdAgentTip: 'Advisor tip', hdHero: 'Hero image', hdGallery: 'Gallery' };
+            const bad = Object.keys(fields).filter(id => PLACEHOLDER_RE.test($(id).value || ''));
+            const box = $('hdPlaceholderWarn');
+            if (!bad.length) { box.hidden = true; box.textContent = ''; return true; }
+            box.hidden = false;
+            box.innerHTML = '<strong>Placeholder text found in ' + bad.map(id => fields[id]).join(', ') +
+                '.</strong> These fields render on the live page — replace with the real value, or clear the field and put the open question in the notes below.';
+            return false;
+        }
+        Object.keys({ hdName:1, hdLocation:1, hdRateFrom:1, hdDesc:1, hdPerks:1, hdIdealFor:1, hdAgentTip:1, hdHero:1, hdGallery:1 })
+            .forEach(id => $(id).addEventListener('input', hdPlaceholderCheck));
 
         /* ── Blog editor ──────────────────────────────────────────────── */
         let blogId = null, blogStatus = 'draft', blogReady = false;
