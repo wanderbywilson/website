@@ -200,15 +200,17 @@
         .modal-title em { font-style: italic; font-weight: 300; color: var(--gold); }
 
         /* ── Social composer ───────────────────────────────────────────── */
-        .modal.social-modal { max-width: 1180px; }
-        .social-body { display: grid; grid-template-columns: 400px 1fr; gap: 24px; min-height: 0; flex: 1; }
-        .social-fields { overflow-y: auto; padding-right: 6px; }
-        .social-preview-col { display: flex; flex-direction: column; min-width: 0; }
+        .modal.social-modal { max-width: 1180px; max-height: 94vh; }
+        .modal-wrap { padding: 18px; }
+        .social-body { display: grid; grid-template-columns: 400px 1fr; gap: 24px; min-height: 0; flex: 1; overflow: hidden; }
+        .social-fields { overflow-y: auto; padding-right: 6px; min-height: 0; }
+        .social-preview-col { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
         .slide-strip {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px; overflow-y: auto; align-content: start; flex: 1;
+            gap: 12px; overflow-y: auto; align-content: start; flex: 1; min-height: 0;
             background: var(--paper-cream); padding: 14px; border: 1px solid var(--studio-line-soft);
         }
+        .social-qa { max-height: 22vh; overflow-y: auto; flex: none; }
         .slide-strip canvas { width: 100%; height: auto; display: block; box-shadow: 0 4px 14px rgba(30,53,82,0.12); }
         .social-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
         .social-note { font-size: 11px; color: rgba(30,53,82,0.5); line-height: 1.5; margin: 12px 0 0; }
@@ -287,7 +289,12 @@
         .soc-day.is-over { background: rgba(156,124,66,.1); border-color: var(--st-gold); }
         .soc-day-n { font-size: 10px; color: var(--st-dim-2); }
         .soc-chip { display: block; width: 100%; margin-top: 3px; cursor: grab; border: 0; padding: 0; background: none; position: relative; }
-        .soc-chip img { width: 100%; height: 46px; object-fit: cover; display: block; }
+        .soc-chip img { width: 100%; height: 42px; object-fit: cover; display: block; }
+        .soc-chip-label {
+            display: block; font-size: 8.5px; letter-spacing: .05em; text-transform: uppercase;
+            background: var(--st-text); color: #fff; padding: 2px 3px; line-height: 1.25;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
+        }
         .soc-chip-x { position: absolute; top: 1px; right: 1px; background: rgba(20,38,62,.8); color: #fff; border: 0; font-size: 10px; line-height: 1; padding: 2px 4px; cursor: pointer; }
         .ig-preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
         .ig-preview div { position: relative; aspect-ratio: 4/5; background: var(--st-bg); overflow: hidden; }
@@ -982,6 +989,10 @@
                     <div class="f-row">
                         <label class="f-label"><input type="checkbox" id="sShowRates" checked style="margin-right:6px; vertical-align:-2px"> Show the quoted rate on each hotel slide</label>
                     </div>
+                    <div class="f-row">
+                        <label class="f-label" for="sCategory">Category <span style="text-transform:none">(the label on the calendar &amp; grid)</span></label>
+                        <select class="f-input" id="sCategory"></select>
+                    </div>
                     <div class="f-grid2">
                         <div class="f-row">
                             <label class="f-label" for="sCtaTitle">Closing slide — title</label>
@@ -1283,6 +1294,39 @@
         ];
         let socItems = [], socFilter = 'all', socMonth = null, socDragId = null;
 
+        /* Post categories — what the calendar chip announces at a glance, so a
+           month of scheduled posts reads as a mix rather than a wall of photos.
+           Region first, then trip type. */
+        const SOC_CATEGORIES = ['Caribbean', 'Mexico', 'Europe', 'Africa', 'Asia', 'South Pacific',
+            'Middle East', 'North America', 'South America', 'All-Inclusive', 'Cruise', 'Safari',
+            'Honeymoon', 'Ski', 'Villa'];
+        const CATEGORY_HINTS = {
+            Caribbean: ['caribbean','turks','caicos','anguilla','st. barth','st barth','barbados','bahamas','jamaica','antigua','st. lucia','st lucia','virgin gorda','bvi','british virgin','grenada','nevis','dominica','curacao','curaçao','belize','providenciales','ambergris','cap juluca','little dix','rock house','guana island','jade mountain','hermitage bay'],
+            Mexico: ['mexico','cabo','los cabos','riviera maya','tulum','punta mita','careyes','oaxaca','mérida','merida','isla mujeres','mayakoba'],
+            Europe: ['italy','italian','france','french','spain','spanish','portugal','greece','greek','tuscany','amalfi','como','sicily','positano','paris','london','ireland','scotland','iceland','dolomites','south tyrol','mallorca','marbella','corsica','provence','santorini','mykonos','crete','norway','austria','switzerland','croatia'],
+            Africa: ['africa','safari','south africa','botswana','kenya','tanzania','serengeti','rwanda','namibia','morocco','marrakech','zambia','zimbabwe','madagascar','seychelles'],
+            Asia: ['asia','japan','japanese','thailand','vietnam','bali','indonesia','india','maldives','sri lanka','singapore','cambodia','laos','bhutan','philippines'],
+            'South Pacific': ['fiji','bora bora','tahiti','french polynesia','australia','new zealand','cook islands','vanuatu','samoa'],
+            'Middle East': ['dubai','abu dhabi','oman','jordan','uae','qatar','saudi'],
+            'North America': ['hawaii','maui','kauai','alaska','canada','banff','napa','montana','utah','wyoming','colorado','aspen','sedona','palm beach','charleston','big sur','nantucket','vermont','tennessee','new york'],
+            'South America': ['patagonia','argentina','chile','peru','machu picchu','brazil','colombia','ecuador','galapagos','uruguay'],
+            'All-Inclusive': ['all-inclusive','all inclusive'],
+            Cruise: ['cruise','yacht','sailing','expedition ship'],
+            Safari: ['safari','game drive','big five','bush camp'],
+            Honeymoon: ['honeymoon','anniversary','newlywed'],
+            Ski: ['ski','ski-in','slopes','powder','snow'],
+            Villa: ['villa','private island','buyout']
+        };
+        function guessCategory(text) {
+            const t = (text || '').toLowerCase();
+            let best = null, bestHits = 0;
+            for (const cat of SOC_CATEGORIES) {
+                const hits = (CATEGORY_HINTS[cat] || []).reduce((n, w) => n + (t.includes(w) ? 1 : 0), 0);
+                if (hits > bestHits) { best = cat; bestHits = hits; }
+            }
+            return best;
+        }
+
         const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         const socStatusOf = (s) => s.scheduledFor ? (s.status === 'published' ? 'published' : 'scheduled') : (s.status === 'ready' ? 'ready' : (s.status || 'draft'));
 
@@ -1313,7 +1357,7 @@
                 <div class="soc-item" draggable="true" data-socid="${esc(s.id)}">
                     ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : '<img alt="">'}
                     <span class="soc-item-t">${esc((s.title || s.id).slice(0, 70))}
-                        <span class="soc-item-s">${STATUS_LABEL[socStatusOf(s)] || ''}${s.scheduledFor ? ' · ' + s.scheduledFor : ''}</span>
+                        <span class="soc-item-s">${esc(s.category || guessCategory(s.title) || '')}${(s.category || guessCategory(s.title)) ? ' · ' : ''}${STATUS_LABEL[socStatusOf(s)] || ''}${s.scheduledFor ? ' · ' + s.scheduledFor : ''}</span>
                     </span>
                 </div>`).join('')
                 : '<p class="dash-empty">Nothing here yet. <strong>New post</strong> builds one from a proposal, hotel page, blog post or itinerary.</p>';
@@ -1334,6 +1378,7 @@
                     <span class="soc-day-n">${d.getDate()}</span>
                     ${(byDay[key] || []).map(s => `
                         <div class="soc-chip" draggable="true" data-socid="${esc(s.id)}" title="${esc(s.title || '')}">
+                            <span class="soc-chip-label">${esc(s.category || guessCategory(s.title) || 'Post')}</span>
                             ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
                             <button class="soc-chip-x" data-socunschedule="${esc(s.id)}" type="button">✕</button>
                         </div>`).join('')}
@@ -1346,7 +1391,7 @@
             $('socGrid').innerHTML = sched.length ? sched.slice(0, 12).map(s => `
                 <div title="${esc(s.title || '')}">
                     ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
-                    <span class="ig-when">${new Date(s.scheduledFor + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    <span class="ig-when">${esc(s.category || guessCategory(s.title) || '')} · ${new Date(s.scheduledFor + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                 </div>`).join('')
                 : '<p class="dash-empty" style="grid-column:1/-1">Schedule a post to see the grid fill in.</p>';
         }
@@ -1359,8 +1404,9 @@
                 if (date && doc.status !== 'published') doc.status = 'ready';
                 await contentApi({ action: 'save', kind: 'social', id, doc,
                     meta: { title: doc.title || item.title, proposalId: doc.proposalId || '', thumb: doc.thumb || item.thumb,
+                            category: doc.category || item.category || '',
                             status: doc.status || 'draft', scheduledFor: doc.scheduledFor } });
-                item.scheduledFor = doc.scheduledFor; item.status = doc.status;
+                item.scheduledFor = doc.scheduledFor; item.status = doc.status; item.category = doc.category || item.category || '';
                 renderSocFilters(); renderSocLibrary(); renderSocCalendar(); renderSocGrid();
                 toast(date ? 'Scheduled for ' + date + '.' : 'Moved back to the library.');
             } catch (err) { toast('Couldn’t update that post.'); }
@@ -1662,6 +1708,7 @@
             '',
             'FORMAT for bodyHtml — allowed tags ONLY: <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>, <a href>, <blockquote>, <img src alt>. No inline styles, no class attributes, no <div>/<span>, no <h1> (the title renders separately). Structure it with <h2> sections; put a hotel name in <strong> the first time it appears. Aim for 1,200-1,800 words unless told otherwise.',
             '',
+            'PHOTO QUALITY \u2014 every slide photo must be the BEST available image of that hotel, destination or experience: wide, bright, instantly readable at thumbnail size. If a property has no genuinely great photo available, use a stunning DESTINATION photo instead rather than settling for a weak hotel shot. Reject dim interiors, tight crops of furniture, empty corridors, meeting rooms, and anything that looks like a booking-site thumbnail.',
             'PHOTOS — do this work, do not skip it. Posts without photos cannot be published.',
             'Place ONE <img> immediately BEFORE the <h2> (or the paragraph) it illustrates, so each section is introduced by its own picture. Give every img a descriptive alt.',
             'IMPORTANT: name the image file after what it shows where you can — our tools match photos to sections by filename, so "soneva-fushi-villa.jpg" is far more useful than "image-3.jpg".',
@@ -2428,7 +2475,12 @@
             // suffixes) and never let it run off the slide.
             let loc = plain(h.location).split('·')[0].trim();
             if (loc.length > 36) loc = loc.slice(0, 36).replace(/[,\s]+\S*$/, '') + '…';
-            kicker(ctx, ['No. 0' + (i + 1), loc].filter(Boolean).join('   ·   '), 110, 880, GOLD, 25);
+            // Itineraries count DAYS, not slides — "Days 1–2" reads as a trip,
+            // "No. 03" reads as a list. Each slide may carry its own dayLabel.
+            const num = (m.deckKind === 'itinerary')
+                ? (plain(h.dayLabel) || 'Day ' + (i + 1))
+                : 'No. 0' + (i + 1);
+            kicker(ctx, [num, loc].filter(Boolean).join('   ·   '), 110, 880, GOLD, 25);
             ctx.font = '400 64px Fraunces'; ctx.fillStyle = INK;
             let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72, 'left', 2);
             y += 14;
@@ -2541,6 +2593,12 @@
             return out;
         }
 
+        function socCategoryOptions(selected) {
+            const sel = $('sCategory');
+            sel.innerHTML = '<option value="">— none —</option>' +
+                SOC_CATEGORIES.map(c => `<option value="${c}"${c === selected ? ' selected' : ''}>${c}</option>`).join('');
+        }
+
         function prefillSocial() {
             const { P, hotels } = socialModel();
             if (socialDeck) { prefillFromDeck(P, hotels); return; }
@@ -2567,6 +2625,10 @@
                     <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
                     ${slidePhotoField(i, h)}
                 </div>`).join('');
+            const catText = [$('sHook').value, $('sBriefIntro').value, $('sBrief').value,
+                Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value).join(' '),
+                slides.map(h => plain(h.name) + ' ' + plain(h.location)).join(' ')].join(' ');
+            socCategoryOptions(guessCategory(catText));
             $('sCaption').value = buildCaption();
         }
 
@@ -2795,6 +2857,7 @@
                 ctaSub: $('sCtaSub').value.trim(),
                 hotels: hotels.map((h, i) => ({
                     ...h,
+                    dayLabel: h.dayLabel || '',
                     socialLine: lines[i] || firstSentence(h.desc, 150),
                     rateLine: [plain(h.room), plain(h.rate).replace(/\*/g, '')].filter(Boolean).join(' · ')
                 }))
@@ -2852,7 +2915,7 @@
             '{',
             '  "hook": "the cover line — the reason someone stops mid-scroll. Max ~70 characters. Tease, do not summarize.",',
             '  "briefIntro": "slide 2 opening line — one sentence that sets up the list.",',
-            '  "brief": ["3-4 short supporting points, one per line, max ~90 characters each"],',
+            '  "brief": ["3-4 fragments, max ~60 characters EACH \u2014 about 8 words, no trailing periods"],',
             '  "slides": [',
             '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "ONE scroll-stopping line, max ~120 characters: what makes it special and the can\\u2019t-miss detail. Factual only.", "imageUrl": "REQUIRED — see PHOTOS below" }',
             '  ],',
@@ -2863,6 +2926,9 @@
             '',
             'Aim for 3-6 entries in "slides".',
             '',
+            'COVER PHOTO \u2014 the single most important image in the post. It must be a SHOWSTOPPER: sweeping scenery, the hero shot of the best property featured, or an iconic view of the destination. NEVER an interior detail, a chair, a corner of a lobby, a close-up of an object, or a plain room shot \u2014 those stop nobody mid-scroll. If the strongest image belongs to a later slide, use it on the cover anyway.',
+            'BRIEF SLIDE COPY \u2014 read in under two seconds. briefIntro: ONE sentence, max ~140 characters. brief: 3-4 bullets, max ~60 characters EACH (about 8 words) \u2014 fragments, not sentences, no trailing periods. If a bullet needs a comma to survive, it is too long. Cut adjectives before facts.',
+            'PHOTO QUALITY \u2014 every slide photo must be the BEST available image of that hotel, destination or experience: wide, bright, instantly readable at thumbnail size. If a property has no genuinely great photo available, use a stunning DESTINATION photo instead rather than settling for a weak hotel shot. Reject dim interiors, tight crops of furniture, empty corridors, meeting rooms, and anything that looks like a booking-site thumbnail.',
             'PHOTOS — do this work, do not skip it. A carousel without photos is unusable.',
             'For EVERY slide, browse to the hotel\'s (or destination\'s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. On most hotel sites you can find these in the gallery or press/media page; many run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image before returning it.',
             'Source order: 1) the hotel\'s own website or official media library — always preferred; 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination (not a hotel) slide. NEVER use Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio — we only publish photography the property itself distributes.',
@@ -2941,7 +3007,7 @@
                     // Anything already on our site brings its approved photo.
                     const m = url ? null : libraryPhotoFor(name);
                     return {
-                        name, location: s.location || '',
+                        name, location: s.location || '', dayLabel: s.dayLabel || '',
                         heroImage: url || (m ? m.image : ''), desc: s.line || '',
                         socialHook: s.line || '', room: '', rate: ''
                     };
@@ -3046,7 +3112,7 @@
             '  "briefIntro": "one sentence on the shape of the trip — how long, where, what kind of traveler it suits. No names, no dates, no prices.",',
             '  "brief": ["3-4 short bullets on what makes this itinerary special — the routing logic, a signature experience, how it is paced"],',
             '  "slides": [',
-            '    { "name": "the stop \\u2014 a place or hotel, max 5 words", "location": "region/country", "line": "ONE line, max ~120 characters: what happens here and why it earns its place. Factual, from the itinerary.", "imageUrl": "REQUIRED \\u2014 see PHOTOS below" }',
+            '    { "dayLabel": "which days this slide covers, read off the itinerary, e.g. Days 1\\u20132 or Day 5 \\u2014 this prints on the slide instead of a slide number", "name": "the stop \\u2014 a place or hotel, max 5 words", "location": "region/country", "line": "ONE line, max ~120 characters: what happens here and why it earns its place. Factual, from the itinerary.", "imageUrl": "REQUIRED \\u2014 see PHOTOS below" }',
             '  ],',
             '  "ctaTitle": "closing line, e.g. Where should we send you next?",',
             '  "ctaSub": "one sentence inviting a DM or inquiry \\u2014 curation language, e.g. Tell us the occasion and we\\u2019ll curate a shortlist tailored to you.",',
@@ -3055,6 +3121,9 @@
             '',
             'One slide per major stop, in trip order. Aim for 4-8 slides — merge minor stops rather than exceeding 8.',
             '',
+            'COVER PHOTO \u2014 the single most important image in the post. It must be a SHOWSTOPPER: sweeping scenery, the hero shot of the best property featured, or an iconic view of the destination. NEVER an interior detail, a chair, a corner of a lobby, a close-up of an object, or a plain room shot \u2014 those stop nobody mid-scroll. If the strongest image belongs to a later slide, use it on the cover anyway.',
+            'BRIEF SLIDE COPY \u2014 read in under two seconds. briefIntro: ONE sentence, max ~140 characters. brief: 3-4 bullets, max ~60 characters EACH (about 8 words) \u2014 fragments, not sentences, no trailing periods. If a bullet needs a comma to survive, it is too long. Cut adjectives before facts.',
+            'PHOTO QUALITY \u2014 every slide photo must be the BEST available image of that hotel, destination or experience: wide, bright, instantly readable at thumbnail size. If a property has no genuinely great photo available, use a stunning DESTINATION photo instead rather than settling for a weak hotel shot. Reject dim interiors, tight crops of furniture, empty corridors, meeting rooms, and anything that looks like a booking-site thumbnail.',
             'PHOTOS — do this work, do not skip it. A carousel without photos is unusable.',
             'For EVERY slide, browse to the hotel’s (or destination’s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. Many hotel sites run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image.',
             'Source order: 1) the hotel’s own website or official media library — always preferred; 2) its Virtuoso listing; 3) an official tourism board for a destination slide. NEVER Instagram, Pinterest, TripAdvisor, stock sites, Google Images thumbnails, or a photographer’s portfolio.',
@@ -3145,6 +3214,7 @@
             const doc = {
                 proposalId: state.id || '',
                 title: m.hook,
+                category: $('sCategory').value || '',
                 thumb,
                 // m.hotels carries the live slides — names, locations, lines and
                 // the photo currently in each per-slide field.
@@ -3160,11 +3230,11 @@
                 scheduledFor: (prev && prev.scheduledFor) || ''
             };
             const out = await contentApi({ action: 'save', kind: 'social', id: social.postId, doc,
-                meta: { title: m.hook, proposalId: doc.proposalId, thumb,
+                meta: { title: m.hook, proposalId: doc.proposalId, thumb, category: doc.category,
                         status: doc.status, scheduledFor: doc.scheduledFor } });
             social.postId = out.id;
             // keep the in-memory library in sync so the studio reflects it at once
-            const row = { id: out.id, title: m.hook, thumb, status: doc.status, scheduledFor: doc.scheduledFor };
+            const row = { id: out.id, title: m.hook, thumb, category: doc.category, status: doc.status, scheduledFor: doc.scheduledFor };
             const at = socItems.findIndex(s => s.id === out.id);
             if (at === -1) socItems.unshift(row); else socItems[at] = Object.assign(socItems[at], row);
             if ($('studio').dataset.view === 'social') { renderSocFilters(); renderSocLibrary(); renderSocCalendar(); renderSocGrid(); }
@@ -3205,6 +3275,7 @@
                 (f.lines || []).forEach((v, i) => { const t = document.querySelector(`[data-sline="${i}"]`); if (t && v) t.value = v; });
                 (f.images || []).forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t && v) t.value = v; });
                 if (f.caption) $('sCaption').value = f.caption;
+                if (doc.category) socCategoryOptions(doc.category);
                 renderSocial();
             } catch (err) { toast('Couldn’t open that post.'); }
         }
