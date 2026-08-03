@@ -371,27 +371,28 @@
         .mobile-toggle { display: none; }
 
         /* ══════════════════════════════════════════════════════════════════
-           DARK CONSOLE THEME — the Studio is a tool, not a brochure. Deep
-           navy-black chrome so the light site previews read as the "real"
-           thing beside it. Brand gold stays the accent. (Wilson, 2026-08-03)
+           LIGHT CONSOLE THEME — white and cool-grey, not beige. The Studio
+           reads as an instrument: crisp hairlines, flat surfaces, brand gold
+           only where it means something. (Wilson, 2026-08-03)
            ══════════════════════════════════════════════════════════════════ */
         :root {
-            --st-bg: #0b111c;
-            --st-panel: #121b2b;
-            --st-card: #16202f;
-            --st-field: #0e1622;
-            --st-line: rgba(199, 174, 138, 0.16);
-            --st-line-2: rgba(199, 174, 138, 0.34);
-            --st-text: #e9eef6;
-            --st-dim: rgba(233, 238, 246, 0.55);
-            --st-dim-2: rgba(233, 238, 246, 0.38);
-            --st-gold: #cbb08a;
-            --st-glow: rgba(203, 176, 138, 0.25);
+            --st-bg: #f2f5f8;
+            --st-panel: #ffffff;
+            --st-card: #ffffff;
+            --st-field: #ffffff;
+            --st-line: rgba(30, 53, 82, 0.12);
+            --st-line-2: rgba(30, 53, 82, 0.24);
+            --st-text: #14263e;
+            --st-dim: rgba(20, 38, 62, 0.62);
+            --st-dim-2: rgba(20, 38, 62, 0.42);
+            --st-gold: #9c7c42;
+            --st-glow: rgba(156, 124, 66, 0.16);
+            --st-shadow: 0 1px 2px rgba(20, 38, 62, 0.05), 0 12px 28px -20px rgba(20, 38, 62, 0.35);
         }
         body.studio-page {
             background:
-                radial-gradient(1100px 620px at 82% -10%, rgba(203,176,138,0.10), transparent 60%),
-                radial-gradient(900px 520px at 8% 108%, rgba(70,120,180,0.10), transparent 62%),
+                radial-gradient(1200px 640px at 88% -12%, rgba(156,124,66,0.07), transparent 62%),
+                radial-gradient(900px 520px at 4% 106%, rgba(60,110,175,0.07), transparent 62%),
                 var(--st-bg);
             background-attachment: fixed;
             color: var(--st-text);
@@ -400,14 +401,12 @@
         .gate-title, .gate-kicker { color: var(--st-text); }
         .gate-kicker { color: var(--st-gold); }
         .gate-title em { color: var(--st-gold); }
-        .gate input {
-            background: var(--st-field); border-color: var(--st-line-2); color: var(--st-text);
-        }
+        .gate input { background: #fff; border-color: var(--st-line-2); color: var(--st-text); }
         .gate input:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
 
         /* Chrome */
         .studio-top {
-            background: rgba(11, 17, 28, 0.86);
+            background: rgba(255, 255, 255, 0.88);
             border-bottom: 1px solid var(--st-line);
             backdrop-filter: blur(14px);
             position: sticky; top: 0; z-index: 40;
@@ -417,15 +416,15 @@
         .studio-status { color: var(--st-dim); }
 
         /* Controls */
-        .btn { background: var(--st-gold); color: #0b111c; border-color: var(--st-gold); }
-        .btn:hover { background: transparent; color: var(--st-gold); }
-        .btn.btn-ghost { background: transparent; color: var(--st-text); border-color: var(--st-line-2); }
-        .btn.btn-ghost:hover { border-color: var(--st-gold); color: var(--st-gold); background: transparent; }
-        .btn.danger, .btn.btn-ghost.danger { color: #e2757a; border-color: rgba(226,117,122,0.4); }
-        .btn.btn-ghost.danger:hover { border-color: #e2757a; color: #e2757a; }
+        .btn { background: var(--st-text); color: #fff; border-color: var(--st-text); }
+        .btn:hover { background: transparent; color: var(--st-text); }
+        .btn.btn-ghost { background: #fff; color: var(--st-text); border-color: var(--st-line-2); }
+        .btn.btn-ghost:hover { border-color: var(--st-gold); color: var(--st-gold); background: #fff; }
+        .btn.danger, .btn.btn-ghost.danger { color: #b3453f; border-color: rgba(179,69,63,0.35); }
+        .btn.btn-ghost.danger:hover { border-color: #b3453f; color: #b3453f; }
         label.f-label { color: var(--st-dim); }
         .f-input, .f-area, select.f-input {
-            background: var(--st-field); border-color: var(--st-line); color: var(--st-text);
+            background: #fff; border-color: var(--st-line-2); color: var(--st-text);
         }
         .f-input::placeholder, .f-area::placeholder { color: var(--st-dim-2); }
         .f-input:focus, .f-area:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
@@ -436,73 +435,72 @@
 
         /* Panels */
         .studio-form, .blog-form { background: var(--st-panel); border-right-color: var(--st-line); }
-        .studio-preview { background: #060a11; }
-        .studio-preview-tag { background: rgba(203,176,138,0.92); color: #0b111c; font-weight: 600; }
+        .studio-preview { background: #e7ebf0; }
+        .studio-preview-tag { background: var(--st-text); color: #fff; }
         .sec-rule { border-top-color: var(--st-line); }
-        .modal { background: var(--st-panel); border: 1px solid var(--st-line); box-shadow: 0 30px 90px rgba(0,0,0,0.6); }
-        .modal-wrap { background: rgba(4, 8, 14, 0.72); backdrop-filter: blur(3px); }
-        .slide-strip { background: var(--st-field); border-color: var(--st-line); }
+        .modal { background: var(--st-panel); border: 1px solid var(--st-line); box-shadow: 0 30px 80px -30px rgba(20,38,62,0.4); }
+        .modal-wrap { background: rgba(20, 38, 62, 0.34); backdrop-filter: blur(3px); }
+        .slide-strip { background: var(--st-bg); border-color: var(--st-line); }
 
         /* Dashboard cards */
         .dash-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0));
-            background-color: var(--st-card);
+            background: var(--st-card);
             border: 1px solid var(--st-line);
             border-radius: 2px;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.9);
+            box-shadow: var(--st-shadow);
         }
         .dash-card-head h2 { color: var(--st-text); }
         .dash-card-head { border-bottom: 1px solid var(--st-line); padding-bottom: 12px; }
         .dash-row { border-top-color: var(--st-line); }
-        .dash-row:hover { background: rgba(203,176,138,0.06); }
+        .dash-row:hover { background: rgba(156,124,66,0.06); }
         .dash-row-title { color: var(--st-text); }
         .dash-row:hover .dash-row-title { color: var(--st-gold); }
         .dash-row-sub { color: var(--st-dim-2); }
-        .list-rows-wrap { background: var(--st-card); border-color: var(--st-line); }
+        .list-rows-wrap { background: var(--st-card); border-color: var(--st-line); box-shadow: var(--st-shadow); }
 
-        /* Status chips — luminous on dark */
+        /* Status chips */
         .chip { border-radius: 2px; }
-        .chip-viewed { color: #6ee7a8; border-color: rgba(110,231,168,0.35); background: rgba(110,231,168,0.08); }
-        .chip-ready { color: #f0c674; border-color: rgba(240,198,116,0.38); background: rgba(240,198,116,0.09); }
-        .chip-review { color: #8fc6ff; border-color: rgba(143,198,255,0.35); background: rgba(143,198,255,0.08); }
+        .chip-viewed { color: #1f7a4d; border-color: rgba(31,122,77,0.35); background: rgba(31,122,77,0.07); }
+        .chip-ready { color: #96650a; border-color: rgba(150,101,10,0.35); background: rgba(150,101,10,0.07); }
+        .chip-review { color: #2a63a8; border-color: rgba(42,99,168,0.32); background: rgba(42,99,168,0.06); }
         .chip-published { color: var(--st-dim); border-color: var(--st-line-2); background: transparent; }
         .chip-draft { color: var(--st-dim); border-color: var(--st-line-2); background: transparent; }
-        .chip-idea { color: rgba(233,238,246,0.5); border-color: var(--st-line); background: rgba(255,255,255,0.03); }
+        .chip-idea { color: var(--st-dim-2); border-color: var(--st-line); background: rgba(20,38,62,0.03); }
 
         /* Filters */
-        .filter-tabs button { background: var(--st-card); border-color: var(--st-line); color: var(--st-dim); }
+        .filter-tabs button { background: #fff; border-color: var(--st-line-2); color: var(--st-dim); }
         .filter-tabs button:hover { border-color: var(--st-gold); color: var(--st-gold); }
-        .filter-tabs button.is-on { background: var(--st-gold); color: #0b111c; border-color: var(--st-gold); }
+        .filter-tabs button.is-on { background: var(--st-text); color: #fff; border-color: var(--st-text); }
 
-        /* Forms inside the proposal editor */
-        .hotel-card { background: var(--st-card); border-color: var(--st-line); }
+        /* Proposal editor */
+        .hotel-card { background: #fbfcfd; border-color: var(--st-line-2); }
         .hotel-card-name { color: var(--st-text); }
         .hotel-card-loc, .hotel-card summary, .claude-row { color: var(--st-dim); }
         .hotel-card summary:hover { color: var(--st-gold); }
-        .icon-btn { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        .icon-btn { background: #fff; border-color: var(--st-line-2); color: var(--st-text); }
         .icon-btn:hover { border-color: var(--st-gold); color: var(--st-gold); }
-        .perks-box .f-area { background: var(--st-field); border-color: var(--st-line-2); box-shadow: none; }
-        .quote-steps { background: rgba(203,176,138,0.06); border-color: var(--st-line-2); }
+        .perks-box .f-area { background: #fbfcfd; border-color: var(--st-line-2); box-shadow: none; }
+        .quote-steps { background: rgba(156,124,66,0.06); border-color: rgba(156,124,66,0.3); }
         .quote-steps-head { color: var(--st-gold); }
         .manual-fields > summary { color: var(--st-dim); }
         .manual-fields[open] > summary { color: var(--st-text); }
         .check-row { color: var(--st-text); }
-        .pub-bar { background: rgba(110,231,168,0.08); border-color: rgba(110,231,168,0.3); color: var(--st-text); }
+        .pub-bar { background: rgba(31,122,77,0.07); border-color: rgba(31,122,77,0.3); color: var(--st-text); }
         .pub-bar a { color: var(--st-gold); }
-        .lib-card { background: var(--st-card); border-color: var(--st-line); color: var(--st-text); }
+        .lib-card { background: #fff; border-color: var(--st-line); color: var(--st-text); }
         .lib-card:hover { border-color: var(--st-gold); }
-        .toast { background: var(--st-gold); color: #0b111c; font-weight: 500; }
+        .toast { background: var(--st-text); color: #fff; font-weight: 500; }
 
-        /* Blog editor */
-        .blog-toolbar button { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        /* Blog + hotel editors */
+        .blog-toolbar button { background: #fff; border-color: var(--st-line-2); color: var(--st-text); }
         .blog-toolbar button:hover { border-color: var(--st-gold); color: var(--st-gold); }
-        .blog-body-edit { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        .blog-body-edit { background: #fff; border-color: var(--st-line-2); color: var(--st-text); }
         .blog-body-edit:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
-        .hd-notes { background: var(--st-field); border-color: var(--st-line); color: var(--st-dim); }
-        .social-qa { background: rgba(110,231,168,0.08); border-color: rgba(110,231,168,0.3); color: #6ee7a8; }
-        .social-qa.has-issues { background: rgba(240,198,116,0.09); border-color: rgba(240,198,116,0.38); color: #f0c674; }
+        .hd-notes { background: #fbfcfd; border-color: var(--st-line); color: var(--st-dim); }
+        .social-qa { background: rgba(31,122,77,0.07); border-color: rgba(31,122,77,0.3); color: #1f7a4d; }
+        .social-qa.has-issues { background: rgba(150,101,10,0.07); border-color: rgba(150,101,10,0.35); color: #96650a; }
 
-        /* Scrollbars — quiet, dark */
+        /* Scrollbars */
         .studio-form, .blog-form, .social-fields, .slide-strip, .lib-grid, .plist { scrollbar-width: thin; scrollbar-color: var(--st-line-2) transparent; }
         .studio-form::-webkit-scrollbar, .blog-form::-webkit-scrollbar, .social-fields::-webkit-scrollbar { width: 9px; }
         .studio-form::-webkit-scrollbar-thumb, .blog-form::-webkit-scrollbar-thumb, .social-fields::-webkit-scrollbar-thumb { background: var(--st-line-2); }
@@ -2122,6 +2120,42 @@
             return { P, hotels };
         }
 
+        /* ── Slide photos ─────────────────────────────────────────────────
+           Every slide needs an image. Three sources, in order:
+           1. whatever the deck already carries (proposal hero / article photo),
+           2. our own website library — if the slide names a hotel we have a
+              page for, its approved photos are already rules-compliant,
+           3. a pasted URL from the hotel's official site (same rule as hotel
+              pages and proposals). Proxied through /api/img so canvas can
+              export it. */
+        const libKeyOf = (name) => {
+            const n = plain(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            if (!n) return null;
+            if (lib[n]) return n;
+            const keys = Object.keys(lib);
+            let hit = keys.find(k => k === n) || keys.find(k => k.startsWith(n) || n.startsWith(k));
+            if (hit) return hit;
+            // fall back to matching the library entry's display name
+            hit = keys.find(k => plain(lib[k].name).toLowerCase() === plain(name).toLowerCase());
+            return hit || null;
+        };
+        function libraryPhotoFor(name) {
+            const k = libKeyOf(name);
+            if (!k) return null;
+            const e = lib[k];
+            return { slug: k, name: e.name, image: e.heroImage || (e.gallery || [])[0] || '' };
+        }
+        function slidePhotoField(i, h) {
+            const match = h.heroImage ? null : libraryPhotoFor(h.name);
+            const hint = match
+                ? `<span style="color:var(--st-gold)">✓ Using our ${esc(plain(match.name))} page photo</span>`
+                : (h.heroImage ? 'Photo set.' : 'No photo yet — paste a direct image URL from the hotel’s own website (right-click an image → Copy image address).');
+            return `<div style="margin-top:6px">
+                <input class="f-input" data-simg="${i}" value="${esc(h.heroImage || (match ? match.image : ''))}" placeholder="https://…/photo.jpg">
+                <p class="f-hint">${hint}</p>
+            </div>`;
+        }
+
         // Punchy trim for social: keep whole clauses, never cut mid-thought.
         function socialTrim(s) {
             let t = firstSentence(s, 320);
@@ -2162,6 +2196,7 @@
                 <div class="f-row">
                     <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
                     <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
+                    ${slidePhotoField(i, h)}
                 </div>`).join('');
             $('sCaption').value = buildCaption();
         }
@@ -2178,6 +2213,7 @@
                 <div class="f-row">
                     <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
                     <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
+                    ${slidePhotoField(i, h)}
                 </div>`).join('');
             $('sCaption').value = socialDeck.caption || buildCaption();
         }
@@ -2283,6 +2319,14 @@
         function collectSocial() {
             const { P, hotels } = socialModel();
             const lines = Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value.trim());
+            const imgs = Array.from(document.querySelectorAll('[data-simg]')).map(t => t.value.trim());
+            hotels.forEach((h, i) => {
+                if (imgs[i]) h.heroImage = imgs[i];
+                else if (!h.heroImage) {
+                    const m = libraryPhotoFor(h.name);
+                    if (m && m.image) h.heroImage = m.image;
+                }
+            });
             return {
                 coverImage: (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
                 hook: $('sHook').value.trim(),
@@ -2356,14 +2400,21 @@
             '  "briefIntro": "slide 2 opening line — one sentence that sets up the list.",',
             '  "brief": ["3-4 short supporting points, one per line, max ~90 characters each"],',
             '  "slides": [',
-            '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "ONE scroll-stopping line, max ~120 characters: what makes it special and the can\\u2019t-miss detail. Factual only.", "imageUrl": "direct https URL of a photo from the hotel\\u2019s or destination\\u2019s OFFICIAL site if you can browse and are confident; otherwise empty string" }',
+            '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "ONE scroll-stopping line, max ~120 characters: what makes it special and the can\\u2019t-miss detail. Factual only.", "imageUrl": "REQUIRED — see PHOTOS below" }',
             '  ],',
             '  "ctaTitle": "closing slide headline, e.g. Which one would you pick?",',
             '  "ctaSub": "closing line — invite them to reach out. Use curation language (we curate / tailored to you), never \\u201cwe design the shortlist\\u201d.",',
             '  "caption": "the Instagram caption: hook, then the list, then the amenities line, then a question, then 5-7 hashtags on the last line."',
             '}',
             '',
-            'Aim for 3-6 entries in "slides". Photo rules if you supply imageUrl: daylight or golden hour only, no plated-food shots, no night shots, no posed models, no bathroom-only room shots.'
+            'Aim for 3-6 entries in "slides".',
+            '',
+            'PHOTOS — do this work, do not skip it. A carousel without photos is unusable.',
+            'For EVERY slide, browse to the hotel\'s (or destination\'s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. On most hotel sites you can find these in the gallery or press/media page; many run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image before returning it.',
+            'Source order: 1) the hotel\'s own website or official media library — always preferred; 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination (not a hotel) slide. NEVER use Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio — we only publish photography the property itself distributes.',
+            'Choose the shot the way we choose photos for our hotel pages: the property\'s signature postcard view, a sense-of-place scene, or the actual room being described. Daylight or golden hour ONLY.',
+            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · posed models as the subject · dark or flat interiors · renders when real photos exist · near-duplicates of the same angle.',
+            'If — after genuinely looking — you cannot find a compliant official photo for a slide, return "" for that imageUrl and add a line AFTER the JSON naming which slides need a photo and where to look. Never invent or guess a URL.'
         ].join('\n');
 
         function openSocialPicker() {
@@ -2424,11 +2475,17 @@
                 let f;
                 try { f = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
                 if (!f || !Array.isArray(f.slides) || !f.slides.length) { toast('That JSON has no "slides" — check the reply.'); return; }
-                const slides = f.slides.map(s => ({
-                    name: titleWords(s.name || ''), location: s.location || '',
-                    heroImage: (s.imageUrl || '').trim(), desc: s.line || '',
-                    socialHook: s.line || '', room: '', rate: ''
-                }));
+                const slides = f.slides.map(s => {
+                    const name = titleWords(s.name || '');
+                    const url = (s.imageUrl || '').trim();
+                    // Anything already on our site brings its approved photo.
+                    const m = url ? null : libraryPhotoFor(name);
+                    return {
+                        name, location: s.location || '',
+                        heroImage: url || (m ? m.image : ''), desc: s.line || '',
+                        socialHook: s.line || '', room: '', rate: ''
+                    };
+                });
                 socialDeck = {
                     kind: 'custom', title: f.hook || '', lede: f.briefIntro || '',
                     coverImage: slides[0] ? slides[0].heroImage : '',
@@ -2447,8 +2504,8 @@
             $('socialModal').classList.add('is-open');
             prefillSocial();
             renderSocial();
-            const missing = (socialDeck.slides || []).filter(s => !s.heroImage).length;
-            if (missing) toast(`${missing} slide${missing > 1 ? 's have' : ' has'} no photo — paste image URLs or swap them before posting.`);
+            const missing = (socialDeck.slides || []).filter(s => !s.heroImage);
+            if (missing.length) toast(`${missing.length} slide${missing.length > 1 ? 's need' : ' needs'} a photo — paste a URL from the hotel’s own site under each line.`);
         }
 
         document.addEventListener('click', async (e) => {
