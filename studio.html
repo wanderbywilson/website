@@ -2016,13 +2016,22 @@
             g.addColorStop(1, 'rgba(30,53,82,0.82)');
             ctx.fillStyle = g; ctx.fillRect(0, 0, SL_W, SL_H);
             wordmark(ctx, SL_W / 2, 96, CREAM, 'center');
-            kicker(ctx, 'A client story', SL_W / 2, 1010, GOLD, 26, 'center');
-            ctx.font = '400 82px Fraunces';
+            kicker(ctx, m.coverKicker || 'A client story', SL_W / 2, 1010, GOLD, 26, 'center');
+            // Shrink the hook until it fits the space above the swipe line —
+            // long blog headlines otherwise run off the bottom of the slide.
+            let fs = 82, lh = 92, lines;
+            do {
+                ctx.font = `400 ${fs}px Fraunces`;
+                lines = wrapLines(ctx, m.hook, 900);
+                if (lines.length * lh <= 170) break;
+                fs -= 6; lh -= 7;
+            } while (fs > 44);
             ctx.fillStyle = CREAM;
-            const endY = drawWrapped(ctx, m.hook, SL_W / 2, 1105, 900, 92, 'center');
-            ctx.fillStyle = GOLD; ctx.fillRect(SL_W / 2 - 40, endY - 62 + 40, 80, 3);
+            const startY = 1105 - Math.max(0, (lines.length - 2)) * lh * 0.5;
+            const endY = drawWrapped(ctx, m.hook, SL_W / 2, startY, 900, lh, 'center');
+            ctx.fillStyle = GOLD; ctx.fillRect(SL_W / 2 - 40, endY - lh + 40, 80, 3);
             ctx.font = '300 30px Inter'; ctx.fillStyle = CREAM;
-            ctx.fillText('Swipe for the shortlist', SL_W / 2, endY + 32);
+            ctx.fillText(m.swipeLine || 'Swipe for the shortlist', SL_W / 2, Math.min(endY + 32, SL_H - 60));
             return c;
         }
 
@@ -2052,7 +2061,7 @@
             // suffixes) and never let it run off the slide.
             let loc = plain(h.location).split('·')[0].trim();
             if (loc.length > 36) loc = loc.slice(0, 36).replace(/[,\s]+\S*$/, '') + '…';
-            kicker(ctx, 'No. 0' + (i + 1) + '   ·   ' + loc, 110, 880, GOLD, 25);
+            kicker(ctx, ['No. 0' + (i + 1), loc].filter(Boolean).join('   ·   '), 110, 880, GOLD, 25);
             ctx.font = '400 64px Fraunces'; ctx.fillStyle = INK;
             let y = drawWrapped(ctx, plain(h.name), 110, 962, 860, 72, 'left', 2);
             y += 14;
@@ -2190,7 +2199,9 @@
                     if (nodes[j].tagName === 'P' && nodes[j].textContent.trim()) { body = nodes[j].textContent.trim(); break; }
                 }
                 slides.push({
-                    name: n.textContent.trim(), location: '',
+                    // Article headings often carry list numbering ("1. Two-
+                    // Destination…") — the slide already shows "No. 01".
+                    name: n.textContent.trim().replace(/^\s*\d+[.)]\s*/, ''), location: '',
                     heroImage: imgs[ix++] || post.heroImage || '',
                     desc: body, socialHook: '', room: '', rate: ''
                 });
@@ -2204,7 +2215,9 @@
                 kind: 'blog', sourceSlug: slug,
                 title: plain(post.title), lede: plain(post.dek || ''),
                 coverImage: post.heroImage || '',
-                hook: plain(post.title),
+                // SEO headlines carry a ": subtitle" tail that reads as clutter
+                // on a cover slide — lead with the punchy half.
+                hook: plain(post.title).split(/:\s+/)[0],
                 briefIntro: plain(post.dek || ''),
                 brief: [],
                 slides,
@@ -2276,6 +2289,8 @@
                 briefIntro: $('sBriefIntro').value.trim(),
                 brief: $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean),
                 briefKicker: socialDeck ? (socialDeck.kind === 'blog' ? 'The short version' : 'In brief') : 'The brief',
+                coverKicker: socialDeck ? (socialDeck.kind === 'blog' ? 'From the journal' : 'Wander by Wilson') : 'A client story',
+                swipeLine: socialDeck ? 'Swipe through' : 'Swipe for the shortlist',
                 deckKind: socialDeck ? socialDeck.kind : 'proposal',
                 showRates: $('sShowRates').checked,
                 ctaTitle: $('sCtaTitle').value.trim(),
