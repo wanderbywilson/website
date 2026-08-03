@@ -222,6 +222,7 @@
         .view { display: none; }
         .studio[data-view="home"] #viewHome,
         .studio[data-view="hotels"] #viewHotels,
+        .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
         .studio[data-view="editor"] #viewEditor { display: block; }
         .studio[data-view="editor"] #viewEditor { display: grid; }
@@ -249,6 +250,18 @@
         .chip-ready { color: #8a6110; border-color: rgba(176,124,16,0.4); background: #fdf6ec; }
         .chip-review { color: #1e3552; border-color: var(--studio-line); background: var(--paper-cream); }
         .chip-draft { color: #6b7a90; border-color: rgba(107,122,144,0.35); }
+        .chip-idea { color: #8a8375; border-color: rgba(138,131,117,0.3); background: var(--paper-cream); }
+        .list-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+        .filter-tabs button {
+            font-family: var(--font-sans); font-size: 11.5px; letter-spacing: 0.04em;
+            padding: 6px 12px; background: #fff; border: 1px solid var(--studio-line-soft);
+            cursor: pointer; color: rgba(30,53,82,0.7);
+        }
+        .filter-tabs button:hover { border-color: var(--gold); }
+        .filter-tabs button.is-on { background: var(--ink); color: var(--paper-cream); border-color: var(--ink); }
+        .list-search { max-width: 240px; }
+        .list-rows-wrap { background: #fff; border: 1px solid var(--studio-line-soft); padding: 4px 20px 12px; }
         .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
         .ig-cell { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 0; padding: 0; cursor: pointer; background: var(--paper-cream); }
         .ig-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
@@ -486,6 +499,22 @@
             </div>
         </div>
 
+        <!-- ── Blog list ─────────────────────────────────────────────── -->
+        <div class="view" id="viewBlogList">
+            <div class="dash">
+                <div class="dash-head">
+                    <h1 class="dash-title">Blog <em>posts.</em></h1>
+                    <p class="dash-sub">The whole content pipeline — ideas through published. Click any row to write, preview and publish it.</p>
+                </div>
+                <div class="list-controls">
+                    <div class="filter-tabs" id="blogFilters"></div>
+                    <input class="f-input list-search" id="blogSearch" placeholder="Search titles…">
+                    <button class="btn btn-small" id="blogListNew" type="button">New post</button>
+                </div>
+                <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
+            </div>
+        </div>
+
         <!-- ── Blog ──────────────────────────────────────────────────── -->
         <div class="view" id="viewBlog">
             <div class="blog-split">
@@ -525,8 +554,18 @@
                         </div>
                         <div class="blog-body-edit" id="bBody" contenteditable="true"></div>
                     </div>
+                    <div class="f-row">
+                        <label class="f-label" for="bStatus">Status</label>
+                        <select class="f-input" id="bStatus">
+                            <option value="idea">Idea — nothing written yet</option>
+                            <option value="draft">Draft — being written</option>
+                            <option value="in-review">Needs review</option>
+                            <option value="ready">Ready to publish</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
                     <div class="blog-actions">
-                        <button class="btn" id="bSave" type="button">Save draft</button>
+                        <button class="btn" id="bSave" type="button">Save</button>
                         <button class="btn btn-ghost" id="bReady" type="button">Mark ready to publish</button>
                         <button class="btn btn-ghost" id="bBack" type="button">All posts</button>
                         <button class="btn btn-ghost danger" id="bDelete" type="button">Delete</button>
@@ -781,11 +820,21 @@
         }
         const fmtWhen = (iso) => iso ? new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
         const STATUS_CHIP = {
+            'idea': '<span class="chip chip-idea">Idea</span>',
             'draft': '<span class="chip chip-draft">Draft</span>',
             'in-review': '<span class="chip chip-review">Needs review</span>',
             'ready': '<span class="chip chip-ready">Ready to publish</span>',
             'published': '<span class="chip chip-published">Published</span>'
         };
+        const BLOG_FILTERS = [
+            { key: 'all', label: 'All' },
+            { key: 'in-review', label: 'Needs review' },
+            { key: 'ready', label: 'Ready' },
+            { key: 'draft', label: 'Drafts' },
+            { key: 'idea', label: 'Ideas' },
+            { key: 'published', label: 'Published' }
+        ];
+        let blogItems = [], blogFilter = 'all';
 
         async function loadDashboard() {
             // Proposals
@@ -821,17 +870,31 @@
                     </button>`).join('')
                     : '<p class="dash-empty">Nothing waiting. When a quoted hotel isn’t on the site, Claude drafts its page and it lands here for your review.</p>';
             }).catch(() => { $('dashHotels').innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; });
-            // Blog
+            // Blog — surface what needs a human first, plus pipeline counts
             contentApi({ action: 'list', kind: 'blog' }).then(({ items }) => {
-                $('dashBlog').innerHTML = items.length ? items.slice(0, 8).map(b => `
+                blogItems = items;
+                if (!items.length) {
+                    $('dashBlog').innerHTML = '<p class="dash-empty">No posts yet — draft one here and see it exactly as it’ll look live.</p>';
+                    return;
+                }
+                const by = (s) => items.filter(i => (i.status || 'draft') === s);
+                const attention = by('ready').concat(by('in-review')).slice(0, 5);
+                const counts = BLOG_FILTERS.slice(1)
+                    .map(f => ({ f, n: by(f.key).length }))
+                    .filter(c => c.n)
+                    .map(c => `<button class="chip chip-${c.f.key === 'in-review' ? 'review' : c.f.key}" data-blogfilter="${c.f.key}" type="button" style="cursor:pointer">${c.n} ${esc(c.f.label.toLowerCase())}</button>`)
+                    .join(' ');
+                $('dashBlog').innerHTML =
+                    (attention.length ? attention.map(b => `
                     <button class="dash-row" data-openblog="${esc(b.id)}" type="button">
                         <div class="dash-row-main">
                             <div class="dash-row-title">${esc(b.title || b.id)}</div>
                             <div class="dash-row-sub">${esc(b.author || '')} · updated ${fmtWhen(b.updatedAt)}</div>
                         </div>
                         ${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
-                    </button>`).join('')
-                    : '<p class="dash-empty">No posts yet — draft one here and see it exactly as it’ll look live.</p>';
+                    </button>`).join('') : '<p class="dash-empty">Nothing waiting on review.</p>')
+                    + `<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:14px; align-items:center">${counts}
+                        <button class="btn btn-ghost btn-small" data-blogfilter="all" type="button" style="margin-left:auto">View all ${items.length}</button></div>`;
             }).catch(() => { $('dashBlog').innerHTML = '<p class="dash-empty">Couldn’t load blog posts.</p>'; });
         }
 
@@ -855,7 +918,39 @@
             if (hd) { openHotelDraft(hd.dataset.openhoteldraft); return; }
             const bl = e.target.closest('[data-openblog]');
             if (bl) { openBlogEditor(bl.dataset.openblog); return; }
+            const bf = e.target.closest('[data-blogfilter]');
+            if (bf) { blogFilter = bf.dataset.blogfilter; showBlogList(); return; }
         });
+
+        /* ── Blog list ────────────────────────────────────────────────── */
+        function renderBlogRows() {
+            const q = $('blogSearch').value.trim().toLowerCase();
+            const rows = blogItems
+                .filter(b => blogFilter === 'all' || (b.status || 'draft') === blogFilter)
+                .filter(b => !q || (b.title || '').toLowerCase().includes(q));
+            $('blogListRows').innerHTML = rows.length ? '<div class="list-rows-wrap">' + rows.map(b => `
+                <button class="dash-row" data-openblog="${esc(b.id)}" type="button">
+                    <div class="dash-row-main">
+                        <div class="dash-row-title">${esc(b.title || b.id)}</div>
+                        <div class="dash-row-sub">${esc([b.category, b.author].filter(Boolean).join(' · '))}${b.updatedAt ? ' · updated ' + fmtWhen(b.updatedAt) : ''}</div>
+                    </div>
+                    ${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
+                </button>`).join('') + '</div>'
+                : '<p class="dash-empty">Nothing here yet.</p>';
+        }
+        async function showBlogList() {
+            showView('bloglist');
+            $('blogFilters').innerHTML = BLOG_FILTERS.map(f =>
+                `<button data-blogfilter="${f.key}" class="${blogFilter === f.key ? 'is-on' : ''}" type="button">${esc(f.label)}</button>`).join('');
+            $('blogListRows').innerHTML = '<p class="dash-empty">Loading…</p>';
+            try {
+                const { items } = await contentApi({ action: 'list', kind: 'blog' });
+                blogItems = items;
+                renderBlogRows();
+            } catch (err) { $('blogListRows').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; }
+        }
+        $('blogSearch').addEventListener('input', renderBlogRows);
+        $('blogListNew').addEventListener('click', () => openBlogEditor(null));
 
         /* ── Hotel-page drafts — edit the fields, see the real page ───── */
         let hotelDraftId = null, hotelDraftDoc = null, hdT = null;
@@ -977,18 +1072,18 @@
         window.addEventListener('message', (e) => {
             if (e.data && e.data.type === 'wndr-blog-ready') { blogReady = true; pushBlogPreview(); }
         });
+        let blogDocExtra = {};
         function blogDocFromForm() {
             const words = ($('bBody').textContent || '').trim().split(/\s+/).filter(Boolean).length;
-            return {
+            return Object.assign({}, blogDocExtra, {
                 title: $('bTitle').value.trim(),
                 dek: $('bDek').value.trim(),
                 heroImage: $('bHero').value.trim(),
                 tags: $('bTags').value.split(',').map(s => s.trim()).filter(Boolean),
                 bodyHtml: $('bBody').innerHTML,
                 readTime: Math.max(1, Math.round(words / 200)) + ' min read',
-                author: 'Studio',
-                status: blogStatus
-            };
+                status: $('bStatus').value
+            });
         }
         let blogT = null;
         function pushBlogPreview() {
@@ -1008,6 +1103,7 @@
             showView('blog');
             blogId = id;
             blogStatus = 'draft';
+            blogDocExtra = {};
             if (id) {
                 try {
                     const { doc } = await contentApi({ action: 'load', kind: 'blog', id });
@@ -1017,29 +1113,37 @@
                     $('bTags').value = (doc.tags || []).join(', ');
                     $('bBody').innerHTML = doc.bodyHtml || '';
                     blogStatus = doc.status || 'draft';
+                    // Carry migration provenance & notes through saves untouched
+                    ['author', 'category', 'sourceDoc', 'notionId', 'liveUrl', 'migrationNotes', 'heroImageHint', 'hotelsMentioned'].forEach(k => {
+                        if (doc[k] !== undefined) blogDocExtra[k] = doc[k];
+                    });
                 } catch (err) { toast('Couldn’t load that post.'); }
             } else {
                 $('bTitle').value = ''; $('bDek').value = ''; $('bHero').value = ''; $('bTags').value = ''; $('bBody').innerHTML = '';
+                blogDocExtra = { author: 'Studio' };
             }
-            $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '');
+            $('bStatus').value = blogStatus;
+            const notes = blogDocExtra.migrationNotes ? ' · <span style="color:#8a6110">' + esc(blogDocExtra.migrationNotes) + '</span>' : '';
+            $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '') + notes;
             pushBlogPreview();
         }
         async function saveBlog(status) {
             const doc = blogDocFromForm();
             if (!doc.title) { toast('Give the post a headline first.'); return; }
-            doc.status = status || blogStatus;
+            if (status) doc.status = status;
             try {
                 const out = await contentApi({ action: 'save', kind: 'blog', id: blogId, doc,
-                    meta: { title: doc.title, author: doc.author, status: doc.status } });
+                    meta: { title: doc.title, author: doc.author || '', category: doc.category || '', status: doc.status } });
                 blogId = out.id;
                 blogStatus = doc.status;
+                $('bStatus').value = blogStatus;
                 $('blogStatusLine').innerHTML = 'Saved — ' + (STATUS_CHIP[blogStatus] || '');
-                toast(status === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Draft saved.');
+                toast(doc.status === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Saved.');
             } catch (err) { toast('Couldn’t save: ' + err.message); }
         }
         $('bSave').addEventListener('click', () => saveBlog());
         $('bReady').addEventListener('click', () => saveBlog('ready'));
-        $('bBack').addEventListener('click', () => showView('home'));
+        $('bBack').addEventListener('click', () => showBlogList());
         $('bDelete').addEventListener('click', async () => {
             if (!blogId) { showView('home'); return; }
             if (!confirm('Delete this blog post draft?')) return;

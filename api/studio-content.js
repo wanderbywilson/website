@@ -16,13 +16,14 @@
 //     delete  {id}
 //
 // Docs live at content/{kind}/{id}.json, index at content/{kind}/_index.json.
-// Status flow for hoteldraft/blog: draft|in-review → ready → published
+// Status flow for hoteldraft/blog: idea → draft|in-review → ready → published
 // (the daily publish pipeline picks up "ready" and flips to "published").
+// "idea" is the blog pipeline's backlog — a title with no copy written yet.
 
 const { blobPutJSON, blobGetJSON, blobDelete } = require('./_blob');
 
 const KINDS = ['social', 'hoteldraft', 'blog'];
-const STATUSES = ['draft', 'in-review', 'ready', 'published'];
+const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
 
 function cleanId(id) {
     return typeof id === 'string' && /^[a-z0-9-]{1,80}$/.test(id) ? id : null;
