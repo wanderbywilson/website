@@ -746,7 +746,7 @@
                             <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
                             <div class="dash-row-sub">${esc(p.title || '')}${p.viewed && p.lastViewedAt ? ' · last viewed ' + fmtWhen(p.lastViewedAt) : ''}</div>
                         </div>
-                        ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Sent — not viewed</span>'}
+                        ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Not viewed yet</span>'}
                     </button>`).join('')
                     : '<p class="dash-empty">No proposals yet — start one and it appears here.</p>';
             }).catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
