@@ -20,7 +20,7 @@
 // (the daily publish pipeline picks up "ready" and flips to "published").
 // "idea" is the blog pipeline's backlog — a title with no copy written yet.
 
-const { blobPutJSON, blobGetJSON, blobDelete } = require('./_blob');
+const { blobPutJSON, blobGetJSON, blobDelete, blobList } = require('./_blob');
 
 const KINDS = ['social', 'hoteldraft', 'blog'];
 const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
@@ -116,6 +116,62 @@ module.exports = async (req, res) => {
             const index = (await blobGetJSON(INDEX)) || {};
             if (index[id]) { index[id].status = status; index[id].updatedAt = doc.updatedAt; await blobPutJSON(INDEX, index); }
             return res.status(200).json({ ok: true, id, status });
+        }
+
+        // Bulk import. One index write at the end — writing the index per item
+        // races itself, because Blob reads lag writes by up to ~60s.
+        if (action === 'saveMany') {
+            const items = Array.isArray(body.items) ? body.items : null;
+            if (!items || !items.length) return res.status(400).json({ error: 'items[] required' });
+            if (items.length > 200) return res.status(400).json({ error: 'Too many items in one call (max 200)' });
+            const now = new Date().toISOString();
+            const saved = [];
+            for (const it of items) {
+                const doc = it.doc;
+                if (!doc || typeof doc !== 'object') continue;
+                let id = cleanId(it.id);
+                if (!id) {
+                    const base = slugify(doc.slug || doc.name || doc.title) || kind;
+                    id = kind === 'hoteldraft' ? base : `${base}-${randomSuffix()}`;
+                }
+                const existing = await blobGetJSON(path(id));
+                doc.createdAt = (existing && existing.createdAt) || now;
+                doc.updatedAt = now;
+                await blobPutJSON(path(id), doc);
+                saved.push({ id, meta: Object.assign({}, it.meta || {}, { updatedAt: now }) });
+            }
+            const index = (await blobGetJSON(INDEX)) || {};
+            saved.forEach(s => { index[s.id] = s.meta; });
+            await blobPutJSON(INDEX, index);
+            return res.status(200).json({ ok: true, saved: saved.length, ids: saved.map(s => s.id) });
+        }
+
+        // Rebuild the index from the documents themselves — the recovery path
+        // when concurrent writes have dropped entries.
+        if (action === 'reindex') {
+            const blobs = await blobList(`content/${kind}/`);
+            const ids = blobs
+                .map(b => (b.pathname.match(new RegExp(`^content/${kind}/(.+)\\.json$`)) || [])[1])
+                .filter(id => id && id !== '_index');
+            const index = {};
+            for (const id of ids) {
+                const doc = await blobGetJSON(path(id));
+                if (!doc) continue;
+                index[id] = {
+                    title: doc.title || doc.name || id,
+                    name: doc.name || '',
+                    location: doc.location || '',
+                    heroImage: doc.heroImage || '',
+                    thumb: doc.thumb || '',
+                    author: doc.author || '',
+                    category: doc.category || '',
+                    proposalId: doc.proposalId || '',
+                    status: doc.status || 'draft',
+                    updatedAt: doc.updatedAt || doc.createdAt || ''
+                };
+            }
+            await blobPutJSON(INDEX, index);
+            return res.status(200).json({ ok: true, indexed: ids.length });
         }
 
         if (action === 'delete') {

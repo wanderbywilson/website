@@ -927,8 +927,18 @@
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=91"></script>
-    <!-- Live blog posts — the source for "social post from a blog post" -->
-    <script src="/blog-data-v17.js"></script>
+    <!-- Live blog posts — the source for "social post from a blog post".
+         The filename carries a cache-bust version that other sessions bump,
+         so probe downwards until one loads instead of hard-coding it. -->
+    <script>
+        (function loadBlogData(v) {
+            if (v < 10) return;
+            const s = document.createElement('script');
+            s.src = '/blog-data-v' + v + '.js';
+            s.onerror = () => loadBlogData(v - 1);
+            document.head.appendChild(s);
+        })(22);
+    </script>
     <script>
     (function () {
         'use strict';
