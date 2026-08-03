@@ -2256,10 +2256,15 @@
             });
 
             const heads = [];
+            let skipping = false;   // inside an FAQ/boilerplate section
             nodes.forEach((n, i) => {
                 if (!/^H[23]$/.test(n.tagName)) return;
                 const name = n.textContent.trim().replace(/^\s*\d+[.)]\s*/, '');
-                if (SKIP_HEADING.test(name)) return;
+                if (n.tagName === 'H2') skipping = SKIP_HEADING.test(name);
+                // An H2 opens a section; its H3s inherit that section's fate.
+                if (skipping || SKIP_HEADING.test(name)) return;
+                // A question is an FAQ answer, not a carousel slide.
+                if (/\?\s*$/.test(name)) return;
                 let body = '';
                 for (let j = i + 1; j < nodes.length; j++) {
                     if (/^H[23]$/.test(nodes[j].tagName)) break;
