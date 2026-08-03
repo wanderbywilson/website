@@ -616,8 +616,9 @@
                         <textarea class="f-area" id="hdPerks" style="min-height:100px"></textarea>
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="hdIdealFor">Ideal for <span style="text-transform:none">(optional — your qualifying read)</span></label>
-                        <textarea class="f-area" id="hdIdealFor"></textarea>
+                        <label class="f-label" for="hdIdealFor">Best for <span style="text-transform:none">(one sentence — who it suits and what they’d trade for it)</span></label>
+                        <textarea class="f-area" id="hdIdealFor" placeholder="Couples and honeymooners who want the Capri-and-South-of-France side of Turks and Caicos rather than a big resort on Grace Bay."></textarea>
+                        <p class="f-hint" id="hdIdealCount"></p>
                     </div>
                     <div class="f-row">
                         <label class="f-label" for="hdAgentTip">Advisor tip <span style="text-transform:none">(optional)</span></label>
@@ -1245,6 +1246,7 @@
                 $('hdHero').value = e0.heroImage || '';
                 $('hdGallery').value = (e0.gallery || []).join('\n');
                 $('hdNotes').textContent = doc.notes || '(no notes)';
+                hdIdealCheck();
                 hdStatusLine();
                 hdReloadPreview();
             } catch (err) { toast('Couldn’t load that draft.'); showHotelDraftList(); }
@@ -1301,6 +1303,22 @@
         });
         ['hdName', 'hdLocation', 'hdRateFrom', 'hdBooking', 'hdDesc', 'hdPerks', 'hdIdealFor', 'hdAgentTip', 'hdHero', 'hdGallery'].forEach(id =>
             $(id).addEventListener('input', () => { clearTimeout(hdT); hdT = setTimeout(hdReloadPreview, 900); }));
+
+        /* "Best for" is a one-line qualifier on the page, not a paragraph —
+           every live entry is a single sentence, 114–279 characters. Show the
+           drift before it reaches the site. */
+        function hdIdealCheck() {
+            const raw = $('hdIdealFor').value.trim();
+            const text = deEnt(stripHtml(raw));
+            const el = $('hdIdealCount');
+            if (!text) { el.textContent = ''; el.style.color = ''; return; }
+            const sentences = (text.match(/[.!?](\s|$)/g) || []).length;
+            const tooLong = text.length > 280, tooMany = sentences > 1;
+            el.textContent = `${text.length} characters${sentences > 1 ? ` · ${sentences} sentences` : ''}` +
+                (tooLong || tooMany ? ' — too long. Keep it to ONE sentence under 280 characters; move detail and caveats to the notes.' : ' — good length.');
+            el.style.color = (tooLong || tooMany) ? '#96650a' : '';
+        }
+        $('hdIdealFor').addEventListener('input', hdIdealCheck);
 
         /* ── Blog editor ──────────────────────────────────────────────── */
         let blogId = null, blogStatus = 'draft', blogReady = false;
