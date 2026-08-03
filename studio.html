@@ -232,6 +232,70 @@
         .social-qa.has-issues { background: #fdf6ec; border-color: rgba(176,124,16,0.4); color: #8a6110; }
         .social-qa ul { margin: 6px 0 0; padding-left: 18px; }
         .social-qa li { margin: 2px 0; }
+
+        /* ── Dashboard & views ─────────────────────────────────────────── */
+        .view { display: none; }
+        .studio[data-view="home"] #viewHome,
+        .studio[data-view="hotels"] #viewHotels,
+        .studio[data-view="blog"] #viewBlog,
+        .studio[data-view="editor"] #viewEditor { display: block; }
+        .studio[data-view="editor"] #viewEditor { display: grid; }
+        .studio:not([data-view="editor"]) .editor-only { display: none !important; }
+        .dash { max-width: 1180px; margin: 0 auto; padding: 34px 28px 80px; }
+        .dash-head { margin-bottom: 26px; }
+        .dash-title { font-family: var(--font-serif); font-weight: 400; font-size: 34px; margin: 0 0 6px; }
+        .dash-title em { font-style: italic; font-weight: 300; color: var(--gold); }
+        .dash-sub { font-size: 14px; color: rgba(30,53,82,0.6); margin: 0; max-width: 640px; line-height: 1.6; }
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+        @media (max-width: 880px) { .dash-grid { grid-template-columns: 1fr; } }
+        .dash-card { border: 1px solid var(--studio-line-soft); background: #fff; padding: 20px 22px; }
+        .dash-card-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+        .dash-card-head h2 { font-family: var(--font-serif); font-weight: 400; font-size: 21px; margin: 0; flex: 1; }
+        .dash-hint { font-size: 11px; color: rgba(30,53,82,0.45); }
+        .dash-empty { font-size: 13px; color: rgba(30,53,82,0.5); margin: 0; }
+        .dash-row { display: flex; align-items: center; gap: 12px; padding: 10px 2px; border-top: 1px solid var(--studio-line-soft); cursor: pointer; width: 100%; background: none; border-left: 0; border-right: 0; border-bottom: 0; text-align: left; font-family: var(--font-sans); }
+        .dash-row:hover .dash-row-title { color: var(--gold-deep, #a8894f); }
+        .dash-row-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+        .dash-row-sub { font-size: 11.5px; color: rgba(30,53,82,0.5); margin-top: 1px; }
+        .dash-row-main { flex: 1; min-width: 0; }
+        .chip { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border: 1px solid; white-space: nowrap; }
+        .chip-viewed { color: #2c7a4b; border-color: rgba(44,122,75,0.4); background: #f2f8f2; }
+        .chip-published { color: #6b7a90; border-color: rgba(107,122,144,0.35); }
+        .chip-ready { color: #8a6110; border-color: rgba(176,124,16,0.4); background: #fdf6ec; }
+        .chip-review { color: #1e3552; border-color: var(--studio-line); background: var(--paper-cream); }
+        .chip-draft { color: #6b7a90; border-color: rgba(107,122,144,0.35); }
+        .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        .ig-cell { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 0; padding: 0; cursor: pointer; background: var(--paper-cream); }
+        .ig-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
+        .ig-cell:hover img { transform: scale(1.04); }
+        .ig-cell-label { position: absolute; inset: auto 0 0 0; font-size: 10px; color: #fff; background: linear-gradient(transparent, rgba(30,53,82,0.75)); padding: 18px 8px 6px; text-align: left; line-height: 1.35; }
+        /* Hotel drafts */
+        .hd-detail-imgs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; }
+        .hd-detail-imgs img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+        .hd-notes { white-space: pre-wrap; font-size: 13px; line-height: 1.6; background: #fff; border: 1px solid var(--studio-line-soft); padding: 16px 18px; max-height: 420px; overflow-y: auto; }
+        .hd-actions { display: flex; gap: 10px; margin: 18px 0; flex-wrap: wrap; }
+        /* Blog editor */
+        .blog-split { display: grid; grid-template-columns: minmax(380px, 520px) 1fr; height: calc(100vh - 57px); }
+        .blog-form { overflow-y: auto; padding: 26px 28px 60px; }
+        .blog-preview { position: relative; }
+        .blog-preview iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+        @media (max-width: 880px) { .blog-split { grid-template-columns: 1fr; } .blog-preview { display: none; } }
+        .blog-toolbar { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+        .blog-toolbar button { font-family: var(--font-sans); font-size: 12px; padding: 5px 10px; background: #fff; border: 1px solid var(--studio-line); cursor: pointer; }
+        .blog-toolbar button:hover { border-color: var(--gold); }
+        .blog-body-edit { min-height: 320px; background: #fff; border: 1px solid var(--studio-line); padding: 16px 18px; font-size: 14px; line-height: 1.7; outline: none; }
+        .blog-body-edit:focus { border-color: var(--gold); }
+        .blog-body-edit h2 { font-family: var(--font-serif); font-weight: 400; font-size: 22px; margin: 18px 0 8px; }
+        .blog-body-edit h3 { font-family: var(--font-serif); font-weight: 400; font-size: 18px; margin: 14px 0 6px; }
+        .blog-body-edit img { max-width: 100%; }
+        .blog-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .btn.danger { color: #a33; border-color: rgba(170,51,51,0.35); }
+        /* Quote steps */
+        .quote-steps { border: 1px solid var(--studio-line); background: var(--paper-cream); padding: 14px 16px; margin: 14px 0 10px; }
+        .quote-steps-head { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep, #a8894f); margin: 0 0 10px; font-weight: 600; }
+        .quote-steps .claude-row { margin: 0 0 10px; }
+        .manual-fields > summary { cursor: pointer; font-size: 13px; color: rgba(30,53,82,0.65); padding: 8px 0; }
+        .manual-fields[open] > summary { color: var(--ink); }
         @media (max-width: 900px) { .social-body { grid-template-columns: 1fr; } }
         .lib-grid {
             overflow-y: auto; display: grid;
@@ -307,19 +371,126 @@
     </div>
 
     <!-- ── App ───────────────────────────────────────────────────────── -->
-    <div class="studio" id="studio">
+    <div class="studio" id="studio" data-view="home">
         <div class="studio-top">
-            <a class="studio-brand" href="/studio">Proposal <em>Studio</em></a>
-            <button class="btn btn-ghost btn-small" id="btnList" type="button">Your proposals</button>
-            <button class="btn btn-ghost btn-small" id="btnNew" type="button">New proposal</button>
-            <button class="btn btn-ghost btn-small" id="btnSocial" type="button">Create social post</button>
+            <a class="studio-brand" href="#home" id="brandHome">The <em>Studio</em></a>
+            <button class="btn btn-ghost btn-small" id="btnHome" type="button">Dashboard</button>
+            <button class="btn btn-ghost btn-small editor-only" id="btnList" type="button">Your proposals</button>
+            <button class="btn btn-ghost btn-small editor-only" id="btnNew" type="button">New proposal</button>
+            <button class="btn btn-ghost btn-small editor-only" id="btnSocial" type="button">Create social post</button>
             <span class="studio-top-spacer"></span>
-            <span class="studio-status" id="statusText">New proposal</span>
-            <button class="btn btn-ghost btn-small mobile-toggle" id="btnMobilePreview" type="button">Preview</button>
-            <button class="btn btn-small" id="btnPublish" type="button">Publish</button>
+            <span class="studio-status editor-only" id="statusText">New proposal</span>
+            <button class="btn btn-ghost btn-small mobile-toggle editor-only" id="btnMobilePreview" type="button">Preview</button>
+            <button class="btn btn-small editor-only" id="btnPublish" type="button">Publish</button>
         </div>
 
-        <div class="studio-main">
+        <!-- ── Dashboard home ────────────────────────────────────────── -->
+        <div class="view" id="viewHome">
+            <div class="dash">
+                <div class="dash-head">
+                    <h1 class="dash-title">Good to see you.</h1>
+                    <p class="dash-sub">Everything the team is working on, in one place.</p>
+                </div>
+                <div class="dash-grid">
+                    <section class="dash-card" id="dashProposalsCard">
+                        <div class="dash-card-head">
+                            <h2>Proposals</h2>
+                            <button class="btn btn-small" id="dashNewProposal" type="button">New proposal</button>
+                        </div>
+                        <div class="dash-card-body" id="dashProposals"><p class="dash-empty">Loading…</p></div>
+                    </section>
+                    <section class="dash-card" id="dashSocialCard">
+                        <div class="dash-card-head">
+                            <h2>Social posts</h2>
+                            <span class="dash-hint">created from a proposal</span>
+                        </div>
+                        <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
+                    </section>
+                    <section class="dash-card" id="dashHotelsCard">
+                        <div class="dash-card-head">
+                            <h2>Hotel pages</h2>
+                            <span class="dash-hint">drafts awaiting review</span>
+                        </div>
+                        <div class="dash-card-body" id="dashHotels"><p class="dash-empty">Loading…</p></div>
+                    </section>
+                    <section class="dash-card" id="dashBlogCard">
+                        <div class="dash-card-head">
+                            <h2>Blog posts</h2>
+                            <button class="btn btn-small" id="dashNewBlog" type="button">New post</button>
+                        </div>
+                        <div class="dash-card-body" id="dashBlog"><p class="dash-empty">Loading…</p></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Hotel-page drafts ─────────────────────────────────────── -->
+        <div class="view" id="viewHotels">
+            <div class="dash">
+                <div class="dash-head">
+                    <h1 class="dash-title">Hotel page <em>drafts.</em></h1>
+                    <p class="dash-sub">Pages Claude has drafted for hotels we quoted that aren&rsquo;t on the site yet. Review, then mark <strong>Ready to publish</strong> — ready pages go live with the next daily publish run.</p>
+                </div>
+                <div id="hotelDraftList"><p class="dash-empty">Loading…</p></div>
+                <div id="hotelDraftDetail" hidden></div>
+            </div>
+        </div>
+
+        <!-- ── Blog ──────────────────────────────────────────────────── -->
+        <div class="view" id="viewBlog">
+            <div class="blog-split">
+                <div class="blog-form">
+                    <div class="dash-head" style="margin-bottom:18px">
+                        <h1 class="dash-title">Blog <em>post.</em></h1>
+                        <p class="dash-sub" id="blogStatusLine">New draft</p>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="bTitle">Headline</label>
+                        <input class="f-input" id="bTitle" placeholder="The 5 Amalfi Coast hotels we book again and again">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="bDek">Dek — one-line summary <span style="text-transform:none">(shows under the headline &amp; in Google)</span></label>
+                        <input class="f-input" id="bDek" placeholder="Where to stay, what to skip, and the suites worth the splurge.">
+                    </div>
+                    <div class="f-grid2">
+                        <div class="f-row">
+                            <label class="f-label" for="bHero">Hero image URL</label>
+                            <input class="f-input" id="bHero" placeholder="https://… or /blog-images/…">
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="bTags">Tags — comma separated</label>
+                            <input class="f-input" id="bTags" placeholder="Italy, Hotels, Summer">
+                        </div>
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label">Body</label>
+                        <div class="blog-toolbar">
+                            <button type="button" data-cmd="h2">H2</button>
+                            <button type="button" data-cmd="h3">H3</button>
+                            <button type="button" data-cmd="bold"><strong>B</strong></button>
+                            <button type="button" data-cmd="italic"><em>I</em></button>
+                            <button type="button" data-cmd="link">Link</button>
+                            <button type="button" data-cmd="ul">• List</button>
+                            <button type="button" data-cmd="img">Photo</button>
+                        </div>
+                        <div class="blog-body-edit" id="bBody" contenteditable="true"></div>
+                    </div>
+                    <div class="blog-actions">
+                        <button class="btn" id="bSave" type="button">Save draft</button>
+                        <button class="btn btn-ghost" id="bReady" type="button">Mark ready to publish</button>
+                        <button class="btn btn-ghost" id="bBack" type="button">All posts</button>
+                        <button class="btn btn-ghost danger" id="bDelete" type="button">Delete</button>
+                    </div>
+                    <p class="social-note">Ready posts go live automatically with the next daily publish run (8&nbsp;AM) — you&rsquo;ll see the status flip to Published here.</p>
+                </div>
+                <div class="studio-preview blog-preview">
+                    <span class="studio-preview-tag">Live preview — exactly how it will look on the site</span>
+                    <iframe id="blogFrame" src="/post.html?draft=1" title="Blog preview"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="studio-main view" id="viewEditor">
             <div class="studio-form" id="formPane">
 
                 <div class="pub-bar" id="pubBar">
@@ -472,6 +643,7 @@
                     <div class="slide-strip" id="slideStrip"><p class="sec-sub" style="grid-column:1/-1">Building preview…</p></div>
                     <div class="social-actions">
                         <button class="btn btn-small" id="sDownload" type="button">Download slides</button>
+                        <button class="btn btn-ghost btn-small" id="sSave" type="button">Save to gallery</button>
                         <button class="btn btn-ghost btn-small" id="sCopyCaption" type="button">Copy caption</button>
                         <button class="btn btn-ghost btn-small" id="sRefresh" type="button">Update preview</button>
                         <button class="btn btn-ghost btn-small" id="sRefill" type="button">Refill from proposal</button>
@@ -538,7 +710,259 @@
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
+            showView('home');
         }
+
+        /* ── Views & dashboard ────────────────────────────────────────── */
+        function showView(v) {
+            $('studio').dataset.view = v;
+            window.scrollTo(0, 0);
+            if (v === 'home') loadDashboard();
+        }
+        async function contentApi(payload) {
+            const res = await fetch('/api/studio-content', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ passcode }, payload))
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+            return data;
+        }
+        const fmtWhen = (iso) => iso ? new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+        const STATUS_CHIP = {
+            'draft': '<span class="chip chip-draft">Draft</span>',
+            'in-review': '<span class="chip chip-review">Needs review</span>',
+            'ready': '<span class="chip chip-ready">Ready to publish</span>',
+            'published': '<span class="chip chip-published">Published</span>'
+        };
+
+        async function loadDashboard() {
+            // Proposals
+            api({ action: 'list' }).then(({ proposals }) => {
+                $('dashProposals').innerHTML = proposals.length ? proposals.slice(0, 8).map(p => `
+                    <button class="dash-row" data-openproposal="${esc(p.id)}" type="button">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
+                            <div class="dash-row-sub">${esc(p.title || '')}${p.viewed && p.lastViewedAt ? ' · last viewed ' + fmtWhen(p.lastViewedAt) : ''}</div>
+                        </div>
+                        ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Sent — not viewed</span>'}
+                    </button>`).join('')
+                    : '<p class="dash-empty">No proposals yet — start one and it appears here.</p>';
+            }).catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
+            // Social gallery
+            contentApi({ action: 'list', kind: 'social' }).then(({ items }) => {
+                $('dashSocial').innerHTML = items.length ? '<div class="ig-grid">' + items.slice(0, 9).map(s => `
+                    <button class="ig-cell" data-opensocial="${esc(s.id)}" type="button" title="${esc(s.title || '')}">
+                        ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
+                        <span class="ig-cell-label">${esc((s.title || '').slice(0, 60))}</span>
+                    </button>`).join('') + '</div>'
+                    : '<p class="dash-empty">No saved posts yet. Open a proposal → <strong>Create social post</strong> → Save to gallery.</p>';
+            }).catch(() => { $('dashSocial').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; });
+            // Hotel drafts
+            contentApi({ action: 'list', kind: 'hoteldraft' }).then(({ items }) => {
+                $('dashHotels').innerHTML = items.length ? items.map(h => `
+                    <button class="dash-row" data-openhoteldraft="${esc(h.id)}" type="button">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(h.name || h.id)}</div>
+                            <div class="dash-row-sub">${esc(h.location || '')}</div>
+                        </div>
+                        ${STATUS_CHIP[h.status] || STATUS_CHIP['in-review']}
+                    </button>`).join('')
+                    : '<p class="dash-empty">Nothing waiting. When a quoted hotel isn’t on the site, Claude drafts its page and it lands here for your review.</p>';
+            }).catch(() => { $('dashHotels').innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; });
+            // Blog
+            contentApi({ action: 'list', kind: 'blog' }).then(({ items }) => {
+                $('dashBlog').innerHTML = items.length ? items.slice(0, 8).map(b => `
+                    <button class="dash-row" data-openblog="${esc(b.id)}" type="button">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(b.title || b.id)}</div>
+                            <div class="dash-row-sub">${esc(b.author || '')} · updated ${fmtWhen(b.updatedAt)}</div>
+                        </div>
+                        ${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
+                    </button>`).join('')
+                    : '<p class="dash-empty">No posts yet — draft one here and see it exactly as it’ll look live.</p>';
+            }).catch(() => { $('dashBlog').innerHTML = '<p class="dash-empty">Couldn’t load blog posts.</p>'; });
+        }
+
+        $('btnHome').addEventListener('click', () => showView('home'));
+        $('brandHome').addEventListener('click', (e) => { e.preventDefault(); showView('home'); });
+        $('dashNewProposal').addEventListener('click', () => { showView('editor'); $('btnNew').click(); });
+        $('dashNewBlog').addEventListener('click', () => openBlogEditor(null));
+        document.addEventListener('click', async (e) => {
+            const pr = e.target.closest('[data-openproposal]');
+            if (pr) {
+                showView('editor');
+                try {
+                    const data = await api({ action: 'load', id: pr.dataset.openproposal });
+                    loadProposal(data.id, data.proposal);
+                } catch (err) { toast('Couldn’t load that proposal.'); }
+                return;
+            }
+            const so = e.target.closest('[data-opensocial]');
+            if (so) { openSavedSocial(so.dataset.opensocial); return; }
+            const hd = e.target.closest('[data-openhoteldraft]');
+            if (hd) { openHotelDraft(hd.dataset.openhoteldraft); return; }
+            const bl = e.target.closest('[data-openblog]');
+            if (bl) { openBlogEditor(bl.dataset.openblog); return; }
+        });
+
+        /* ── Hotel-page drafts ────────────────────────────────────────── */
+        let hotelDraftId = null;
+        async function openHotelDraft(id) {
+            showView('hotels');
+            $('hotelDraftList').hidden = true;
+            const box = $('hotelDraftDetail');
+            box.hidden = false;
+            box.innerHTML = '<p class="dash-empty">Loading…</p>';
+            try {
+                const { doc } = await contentApi({ action: 'load', kind: 'hoteldraft', id });
+                hotelDraftId = id;
+                box.innerHTML = `
+                    <button class="btn btn-ghost btn-small" data-hdback type="button">&larr; All drafts</button>
+                    <div class="dash-card" style="margin-top:14px">
+                        <div class="dash-card-head">
+                            <h2>${esc(doc.name || id)}</h2>
+                            ${STATUS_CHIP[doc.status] || STATUS_CHIP['in-review']}
+                        </div>
+                        <p class="dash-sub">${esc(doc.location || '')}</p>
+                        <div class="hd-detail-imgs">${(doc.images || []).map(u => `<img src="${esc(u)}" alt="" loading="lazy">`).join('')}</div>
+                        <div class="hd-notes">${esc(doc.notes || '(no notes)')}</div>
+                        <div class="hd-actions">
+                            ${doc.status === 'ready'
+                                ? '<button class="btn btn-ghost" data-hdstatus="in-review" type="button">Back to review</button>'
+                                : '<button class="btn" data-hdstatus="ready" type="button">Ready to publish</button>'}
+                            <button class="btn btn-ghost danger" data-hddelete type="button">Delete draft</button>
+                        </div>
+                        <p class="social-note">Ready drafts go live on the site with the next daily publish run — the status flips to Published here once it&rsquo;s up.</p>
+                    </div>`;
+            } catch (err) { box.innerHTML = '<p class="dash-empty">Couldn’t load that draft.</p>'; }
+        }
+        async function showHotelDraftList() {
+            $('hotelDraftDetail').hidden = true;
+            const list = $('hotelDraftList');
+            list.hidden = false;
+            list.innerHTML = '<p class="dash-empty">Loading…</p>';
+            try {
+                const { items } = await contentApi({ action: 'list', kind: 'hoteldraft' });
+                list.innerHTML = items.length ? items.map(h => `
+                    <button class="dash-row" data-openhoteldraft="${esc(h.id)}" type="button">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(h.name || h.id)}</div>
+                            <div class="dash-row-sub">${esc(h.location || '')} · updated ${fmtWhen(h.updatedAt)}</div>
+                        </div>
+                        ${STATUS_CHIP[h.status] || STATUS_CHIP['in-review']}
+                    </button>`).join('') : '<p class="dash-empty">No drafts right now.</p>';
+            } catch (err) { list.innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; }
+        }
+        document.addEventListener('click', async (e) => {
+            if (e.target.closest('[data-hdback]')) { showHotelDraftList(); return; }
+            const st = e.target.closest('[data-hdstatus]');
+            if (st && hotelDraftId) {
+                try {
+                    await contentApi({ action: 'setstatus', kind: 'hoteldraft', id: hotelDraftId, status: st.dataset.hdstatus });
+                    toast(st.dataset.hdstatus === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Moved back to review.');
+                    openHotelDraft(hotelDraftId);
+                } catch (err) { toast('Couldn’t update the status.'); }
+                return;
+            }
+            if (e.target.closest('[data-hddelete]') && hotelDraftId) {
+                if (!confirm('Delete this hotel-page draft? Claude can always re-create it.')) return;
+                try { await contentApi({ action: 'delete', kind: 'hoteldraft', id: hotelDraftId }); toast('Draft deleted.'); showHotelDraftList(); }
+                catch (err) { toast('Couldn’t delete it.'); }
+            }
+        });
+
+        /* ── Blog editor ──────────────────────────────────────────────── */
+        let blogId = null, blogStatus = 'draft', blogReady = false;
+        const blogFrame = () => $('blogFrame').contentWindow;
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'wndr-blog-ready') { blogReady = true; pushBlogPreview(); }
+        });
+        function blogDocFromForm() {
+            const words = ($('bBody').textContent || '').trim().split(/\s+/).filter(Boolean).length;
+            return {
+                title: $('bTitle').value.trim(),
+                dek: $('bDek').value.trim(),
+                heroImage: $('bHero').value.trim(),
+                tags: $('bTags').value.split(',').map(s => s.trim()).filter(Boolean),
+                bodyHtml: $('bBody').innerHTML,
+                readTime: Math.max(1, Math.round(words / 200)) + ' min read',
+                author: 'Studio',
+                status: blogStatus
+            };
+        }
+        let blogT = null;
+        function pushBlogPreview() {
+            if (!blogReady) return;
+            const d = blogDocFromForm();
+            blogFrame().postMessage({ type: 'wndr-blog-draft', post: {
+                title: d.title || 'Untitled post',
+                dek: d.dek,
+                heroImage: d.heroImage,
+                date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                readTime: d.readTime,
+                bodyHtml: d.bodyHtml || '<p>Start writing…</p>',
+                tags: d.tags
+            } }, '*');
+        }
+        async function openBlogEditor(id) {
+            showView('blog');
+            blogId = id;
+            blogStatus = 'draft';
+            if (id) {
+                try {
+                    const { doc } = await contentApi({ action: 'load', kind: 'blog', id });
+                    $('bTitle').value = doc.title || '';
+                    $('bDek').value = doc.dek || '';
+                    $('bHero').value = doc.heroImage || '';
+                    $('bTags').value = (doc.tags || []).join(', ');
+                    $('bBody').innerHTML = doc.bodyHtml || '';
+                    blogStatus = doc.status || 'draft';
+                } catch (err) { toast('Couldn’t load that post.'); }
+            } else {
+                $('bTitle').value = ''; $('bDek').value = ''; $('bHero').value = ''; $('bTags').value = ''; $('bBody').innerHTML = '';
+            }
+            $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '');
+            pushBlogPreview();
+        }
+        async function saveBlog(status) {
+            const doc = blogDocFromForm();
+            if (!doc.title) { toast('Give the post a headline first.'); return; }
+            doc.status = status || blogStatus;
+            try {
+                const out = await contentApi({ action: 'save', kind: 'blog', id: blogId, doc,
+                    meta: { title: doc.title, author: doc.author, status: doc.status } });
+                blogId = out.id;
+                blogStatus = doc.status;
+                $('blogStatusLine').innerHTML = 'Saved — ' + (STATUS_CHIP[blogStatus] || '');
+                toast(status === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Draft saved.');
+            } catch (err) { toast('Couldn’t save: ' + err.message); }
+        }
+        $('bSave').addEventListener('click', () => saveBlog());
+        $('bReady').addEventListener('click', () => saveBlog('ready'));
+        $('bBack').addEventListener('click', () => showView('home'));
+        $('bDelete').addEventListener('click', async () => {
+            if (!blogId) { showView('home'); return; }
+            if (!confirm('Delete this blog post draft?')) return;
+            try { await contentApi({ action: 'delete', kind: 'blog', id: blogId }); toast('Post deleted.'); showView('home'); }
+            catch (err) { toast('Couldn’t delete it.'); }
+        });
+        document.querySelector('.blog-toolbar').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-cmd]');
+            if (!b) return;
+            const cmd = b.dataset.cmd;
+            $('bBody').focus();
+            if (cmd === 'h2' || cmd === 'h3') document.execCommand('formatBlock', false, cmd.toUpperCase());
+            else if (cmd === 'bold') document.execCommand('bold');
+            else if (cmd === 'italic') document.execCommand('italic');
+            else if (cmd === 'ul') document.execCommand('insertUnorderedList');
+            else if (cmd === 'link') { const u = prompt('Link URL:'); if (u) document.execCommand('createLink', false, u); }
+            else if (cmd === 'img') { const u = prompt('Image URL:'); if (u) document.execCommand('insertImage', false, u); }
+            pushBlogPreview();
+        });
+        ['bTitle', 'bDek', 'bHero', 'bTags'].forEach(id => $(id).addEventListener('input', () => { clearTimeout(blogT); blogT = setTimeout(pushBlogPreview, 500); }));
+        $('bBody').addEventListener('input', () => { clearTimeout(blogT); blogT = setTimeout(pushBlogPreview, 500); });
         $('gateForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const code = $('gateInput').value.trim();
@@ -731,17 +1155,22 @@
                         </div>
                     </div>
                     ${customFields}
-                    <div class="quote-drop" data-drop="${i}">
-                        📷 <strong>Drop a screenshot of the quote here</strong> (or click to browse) &mdash; room, rate, deposit &amp; cancellation fill in automatically, copied exactly as written. You can always type instead.
-                        <input type="file" accept="image/*" class="quote-file" data-i="${i}" hidden>
+                    <div class="quote-steps">
+                        <p class="quote-steps-head">Add the quote — nothing typed by hand</p>
+                        <div class="claude-row">
+                            <button class="btn btn-small" data-copyprompt="${i}" type="button">1 &middot; Copy the Claude prompt</button>
+                            &nbsp;give it to your Claude along with the quote screenshot(s), then paste the reply below.
+                        </div>
+                        <div class="f-row claude-paste" data-pastefor="${i}">
+                            <textarea class="f-area" data-pastearea="${i}" placeholder='2 · Paste Claude&#39;s reply here — it starts with { and ends with } — and every field fills in automatically.'></textarea>
+                        </div>
+                        <div class="quote-drop" data-drop="${i}">
+                            or 📷 drop a screenshot of the quote here and the Studio reads it directly
+                            <input type="file" accept="image/*" class="quote-file" data-i="${i}" hidden>
+                        </div>
                     </div>
-                    <div class="claude-row">
-                        Free option: <button class="linklike" data-copyprompt="${i}" type="button">copy the Claude prompt</button>, give it to your own Claude with the screenshot, then
-                        <button class="linklike" data-pastebox="${i}" type="button">paste Claude&rsquo;s answer</button>
-                    </div>
-                    <div class="f-row claude-paste" data-pastefor="${i}" hidden>
-                        <textarea class="f-area" data-pastearea="${i}" placeholder='Paste the block your Claude replied with — it starts with { and ends with } — and the fields above fill in.'></textarea>
-                    </div>
+                    <details class="manual-fields"${(h.room || h.rate || h.deposit || h.flight) ? ' open' : ''}>
+                    <summary>Enter or edit the quote fields manually</summary>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Room category</label>
                             <input class="f-input" data-i="${i}" data-k="room" value="${esc(h.room)}" placeholder="Deluxe Sea View Suite"></div>
@@ -760,6 +1189,7 @@
                         <div class="f-row"><label class="f-label">Cancellation</label>
                             <input class="f-input" data-i="${i}" data-k="cancellation" value="${esc(h.cancellation)}" placeholder="Cancel 30 days before arrival to avoid penalty."></div>
                     </div>
+                    </details>
                     <div class="f-row check-row">
                         <input type="checkbox" id="perks${i}" data-i="${i}" data-k="usePerks" ${h.usePerks ? 'checked' : ''}>
                         <label for="perks${i}">Include preferred-partner amenities on this hotel</label>
@@ -1437,10 +1867,62 @@
             $('socialModal').classList.add('is-open');
             if (social.forId !== (state.id || 'draft')) {
                 social.forId = state.id || 'draft';
+                social.postId = null;
                 prefillSocial();
             }
             renderSocial();
         });
+
+        /* Saved posts — the dashboard's IG-style gallery. */
+        async function saveSocialPost(auto) {
+            if (!socialCanvases.length) await renderSocial();
+            const tc = document.createElement('canvas');
+            tc.width = 324; tc.height = 405;
+            tc.getContext('2d').drawImage(socialCanvases[0], 0, 0, 324, 405);
+            const thumb = tc.toDataURL('image/jpeg', 0.72);
+            const m = collectSocial();
+            const doc = {
+                proposalId: state.id || '',
+                title: m.hook,
+                thumb,
+                fields: {
+                    hook: m.hook, briefIntro: m.briefIntro, brief: $('sBrief').value,
+                    showRates: m.showRates, ctaTitle: m.ctaTitle, ctaSub: m.ctaSub,
+                    lines: Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value),
+                    caption: $('sCaption').value
+                }
+            };
+            const out = await contentApi({ action: 'save', kind: 'social', id: social.postId, doc,
+                meta: { title: m.hook, proposalId: state.id || '', thumb } });
+            social.postId = out.id;
+            if (!auto) toast('Saved — it’s in the gallery on the dashboard.');
+        }
+        $('sSave').addEventListener('click', () => saveSocialPost(false).catch(err => toast('Couldn’t save: ' + err.message)));
+
+        async function openSavedSocial(id) {
+            try {
+                const { doc } = await contentApi({ action: 'load', kind: 'social', id });
+                if (doc.proposalId) {
+                    const data = await api({ action: 'load', id: doc.proposalId });
+                    showView('editor');
+                    loadProposal(data.id, data.proposal);
+                } else showView('editor');
+                $('socialModal').classList.add('is-open');
+                social.forId = state.id || 'draft';
+                social.postId = id;
+                prefillSocial();
+                const f = doc.fields || {};
+                if (f.hook) $('sHook').value = f.hook;
+                if (f.briefIntro) $('sBriefIntro').value = f.briefIntro;
+                if (f.brief !== undefined) $('sBrief').value = f.brief;
+                $('sShowRates').checked = f.showRates !== false;
+                if (f.ctaTitle) $('sCtaTitle').value = f.ctaTitle;
+                if (f.ctaSub) $('sCtaSub').value = f.ctaSub;
+                (f.lines || []).forEach((v, i) => { const t = document.querySelector(`[data-sline="${i}"]`); if (t && v) t.value = v; });
+                if (f.caption) $('sCaption').value = f.caption;
+                renderSocial();
+            } catch (err) { toast('Couldn’t open that post.'); }
+        }
         $('sRefresh').addEventListener('click', () => { $('sCaption').value = buildCaption(); renderSocial(); });
         $('sRefill').addEventListener('click', () => {
             if (!confirm('Refill every field from the current proposal? Your edits in this panel will be replaced.')) return;
@@ -1501,6 +1983,7 @@
             a.download = 'social-post-' + (state.id || 'draft') + '.zip';
             document.body.appendChild(a); a.click(); a.remove();
             toast('Downloaded one .zip with every slide + the caption.');
+            saveSocialPost(true).catch(() => {});
         });
 
         /* ── Mobile preview toggle ────────────────────────────────────── */
