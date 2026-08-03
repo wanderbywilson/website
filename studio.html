@@ -906,7 +906,7 @@
                 $('hdName').value = e0.name || '';
                 $('hdLocation').value = e0.location || '';
                 $('hdRateFrom').value = e0.rateFrom || '';
-                $('hdBooking').value = e0.bookingUrl || '';
+                $('hdBooking').value = (e0.bookingUrl === '#' ? '' : e0.bookingUrl) || '';
                 $('hdDesc').value = deEnt(e0.description || '');
                 $('hdPerks').value = (e0.perks || []).join('\n');
                 $('hdIdealFor').value = deEnt(e0.idealFor || '');
