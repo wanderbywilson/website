@@ -674,6 +674,16 @@
                         <h1 class="dash-title">Blog <em>post.</em></h1>
                         <p class="dash-sub" id="blogStatusLine">New draft</p>
                     </div>
+                    <div class="quote-steps">
+                        <p class="quote-steps-head">Write it with Claude — nothing typed by hand</p>
+                        <div class="claude-row">
+                            <button class="btn btn-small" id="bCopyPrompt" type="button">1 · Copy the blog prompt</button>
+                            &nbsp;give it to your Claude with the topic (or Sajad&rsquo;s copy), then paste the reply below.
+                        </div>
+                        <div class="f-row" style="margin:0">
+                            <textarea class="f-area" id="bPasteArea" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the whole post fills in, photos included."></textarea>
+                        </div>
+                    </div>
                     <div class="f-row">
                         <label class="f-label" for="bTitle">Headline</label>
                         <input class="f-input" id="bTitle" placeholder="The 5 Amalfi Coast hotels we book again and again">
@@ -702,6 +712,7 @@
                             <button type="button" data-cmd="link">Link</button>
                             <button type="button" data-cmd="ul">• List</button>
                             <button type="button" data-cmd="img">Photo</button>
+                            <button type="button" id="bAutoPhotos" style="margin-left:auto">✦ Add photos from our library</button>
                         </div>
                         <div class="blog-body-edit" id="bBody" contenteditable="true"></div>
                     </div>
@@ -1366,6 +1377,105 @@
                 toast(doc.status === 'ready' ? 'Marked ready — it publishes with the next daily run.' : 'Saved.');
             } catch (err) { toast('Couldn’t save: ' + err.message); }
         }
+        /* ── Blog: write with Claude, and illustrate from our own library ── */
+        const BLOG_PROMPT = [
+            'You are writing a blog post for Wander by Wilson (wanderbywilson.com), a luxury travel advisory. Wilson Schubert is the founder — she/her.',
+            '',
+            'VOICE: travel-chic and editorial, the way a well-travelled advisor writes to a client she likes. Confident, specific, unhurried. Concrete detail beats adjectives — name the villa, the beach, the dish, the transfer. No breathless marketing ("paradise awaits", "nestled", "bucket list"), no exclamation marks, no emoji, no second-person hard sell. Vary sentence length. It should read like someone who has actually been there.',
+            '',
+            'ACCURACY RULES (this is a travel advisory — a client may book on what we publish):',
+            '1. Every factual claim about a hotel — villa names, room counts, what is included, transfer times, closures — must be true and checkable on the property\'s own website. If you cannot confirm it, leave it out. Never invent an amenity, a price, or a superlative award.',
+            '2. Do NOT publish specific nightly rates. Say "rates from" ranges only if the hotel publishes them; otherwise describe value without numbers.',
+            '3. Never mention "a personalized welcome note from your advisor" — that amenity is meant to be a surprise.',
+            '4. Preferred-partner amenities may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out, "included at no additional cost".',
+            '',
+            'If the user pastes existing copy (e.g. a draft from our writer), PRESERVE their words — your job is then to structure it, source the photos, and fill in the JSON. Do not rewrite their sentences.',
+            '',
+            'Reply with ONLY this JSON block:',
+            '',
+            '{',
+            '  "title": "the headline — specific and searchable, not clickbait. Sentence case.",',
+            '  "dek": "one sentence, max ~160 characters, that also works as the Google meta description",',
+            '  "tags": ["2-4 tags, e.g. Maldives, Honeymoons, Overwater Villas"],',
+            '  "heroImage": "direct https image URL for the top of the article — see PHOTOS",',
+            '  "bodyHtml": "the article as clean semantic HTML — see FORMAT",',
+            '  "photoCredits": [ { "url": "…", "property": "which hotel or place it shows", "source": "the page you took it from" } ]',
+            '}',
+            '',
+            'FORMAT for bodyHtml — allowed tags ONLY: <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>, <a href>, <blockquote>, <img src alt>. No inline styles, no class attributes, no <div>/<span>, no <h1> (the title renders separately). Structure it with <h2> sections; put a hotel name in <strong> the first time it appears. Aim for 1,200-1,800 words unless told otherwise.',
+            '',
+            'PHOTOS — do this work, do not skip it. Posts without photos cannot be published.',
+            'Place ONE <img> immediately BEFORE the <h2> (or the paragraph) it illustrates, so each section is introduced by its own picture. Give every img a descriptive alt.',
+            'IMPORTANT: name the image file after what it shows where you can — our tools match photos to sections by filename, so "soneva-fushi-villa.jpg" is far more useful than "image-3.jpg".',
+            'Source order: 1) the hotel\'s OWN official website or media library (many run WordPress and expose /wp-json/wp/v2/media, which lists full-size URLs); 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination shot. NEVER Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio.',
+            'Verify each URL actually resolves to an image before returning it. Never invent or guess a URL.',
+            'CHOOSE like an editor: the property\'s signature view, a sense-of-place scene, or the actual room being described. Daylight or golden hour ONLY.',
+            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · posed models as the subject · dark or flat interiors · renders when real photos exist · two near-identical angles.',
+            'If you genuinely cannot find a compliant official photo for a section, omit the img there and list what is missing AFTER the JSON.',
+            '',
+            'LINKS: link a hotel name to its page on wanderbywilson.com when one plausibly exists (/hotels/{kebab-case-name}), and link naturally to related guides on the site. Do not invent URLs on other domains.'
+        ].join('\n');
+
+        $('bCopyPrompt').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText(BLOG_PROMPT); toast('Blog prompt copied — paste it into your Claude with the topic.'); }
+            catch (err) { window.prompt('Copy this prompt:', BLOG_PROMPT); }
+        });
+
+        $('bPasteArea').addEventListener('input', (e) => {
+            const raw = e.target.value;
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let f;
+            try { f = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            if (!f.title && !f.bodyHtml) { toast('That JSON has no title or body — check the reply.'); return; }
+            if (f.title) $('bTitle').value = f.title;
+            if (f.dek) $('bDek').value = f.dek;
+            if (f.heroImage) $('bHero').value = f.heroImage;
+            if (Array.isArray(f.tags) && f.tags.length) $('bTags').value = f.tags.join(', ');
+            if (f.bodyHtml) $('bBody').innerHTML = f.bodyHtml;
+            if (Array.isArray(f.photoCredits) && f.photoCredits.length) {
+                blogDocExtra.photoCredits = f.photoCredits;
+            }
+            pushBlogPreview();
+            const imgs = $('bBody').querySelectorAll('img').length;
+            toast(`Post filled in — ${imgs} photo${imgs === 1 ? '' : 's'} in the body. Check every fact and image before publishing.`);
+        });
+
+        /* Illustrate from what we already own: any hotel in our website
+           library brings its approved hero shot, so a text-only draft (like
+           the ones migrated out of Google Docs) can be photographed in one
+           click without sourcing anything new. */
+        $('bAutoPhotos').addEventListener('click', () => {
+            const body = $('bBody');
+            const existing = new Set(Array.from(body.querySelectorAll('img')).map(i => i.getAttribute('src')));
+            const entries = Object.keys(lib)
+                .map(k => ({ k, name: plain(lib[k].name), img: lib[k].heroImage || (lib[k].gallery || [])[0] || '' }))
+                .filter(e => e.name && e.img && !existing.has(e.img))
+                .sort((a, b) => b.name.length - a.name.length);   // match longer names first
+            let added = 0;
+            const used = new Set();
+            Array.from(body.children).forEach(node => {
+                if (added >= 8 || !/^(P|H2|H3)$/.test(node.tagName)) return;
+                const text = (node.textContent || '').toLowerCase();
+                const hit = entries.find(e => !used.has(e.k) && text.includes(e.name.toLowerCase()));
+                if (!hit) return;
+                if (node.previousElementSibling && node.previousElementSibling.tagName === 'IMG') return;
+                const im = document.createElement('img');
+                im.src = hit.img;
+                im.alt = hit.name;
+                node.parentNode.insertBefore(im, node);
+                used.add(hit.k); added++;
+            });
+            if (!$('bHero').value.trim() && used.size) {
+                const first = entries.find(e => used.has(e.k));
+                if (first) $('bHero').value = first.img;
+            }
+            pushBlogPreview();
+            toast(added
+                ? `Added ${added} photo${added === 1 ? '' : 's'} from our hotel pages. Sections naming hotels we don't have still need images.`
+                : 'No hotels from our library were named in this post — source photos from each hotel’s own site.');
+        });
+
         $('bSave').addEventListener('click', () => saveBlog());
         $('bReady').addEventListener('click', () => saveBlog('ready'));
         $('bBack').addEventListener('click', () => showBlogList());
