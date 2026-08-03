@@ -222,6 +222,7 @@
         .view { display: none; }
         .studio[data-view="home"] #viewHome,
         .studio[data-view="hotels"] #viewHotels,
+        .studio[data-view="social"] #viewSocial,
         .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
         .studio[data-view="editor"] #viewEditor { display: block; }
@@ -262,6 +263,36 @@
         .filter-tabs button.is-on { background: var(--ink); color: var(--paper-cream); border-color: var(--ink); }
         .list-search { max-width: 240px; }
         .list-rows-wrap { background: #fff; border: 1px solid var(--studio-line-soft); padding: 4px 20px 12px; }
+
+        /* ── Social studio ─────────────────────────────────────────────── */
+        .soc-split { display: grid; grid-template-columns: 300px 1fr 300px; gap: 20px; align-items: start; }
+        @media (max-width: 1180px) { .soc-split { grid-template-columns: 1fr 1fr; } .soc-split > :last-child { grid-column: 1 / -1; } }
+        @media (max-width: 780px) { .soc-split { grid-template-columns: 1fr; } }
+        .soc-col { background: #fff; border: 1px solid var(--studio-line-soft); padding: 16px 18px; box-shadow: var(--st-shadow); }
+        .soc-col-head { font-family: var(--font-serif); font-weight: 400; font-size: 18px; margin: 0 0 4px; }
+        .soc-col-head span { font-size: 12px; font-family: var(--font-sans); color: var(--st-dim-2); }
+        .soc-library { display: grid; gap: 10px; max-height: 62vh; overflow-y: auto; }
+        .soc-item { display: flex; gap: 10px; align-items: center; text-align: left; cursor: grab; background: #fff; border: 1px solid var(--studio-line-soft); padding: 7px; width: 100%; font-family: var(--font-sans); }
+        .soc-item:hover { border-color: var(--st-gold); }
+        .soc-item.is-dragging { opacity: .45; }
+        .soc-item img { width: 44px; height: 55px; object-fit: cover; flex: none; background: var(--st-bg); }
+        .soc-item-t { font-size: 12px; line-height: 1.35; color: var(--st-text); flex: 1; min-width: 0; }
+        .soc-item-s { font-size: 10.5px; color: var(--st-dim-2); margin-top: 2px; }
+        .soc-cal-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .soc-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .soc-dow { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--st-dim-2); text-align: center; padding-bottom: 4px; }
+        .soc-day { min-height: 88px; border: 1px solid var(--studio-line-soft); padding: 4px; background: #fff; position: relative; }
+        .soc-day.is-out { background: var(--st-bg); opacity: .5; }
+        .soc-day.is-today { border-color: var(--st-gold); }
+        .soc-day.is-over { background: rgba(156,124,66,.1); border-color: var(--st-gold); }
+        .soc-day-n { font-size: 10px; color: var(--st-dim-2); }
+        .soc-chip { display: block; width: 100%; margin-top: 3px; cursor: grab; border: 0; padding: 0; background: none; position: relative; }
+        .soc-chip img { width: 100%; height: 46px; object-fit: cover; display: block; }
+        .soc-chip-x { position: absolute; top: 1px; right: 1px; background: rgba(20,38,62,.8); color: #fff; border: 0; font-size: 10px; line-height: 1; padding: 2px 4px; cursor: pointer; }
+        .ig-preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+        .ig-preview div { position: relative; aspect-ratio: 4/5; background: var(--st-bg); overflow: hidden; }
+        .ig-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .ig-preview .ig-when { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9px; color: #fff; background: linear-gradient(transparent, rgba(20,38,62,.8)); padding: 12px 4px 3px; text-align: center; }
         .tmpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
         @media (max-width: 720px) { .tmpl-grid { grid-template-columns: 1fr; } }
         .tmpl-card {
@@ -552,6 +583,7 @@
                     <section class="dash-card" id="dashSocialCard">
                         <div class="dash-card-head">
                             <h2>Social posts</h2>
+                            <button class="btn btn-ghost btn-small" id="dashOpenSocial" type="button">Open studio</button>
                             <button class="btn btn-small" id="dashNewSocial" type="button">New post</button>
                         </div>
                         <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
@@ -647,6 +679,42 @@
                 <div class="studio-preview blog-preview">
                     <span class="studio-preview-tag">Live preview — exactly how the page will look</span>
                     <iframe id="hotelFrame" src="/hotel-preview.html?draft=1" title="Hotel page preview"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Social studio ─────────────────────────────────────────── -->
+        <div class="view" id="viewSocial">
+            <div class="dash" style="max-width:1420px">
+                <div class="dash-head">
+                    <h1 class="dash-title">Social <em>studio.</em></h1>
+                    <p class="dash-sub">Everything the funnel feeds — proposals, hotel pages and blog posts become posts here. Drag a post onto a date to schedule it; the grid shows how the feed will look as they go out.</p>
+                </div>
+                <div class="list-controls">
+                    <div class="filter-tabs" id="socialFilters"></div>
+                    <span class="studio-top-spacer"></span>
+                    <button class="btn btn-small" id="socNew" type="button">New post</button>
+                </div>
+                <div class="soc-split">
+                    <section class="soc-col">
+                        <h2 class="soc-col-head">Content library <span id="socLibCount"></span></h2>
+                        <p class="f-hint" style="margin:0 0 10px">Drag any post onto a date to schedule it.</p>
+                        <div id="socLibrary" class="soc-library"><p class="dash-empty">Loading…</p></div>
+                    </section>
+                    <section class="soc-col">
+                        <div class="soc-cal-head">
+                            <button class="icon-btn" id="socPrev" type="button">&larr;</button>
+                            <h2 class="soc-col-head" id="socMonth" style="margin:0; flex:1; text-align:center"></h2>
+                            <button class="icon-btn" id="socNext" type="button">&rarr;</button>
+                        </div>
+                        <div class="soc-cal" id="socCalendar"></div>
+                        <p class="f-hint">Drag a post from the library onto a day. Drag a scheduled post back to the library to unschedule it.</p>
+                    </section>
+                    <section class="soc-col">
+                        <h2 class="soc-col-head">Instagram grid</h2>
+                        <p class="f-hint" style="margin:0 0 10px">Scheduled posts, newest first — how <strong>@wanderbywilson</strong> will look.</p>
+                        <div class="ig-preview" id="socGrid"></div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -1021,6 +1089,7 @@
             $('studio').dataset.view = v;
             window.scrollTo(0, 0);
             if (v === 'home') loadDashboard();
+            if (v === 'social') loadSocialStudio();
         }
         async function contentApi(payload) {
             const res = await fetch('/api/studio-content', {
@@ -1198,6 +1267,145 @@
         }
         $('blogSearch').addEventListener('input', renderBlogRows);
         $('blogListNew').addEventListener('click', () => openBlogEditor(null));
+
+        /* ── Social studio ───────────────────────────────────────────────
+           Library (everything the funnel produced) + a drag-and-drop month
+           calendar + an Instagram grid preview. Scheduling is stored on each
+           social doc as {status, scheduledFor}. Instagram only. */
+        const SOC_FILTERS = [
+            { key: 'all', label: 'All' },
+            { key: 'draft', label: 'Drafts' },
+            { key: 'ready', label: 'Ready to post' },
+            { key: 'scheduled', label: 'Scheduled' },
+            { key: 'published', label: 'Posted' }
+        ];
+        let socItems = [], socFilter = 'all', socMonth = null, socDragId = null;
+
+        const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const socStatusOf = (s) => s.scheduledFor ? (s.status === 'published' ? 'published' : 'scheduled') : (s.status === 'ready' ? 'ready' : (s.status || 'draft'));
+
+        async function loadSocialStudio() {
+            if (!socMonth) { const n = new Date(); socMonth = new Date(n.getFullYear(), n.getMonth(), 1); }
+            try {
+                const { items } = await contentApi({ action: 'list', kind: 'social' });
+                socItems = items;
+            } catch (err) { socItems = []; }
+            renderSocFilters(); renderSocLibrary(); renderSocCalendar(); renderSocGrid();
+        }
+        function renderSocFilters() {
+            const counts = {};
+            socItems.forEach(s => { const k = socStatusOf(s); counts[k] = (counts[k] || 0) + 1; });
+            $('socialFilters').innerHTML = SOC_FILTERS.map(f => {
+                const n = f.key === 'all' ? socItems.length : (counts[f.key] || 0);
+                return `<button type="button" data-socfilter="${f.key}" class="${socFilter === f.key ? 'is-on' : ''}">${f.label}${n ? ' · ' + n : ''}</button>`;
+            }).join('');
+        }
+        function socVisible() {
+            return socItems.filter(s => socFilter === 'all' || socStatusOf(s) === socFilter);
+        }
+        function renderSocLibrary() {
+            // The library holds what is NOT yet on the calendar, plus whatever the filter asks for.
+            const list = socVisible().filter(s => socFilter === 'all' ? !s.scheduledFor : true);
+            $('socLibCount').textContent = list.length ? `· ${list.length}` : '';
+            $('socLibrary').innerHTML = list.length ? list.map(s => `
+                <div class="soc-item" draggable="true" data-socid="${esc(s.id)}">
+                    ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : '<img alt="">'}
+                    <span class="soc-item-t">${esc((s.title || s.id).slice(0, 70))}
+                        <span class="soc-item-s">${STATUS_LABEL[socStatusOf(s)] || ''}${s.scheduledFor ? ' · ' + s.scheduledFor : ''}</span>
+                    </span>
+                </div>`).join('')
+                : '<p class="dash-empty">Nothing here yet. <strong>New post</strong> builds one from a proposal, hotel page, blog post or itinerary.</p>';
+        }
+        const STATUS_LABEL = { draft: 'Draft', ready: 'Ready to post', scheduled: 'Scheduled', published: 'Posted' };
+        function renderSocCalendar() {
+            const first = new Date(socMonth.getFullYear(), socMonth.getMonth(), 1);
+            const start = new Date(first); start.setDate(1 - first.getDay());
+            $('socMonth').textContent = socMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+            const today = ymd(new Date());
+            const byDay = {};
+            socItems.filter(s => s.scheduledFor).forEach(s => { (byDay[s.scheduledFor] = byDay[s.scheduledFor] || []).push(s); });
+            let html = ['S','M','T','W','T','F','S'].map(d => `<div class="soc-dow">${d}</div>`).join('');
+            for (let i = 0; i < 42; i++) {
+                const d = new Date(start); d.setDate(start.getDate() + i);
+                const key = ymd(d), out = d.getMonth() !== socMonth.getMonth();
+                html += `<div class="soc-day${out ? ' is-out' : ''}${key === today ? ' is-today' : ''}" data-day="${key}">
+                    <span class="soc-day-n">${d.getDate()}</span>
+                    ${(byDay[key] || []).map(s => `
+                        <div class="soc-chip" draggable="true" data-socid="${esc(s.id)}" title="${esc(s.title || '')}">
+                            ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
+                            <button class="soc-chip-x" data-socunschedule="${esc(s.id)}" type="button">✕</button>
+                        </div>`).join('')}
+                </div>`;
+            }
+            $('socCalendar').innerHTML = html;
+        }
+        function renderSocGrid() {
+            const sched = socItems.filter(s => s.scheduledFor).sort((a, b) => b.scheduledFor.localeCompare(a.scheduledFor));
+            $('socGrid').innerHTML = sched.length ? sched.slice(0, 12).map(s => `
+                <div title="${esc(s.title || '')}">
+                    ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
+                    <span class="ig-when">${new Date(s.scheduledFor + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                </div>`).join('')
+                : '<p class="dash-empty" style="grid-column:1/-1">Schedule a post to see the grid fill in.</p>';
+        }
+        async function socSchedule(id, date) {
+            const item = socItems.find(s => s.id === id);
+            if (!item) return;
+            try {
+                const { doc } = await contentApi({ action: 'load', kind: 'social', id });
+                doc.scheduledFor = date || '';
+                if (date && doc.status !== 'published') doc.status = 'ready';
+                await contentApi({ action: 'save', kind: 'social', id, doc,
+                    meta: { title: doc.title || item.title, proposalId: doc.proposalId || '', thumb: doc.thumb || item.thumb,
+                            status: doc.status || 'draft', scheduledFor: doc.scheduledFor } });
+                item.scheduledFor = doc.scheduledFor; item.status = doc.status;
+                renderSocFilters(); renderSocLibrary(); renderSocCalendar(); renderSocGrid();
+                toast(date ? 'Scheduled for ' + date + '.' : 'Moved back to the library.');
+            } catch (err) { toast('Couldn’t update that post.'); }
+        }
+        document.addEventListener('dragstart', (e) => {
+            const it = e.target.closest('[data-socid]');
+            if (!it) return;
+            socDragId = it.dataset.socid;
+            it.classList.add('is-dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            try { e.dataTransfer.setData('text/plain', socDragId); } catch (err) {}
+        });
+        document.addEventListener('dragend', (e) => {
+            document.querySelectorAll('.is-dragging').forEach(n => n.classList.remove('is-dragging'));
+        });
+        document.addEventListener('dragover', (e) => {
+            const day = e.target.closest('.soc-day'), lib = e.target.closest('#socLibrary');
+            if (!day && !lib) return;
+            e.preventDefault();
+            if (day) day.classList.add('is-over');
+        });
+        document.addEventListener('dragleave', (e) => {
+            const day = e.target.closest('.soc-day');
+            if (day) day.classList.remove('is-over');
+        });
+        document.addEventListener('drop', (e) => {
+            const day = e.target.closest('.soc-day'), lib = e.target.closest('#socLibrary');
+            if (!day && !lib) return;
+            e.preventDefault();
+            if (day) day.classList.remove('is-over');
+            const id = socDragId || (e.dataTransfer && e.dataTransfer.getData('text/plain'));
+            if (!id) return;
+            socSchedule(id, day ? day.dataset.day : '');
+            socDragId = null;
+        });
+        document.addEventListener('click', (e) => {
+            const f = e.target.closest('[data-socfilter]');
+            if (f) { socFilter = f.dataset.socfilter; renderSocFilters(); renderSocLibrary(); return; }
+            const un = e.target.closest('[data-socunschedule]');
+            if (un) { e.stopPropagation(); socSchedule(un.dataset.socunschedule, ''); return; }
+            const item = e.target.closest('.soc-item');
+            if (item && $('studio').dataset.view === 'social') { openSavedSocial(item.dataset.socid); return; }
+        });
+        $('socPrev').addEventListener('click', () => { socMonth = new Date(socMonth.getFullYear(), socMonth.getMonth() - 1, 1); renderSocCalendar(); });
+        $('socNext').addEventListener('click', () => { socMonth = new Date(socMonth.getFullYear(), socMonth.getMonth() + 1, 1); renderSocCalendar(); });
+        $('socNew').addEventListener('click', () => openSocialPicker());
+        $('dashOpenSocial').addEventListener('click', () => showView('social'));
 
         /* ── Hotel-page drafts — edit the fields, see the real page ───── */
         let hotelDraftId = null, hotelDraftDoc = null, hdT = null;
@@ -2918,8 +3126,12 @@
                     caption: $('sCaption').value
                 }
             };
+            const prev = socItems.find(s => s.id === social.postId);
+            doc.status = doc.status || (prev && prev.status) || 'draft';
+            doc.scheduledFor = doc.scheduledFor || (prev && prev.scheduledFor) || '';
             const out = await contentApi({ action: 'save', kind: 'social', id: social.postId, doc,
-                meta: { title: m.hook, proposalId: state.id || '', thumb } });
+                meta: { title: m.hook, proposalId: state.id || '', thumb,
+                        status: doc.status, scheduledFor: doc.scheduledFor } });
             social.postId = out.id;
             if (!auto) toast('Saved — it’s in the gallery on the dashboard.');
         }
