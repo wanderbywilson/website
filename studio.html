@@ -262,6 +262,21 @@
         .filter-tabs button.is-on { background: var(--ink); color: var(--paper-cream); border-color: var(--ink); }
         .list-search { max-width: 240px; }
         .list-rows-wrap { background: #fff; border: 1px solid var(--studio-line-soft); padding: 4px 20px 12px; }
+        .tmpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        @media (max-width: 720px) { .tmpl-grid { grid-template-columns: 1fr; } }
+        .tmpl-card {
+            display: flex; flex-direction: column; gap: 8px; text-align: left;
+            padding: 22px 20px; cursor: pointer; font-family: var(--font-sans);
+            background: var(--st-card, #fff); border: 1px solid var(--st-line, #ddd);
+            transition: border-color .15s ease, transform .15s ease;
+        }
+        .tmpl-card:hover { border-color: var(--st-gold, #c7ae8a); transform: translateY(-2px); }
+        .tmpl-icon { font-size: 26px; color: var(--st-gold, #c7ae8a); line-height: 1; }
+        .tmpl-title { font-family: var(--font-serif); font-size: 18px; color: var(--st-text, #1e3552); }
+        .tmpl-sub { font-size: 12px; line-height: 1.5; color: var(--st-dim, rgba(30,53,82,0.55)); }
+        .picker-list { max-height: 46vh; overflow-y: auto; margin-top: 18px; }
+        .picker-head { display: flex; align-items: center; gap: 12px; margin: 20px 0 4px; }
+        .picker-head h3 { font-family: var(--font-serif); font-weight: 400; font-size: 17px; margin: 0; flex: 1; color: var(--st-text, #1e3552); }
         .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
         .ig-cell { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 0; padding: 0; cursor: pointer; background: var(--paper-cream); }
         .ig-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
@@ -354,6 +369,144 @@
             .mobile-toggle { display: inline-flex !important; }
         }
         .mobile-toggle { display: none; }
+
+        /* ══════════════════════════════════════════════════════════════════
+           DARK CONSOLE THEME — the Studio is a tool, not a brochure. Deep
+           navy-black chrome so the light site previews read as the "real"
+           thing beside it. Brand gold stays the accent. (Wilson, 2026-08-03)
+           ══════════════════════════════════════════════════════════════════ */
+        :root {
+            --st-bg: #0b111c;
+            --st-panel: #121b2b;
+            --st-card: #16202f;
+            --st-field: #0e1622;
+            --st-line: rgba(199, 174, 138, 0.16);
+            --st-line-2: rgba(199, 174, 138, 0.34);
+            --st-text: #e9eef6;
+            --st-dim: rgba(233, 238, 246, 0.55);
+            --st-dim-2: rgba(233, 238, 246, 0.38);
+            --st-gold: #cbb08a;
+            --st-glow: rgba(203, 176, 138, 0.25);
+        }
+        body.studio-page {
+            background:
+                radial-gradient(1100px 620px at 82% -10%, rgba(203,176,138,0.10), transparent 60%),
+                radial-gradient(900px 520px at 8% 108%, rgba(70,120,180,0.10), transparent 62%),
+                var(--st-bg);
+            background-attachment: fixed;
+            color: var(--st-text);
+        }
+        .gate { background: var(--st-bg); }
+        .gate-title, .gate-kicker { color: var(--st-text); }
+        .gate-kicker { color: var(--st-gold); }
+        .gate-title em { color: var(--st-gold); }
+        .gate input {
+            background: var(--st-field); border-color: var(--st-line-2); color: var(--st-text);
+        }
+        .gate input:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
+
+        /* Chrome */
+        .studio-top {
+            background: rgba(11, 17, 28, 0.86);
+            border-bottom: 1px solid var(--st-line);
+            backdrop-filter: blur(14px);
+            position: sticky; top: 0; z-index: 40;
+        }
+        .studio-brand { color: var(--st-text); }
+        .studio-brand em { color: var(--st-gold); }
+        .studio-status { color: var(--st-dim); }
+
+        /* Controls */
+        .btn { background: var(--st-gold); color: #0b111c; border-color: var(--st-gold); }
+        .btn:hover { background: transparent; color: var(--st-gold); }
+        .btn.btn-ghost { background: transparent; color: var(--st-text); border-color: var(--st-line-2); }
+        .btn.btn-ghost:hover { border-color: var(--st-gold); color: var(--st-gold); background: transparent; }
+        .btn.danger, .btn.btn-ghost.danger { color: #e2757a; border-color: rgba(226,117,122,0.4); }
+        .btn.btn-ghost.danger:hover { border-color: #e2757a; color: #e2757a; }
+        label.f-label { color: var(--st-dim); }
+        .f-input, .f-area, select.f-input {
+            background: var(--st-field); border-color: var(--st-line); color: var(--st-text);
+        }
+        .f-input::placeholder, .f-area::placeholder { color: var(--st-dim-2); }
+        .f-input:focus, .f-area:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
+        .f-hint { color: var(--st-dim-2); }
+        .sec-head, .dash-title, .modal-title { color: var(--st-text); }
+        .sec-head em, .dash-title em, .modal-title em { color: var(--st-gold); }
+        .sec-sub, .dash-sub, .dash-empty, .dash-hint, .social-note { color: var(--st-dim); }
+
+        /* Panels */
+        .studio-form, .blog-form { background: var(--st-panel); border-right-color: var(--st-line); }
+        .studio-preview { background: #060a11; }
+        .studio-preview-tag { background: rgba(203,176,138,0.92); color: #0b111c; font-weight: 600; }
+        .sec-rule { border-top-color: var(--st-line); }
+        .modal { background: var(--st-panel); border: 1px solid var(--st-line); box-shadow: 0 30px 90px rgba(0,0,0,0.6); }
+        .modal-wrap { background: rgba(4, 8, 14, 0.72); backdrop-filter: blur(3px); }
+        .slide-strip { background: var(--st-field); border-color: var(--st-line); }
+
+        /* Dashboard cards */
+        .dash-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0));
+            background-color: var(--st-card);
+            border: 1px solid var(--st-line);
+            border-radius: 2px;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.9);
+        }
+        .dash-card-head h2 { color: var(--st-text); }
+        .dash-card-head { border-bottom: 1px solid var(--st-line); padding-bottom: 12px; }
+        .dash-row { border-top-color: var(--st-line); }
+        .dash-row:hover { background: rgba(203,176,138,0.06); }
+        .dash-row-title { color: var(--st-text); }
+        .dash-row:hover .dash-row-title { color: var(--st-gold); }
+        .dash-row-sub { color: var(--st-dim-2); }
+        .list-rows-wrap { background: var(--st-card); border-color: var(--st-line); }
+
+        /* Status chips — luminous on dark */
+        .chip { border-radius: 2px; }
+        .chip-viewed { color: #6ee7a8; border-color: rgba(110,231,168,0.35); background: rgba(110,231,168,0.08); }
+        .chip-ready { color: #f0c674; border-color: rgba(240,198,116,0.38); background: rgba(240,198,116,0.09); }
+        .chip-review { color: #8fc6ff; border-color: rgba(143,198,255,0.35); background: rgba(143,198,255,0.08); }
+        .chip-published { color: var(--st-dim); border-color: var(--st-line-2); background: transparent; }
+        .chip-draft { color: var(--st-dim); border-color: var(--st-line-2); background: transparent; }
+        .chip-idea { color: rgba(233,238,246,0.5); border-color: var(--st-line); background: rgba(255,255,255,0.03); }
+
+        /* Filters */
+        .filter-tabs button { background: var(--st-card); border-color: var(--st-line); color: var(--st-dim); }
+        .filter-tabs button:hover { border-color: var(--st-gold); color: var(--st-gold); }
+        .filter-tabs button.is-on { background: var(--st-gold); color: #0b111c; border-color: var(--st-gold); }
+
+        /* Forms inside the proposal editor */
+        .hotel-card { background: var(--st-card); border-color: var(--st-line); }
+        .hotel-card-name { color: var(--st-text); }
+        .hotel-card-loc, .hotel-card summary, .claude-row { color: var(--st-dim); }
+        .hotel-card summary:hover { color: var(--st-gold); }
+        .icon-btn { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        .icon-btn:hover { border-color: var(--st-gold); color: var(--st-gold); }
+        .perks-box .f-area { background: var(--st-field); border-color: var(--st-line-2); box-shadow: none; }
+        .quote-steps { background: rgba(203,176,138,0.06); border-color: var(--st-line-2); }
+        .quote-steps-head { color: var(--st-gold); }
+        .manual-fields > summary { color: var(--st-dim); }
+        .manual-fields[open] > summary { color: var(--st-text); }
+        .check-row { color: var(--st-text); }
+        .pub-bar { background: rgba(110,231,168,0.08); border-color: rgba(110,231,168,0.3); color: var(--st-text); }
+        .pub-bar a { color: var(--st-gold); }
+        .lib-card { background: var(--st-card); border-color: var(--st-line); color: var(--st-text); }
+        .lib-card:hover { border-color: var(--st-gold); }
+        .toast { background: var(--st-gold); color: #0b111c; font-weight: 500; }
+
+        /* Blog editor */
+        .blog-toolbar button { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        .blog-toolbar button:hover { border-color: var(--st-gold); color: var(--st-gold); }
+        .blog-body-edit { background: var(--st-field); border-color: var(--st-line); color: var(--st-text); }
+        .blog-body-edit:focus { border-color: var(--st-gold); box-shadow: 0 0 0 3px var(--st-glow); }
+        .hd-notes { background: var(--st-field); border-color: var(--st-line); color: var(--st-dim); }
+        .social-qa { background: rgba(110,231,168,0.08); border-color: rgba(110,231,168,0.3); color: #6ee7a8; }
+        .social-qa.has-issues { background: rgba(240,198,116,0.09); border-color: rgba(240,198,116,0.38); color: #f0c674; }
+
+        /* Scrollbars — quiet, dark */
+        .studio-form, .blog-form, .social-fields, .slide-strip, .lib-grid, .plist { scrollbar-width: thin; scrollbar-color: var(--st-line-2) transparent; }
+        .studio-form::-webkit-scrollbar, .blog-form::-webkit-scrollbar, .social-fields::-webkit-scrollbar { width: 9px; }
+        .studio-form::-webkit-scrollbar-thumb, .blog-form::-webkit-scrollbar-thumb, .social-fields::-webkit-scrollbar-thumb { background: var(--st-line-2); }
+        .studio-form::-webkit-scrollbar-track, .blog-form::-webkit-scrollbar-track, .social-fields::-webkit-scrollbar-track { background: transparent; }
     </style>
 </head>
 <body class="studio-page">
@@ -401,7 +554,7 @@
                     <section class="dash-card" id="dashSocialCard">
                         <div class="dash-card-head">
                             <h2>Social posts</h2>
-                            <span class="dash-hint">created from a proposal</span>
+                            <button class="btn btn-small" id="dashNewSocial" type="button">New post</button>
                         </div>
                         <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
                     </section>
@@ -685,6 +838,34 @@
         </div>
     </div>
 
+    <!-- ── New social post — pick a starting point ───────────────────── -->
+    <div class="modal-wrap" id="socialNewModal">
+        <div class="modal" style="max-width:760px">
+            <div class="modal-head">
+                <h2 class="modal-title">New social <em>post.</em></h2>
+                <button class="btn btn-ghost btn-small" data-close="socialNewModal" type="button">Close</button>
+            </div>
+            <div class="tmpl-grid">
+                <button class="tmpl-card" data-tmpl="proposal" type="button">
+                    <span class="tmpl-icon">◱</span>
+                    <span class="tmpl-title">From a proposal</span>
+                    <span class="tmpl-sub">The client-story carousel — the brief, then each hotel you shortlisted.</span>
+                </button>
+                <button class="tmpl-card" data-tmpl="blog" type="button">
+                    <span class="tmpl-icon">▤</span>
+                    <span class="tmpl-title">From a blog post</span>
+                    <span class="tmpl-sub">Turn any published article into a swipeable carousel that drives to the site.</span>
+                </button>
+                <button class="tmpl-card" data-tmpl="scratch" type="button">
+                    <span class="tmpl-icon">✦</span>
+                    <span class="tmpl-title">From scratch</span>
+                    <span class="tmpl-sub">Copy our brand prompt, give it to your Claude, paste the answer back.</span>
+                </button>
+            </div>
+            <div id="tmplPicker" hidden></div>
+        </div>
+    </div>
+
     <!-- ── Social composer — formula-driven Instagram carousel ───────── -->
     <div class="modal-wrap" id="socialModal">
         <div class="modal social-modal">
@@ -746,6 +927,8 @@
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=91"></script>
+    <!-- Live blog posts — the source for "social post from a blog post" -->
+    <script src="/blog-data-v17.js"></script>
     <script>
     (function () {
         'use strict';
@@ -836,39 +1019,72 @@
         ];
         let blogItems = [], blogFilter = 'all';
 
+        /* Dashboard sections show a preview; "See more" expands in place so a
+           full library doesn't bury what needs attention. */
+        const dashData = { proposals: [], social: [], hotels: [] };
+        const dashOpen = { proposals: false, social: false, hotels: false };
+        const PREVIEW_N = { proposals: 4, social: 6, hotels: 4 };
+        function moreBar(key, total) {
+            const shown = dashOpen[key] ? total : Math.min(PREVIEW_N[key], total);
+            if (total <= PREVIEW_N[key]) return '';
+            return `<button class="btn btn-ghost btn-small" data-dashmore="${key}" type="button" style="margin-top:12px">
+                ${dashOpen[key] ? 'Show less' : `See all ${total}`}</button>
+                <span class="dash-hint" style="margin-left:8px">showing ${shown} of ${total}</span>`;
+        }
+        function renderDashProposals() {
+            const all = dashData.proposals;
+            if (!all.length) { $('dashProposals').innerHTML = '<p class="dash-empty">No proposals yet — start one and it appears here.</p>'; return; }
+            const list = dashOpen.proposals ? all : all.slice(0, PREVIEW_N.proposals);
+            $('dashProposals').innerHTML = list.map(p => `
+                <button class="dash-row" data-openproposal="${esc(p.id)}" type="button">
+                    <div class="dash-row-main">
+                        <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
+                        <div class="dash-row-sub">${esc(stripTags(p.title || ''))}${p.viewed && p.lastViewedAt ? ' · last viewed ' + fmtWhen(p.lastViewedAt) : ''}</div>
+                    </div>
+                    ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Not viewed yet</span>'}
+                </button>`).join('') + moreBar('proposals', all.length);
+        }
+        function renderDashSocial() {
+            const all = dashData.social;
+            if (!all.length) { $('dashSocial').innerHTML = '<p class="dash-empty">No saved posts yet — hit <strong>New post</strong> above.</p>'; return; }
+            const list = dashOpen.social ? all : all.slice(0, PREVIEW_N.social);
+            $('dashSocial').innerHTML = '<div class="ig-grid">' + list.map(s => `
+                <button class="ig-cell" data-opensocial="${esc(s.id)}" type="button" title="${esc(s.title || '')}">
+                    ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
+                    <span class="ig-cell-label">${esc((s.title || '').slice(0, 60))}</span>
+                </button>`).join('') + '</div>' + moreBar('social', all.length);
+        }
+        function renderDashHotels() {
+            const all = dashData.hotels;
+            if (!all.length) { $('dashHotels').innerHTML = '<p class="dash-empty">Nothing waiting. When a quoted hotel isn’t on the site, Claude drafts its page and it lands here for your review.</p>'; return; }
+            const list = dashOpen.hotels ? all : all.slice(0, PREVIEW_N.hotels);
+            $('dashHotels').innerHTML = list.map(h => `
+                <button class="dash-row" data-openhoteldraft="${esc(h.id)}" type="button">
+                    <div class="dash-row-main">
+                        <div class="dash-row-title">${esc(h.name || h.id)}</div>
+                        <div class="dash-row-sub">${esc(h.location || '')}</div>
+                    </div>
+                    ${STATUS_CHIP[h.status] || STATUS_CHIP['in-review']}
+                </button>`).join('') + moreBar('hotels', all.length);
+        }
+        document.addEventListener('click', (e) => {
+            const b = e.target.closest('[data-dashmore]');
+            if (!b) return;
+            const k = b.dataset.dashmore;
+            dashOpen[k] = !dashOpen[k];
+            ({ proposals: renderDashProposals, social: renderDashSocial, hotels: renderDashHotels })[k]();
+        });
+
         async function loadDashboard() {
-            // Proposals
-            api({ action: 'list' }).then(({ proposals }) => {
-                $('dashProposals').innerHTML = proposals.length ? proposals.slice(0, 8).map(p => `
-                    <button class="dash-row" data-openproposal="${esc(p.id)}" type="button">
-                        <div class="dash-row-main">
-                            <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
-                            <div class="dash-row-sub">${esc(p.title || '')}${p.viewed && p.lastViewedAt ? ' · last viewed ' + fmtWhen(p.lastViewedAt) : ''}</div>
-                        </div>
-                        ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Not viewed yet</span>'}
-                    </button>`).join('')
-                    : '<p class="dash-empty">No proposals yet — start one and it appears here.</p>';
-            }).catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
-            // Social gallery
-            contentApi({ action: 'list', kind: 'social' }).then(({ items }) => {
-                $('dashSocial').innerHTML = items.length ? '<div class="ig-grid">' + items.slice(0, 9).map(s => `
-                    <button class="ig-cell" data-opensocial="${esc(s.id)}" type="button" title="${esc(s.title || '')}">
-                        ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
-                        <span class="ig-cell-label">${esc((s.title || '').slice(0, 60))}</span>
-                    </button>`).join('') + '</div>'
-                    : '<p class="dash-empty">No saved posts yet. Open a proposal → <strong>Create social post</strong> → Save to gallery.</p>';
-            }).catch(() => { $('dashSocial').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; });
-            // Hotel drafts
+            api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
+                .catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
+            contentApi({ action: 'list', kind: 'social' }).then(({ items }) => { dashData.social = items; renderDashSocial(); })
+                .catch(() => { $('dashSocial').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; });
             contentApi({ action: 'list', kind: 'hoteldraft' }).then(({ items }) => {
-                $('dashHotels').innerHTML = items.length ? items.map(h => `
-                    <button class="dash-row" data-openhoteldraft="${esc(h.id)}" type="button">
-                        <div class="dash-row-main">
-                            <div class="dash-row-title">${esc(h.name || h.id)}</div>
-                            <div class="dash-row-sub">${esc(h.location || '')}</div>
-                        </div>
-                        ${STATUS_CHIP[h.status] || STATUS_CHIP['in-review']}
-                    </button>`).join('')
-                    : '<p class="dash-empty">Nothing waiting. When a quoted hotel isn’t on the site, Claude drafts its page and it lands here for your review.</p>';
+                // Drafts needing a human first, published ones last
+                const rank = { 'in-review': 0, draft: 1, ready: 2, published: 3 };
+                dashData.hotels = items.slice().sort((a, b) => (rank[a.status] ?? 0) - (rank[b.status] ?? 0));
+                renderDashHotels();
             }).catch(() => { $('dashHotels').innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; });
             // Blog — surface what needs a human first, plus pipeline counts
             contentApi({ action: 'list', kind: 'blog' }).then(({ items }) => {
@@ -1803,7 +2019,7 @@
         async function slideBrief(m) {
             const [c, ctx] = newSlide();
             ctx.fillStyle = CREAM; ctx.fillRect(0, 0, SL_W, SL_H);
-            kicker(ctx, 'The brief', 110, 190, GOLD, 28);
+            kicker(ctx, m.briefKicker || 'The brief', 110, 190, GOLD, 28);
             ctx.font = '300 56px Fraunces'; ctx.fillStyle = INK;
             let y = drawWrapped(ctx, m.briefIntro, 110, 290, 860, 70);
             y += 50;
@@ -1861,7 +2077,16 @@
             return c;
         }
 
+        /* A deck can come from a proposal, a blog post, or a Claude prompt.
+           All three normalize to the same shape the slide renderers expect. */
+        let socialDeck = null;
         function socialModel() {
+            if (socialDeck) {
+                return {
+                    P: { title: socialDeck.title || '', lede: socialDeck.lede || '', preparedFor: '' },
+                    hotels: socialDeck.slides || []
+                };
+            }
             const P = serialize();
             // Resolve library slugs the same way the proposal page does.
             const hotels = P.hotels.map(h => {
@@ -1896,6 +2121,7 @@
 
         function prefillSocial() {
             const { P, hotels } = socialModel();
+            if (socialDeck) { prefillFromDeck(P, hotels); return; }
             const sentences = plain(P.lede).split(/(?<=[.!?])\s+/).filter(Boolean);
             // Hook: lead with what the stays have in common — place + occasion
             // from the proposal title when we can find them.
@@ -1921,13 +2147,77 @@
             $('sCaption').value = buildCaption();
         }
 
+        function prefillFromDeck(P, slides) {
+            $('sHook').value = socialDeck.hook || plain(P.title);
+            $('sBriefIntro').value = socialDeck.briefIntro || '';
+            $('sBrief').value = (socialDeck.brief || []).join('\n');
+            $('sShowRates').checked = false;
+            $('sCtaTitle').value = socialDeck.ctaTitle || 'Want the full guide?';
+            $('sCtaSub').value = socialDeck.ctaSub || 'Read it on wanderbywilson.com — or tell us the occasion and we’ll curate a shortlist tailored to you.';
+            $('sHotelLines').innerHTML = '<p class="f-hint" style="margin:0 0 10px">One line per slide — punchy and specific. What would make someone stop scrolling?</p>' +
+                slides.map((h, i) => `
+                <div class="f-row">
+                    <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
+                    <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
+                </div>`).join('');
+            $('sCaption').value = socialDeck.caption || buildCaption();
+        }
+
+        /* Blog post → carousel: cover from the hero, one slide per H2/H3
+           section, using inline photos where the article has them. */
+        function slidesFromBlogPost(post) {
+            const box = document.createElement('div');
+            box.innerHTML = post.bodyHtml || '';
+            const nodes = Array.from(box.children);
+            const imgs = Array.from(box.querySelectorAll('img')).map(i => i.getAttribute('src')).filter(Boolean);
+            const slides = [];
+            let ix = 0;
+            nodes.forEach((n, i) => {
+                if (!/^H[23]$/.test(n.tagName)) return;
+                let body = '';
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (/^H[23]$/.test(nodes[j].tagName)) break;
+                    if (nodes[j].tagName === 'P' && nodes[j].textContent.trim()) { body = nodes[j].textContent.trim(); break; }
+                }
+                slides.push({
+                    name: n.textContent.trim(), location: '',
+                    heroImage: imgs[ix++] || post.heroImage || '',
+                    desc: body, socialHook: '', room: '', rate: ''
+                });
+            });
+            return slides.slice(0, 8);
+        }
+
+        function deckFromBlogPost(slug, post) {
+            const slides = slidesFromBlogPost(post);
+            return {
+                kind: 'blog', sourceSlug: slug,
+                title: plain(post.title), lede: plain(post.dek || ''),
+                coverImage: post.heroImage || '',
+                hook: plain(post.title),
+                briefIntro: plain(post.dek || ''),
+                brief: [],
+                slides,
+                ctaTitle: 'Read the full guide.',
+                ctaSub: 'The whole thing is on wanderbywilson.com — link in bio. Planning this trip? Tell us the occasion and we’ll curate a shortlist tailored to you.',
+                caption: [
+                    plain(post.title), '',
+                    plain(post.dek || ''), '',
+                    'Full guide on wanderbywilson.com — link in bio.', '',
+                    '#luxurytravel #traveladvisor #virtuoso #travelplanner #wanderbywilson'
+                ].join('\n')
+            };
+        }
+
         /* QA pass — sanity-check the post before anyone downloads it. */
         function socialQA(m) {
             const issues = [];
             const n = m.hotels.length;
             const NUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
             const textAll = [m.hook, m.briefIntro, ...m.brief, m.ctaTitle, m.ctaSub, $('sCaption').value].join(' • ');
-            const re = /\b(one|two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\s+(?:[a-z]+\s+)?(stays?|hotels?|options?|propert\w+|islands?|resorts?)\b/gi;
+            const re = m.deckKind === 'proposal'
+                ? /\b(one|two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\s+(?:[a-z]+\s+)?(stays?|hotels?|options?|propert\w+|islands?|resorts?)\b/gi
+                : /(?!)/g;
             let mm;
             while ((mm = re.exec(textAll))) {
                 const v = NUM[mm[1].toLowerCase()] || parseInt(mm[1], 10);
@@ -1939,7 +2229,8 @@
                     if (new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(textAll))
                         issues.push(`Possible client name in the post: “${w}” — client names must never appear on social.`);
                 });
-            if (!m.brief.length) issues.push('The brief bullets are empty — add 3–4 points from the inquiry & intake call.');
+            if (!m.brief.length && m.deckKind === 'proposal') issues.push('The brief bullets are empty — add 3–4 points from the inquiry & intake call.');
+            if (!m.briefIntro) issues.push('Slide 2 has no opening line — it will render nearly empty.');
             m.hotels.forEach((h, i) => {
                 if ((h.socialLine || '').length > 150) issues.push(`Slide ${i + 3} (${plain(h.name)}): line is long and may get cut — aim for ~110 characters.`);
                 if (!h.heroImage) issues.push(`Slide ${i + 3} (${plain(h.name)}) has no photo.`);
@@ -1970,10 +2261,12 @@
             const { P, hotels } = socialModel();
             const lines = Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value.trim());
             return {
-                coverImage: hotels[0] ? hotels[0].heroImage : '',
+                coverImage: (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
                 hook: $('sHook').value.trim(),
                 briefIntro: $('sBriefIntro').value.trim(),
                 brief: $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean),
+                briefKicker: socialDeck ? (socialDeck.kind === 'blog' ? 'The short version' : 'In brief') : 'The brief',
+                deckKind: socialDeck ? socialDeck.kind : 'proposal',
                 showRates: $('sShowRates').checked,
                 ctaTitle: $('sCtaTitle').value.trim(),
                 ctaSub: $('sCtaSub').value.trim(),
@@ -2017,6 +2310,152 @@
                 prefillSocial();
             }
             renderSocial();
+        });
+
+        /* ── New social post: proposal · blog post · from scratch ─────── */
+        const SOCIAL_PROMPT = [
+            'You are writing an Instagram carousel for Wander by Wilson, a luxury travel advisory (wanderbywilson.com, @wanderbywilson). Wilson Schubert is the founder — she/her.',
+            '',
+            'BRAND VOICE: travel-chic and editorial. Confident, warm, specific. Never breathless or salesy — no "paradise awaits", no exclamation marks, no emoji in slide copy (the caption may use one). Short sentences. Concrete details beat adjectives.',
+            '',
+            'HARD RULES:',
+            '1. NEVER invent facts about a hotel — no room counts, rates, amenities, or claims unless the user gives them to you. If you are unsure, leave it out. (This is a compliance requirement; a client could book on it.)',
+            '2. NEVER name a client or use identifying details about one.',
+            '3. NEVER mention "a personalized welcome note from your advisor" — that amenity is meant to be a surprise.',
+            '4. Preferred-partner amenities may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out — "included at no additional cost".',
+            '',
+            'The user will tell you the topic below this prompt. Reply with ONLY this JSON block:',
+            '',
+            '{',
+            '  "hook": "the cover line — the reason someone stops mid-scroll. Max ~70 characters. Tease, do not summarize.",',
+            '  "briefIntro": "slide 2 opening line — one sentence that sets up the list.",',
+            '  "brief": ["3-4 short supporting points, one per line, max ~90 characters each"],',
+            '  "slides": [',
+            '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "ONE scroll-stopping line, max ~120 characters: what makes it special and the can\\u2019t-miss detail. Factual only.", "imageUrl": "direct https URL of a photo from the hotel\\u2019s or destination\\u2019s OFFICIAL site if you can browse and are confident; otherwise empty string" }',
+            '  ],',
+            '  "ctaTitle": "closing slide headline, e.g. Which one would you pick?",',
+            '  "ctaSub": "closing line — invite them to reach out. Use curation language (we curate / tailored to you), never \\u201cwe design the shortlist\\u201d.",',
+            '  "caption": "the Instagram caption: hook, then the list, then the amenities line, then a question, then 5-7 hashtags on the last line."',
+            '}',
+            '',
+            'Aim for 3-6 entries in "slides". Photo rules if you supply imageUrl: daylight or golden hour only, no plated-food shots, no night shots, no posed models, no bathroom-only room shots.'
+        ].join('\n');
+
+        function openSocialPicker() {
+            $('tmplPicker').hidden = true;
+            $('tmplPicker').innerHTML = '';
+            $('socialNewModal').classList.add('is-open');
+        }
+        $('dashNewSocial').addEventListener('click', openSocialPicker);
+
+        function pickerShell(title, bodyHtml) {
+            const box = $('tmplPicker');
+            box.hidden = false;
+            box.innerHTML = `<div class="picker-head"><h3>${esc(title)}</h3>
+                <button class="btn btn-ghost btn-small" data-tmplback type="button">Back</button></div>${bodyHtml}`;
+        }
+
+        async function startFromProposal() {
+            pickerShell('Which proposal?', '<p class="dash-empty">Loading…</p>');
+            try {
+                const { proposals } = await api({ action: 'list' });
+                pickerShell('Which proposal?', '<div class="picker-list">' + (proposals.length ? proposals.map(p => `
+                    <button class="dash-row" data-tmplproposal="${esc(p.id)}" type="button">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
+                            <div class="dash-row-sub">${esc(stripTags(p.title || ''))}</div>
+                        </div>
+                    </button>`).join('') : '<p class="dash-empty">No proposals yet.</p>') + '</div>');
+            } catch (err) { pickerShell('Which proposal?', '<p class="dash-empty">Couldn’t load proposals.</p>'); }
+        }
+
+        function startFromBlog() {
+            const posts = (typeof BLOG_POSTS !== 'undefined') ? BLOG_POSTS : {};
+            const keys = Object.keys(posts);
+            pickerShell('Which post?', '<div class="picker-list">' + (keys.length ? keys.map(k => `
+                <button class="dash-row" data-tmplblog="${esc(k)}" type="button">
+                    <div class="dash-row-main">
+                        <div class="dash-row-title">${esc(stripTags(posts[k].title || k))}</div>
+                        <div class="dash-row-sub">${esc(stripTags(posts[k].dek || ''))}</div>
+                    </div>
+                </button>`).join('') : '<p class="dash-empty">No published posts found.</p>') + '</div>');
+        }
+
+        function startFromScratch() {
+            pickerShell('From scratch', `
+                <p class="sec-sub" style="margin-bottom:12px">Copy our brand prompt, paste it into your own Claude with what the post is about, then paste the JSON it replies with back here.</p>
+                <button class="btn btn-small" id="tmplCopyPrompt" type="button">1 · Copy the brand prompt</button>
+                <div class="f-row" style="margin-top:14px">
+                    <textarea class="f-area" id="tmplPasteArea" style="min-height:150px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the carousel builds itself."></textarea>
+                </div>`);
+            $('tmplCopyPrompt').addEventListener('click', async () => {
+                try { await navigator.clipboard.writeText(SOCIAL_PROMPT); toast('Brand prompt copied — paste it into your Claude.'); }
+                catch (err) { window.prompt('Copy this prompt:', SOCIAL_PROMPT); }
+            });
+            $('tmplPasteArea').addEventListener('input', (e) => {
+                const raw = e.target.value;
+                const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+                if (a === -1 || b <= a) return;
+                let f;
+                try { f = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+                if (!f || !Array.isArray(f.slides) || !f.slides.length) { toast('That JSON has no "slides" — check the reply.'); return; }
+                const slides = f.slides.map(s => ({
+                    name: titleWords(s.name || ''), location: s.location || '',
+                    heroImage: (s.imageUrl || '').trim(), desc: s.line || '',
+                    socialHook: s.line || '', room: '', rate: ''
+                }));
+                socialDeck = {
+                    kind: 'custom', title: f.hook || '', lede: f.briefIntro || '',
+                    coverImage: slides[0] ? slides[0].heroImage : '',
+                    hook: f.hook || '', briefIntro: f.briefIntro || '',
+                    brief: Array.isArray(f.brief) ? f.brief : [],
+                    slides, ctaTitle: f.ctaTitle || '', ctaSub: f.ctaSub || '', caption: f.caption || ''
+                };
+                $('socialNewModal').classList.remove('is-open');
+                openComposerForDeck();
+            });
+        }
+
+        function openComposerForDeck() {
+            social.postId = null;
+            social.forId = null;
+            $('socialModal').classList.add('is-open');
+            prefillSocial();
+            renderSocial();
+            const missing = (socialDeck.slides || []).filter(s => !s.heroImage).length;
+            if (missing) toast(`${missing} slide${missing > 1 ? 's have' : ' has'} no photo — paste image URLs or swap them before posting.`);
+        }
+
+        document.addEventListener('click', async (e) => {
+            const t = e.target.closest('[data-tmpl]');
+            if (t) {
+                if (t.dataset.tmpl === 'proposal') startFromProposal();
+                else if (t.dataset.tmpl === 'blog') startFromBlog();
+                else startFromScratch();
+                return;
+            }
+            if (e.target.closest('[data-tmplback]')) { $('tmplPicker').hidden = true; return; }
+            const tp = e.target.closest('[data-tmplproposal]');
+            if (tp) {
+                try {
+                    const data = await api({ action: 'load', id: tp.dataset.tmplproposal });
+                    socialDeck = null;
+                    showView('editor');
+                    loadProposal(data.id, data.proposal);
+                    $('socialNewModal').classList.remove('is-open');
+                    setTimeout(() => $('btnSocial').click(), 400);
+                } catch (err) { toast('Couldn’t load that proposal.'); }
+                return;
+            }
+            const tb = e.target.closest('[data-tmplblog]');
+            if (tb) {
+                const post = (typeof BLOG_POSTS !== 'undefined') ? BLOG_POSTS[tb.dataset.tmplblog] : null;
+                if (!post) { toast('Couldn’t read that post.'); return; }
+                socialDeck = deckFromBlogPost(tb.dataset.tmplblog, post);
+                if (!socialDeck.slides.length) { toast('That post has no section headings to slice into slides.'); return; }
+                $('socialNewModal').classList.remove('is-open');
+                openComposerForDeck();
+            }
         });
 
         /* Saved posts — the dashboard's IG-style gallery. */
