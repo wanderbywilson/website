@@ -2866,8 +2866,11 @@
                 const t = ' ' + normName(h.sectionText || (h.name + ' ' + h.body)) + ' ';
                 const hit = libEntries.find(e => {
                     if (usedKeys.has(e.k) || takenSrc.has(e.img)) return false;
+                    // Only DISTINCTIVE place names count. "Gili Islands" once
+                    // matched "British Virgin Islands" on the strength of the
+                    // word "islands" and put a Caribbean photo on a Bali slide.
                     const place = normName(plain(lib[e.k].location)).split(' ')
-                        .filter(w => w.length > 3);
+                        .filter(w => w.length > 3 && !GENERIC_PLACE.test(w));
                     return place.some(w => t.includes(' ' + w + ' '));
                 });
                 if (hit) {
@@ -2911,6 +2914,9 @@
 
         // Filenames that usually mean a shot too small-scale to carry a slide:
         // furniture, corners, empty service spaces.
+        // Geography words too generic to identify a destination on their own.
+        const GENERIC_PLACE = /^(island|islands|coast|coastline|valley|bay|city|town|village|region|province|state|county|country|north|northern|south|southern|east|eastern|west|western|central|lake|lakes|mountain|mountains|beach|beaches|riviera|peninsula|archipelago|cays?|keys?|shore|shores|sea|ocean|gulf|river|desert|hills?|highlands?|new|great|grand|upper|lower|saint|santa|costa|del|della|delle)$/;
+
         const WEAK_IMG = /(armchair|chair|sofa|lobby|corridor|hallway|reception|desk|detail|closeup|close-up|meeting|conference|ballroom|elevator|amenit|minibar|wardrobe)/i;
 
         /* QA pass — sanity-check the post before anyone downloads it. */
