@@ -2823,14 +2823,21 @@
             // arrive text-only, so most sections have no inline photo at all.
             // If the section names a hotel we have a page for, use its approved
             // hero; failing that, use a hotel photo from the same destination.
+            // Match against the WHOLE section, not just its first paragraph —
+            // "Where to Stay" names its hotels several paragraphs down.
+            heads.forEach((h, k) => {
+                const end = nextHeadAt(k);
+                let txt = h.name;
+                for (let j = h.at + 1; j < end && j < nodes.length; j++) txt += ' ' + (nodes[j].textContent || '');
+                h.sectionText = txt;
+            });
             const libEntries = libEntriesForMatching();
             const takenSrc = new Set(pics.filter(p => p.used).map(p => p.src));
             if (heroSrc) takenSrc.add(heroSrc);
             const usedKeys = new Set();
             heads.forEach((h, k) => {
                 if (chosen[k]) return;
-                const text = h.name + ' ' + h.body;
-                const hit = matchLibHotel(text, libEntries, usedKeys);
+                const hit = matchLibHotel(h.sectionText || (h.name + ' ' + h.body), libEntries, usedKeys);
                 if (hit && !takenSrc.has(hit.img)) {
                     chosen[k] = { src: hit.img, why: 'our ' + hit.name + ' page' };
                     usedKeys.add(hit.k); takenSrc.add(hit.img);
@@ -2841,7 +2848,7 @@
             // beautiful, on-topic photo of the right part of the world.
             heads.forEach((h, k) => {
                 if (chosen[k]) return;
-                const t = ' ' + normName(h.name + ' ' + h.body) + ' ';
+                const t = ' ' + normName(h.sectionText || (h.name + ' ' + h.body)) + ' ';
                 const hit = libEntries.find(e => {
                     if (usedKeys.has(e.k) || takenSrc.has(e.img)) return false;
                     const place = normName(plain(lib[e.k].location)).split(' ')
