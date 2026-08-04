@@ -1769,13 +1769,15 @@
         // A hotel matches if every significant word of its name appears in the
         // text — so "Belmond Cap Juluca" still finds "Cap Juluca, A Belmond Hotel".
         function matchLibHotel(text, entries, used) {
-            const t = normName(text);
-            if (!t) return null;
+            const t = ' ' + normName(text) + ' ';
+            if (t.trim().length < 3) return null;
             return entries.find(e => {
                 if (used.has(e.k)) return false;
                 const words = e.norm.split(' ').filter(w => w.length > 2);
                 if (!words.length) return false;
-                return words.every(w => t.includes(w));
+                // WHOLE words only — substring matching put Villa d'Este on a
+                // Bora Bora paragraph because "villa" appeared in "35-villa".
+                return words.every(w => t.includes(' ' + w + ' '));
             }) || null;
         }
         $('bAutoPhotos').addEventListener('click', () => {
