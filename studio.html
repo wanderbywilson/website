@@ -792,6 +792,7 @@
                             <button type="button" id="bAutoPhotos" style="margin-left:auto">✦ Add photos from our library</button>
                         </div>
                         <div class="blog-body-edit" id="bBody" contenteditable="true"></div>
+                        <div class="social-qa has-issues" id="blogGaps" hidden style="margin-top:10px"></div>
                     </div>
                     <div class="f-row">
                         <label class="f-label" for="bStatus">Status</label>
@@ -1664,6 +1665,7 @@
             }
             $('bStatus').value = blogStatus;
             const notes = blogDocExtra.migrationNotes ? ' · <span style="color:#8a6110">' + esc(blogDocExtra.migrationNotes) + '</span>' : '';
+            blogMissingHotels = []; renderBlogGaps();
             $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '') + notes;
             pushBlogPreview();
         }
@@ -1750,35 +1752,111 @@
            library brings its approved hero shot, so a text-only draft (like
            the ones migrated out of Google Docs) can be photographed in one
            click without sourcing anything new. */
+        /* Photos from our own hotel pages.
+           Rule (Wilson, 2026-08-03): if a post names a hotel we already have a
+           page for, use that page's approved hero. If it LINKS a hotel we have
+           no page for, that's a gap — offer to draft the page. */
+        const normName = (x) => plain(x).toLowerCase()
+            .replace(/&amp;/g, '&')
+            .replace(/\b(hotel|resort|the|a|an|and|&|by|at|de|di|la|le|el)\b/g, ' ')
+            .replace(/[^a-z0-9]+/g, ' ').trim();
+        function libEntriesForMatching() {
+            return Object.keys(lib).map(k => ({
+                k, name: plain(lib[k].name), norm: normName(lib[k].name),
+                img: lib[k].heroImage || (lib[k].gallery || [])[0] || ''
+            })).filter(e => e.norm && e.img).sort((a, b) => b.norm.length - a.norm.length);
+        }
+        // A hotel matches if every significant word of its name appears in the
+        // text — so "Belmond Cap Juluca" still finds "Cap Juluca, A Belmond Hotel".
+        function matchLibHotel(text, entries, used) {
+            const t = normName(text);
+            if (!t) return null;
+            return entries.find(e => {
+                if (used.has(e.k)) return false;
+                const words = e.norm.split(' ').filter(w => w.length > 2);
+                if (!words.length) return false;
+                return words.every(w => t.includes(w));
+            }) || null;
+        }
         $('bAutoPhotos').addEventListener('click', () => {
             const body = $('bBody');
             const existing = new Set(Array.from(body.querySelectorAll('img')).map(i => i.getAttribute('src')));
-            const entries = Object.keys(lib)
-                .map(k => ({ k, name: plain(lib[k].name), img: lib[k].heroImage || (lib[k].gallery || [])[0] || '' }))
-                .filter(e => e.name && e.img && !existing.has(e.img))
-                .sort((a, b) => b.name.length - a.name.length);   // match longer names first
-            let added = 0;
+            const entries = libEntriesForMatching().filter(e => !existing.has(e.img));
             const used = new Set();
+            let added = 0;
+            // Pass 1 — headings and paragraphs that name a hotel we have.
             Array.from(body.children).forEach(node => {
-                if (added >= 8 || !/^(P|H2|H3)$/.test(node.tagName)) return;
-                const text = (node.textContent || '').toLowerCase();
-                const hit = entries.find(e => !used.has(e.k) && text.includes(e.name.toLowerCase()));
-                if (!hit) return;
+                if (!/^(P|H2|H3)$/.test(node.tagName)) return;
                 if (node.previousElementSibling && node.previousElementSibling.tagName === 'IMG') return;
+                const hit = matchLibHotel(node.textContent || '', entries, used);
+                if (!hit) return;
                 const im = document.createElement('img');
-                im.src = hit.img;
-                im.alt = hit.name;
+                im.src = hit.img; im.alt = hit.name;
                 node.parentNode.insertBefore(im, node);
                 used.add(hit.k); added++;
             });
+            // Hero: the first hotel the article actually leads with.
             if (!$('bHero').value.trim() && used.size) {
-                const first = entries.find(e => used.has(e.k));
-                if (first) $('bHero').value = first.img;
+                const firstUsed = entries.find(e => used.has(e.k));
+                if (firstUsed) $('bHero').value = firstUsed.img;
             }
+            // Gap report — hotels the post links that we have NO page for.
+            const linked = Array.from(body.querySelectorAll('a'))
+                .map(a => plain(a.textContent))
+                .filter(t => t && t.length > 3 && t.split(/\s+/).length <= 7 && !/^(here|this|read|more|guide|click)/i.test(t));
+            const allEntries = libEntriesForMatching();
+            const missing = [];
+            linked.forEach(t => {
+                if (matchLibHotel(t, allEntries, new Set())) return;
+                if (!/[A-Z]/.test(t)) return;                       // proper nouns only
+                if (missing.some(m => normName(m) === normName(t))) return;
+                missing.push(t);
+            });
+            blogMissingHotels = missing;
+            renderBlogGaps();
             pushBlogPreview();
             toast(added
-                ? `Added ${added} photo${added === 1 ? '' : 's'} from our hotel pages. Sections naming hotels we don't have still need images.`
-                : 'No hotels from our library were named in this post — source photos from each hotel’s own site.');
+                ? `Added ${added} photo${added === 1 ? '' : 's'} from our hotel pages.`
+                : 'No hotels from our library were named here — source photos from each hotel’s own site.');
+        });
+
+        /* Hotels a post links that have no page yet: the funnel's real gap. */
+        let blogMissingHotels = [];
+        function renderBlogGaps() {
+            const box = $('blogGaps');
+            if (!blogMissingHotels.length) { box.hidden = true; box.innerHTML = ''; return; }
+            box.hidden = false;
+            box.innerHTML = '<strong>' + blogMissingHotels.length + ' propert' +
+                (blogMissingHotels.length === 1 ? 'y is' : 'ies are') +
+                ' linked here but have no page on our site</strong> — so this post sends traffic away and we have no photos for them:' +
+                '<ul>' + blogMissingHotels.map(m => `<li>${esc(m)}</li>`).join('') + '</ul>' +
+                '<button class="btn btn-ghost btn-small" id="bDraftMissing" type="button">Queue hotel-page drafts for these</button>';
+        }
+        document.addEventListener('click', async (e) => {
+            if (!e.target.closest('#bDraftMissing')) return;
+            const names = blogMissingHotels.slice();
+            if (!names.length) return;
+            e.target.closest('#bDraftMissing').disabled = true;
+            let made = 0;
+            for (const nm of names) {
+                const slug = normName(nm).replace(/\s+/g, '-').slice(0, 60);
+                if (!slug) continue;
+                try {
+                    await contentApi({ action: 'save', kind: 'hoteldraft', id: slug, doc: {
+                        slug, name: nm, location: '', status: 'idea', heroImage: '', images: [],
+                        entry: { name: nm, location: '', rateFrom: '', heroImage: '', description: '',
+                                 perks: [], gallery: [], idealFor: '', agentTip: '', bookingUrl: '' },
+                        notes: 'Queued automatically from the blog post "' + ($('bTitle').value || 'untitled') +
+                               '", which links this property but we have no page for it.\n\n' +
+                               'Nothing here is researched yet — ask Claude to "draft the hotel page for ' + nm +
+                               '" and it will fill this in against HOTEL-PAGE-SPEC.md.'
+                    }, meta: { name: nm, location: '', status: 'idea', heroImage: '' } });
+                    made++;
+                } catch (err) { /* keep going */ }
+            }
+            toast(made + ' hotel page' + (made === 1 ? '' : 's') + ' queued in Hotel pages — ask Claude to research them.');
+            blogMissingHotels = [];
+            renderBlogGaps();
         });
 
         $('bSave').addEventListener('click', () => saveBlog());
@@ -2768,6 +2846,10 @@
             };
         }
 
+        // Filenames that usually mean a shot too small-scale to carry a slide:
+        // furniture, corners, empty service spaces.
+        const WEAK_IMG = /(armchair|chair|sofa|lobby|corridor|hallway|reception|desk|detail|closeup|close-up|meeting|conference|ballroom|elevator|amenit|minibar|wardrobe)/i;
+
         /* QA pass — sanity-check the post before anyone downloads it. */
         function socialQA(m) {
             const issues = [];
@@ -2789,6 +2871,22 @@
                         issues.push(`Possible client name in the post: “${w}” — client names must never appear on social.`);
                 });
             if (!m.brief.length && m.deckKind === 'proposal') issues.push('The brief bullets are empty — add 3–4 points from the inquiry & intake call.');
+            // Brief-slide copy discipline — this slide is read in two seconds.
+            if (m.briefIntro && plain(m.briefIntro).length > 160)
+                issues.push(`The brief intro is ${plain(m.briefIntro).length} characters — trim to one sentence under ~140 so the type stays large.`);
+            m.brief.forEach((b, i) => {
+                const len = plain(b).length;
+                if (len > 75) issues.push(`Brief bullet ${i + 1} is ${len} characters — cut to a fragment under ~60 (about 8 words); long bullets shrink the type.`);
+            });
+            if (m.brief.length > 4) issues.push(`${m.brief.length} brief bullets — keep it to 4 at most.`);
+            // The cover carries the post.
+            if (!m.coverImage) issues.push('No cover photo — this is the image that stops the scroll.');
+            else if (WEAK_IMG.test(m.coverImage))
+                issues.push('The cover photo looks like an interior or detail shot — the cover must be a showstopper: sweeping scenery, the best property’s hero image, or an iconic view of the destination.');
+            m.hotels.forEach((h, i) => {
+                if (h.heroImage && WEAK_IMG.test(h.heroImage))
+                    issues.push(`Slide ${i + 3} (${plain(h.name)}): that photo looks like an interior detail. Use the property’s best wide shot — or a stunning destination photo if it hasn’t got one.`);
+            });
             if (!m.briefIntro) issues.push('Slide 2 has no opening line — it will render nearly empty.');
             // Photo checks — the failure mode that costs the most rework is a
             // slide whose picture doesn't match its words, so test for it.
