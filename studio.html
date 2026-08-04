@@ -236,7 +236,9 @@
         .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
         .studio[data-view="editor"] #viewEditor { display: block; }
-        .studio[data-view="editor"] #viewEditor { display: grid; }
+        /* the editor is a flex row (form | live preview) — never grid, or the
+           preview stacks underneath the form */
+        .studio[data-view="editor"] #viewEditor { display: flex; }
         .studio:not([data-view="editor"]) .editor-only { display: none !important; }
         .dash { max-width: 1180px; margin: 0 auto; padding: 34px 28px 80px; }
         .dash-head { margin-bottom: 26px; }
