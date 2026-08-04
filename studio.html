@@ -1788,7 +1788,7 @@
             'Source order: 1) the hotel\'s OWN official website or media library (many run WordPress and expose /wp-json/wp/v2/media, which lists full-size URLs); 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination shot. NEVER Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio.',
             'Verify each URL actually resolves to an image before returning it. Never invent or guess a URL.',
             'CHOOSE like an editor: the property\'s signature view, a sense-of-place scene, or the actual room being described. Daylight or golden hour ONLY.',
-            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · posed models as the subject · dark or flat interiors · renders when real photos exist · two near-identical angles.',
+            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · dark or flat interiors · renders when real photos exist · two near-identical angles.',
             'If you genuinely cannot find a compliant official photo for a section, omit the img there and list what is missing AFTER the JSON.',
             '',
             'LINKS: link a hotel name to its page on wanderbywilson.com when one plausibly exists (/hotels/{kebab-case-name}), and link naturally to related guides on the site. Do not invent URLs on other domains.'
@@ -2366,7 +2366,7 @@
             '  "desc": "IF you can browse the web: the property overview copied VERBATIM from the hotel\\u2019s official website or its Virtuoso page \\u2014 NEVER write or paraphrase your own copy (compliance requirement; if you cannot browse, leave empty and say so after the JSON).",',
             '  "socialHook": "ONE scroll-stopping line for social media, max ~120 characters (the rate prints underneath, so a longer line gets cut), combining what makes the PROPERTY unique with the can\\u2019t-miss feature of the QUOTED room \\u2014 factual, never invented. e.g. Mediterranean soul in the Caribbean \\u2014 and the Oceanfront One Bedroom has its own private pool over the sea. Or: The included 20-minute island hop lands you at a beachfront bungalow that opens right onto the sand.",',
             '  "heroImage": "IF you can browse: direct URL (https://\\u2026.jpg/.webp) of ONE representative full-size photo from the hotel\\u2019s OFFICIAL website only. Else empty.",',
-            '  "gallery": ["IF you can browse: up to 5 more direct image URLs from the official site telling the story of the PLACE \\u2014 a lifestyle/landscape scene, a signature experience, ONE shot of the actual room (bed/living, ideally with its view \\u2014 never bathroom-only), the pool/waterfront. Daylight or golden hour ONLY (no night shots), NO plated-food shots, no posed models, no two angles of the same room. Else empty array."],',
+            '  "gallery": ["IF you can browse: up to 5 more direct image URLs from the official site telling the story of the PLACE \\u2014 a lifestyle/landscape scene, a signature experience, ONE shot of the actual room (bed/living, ideally with its view \\u2014 never bathroom-only), the pool/waterfront. Daylight or golden hour ONLY (no night shots), NO plated-food shots, no NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not, no two angles of the same room. Else empty array."],',
             '  "room": "room category marketing name ONLY, max 6 words, e.g. Prestige Suite Borgo. NEVER spec dumps (1 Double Bed-50-70SQM-...)",',
             '  "roomDesc": "if room features/size are listed: ONE readable sentence, max ~35 words, with those exact features. No amenities, no occupancy codes. Else empty.",',
             '  "rate": "STRICT: total + stay length, max 30 characters, e.g. $4,340.09 \\u00b7 3-night total — NOTHING else, no breakdowns, no currency conversions",',
@@ -3121,7 +3121,7 @@
         // Sections that are never good carousel slides.
         const SKIP_HEADING = /^(frequently asked|faq|related|read more|about the author|sources|methodology|in this (guide|article)|table of contents)/i;
         // Filenames that suggest a shot our photo rules exclude.
-        const SUSPECT_IMG = /(dining|restaurant|dinner|food|dish|plate|menu|bar-|cocktail|night|evening|dusk|bathroom|bath-|tub|spa-treatment)/i;
+        const SUSPECT_IMG = /(dining|restaurant|dinner|food|dish|plate|menu|bar-|cocktail|night|evening|dusk|bathroom|bath-|tub|spa-treatment|couple|bride|groom|wedding|honeymooners|model|portrait|guests?-|people|family-)/i;
 
         function slidesFromBlogPost(post) {
             const box = document.createElement('div');
@@ -3512,7 +3512,7 @@
             'For EVERY slide, browse to the hotel\'s (or destination\'s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. On most hotel sites you can find these in the gallery or press/media page; many run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image before returning it.',
             'Source order: 1) the hotel\'s own website or official media library — always preferred; 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination (not a hotel) slide. NEVER use Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio — we only publish photography the property itself distributes.',
             'Choose the shot the way we choose photos for our hotel pages: the property\'s signature postcard view, a sense-of-place scene, or the actual room being described. Daylight or golden hour ONLY.',
-            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · posed models as the subject · dark or flat interiors · renders when real photos exist · near-duplicates of the same angle.',
+            'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · dark or flat interiors · renders when real photos exist · near-duplicates of the same angle.',
             'If — after genuinely looking — you cannot find a compliant official photo for a slide, return "" for that imageUrl and add a line AFTER the JSON naming which slides need a photo and where to look. Never invent or guess a URL.'
         ].join('\n');
 
@@ -3706,7 +3706,7 @@
             'PHOTOS — do this work, do not skip it. A carousel without photos is unusable.',
             'For EVERY slide, browse to the hotel’s (or destination’s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. Many hotel sites run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image.',
             'Source order: 1) the hotel’s own website or official media library — always preferred; 2) its Virtuoso listing; 3) an official tourism board for a destination slide. NEVER Instagram, Pinterest, TripAdvisor, stock sites, Google Images thumbnails, or a photographer’s portfolio.',
-            'Daylight or golden hour ONLY. NEVER: plated-food shots · night shots · bathroom-only room shots · posed models as the subject · renders when real photos exist · near-duplicates.',
+            'Daylight or golden hour ONLY. NEVER: plated-food shots · night shots · bathroom-only room shots · NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · renders when real photos exist · near-duplicates.',
             'If you truly cannot find a compliant official photo for a slide, return "" for that imageUrl and say which slides need one AFTER the JSON. Never invent a URL.'
         ].join('\n');
 
@@ -3971,7 +3971,7 @@
                 '',
                 'For each slide, answer two things:',
                 '1. MATCH — does the photo actually show the property/place the copy is about? Watch for off-by-one errors, where a slide carries the photo belonging to the slide before or after it. If you cannot tell what property it is, say so.',
-                '2. RULES — does it break any of our photo rules? No plated-food shots · no night/after-dark shots · no bathroom-only room shots · no posed models as the subject · no dark or flat interiors · no near-duplicates of another slide.',
+                '2. RULES — does it break any of our photo rules? No plated-food shots · no night/after-dark shots · no bathroom-only room shots · no NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · no dark or flat interiors · no near-duplicates of another slide.',
                 '',
                 'Then give a verdict line per slide: OK, or SWAP with a one-line reason. If you can browse, suggest a replacement: a direct image URL from that property\'s OWN official website (daylight or golden hour, signature view or the actual room).',
                 '',

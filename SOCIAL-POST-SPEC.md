@@ -39,8 +39,9 @@ Read in under two seconds, or not at all.
 - Reject: dim interiors, tight crops of furniture, empty corridors, meeting
   rooms, anything that looks like a booking-site thumbnail.
 - Standing photo rules still apply: daylight or golden hour only; no plated
-  food; no night shots; no bathroom-only room shots; no posed models as the
-  subject; never the same photo twice in one carousel.
+  food; no night shots; no bathroom-only room shots; no people as the subject — no couples,
+  portraits, models or lifestyle shots where a person is what the photo is
+  about (small figures at human scale in a wide view are fine); never the same photo twice in one carousel.
 - **Copy:** one strong sentence (~110 characters) by default. A **second short
   sentence** is welcome when it genuinely strengthens the slide — a concrete
   detail, never filler. Measured limits: **~170 characters** fits (4 lines), but

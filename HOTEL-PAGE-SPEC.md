@@ -62,7 +62,7 @@ Galleries tell the story of the **place**, not an inventory of rooms.
   dining *setting* only if it earns its place · ONE shot of an actual room (bed/living,
   ideally with its view) · pool/waterfront/architecture.
 - **Never:** plated-food shots · night/after-dark shots · bathroom-only room shots ·
-  posed models as the subject · dark or flat interiors · renders when photos exist ·
+  **people as the subject** — no couples, portraits, models or lifestyle shots where a person is what the photo is about (small figures at human scale in a wide view are fine) · dark or flat interiors · renders when photos exist ·
   near-duplicates · generic spa treatment rooms.
 - **Sources:** the hotel's own site/official media (WordPress sites often expose
   `/wp-json/wp/v2/media`), SmartFlyer, Virtuoso. Optimize with Pillow, ≥1600px.
