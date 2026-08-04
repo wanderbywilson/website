@@ -867,7 +867,7 @@
                 <section class="claude-build">
                     <p class="claude-build-kicker">Start here</p>
                     <h2 class="claude-build-head">Build a proposal <em>with Claude.</em></h2>
-                    <p class="claude-build-sub">Copy the prompt, open your own Claude, and tell it who you&rsquo;re quoting for and what they&rsquo;re after &mdash; point it at the intake recap, the Asana task, your call notes. It comes back with 3&ndash;5 recommended properties, fully written. Paste the reply here and the whole proposal builds itself.</p>
+                    <p class="claude-build-sub">Copy the prompt into your own Claude and type <strong>&ldquo;build a proposal for [client name]&rdquo;</strong> &mdash; that&rsquo;s all. It goes and reads their inquiry, your intake-call recap, the Asana task and any call notes, then comes back with 3&ndash;5 recommended properties, fully written. Paste the reply here and the whole proposal builds itself.</p>
                     <div class="claude-build-row">
                         <button class="btn" id="pbCopyPrompt" type="button">1 &middot; Copy the proposal prompt</button>
                     </div>
@@ -2239,29 +2239,35 @@
            The team describes the client to their own Claude, points it at the
            intake recap / Asana task / call notes, and pastes the JSON back. */
         const PROPOSAL_PROMPT = [
-            'You are helping Wander by Wilson \u2014 a luxury travel advisory \u2014 build a client hotel proposal.',
+            'You are helping Wander by Wilson \u2014 a luxury travel advisory (wanderbywilson.com) \u2014 build a client hotel proposal.',
             '',
-            'FIRST, TELL ME ABOUT THE TRIP (replace this section with your own details before sending):',
-            '  \u2022 Who is travelling (couple / family / group, occasion, rough ages \u2014 no surnames needed)',
-            '  \u2022 Destination(s) and travel dates, and how many nights',
-            '  \u2022 Budget per night or per stay, and whether that is before or after taxes',
-            '  \u2022 What they said they want \u2014 paste the inquiry, the intake-call recap email, the Asana task notes, and any call notes you have. If they live in your connected Gmail/Asana/Drive, go and read them.',
-            '  \u2022 Anything ruled out (islands they have done, brands they dislike, no-fly constraints)',
+            'I will give you ONE thing: a client name. Everything else already exists in our systems \u2014 go and find it yourself. Do not ask me to fill in a brief.',
             '',
-            'THEN RECOMMEND 3\u20135 PROPERTIES that genuinely fit, and explain each choice against what they asked for. Favour properties bookable through Virtuoso or SmartFlyer so preferred-partner amenities apply. Vary them meaningfully \u2014 do not return five versions of the same hotel.',
+            'STEP 1 \u2014 GATHER THE FILE. Search every source you have access to for this client:',
+            '  \u2022 Gmail \u2014 the website inquiry (from forms@wanderbywilson.com to wilson@wanderbywilson.com, subject \u201cNew trip inquiry \u2014 {name}\u201d). It carries destination, dates, travellers, trip type, budget band, and their own description of what they want.',
+            '  \u2022 Gmail \u2014 the intake-call recap Wilson sent after their call (from wilson@wanderbywilson.com, usually cc\u2019ing riana@wanderbywilson.com, in the same thread). This is the richest source: the direction they landed on, preferences, pace, what was ruled out.',
+            '  \u2022 Gmail \u2014 the rest of that thread, plus anything forwarded from wilson.schubert@smartflyer.com (the SmartFlyer quoting desk) for rates already pulled.',
+            '  \u2022 Asana \u2014 the task or project under the client\u2019s name for planning notes and to-dos.',
+            '  \u2022 Google Drive \u2014 any call notes, client profile form, or trip document with their name on it.',
+            '',
+            'Read all of it before recommending anything. Then state back, in two or three lines, what you found: who is travelling, the occasion, the destination and dates, the nights, the budget, and anything explicitly ruled out. If you cannot find the client at all, say so and stop \u2014 do not invent a brief.',
+            '',
+            'STEP 2 \u2014 CHECK WHAT WE ALREADY HAVE. Browse wanderbywilson.com/hotels and prefer properties we already have pages for; those come into the proposal with our own approved photography, copy and amenities. Only go outside the library when the brief genuinely calls for it.',
+            '',
+            'STEP 3 \u2014 RECOMMEND 3\u20135 PROPERTIES that fit what you read, ordered strongest-fit first, each with a line on why it answers their brief. Vary them meaningfully \u2014 not five versions of the same hotel. Favour properties bookable through Virtuoso or SmartFlyer so preferred-partner amenities apply.',
             '',
             'COMPLIANCE \u2014 non-negotiable, we are legally liable for what a client books on:',
             '1. Every hotel description must be VERBATIM from the hotel\u2019s own website or its Virtuoso/SmartFlyer listing. NEVER write, paraphrase or embellish your own marketing copy. One coherent passage per hotel, 400\u2013900 characters; do not stitch several pages together.',
             '2. Amenities must be the ones actually documented for THAT hotel. Never assume a generic package. NEVER include an advisor\u2019s \u201cpersonalized welcome note on arrival\u201d \u2014 it is meant to be a surprise.',
-            '3. Rates: give a realistic nightly or total figure with the season it applies to, and say plainly that it needs confirming. Never invent precision.',
+            '3. Rates: if a real quote exists in the email thread, use it exactly. Otherwise give a researched figure, name the season it reflects, and say plainly it needs confirming. Never invent precision.',
             '4. If you cannot verify something, leave the field empty rather than guessing. Never write TODO or placeholder text.',
             '',
-            'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model.',
+            'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model. For properties already on wanderbywilson.com you can leave the photo fields empty; our page supplies them.',
             '',
-            'Reply with ONLY this JSON block:',
+            'STEP 4 \u2014 reply with your two-line summary of what you found, then ONLY this JSON block:',
             '',
             '{',
-            '  "preparedFor": "how to address them on the page, e.g. The Apfels \u2014 no surnames if they did not give one",',
+            '  "preparedFor": "how to address them on the page, e.g. The Apfels \u2014 match how they signed their emails",',
             '  "title": "the proposal headline, e.g. Your Caribbean *celebration.* \u2014 wrap ONE word in *asterisks* to set it in italic gold",',
             '  "lede": "one or two sentences framing the shortlist and what is included. No prices here.",',
             '  "dates": "e.g. November 11 \u2014 15, 2026 \u00b7 4 nights",',
@@ -2272,14 +2278,14 @@
             '    {',
             '      "name": "official hotel name exactly as the hotel writes it",',
             '      "location": "Town, Region, Country \u00b7 Brand if the affiliation is part of its identity",',
-            '      "whyRecommended": "1\u20132 sentences for WILSON (not the client) on why this fits their brief \u2014 this does NOT print on the proposal",',
-            '      "desc": "the property overview, VERBATIM from the hotel or Virtuoso \u2014 see compliance rule 1",',
-            '      "heroImage": "direct image URL from the hotel\u2019s own site",',
-            '      "gallery": ["up to 5 more direct image URLs telling the story of the place"],',
+            '      "whyRecommended": "1\u20132 sentences for WILSON (not the client) on why this fits what you read in their file \u2014 this does NOT print on the proposal",',
+            '      "desc": "the property overview, VERBATIM \u2014 see compliance rule 1. Empty string if the hotel is already on wanderbywilson.com.",',
+            '      "heroImage": "direct image URL from the hotel\u2019s own site \u2014 empty if the hotel is already on our site",',
+            '      "gallery": ["up to 5 more direct image URLs telling the story of the place \u2014 empty if already on our site"],',
             '      "room": "the room category you are quoting, marketing name only, max 6 words",',
             '      "roomDesc": "ONE readable sentence on that room, from the hotel\u2019s own description",',
             '      "rate": "total or nightly, max 30 characters, e.g. $8,128 \u00b7 4-night total",',
-            '      "rateNote": "ONE line: what the rate includes, the season it reflects, and that it needs confirming",',
+            '      "rateNote": "ONE line: what the rate includes, the season it reflects, and whether it is a real quote or needs confirming",',
             '      "perks": ["each preferred-partner amenity as a short elegant bullet"],',
             '      "deposit": "1 sentence, plain English",',
             '      "cancellation": "1\u20132 sentences, plain English, exact deadline and penalty",',
@@ -2288,7 +2294,10 @@
             '  ]',
             '}',
             '',
-            'Order the hotels strongest-fit first. After the JSON, list anything you could not verify and would want Wilson to check.'
+            'After the JSON, list anything you could not verify and would want Wilson to check before this goes to the client.',
+            '',
+            '\u2014\u2014\u2014',
+            'Now tell me: build a proposal for [CLIENT NAME]'
         ].join('\n');
 
         const CLAUDE_PROMPT = [
