@@ -41,11 +41,25 @@ Read in under two seconds, or not at all.
 - Standing photo rules still apply: daylight or golden hour only; no plated
   food; no night shots; no bathroom-only room shots; no posed models as the
   subject; never the same photo twice in one carousel.
-- **Copy:** one line, ~110–120 characters — what makes it unique plus the
-  can't-miss detail. Not brochure copy.
+- **Copy:** one strong sentence (~110 characters) by default. A **second short
+  sentence** is welcome when it genuinely strengthens the slide — a concrete
+  detail, never filler. Measured limits: **~170 characters** fits (4 lines), but
+  only **~130** when the rate line is showing (3 lines). Past that it truncates,
+  and the QA panel flags it against whichever budget applies.
 - **Sourcing:** the hotel's own site or official media library first, then
   Virtuoso, then an official tourism board for a destination slide. Never
   Instagram, Pinterest, TripAdvisor, stock sites, or Google Images.
+
+## Structure
+
+- **Blog posts become chapters.** An article's H2 section heading renders as a
+  **section divider** — cream, "Part One", the section title, its opening line,
+  no photo — and the H3s beneath it become the photo slides. It breaks up a long
+  run of photo slides and tells the reader where they are.
+- Dividers are deliberately text-only; the QA panel doesn't ask them for a photo.
+- Any slide can be removed with the **✕** on its preview. Numbering is derived
+  from position, so the slides after it renumber themselves — and dividers don't
+  consume a number.
 
 ## Numbering
 
