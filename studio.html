@@ -2782,7 +2782,15 @@
                     if (/^H[23]$/.test(nodes[j].tagName)) break;
                     if (nodes[j].tagName === 'P' && nodes[j].textContent.trim()) { body = nodes[j].textContent.trim(); break; }
                 }
-                heads.push({ name, body, at: i });
+                // Scaffolding headings ("Where to Stay") introduce sub-sections
+                // and carry no copy of their own — they make empty slides.
+                let ownWords = 0;
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (/^H[23]$/.test(nodes[j].tagName)) break;
+                    ownWords += (nodes[j].textContent || '').split(/\s+/).filter(Boolean).length;
+                }
+                if (ownWords < 8) return;
+                heads.push({ name, body, at: i, level: n.tagName });
             });
             // Drop the FAQ tail: once we hit skipped headings, later H3s are answers.
             const nextHeadAt = (k) => (heads[k + 1] ? heads[k + 1].at : nodes.length);
@@ -2826,7 +2834,14 @@
             // Match against the WHOLE section, not just its first paragraph —
             // "Where to Stay" names its hotels several paragraphs down.
             heads.forEach((h, k) => {
-                const end = nextHeadAt(k);
+                let end = nextHeadAt(k);
+                if (h.level === 'H2') {
+                    // run to the NEXT H2 so the block's sub-sections count too
+                    end = nodes.length;
+                    for (let j = h.at + 1; j < nodes.length; j++) {
+                        if (nodes[j].tagName === 'H2') { end = j; break; }
+                    }
+                }
                 let txt = h.name;
                 for (let j = h.at + 1; j < end && j < nodes.length; j++) txt += ' ' + (nodes[j].textContent || '');
                 h.sectionText = txt;
