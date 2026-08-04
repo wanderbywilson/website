@@ -212,6 +212,14 @@
         }
         .social-qa { max-height: 22vh; overflow-y: auto; flex: none; }
         .slide-strip canvas { width: 100%; height: auto; display: block; box-shadow: 0 4px 14px rgba(30,53,82,0.12); }
+        .slide-cell { position: relative; }
+        .slide-x {
+            position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
+            border: 0; border-radius: 50%; background: rgba(20,38,62,.72); color: #fff;
+            font-size: 12px; line-height: 1; cursor: pointer; opacity: 0; transition: opacity .15s ease;
+        }
+        .slide-cell:hover .slide-x { opacity: 1; }
+        .slide-x:hover { background: #b3453f; }
         .social-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
         .social-note { font-size: 11px; color: rgba(30,53,82,0.5); line-height: 1.5; margin: 12px 0 0; }
         .social-qa { font-size: 12px; line-height: 1.55; margin: 0 0 10px; padding: 10px 14px; background: #f2f8f2; border: 1px solid rgba(44,122,75,0.35); color: #2c7a4b; }
@@ -2584,6 +2592,27 @@
             return c;
         }
 
+        /* Section transition — a blog article's H2 becomes a quiet cream
+           divider so the carousel reads in chapters instead of one long run
+           of photo slides. */
+        const ORDINALS = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'];
+        async function slideSection(h, partNo) {
+            const [c, ctx] = newSlide();
+            ctx.fillStyle = CREAM; ctx.fillRect(0, 0, SL_W, SL_H);
+            kicker(ctx, 'Part ' + (ORDINALS[partNo - 1] || partNo), 110, 420, GOLD, 28);
+            ctx.font = '300 76px Fraunces'; ctx.fillStyle = INK;
+            // Strip the article's leading "1." numbering — the kicker says it.
+            const title = plain(h.name).replace(/^\s*\d+[.)]\s*/, '');
+            let y = drawWrapped(ctx, title, 110, 540, 860, 88, 'left', 4);
+            ctx.fillStyle = GOLD; ctx.fillRect(110, y + 6, 90, 3);
+            if (h.socialLine) {
+                ctx.font = '300 34px Inter'; ctx.fillStyle = 'rgba(30,53,82,0.72)';
+                drawWrapped(ctx, h.socialLine, 110, y + 78, 860, 48, 'left', 4);
+            }
+            wordmark(ctx, SL_W / 2, SL_H - 90, INK, 'center');
+            return c;
+        }
+
         async function slideCTA(m) {
             const [c, ctx] = newSlide();
             ctx.fillStyle = INK; ctx.fillRect(0, 0, SL_W, SL_H);
@@ -2703,7 +2732,7 @@
             const wrap = $('sHotelLines');
             wrap.innerHTML = '<p class="f-hint" style="margin:0 0 10px">Hotel lines: what makes the property unique + the can’t-miss feature of the quoted room. e.g. “Mediterranean soul in the Caribbean — and the Oceanfront One Bedroom has its own private pool over the sea.”</p>' + hotels.map((h, i) => `
                 <div class="f-row">
-                    <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
+                    <label class="f-label">${h.isSection ? 'Section divider' : 'Slide ' + (i + 3)} — ${esc(plain(h.name))}</label>
                     <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
                     ${slidePhotoField(i, h)}
                 </div>`).join('');
@@ -2724,7 +2753,7 @@
             $('sHotelLines').innerHTML = '<p class="f-hint" style="margin:0 0 10px">One line per slide — punchy and specific. What would make someone stop scrolling?</p>' +
                 slides.map((h, i) => `
                 <div class="f-row">
-                    <label class="f-label">Slide ${i + 3} — ${esc(plain(h.name))}</label>
+                    <label class="f-label">${h.isSection ? 'Section divider' : 'Slide ' + (i + 3)} — ${esc(plain(h.name))}</label>
                     <textarea class="f-area" data-sline="${i}" rows="2">${esc(plain(h.socialHook) || socialTrim(h.desc))}</textarea>
                     ${slidePhotoField(i, h)}
                 </div>`).join('');
@@ -2879,8 +2908,10 @@
                 }
             });
 
-            return heads.slice(0, 8).map((h, k) => ({
+            return heads.slice(0, 9).map((h, k) => ({
                 name: h.name, location: '',
+                // An article's H2 becomes a chapter divider; its H3s are the content.
+                isSection: h.level === 'H2',
                 heroImage: chosen[k] ? chosen[k].src : '',
                 photoWhy: chosen[k] ? chosen[k].why : 'none',
                 desc: h.body, socialHook: '', room: '', rate: ''
@@ -2953,6 +2984,7 @@
             else if (WEAK_IMG.test(m.coverImage))
                 issues.push('The cover photo looks like an interior or detail shot — the cover must be a showstopper: sweeping scenery, the best property’s hero image, or an iconic view of the destination.');
             m.hotels.forEach((h, i) => {
+                if (h.isSection) return;   // chapter dividers carry no photo by design
                 if (h.heroImage && WEAK_IMG.test(h.heroImage))
                     issues.push(`Slide ${i + 3} (${plain(h.name)}): that photo looks like an interior detail. Use the property’s best wide shot — or a stunning destination photo if it hasn’t got one.`);
             });
@@ -2961,6 +2993,7 @@
             // slide whose picture doesn't match its words, so test for it.
             const seenImg = {};
             m.hotels.forEach((h, i) => {
+                if (h.isSection) return;   // chapter dividers carry no photo by design
                 const n = i + 3;
                 const label = `Slide ${n} (${plain(h.name)})`;
                 // Measured budget: 43 characters a line; 4 lines without a rate
@@ -3029,6 +3062,7 @@
                 hotels: hotels.map((h, i) => ({
                     ...h,
                     dayLabel: h.dayLabel || '',
+                    isSection: !!h.isSection,
                     socialLine: lines[i] || firstSentence(h.desc, 150),
                     rateLine: [plain(h.room), plain(h.rate).replace(/\*/g, '')].filter(Boolean).join(' · ')
                 }))
@@ -3046,11 +3080,40 @@
             ]); } catch (e) {}
             const m = collectSocial();
             const slides = [await slideCover(m), await slideBrief(m)];
-            for (let i = 0; i < m.hotels.length; i++) slides.push(await slideHotel(m.hotels[i], i, m));
+            // Track which strip position maps to which editable slide, so the
+            // ✕ removes the right one; numbering counts CONTENT slides only,
+            // so deleting one renumbers the rest automatically.
+            const owner = [null, null];
+            let contentNo = 0, partNo = 0;
+            for (let i = 0; i < m.hotels.length; i++) {
+                const h = m.hotels[i];
+                if (h.isSection) {
+                    partNo++;
+                    slides.push(await slideSection(h, partNo));
+                } else {
+                    slides.push(await slideHotel(h, contentNo++, m));
+                }
+                owner.push(i);
+            }
             slides.push(await slideCTA(m));
+            owner.push(null);
             socialCanvases = slides;
             strip.innerHTML = '';
-            slides.forEach(c => strip.appendChild(c));
+            slides.forEach((c, k) => {
+                const cell = document.createElement('div');
+                cell.className = 'slide-cell';
+                cell.appendChild(c);
+                if (owner[k] !== null) {
+                    const x = document.createElement('button');
+                    x.className = 'slide-x';
+                    x.type = 'button';
+                    x.title = 'Remove this slide';
+                    x.dataset.delslide = String(owner[k]);
+                    x.textContent = '✕';
+                    cell.appendChild(x);
+                }
+                strip.appendChild(cell);
+            });
             const issues = socialQA(m);
             $('socialQA').innerHTML = issues.length
                 ? '<strong>QA check — please fix before posting:</strong><ul>' + issues.map(i => '<li>' + esc(i) + '</li>').join('') + '</ul>'
@@ -3450,6 +3513,36 @@
                 renderSocial();
             } catch (err) { toast('Couldn’t open that post.'); }
         }
+        /* Remove a slide. The deck is rebuilt from the CURRENT field values so
+           nothing typed is lost, and because numbering is derived from position
+           the remaining slides renumber themselves. */
+        document.addEventListener('click', (e) => {
+            const x = e.target.closest('[data-delslide]');
+            if (!x) return;
+            const idx = +x.dataset.delslide;
+            const m = collectSocial();
+            if (!m.hotels[idx]) return;
+            const name = plain(m.hotels[idx].name) || 'this slide';
+            if (!confirm('Remove “' + name + '” from the carousel? The slides after it renumber automatically.')) return;
+            const slides = m.hotels.filter((_, i) => i !== idx);
+            if (!slides.length) { toast('A carousel needs at least one slide.'); return; }
+            socialDeck = Object.assign({}, socialDeck || {
+                kind: m.deckKind || 'proposal', title: m.hook, lede: m.briefIntro,
+                ctaTitle: m.ctaTitle, ctaSub: m.ctaSub, briefKicker: m.briefKicker
+            }, {
+                slides,
+                coverImage: m.coverImage,
+                hook: m.hook, briefIntro: m.briefIntro, brief: m.brief,
+                ctaTitle: m.ctaTitle, ctaSub: m.ctaSub, caption: $('sCaption').value
+            });
+            // keep the edited copy: prefill reads socialHook off each slide
+            slides.forEach(sl => { sl.socialHook = sl.socialLine || sl.socialHook || ''; });
+            prefillSocial();
+            $('sCaption').value = socialDeck.caption || buildCaption();
+            renderSocial();
+            toast('Slide removed — the rest renumbered.');
+        });
+
         $('sRefresh').addEventListener('click', () => { $('sCaption').value = buildCaption(); renderSocial(); });
         $('sRefill').addEventListener('click', () => {
             if (!confirm('Refill every field from the current proposal? Your edits in this panel will be replaced.')) return;
