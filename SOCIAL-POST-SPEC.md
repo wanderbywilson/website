@@ -82,6 +82,24 @@ Read in under two seconds, or not at all.
   that visible at a glance.
 - 6–10 slides per carousel. Past ~10, swipe-through collapses.
 
+## Where slide photos come from (blog posts)
+
+Articles rarely have one image per section, and anything migrated from Google
+Docs has none at all. The builder fills every slide in this order:
+
+1. an image inside that section, matched by meaning (filename/alt vs. heading),
+   then by position;
+2. **our own hotel page's hero**, if the section names a property we have a page
+   for — matched across the whole section, and for an H2 across its sub-sections;
+3. a **destination match** — a library hotel whose location shares a distinctive
+   place name with the section (generic words like *island*, *coast*, *bay* don't
+   count);
+4. for the cover, the strongest slide photo when the article has no hero.
+
+Headings with under 8 words of their own copy ("Where to Stay") are scaffolding,
+not slides, and are skipped. Fallback photos are on-topic but may not show the
+exact property named — the QA panel flags them so you can confirm or swap.
+
 ## What the Studio checks for you
 
 The QA panel flags: number words that contradict the slide count · client-name
