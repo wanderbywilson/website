@@ -135,6 +135,45 @@
         }
         .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
 
+        /* "Also considered" — a quiet record of what was looked at */
+        .prop-considered { padding: 56px 0 8px; background: #fff; }
+        .prop-considered-head {
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.28em; text-transform: uppercase;
+            color: rgba(30, 53, 82, 0.42); margin: 0 0 22px; text-align: center;
+        }
+        .prop-considered-list {
+            list-style: none; margin: 0 auto; padding: 0; max-width: 900px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 22px;
+        }
+        .prop-considered-list li { text-align: center; opacity: 0.55; transition: opacity .3s ease; }
+        .prop-considered-list li:hover { opacity: 0.9; }
+        .prop-considered-list img {
+            width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block;
+            filter: grayscale(1); margin-bottom: 10px;
+        }
+        .prop-considered-list li:hover img { filter: grayscale(0.4); }
+        .prop-considered-name {
+            display: block; font-family: var(--font-serif); font-size: 15px; color: var(--ink);
+        }
+        .prop-considered-loc, .prop-considered-why {
+            display: block; font-family: var(--font-sans); font-size: 11px;
+            color: rgba(30, 53, 82, 0.5); margin-top: 3px; line-height: 1.5;
+        }
+        .prop-considered-why { font-style: italic; }
+
+        /* How to get there — lookbook only */
+        .prop-hotel-getting {
+            border-top: 1px solid rgba(199, 174, 138, 0.35);
+            padding-top: 16px; margin: 0 0 22px;
+            font-family: var(--font-sans); font-size: 14px; line-height: 1.65;
+            color: rgba(30, 53, 82, 0.78);
+        }
+        .prop-hotel-getting strong {
+            display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+        }
+
         /* HOTEL SECTIONS — split "lookbook" layout: full-bleed photo pinned
            on the left, content scrolling on the right. As one option scrolls
            away, the next option's photo takes over. */
@@ -791,6 +830,9 @@
                     roomDesc:  h.roomDesc  || '',
                     deposit:   h.deposit   || '',
                     cancellation: h.cancellation || '',
+                    gettingThere: h.gettingThere || '',
+                    considered: !!h.considered,
+                    consideredWhy: h.consideredWhy || '',
                     perksList: h.perksList || [],
                     perksLabel: h.perksLabel || 'Preferred-partner amenities &mdash; included',
                     gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
@@ -831,8 +873,9 @@
             }
 
             // ── Section builders ──────────────────────────────────────────
-            function hotelSection(h, i) {
+            function hotelSection(h, i, mode) {
                 const r = resolveHotel(h);
+                const lookbook = mode === 'lookbook';
                 const altName = decode(strip(r.name));
                 const num = 'No. ' + String(i + 1).padStart(2, '0');
                 const shots = r.gallery || [];
@@ -848,7 +891,12 @@
                 const roomDesc = r.roomDesc
                     ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span></p>`
                     : '';
-                const finePrint = (r.deposit || r.cancellation)
+                // How to get there — a lookbook's answer to "is this even reachable?".
+                // In a quote the real flight detail takes its place.
+                const gettingThere = (lookbook && r.gettingThere)
+                    ? `<div class="prop-hotel-getting"><strong>How to get there</strong><span${E(`hotels.${i}.gettingThere`)}>${r.gettingThere}</span></div>`
+                    : '';
+                const finePrint = (!lookbook && (r.deposit || r.cancellation))
                     ? `<div class="prop-hotel-fineprint">
                         ${r.deposit ? `<p><strong>Deposit</strong><span${E(`hotels.${i}.deposit`)}>${r.deposit}</span></p>` : ''}
                         ${r.cancellation ? `<p><strong>Cancellation</strong><span${E(`hotels.${i}.cancellation`)}>${r.cancellation}</span></p>` : ''}
@@ -874,11 +922,11 @@
                         <p class="prop-hotel-num">${num}</p>
                         <h2 class="prop-hotel-name">${r.name}</h2>
                         <p class="prop-hotel-location">${r.location}</p>
-                        ${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
-                        ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
-                        ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
+                        ${!lookbook && r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
+                        ${!lookbook && r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
+                        ${!lookbook && r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
                         </div>
-                        ${r.flight ? (r.flightDetails
+                        ${!lookbook && r.flight ? (r.flightDetails
                             ? `<div class="prop-hotel-flightwrap">
                                 <button class="prop-hotel-flight prop-flight-toggle" type="button" aria-expanded="false"><span${E(`hotels.${i}.flight`)}>${r.flight}</span><span class="prop-flight-open">Flight details <span class="prop-flight-caret">&#9662;</span></span></button>
                                 <div class="prop-flight-details" hidden>${flightDetailsHTML(r.flightDetails)}</div>
@@ -886,10 +934,11 @@
                             : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
                         ${carousel}
-                        ${roomDesc}
+                        ${lookbook ? '' : roomDesc}
+                        ${gettingThere}
                         ${hotelPerks}
                         ${finePrint}
-                        ${cta}
+                        ${lookbook ? '' : cta}
                     </div>
                 </section>`;
             }
@@ -972,6 +1021,30 @@
                 });
             }
 
+            /* Properties we looked at and set aside. Kept on the page, quietly,
+               so the client can see the shortlist was a shortlist — and so we
+               have a record of what was considered. */
+            function consideredSection(list) {
+                if (!list.length) return '';
+                return `
+                <section class="prop-considered">
+                    <div class="prop-container">
+                        <p class="prop-considered-head">Also considered</p>
+                        <ul class="prop-considered-list">
+                            ${list.map(h => {
+                                const r = resolveHotel(h);
+                                return `<li>
+                                    ${r.heroImage ? `<img src="${r.heroImage}" alt="" loading="lazy">` : ''}
+                                    <span class="prop-considered-name">${r.name}</span>
+                                    <span class="prop-considered-loc">${r.location}</span>
+                                    ${r.consideredWhy ? `<span class="prop-considered-why">${r.consideredWhy}</span>` : ''}
+                                </li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                </section>`;
+            }
+
             function render(P) {
                 applyMeta(P);
                 if (isHeldBack(P)) {
@@ -987,10 +1060,15 @@
                     return;
                 }
                 const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || 'Photography is provided by each property. Actual rooms may differ from the images shown.'}</p>`;
+                const mode = P.mode === 'lookbook' ? 'lookbook' : 'quote';
+                const all = P.hotels || [];
+                const shown = all.filter(h => !h.considered);
+                const setAside = all.filter(h => h.considered);
                 document.getElementById('proposalRoot').innerHTML =
                     heroSection(P) +
-                    (P.hotels || []).map(hotelSection).join('') +
+                    shown.map((h, i) => hotelSection(h, i, mode)).join('') +
                     perksSection(P.perks) +
+                    consideredSection(setAside) +
                     photoNote +
                     closeSection(P);
                 initCarousels();

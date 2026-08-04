@@ -372,6 +372,24 @@
         .claude-build textarea { background: #fff; border-color: rgba(42,99,168,0.4); }
         .claude-build textarea:focus { border-color: #2a63a8; box-shadow: 0 0 0 3px rgba(42,99,168,0.15); }
         .claude-build-note { font-size: 12px; line-height: 1.6; margin: 10px 0 0; color: #2a63a8; }
+        .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .mode-switch button {
+            text-align: left; background: #fff; border: 1px solid var(--st-line-2);
+            padding: 10px 12px; cursor: pointer; font-family: var(--font-sans);
+        }
+        .mode-switch button strong {
+            display: block; font-size: 13px; color: var(--st-text); margin-bottom: 3px;
+        }
+        .mode-switch button span { display: block; font-size: 11px; line-height: 1.45; color: var(--st-dim-2); }
+        .mode-switch button.is-on { border-color: #2a63a8; background: rgba(42,99,168,0.07); }
+        .mode-switch button.is-on strong { color: #2a63a8; }
+        .quote-only-hidden { display: none !important; }
+        .conv-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 2px; border-top: 1px solid var(--st-line); cursor: pointer; }
+        .conv-row span { font-size: 13px; color: var(--st-text); }
+        .conv-row em { display: block; font-style: normal; font-size: 11px; color: var(--st-dim-2); margin-top: 2px; }
+        .hotel-card.is-considered { opacity: .6; }
+        .hotel-card.is-considered .hotel-card-name::after { content: ' — also considered'; font-size: 11px; color: var(--st-dim-2); }
+
         .manual-divider {
             display: flex; align-items: center; gap: 12px; margin: 0 0 22px;
             font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--st-dim-2);
@@ -883,11 +901,22 @@
                     <p class="claude-build-kicker">Start here</p>
                     <h2 class="claude-build-head">Build a proposal <em>with Claude.</em></h2>
                     <p class="claude-build-sub">Copy the prompt into your own Claude and type <strong>&ldquo;build a proposal for [client name]&rdquo;</strong> &mdash; that&rsquo;s all. It goes and reads their inquiry, your intake-call recap, the Asana task and any call notes, then comes back with 3&ndash;5 recommended properties, fully written. Paste the reply here and the whole proposal builds itself.</p>
+                    <div class="mode-switch" id="modeSwitch">
+                        <button type="button" data-mode="lookbook">
+                            <strong>Lookbook</strong>
+                            <span>Ideas to react to &mdash; hotels, photos and how to get there. No rooms or pricing.</span>
+                        </button>
+                        <button type="button" data-mode="quote" class="is-on">
+                            <strong>Quote</strong>
+                            <span>The real thing &mdash; room category, rate, deposit and cancellation.</span>
+                        </button>
+                    </div>
                     <div class="claude-build-row">
-                        <button class="btn" id="pbCopyPrompt" type="button">1 &middot; Copy the proposal prompt</button>
+                        <button class="btn" id="pbCopyPrompt" type="button">1 &middot; Copy the quote prompt</button>
                     </div>
                     <textarea class="f-area" id="pbPaste" style="min-height:130px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the trip, the hotels and the close all fill in."></textarea>
                     <p class="claude-build-note" id="pbResult" hidden></p>
+                    <button class="btn btn-ghost btn-small" id="btnConvert" type="button" hidden style="margin-top:12px">Convert to a quote &mdash; pick what they liked</button>
                 </section>
 
                 <p class="manual-divider"><span>or build it by hand &mdash; and edit anything Claude wrote</span></p>
@@ -1096,6 +1125,19 @@
         </div>
     </div>
 
+    <!-- Lookbook → quote -->
+    <div class="modal-wrap" id="convModal">
+        <div class="modal" style="max-width:520px">
+            <div class="modal-head">
+                <h2 class="modal-title">Which ones did they <em>like?</em></h2>
+                <button class="btn btn-ghost btn-small" data-close="convModal" type="button">Close</button>
+            </div>
+            <p class="sec-sub" style="margin-bottom:14px">Keep the properties they responded to. The rest stay on the page as &ldquo;also considered&rdquo; &mdash; greyed out, so you both have a record of what was looked at.</p>
+            <div id="convList"></div>
+            <button class="btn" id="convGo" type="button" style="width:100%; justify-content:center; margin-top:16px">Convert to a quote</button>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=91"></script>
@@ -1127,7 +1169,7 @@
 
         /* state.hotels[i]: { slug } for library hotels (plus the variable
            fields) or { custom:true, name, location, heroImage, galleryText }  */
-        let state = { id: null, hotels: [] };
+        let state = { id: null, mode: 'quote', hotels: [] };
         let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
         let previewReady = false;
 
@@ -2016,6 +2058,8 @@
             if ((h.bookingPartners || '').trim()) out.bookingPartners = h.bookingPartners.trim();
             if ((h.amenitiesNote || '').trim()) out.amenitiesNote = h.amenitiesNote.trim();
             if ((h.advisorNote || '').trim()) out.advisorNote = h.advisorNote.trim();
+            if ((h.gettingThere || '').trim()) out.gettingThere = sentenceCap(h.gettingThere.trim());
+            if (h.considered) { out.considered = true; if ((h.consideredWhy || '').trim()) out.consideredWhy = h.consideredWhy.trim(); }
             if ((h.room || '').trim()) out.room = titleWords(h.room.trim());
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
@@ -2049,6 +2093,7 @@
                 lede: sentenceCap($('fLede').value.trim()),
                 dates: sentenceCap($('fDates').value.trim()),
                 validUntil: sentenceCap($('fValid').value.trim()),
+                mode: state.mode === 'lookbook' ? 'lookbook' : 'quote',
                 hotels: state.hotels.map(serializeHotel),
                 // no global perks band — amenities live on each hotel card
                 closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || 'Just hit reply <em>to confirm.</em>',
@@ -2141,8 +2186,9 @@
                         <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="Paste the property overview exactly as the hotel or Virtuoso writes it — never write your own.">${esc(h.desc)}</textarea></div>
                     <div class="f-row"><label class="f-label">Gallery photo URLs — one per line (optional)</label>
                         <textarea class="f-area" data-i="${i}" data-k="galleryText">${esc(h.galleryText)}</textarea></div>` : '';
+                const lb = state.mode === 'lookbook';
                 return `
-                <div class="hotel-card" data-card="${i}">
+                <div class="hotel-card${h.considered ? ' is-considered' : ''}" data-card="${i}">
                     <div class="hotel-card-top">
                         ${m.img ? `<img class="hotel-card-thumb" src="${esc(m.img)}" alt="">` : '<div class="hotel-card-thumb"></div>'}
                         <div>
@@ -2156,7 +2202,16 @@
                         </div>
                     </div>
                     ${customFields}
-                    <div class="quote-steps">
+                    ${lb ? `
+                    <div class="f-row"><label class="f-label">How to get there <span style="text-transform:none">(shows on a lookbook in place of flights)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="gettingThere" placeholder="Fly into Providenciales; the resort is a 25-minute drive from the airport and transfers are arranged for you.">${esc(h.gettingThere || '')}</textarea></div>` : ''}
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="cons${i}" data-i="${i}" data-k="considered" ${h.considered ? 'checked' : ''}>
+                        <label for="cons${i}">Considered but not selected — show greyed out at the end</label>
+                    </div>
+                    ${h.considered ? `<div class="f-row"><label class="f-label">Why it wasn’t the pick <span style="text-transform:none">(optional, client-facing)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="consideredWhy" value="${esc(h.consideredWhy || '')}" placeholder="Beautiful, but a longer transfer than you wanted"></div>` : ''}
+                    <div class="quote-steps"${lb ? ' hidden' : ''}>
                         <p class="quote-steps-head">Add the quote — nothing typed by hand</p>
                         <div class="claude-row">
                             <button class="btn btn-small" data-copyprompt="${i}" type="button">1 &middot; Copy the Claude prompt</button>
@@ -2175,7 +2230,7 @@
                         <div class="f-row"><label class="f-label">Caveats &amp; what to check</label>
                             <textarea class="f-area" data-i="${i}" data-k="advisorNote" placeholder="Rate is researched, not quoted. Couldn't source verbatim copy — pull it from the hotel site before publishing.">${esc(h.advisorNote || '')}</textarea></div>
                     </div>
-                    <details class="manual-fields"${(h.room || h.rate || h.deposit || h.flight) ? ' open' : ''}>
+                    <details class="manual-fields"${lb ? ' hidden' : ''}${(h.room || h.rate || h.deposit || h.flight) ? ' open' : ''}>
                     <summary>Enter or edit the quote fields manually</summary>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Room category</label>
@@ -2223,7 +2278,7 @@
             const i = e.target.dataset.i, k = e.target.dataset.k;
             if (i === undefined || !k) return;
             state.hotels[+i][k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-            if (k === 'usePerks') { renderHotels(); return; }
+            if (k === 'usePerks' || k === 'considered') { renderHotels(); onChange(); return; }
             if (['name', 'location', 'heroImage'].includes(k)) {
                 clearTimeout($('hotelList')._metaT);
                 $('hotelList')._metaT = setTimeout(() => { renderHotels(); }, 900);
@@ -2273,6 +2328,71 @@
         /* ── Build a whole proposal from one Claude reply ────────────────
            The team describes the client to their own Claude, points it at the
            intake recap / Asana task / call notes, and pastes the JSON back. */
+        /* A lookbook goes out when the brief is broad: hotels and photography
+           to react to, with no room categories or pricing to argue with. */
+        const LOOKBOOK_PROMPT = [
+            'You are helping Wander by Wilson \u2014 a luxury travel advisory (wanderbywilson.com) \u2014 build a client LOOKBOOK.',
+            '',
+            'A lookbook is NOT a quote. It is a shortlist of properties for the client to react to early on, when the brief is still broad. It carries the hotel, its story and its photography \u2014 and NO room category, NO pricing, NO deposit and NO cancellation terms. Those come later, if they like something.',
+            '',
+            'I will give you ONE thing: a client name. Everything else already exists in our systems \u2014 go and find it yourself. Do not ask me to fill in a brief.',
+            '',
+            'STEP 1 \u2014 GATHER THE FILE. Search every source you have access to for this client:',
+            '  \u2022 Gmail \u2014 the website inquiry (from forms@wanderbywilson.com to wilson@wanderbywilson.com, subject \u201cNew trip inquiry \u2014 {name}\u201d).',
+            '  \u2022 Gmail \u2014 the intake-call recap Wilson sent after their call (from wilson@wanderbywilson.com, usually cc\u2019ing riana@wanderbywilson.com, in the same thread). The richest source.',
+            '  \u2022 Asana \u2014 the task or project under the client\u2019s name.',
+            '  \u2022 Google Drive \u2014 call notes, client profile form, any trip document with their name on it.',
+            '',
+            'Read all of it, then state back in two or three lines what you found: who is travelling, the occasion, the destination and dates, the nights, the budget, anything ruled out. If you cannot find the client, say so and stop \u2014 do not invent a brief.',
+            '',
+            'STEP 2 \u2014 CHOOSE 4\u20136 PROPERTIES that genuinely fit, ordered strongest-fit first. Because this is early-stage, deliberately show RANGE: different islands, different characters, different price tiers \u2014 the point is to learn what they respond to. Two hard filters:',
+            '',
+            'A. LUXURY ONLY \u2014 never below a genuine 4-star standard.',
+            'B. WE MUST BE ABLE TO BOOK IT \u2014 the property must be reachable through at least one of our partners: rep companies (Antipodal, Bennett & Mercado, Claudia Da Rin, Creative Destinations, Dominique Debay, Heloise\u2019s Choice, Hidden Doorways, Hotel Labs, House of Kooser, Index Select, Insieme, Island Luxe, Janine Cifanelli, JMAK, KAI, Lush Experiences, MJL Select, Namron Hospitality, Passages of Distinction, Querido, Rebecca Recommends, TL Portfolio, Vitae Collection, Waterstone Marketing, Wanderluxe, Muse Collection, All About Rep Terra, Reiimagine, Selected Escapes, Roe & Co) \u00b7 wholesalers (Classic Vacations, Ultimate Jet Vacations) \u00b7 booking platforms (Tablet, Mr & Mrs Smith, Small Luxury Hotels of the World, Leading Hotels of the World, Virtuoso, Excellence Collection, meliaPRO, Sandals, Secrets) \u00b7 brand programs (Marriott, IHG, Hilton, Hyatt, Belmond, Dorchester Collection, Accor, Four Seasons, anything on smartflyer.com). Verify the affiliation \u2014 do not assume it \u2014 and record every confirmed route in "bookingPartners".',
+            '',
+            'COMPLIANCE \u2014 non-negotiable:',
+            '1. Every description must be VERBATIM from the hotel\u2019s own website or its Virtuoso/SmartFlyer listing. NEVER write, paraphrase or embellish your own copy. One coherent passage per hotel, 400\u2013900 characters.',
+            '2. Amenities: default to the hotel\u2019s VIRTUOSO page. NEVER include an advisor\u2019s \u201cpersonalized welcome note on arrival\u201d.',
+            '3. EVERY field below prints on a page the CLIENT reads. Never write a note to us inside one \u2014 no \u201cVERBATIM COPY NEEDED\u201d, no \u201creplace before sending\u201d, no bracketed placeholders, no source URLs. If you cannot verify something, leave it an EMPTY STRING and put the caveat in "advisorNote", which never prints.',
+            '4. Do NOT include room categories, rates, deposits or cancellation terms anywhere. This is a lookbook.',
+            '',
+            'PHOTOS \u2014 the whole point of a lookbook. For each hotel give a hero plus up to 5 more, as direct image URLs (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero is the property\u2019s signature wide shot. Daylight or golden hour only. NEVER: plated-food shots \u00b7 night shots \u00b7 bathroom-only shots \u00b7 NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about (a few small figures at human scale in a wide view are fine; anyone recognisable, posed or dominating the frame is not) \u00b7 renders when real photos exist \u00b7 near-duplicates.',
+            '',
+            'STEP 3 \u2014 reply with your summary, then ONLY this JSON block:',
+            '',
+            '{',
+            '  "mode": "lookbook",',
+            '  "preparedFor": "how to address them, e.g. The Apfels",',
+            '  "title": "the lookbook headline, e.g. Somewhere in the *Caribbean.* \u2014 wrap ONE word in *asterisks* for italic gold",',
+            '  "lede": "one or two sentences on what this is: a first look, to find out what they respond to. Say plainly that rates come next.",',
+            '  "dates": "e.g. November 2026 \u00b7 4\u20135 nights \u2014 keep it loose if the dates are not fixed",',
+            '  "validUntil": "",',
+            '  "closeTitle": "closing headline, e.g. Which of these feels *right?*",',
+            '  "closeLede": "invite them to tell you which ones they like, and say you will quote those with real dates and rates",',
+            '  "hotels": [',
+            '    {',
+            '      "name": "official hotel name exactly as the hotel writes it",',
+            '      "location": "Town, Region, Country \u00b7 Brand if part of its identity",',
+            '      "whyRecommended": "1\u20132 sentences for WILSON on why this fits \u2014 does NOT print",',
+            '      "desc": "the property overview, VERBATIM",',
+            '      "heroImage": "direct image URL from the hotel\u2019s own site",',
+            '      "gallery": ["up to 5 more direct image URLs telling the story of the place"],',
+            '      "gettingThere": "ONE or two sentences a client can act on: nearest airport, roughly how long from there, and how the transfer works (car, boat, island flight). Client-facing.",',
+            '      "perks": ["each Virtuoso amenity as a short elegant bullet"],',
+            '      "bookingPartners": ["every confirmed way we can book this \u2014 advisor-only"],',
+            '      "amenitiesNote": "advisor-only: which program the perks come from, and any different package elsewhere",',
+            '      "advisorNote": "advisor-only: anything unverified, anything Wilson should check",',
+            '      "socialHook": "ONE line, max ~120 characters, on what makes the property singular \u2014 used later if we post about this trip"',
+            '    }',
+            '  ]',
+            '}',
+            '',
+            'After the JSON, list anything you could not verify.',
+            '',
+            '\u2014\u2014\u2014',
+            'Now tell me: build a lookbook for [CLIENT NAME]'
+        ].join('\n');
+
         const PROPOSAL_PROMPT = [
             'You are helping Wander by Wilson \u2014 a luxury travel advisory (wanderbywilson.com) \u2014 build a client hotel proposal.',
             '',
@@ -2392,6 +2512,56 @@
             catch (err) { window.prompt('Copy this prompt:', PROPOSAL_PROMPT); }
         });
 
+        /* Lookbook vs quote. The mode decides which prompt we hand out, which
+           fields show on each hotel card, and what the client page renders. */
+        function setMode(mode) {
+            state.mode = mode === 'lookbook' ? 'lookbook' : 'quote';
+            const lb = state.mode === 'lookbook';
+            document.querySelectorAll('#modeSwitch [data-mode]').forEach(b =>
+                b.classList.toggle('is-on', b.dataset.mode === state.mode));
+            $('pbCopyPrompt').textContent = lb ? '1 · Copy the lookbook prompt' : '1 · Copy the quote prompt';
+            $('btnConvert').hidden = !lb || !state.hotels.length;
+            $('btnPublish').textContent = 'Publish';
+            $('btnPublishBottom').textContent = lb ? 'Publish lookbook' : 'Publish proposal';
+            renderHotels();
+            onChange();
+        }
+        document.getElementById('modeSwitch').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-mode]');
+            if (b) setMode(b.dataset.mode);
+        });
+        $('pbCopyPrompt').addEventListener('click', async () => {
+            const text = state.mode === 'lookbook' ? LOOKBOOK_PROMPT : PROPOSAL_PROMPT;
+            try { await navigator.clipboard.writeText(text); toast((state.mode === 'lookbook' ? 'Lookbook' : 'Quote') + ' prompt copied — paste it into your Claude and name the client.'); }
+            catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+
+        /* Turning a lookbook into a quote: the client picked favourites, so keep
+           those, set the rest aside on the page, and switch on the commercial
+           fields ready for real rates. */
+        $('btnConvert').addEventListener('click', () => {
+            const rows = state.hotels.map((h, i) => {
+                const m = hotelMeta(h);
+                return `<label class="conv-row"><input type="checkbox" data-conv="${i}" checked> <span>${esc(m.name)}<em>${esc(m.loc)}</em></span></label>`;
+            }).join('');
+            $('convList').innerHTML = rows;
+            $('convModal').classList.add('is-open');
+        });
+        $('convGo').addEventListener('click', () => {
+            const keep = new Set(Array.from(document.querySelectorAll('[data-conv]'))
+                .filter(c => c.checked).map(c => +c.dataset.conv));
+            if (!keep.size) { toast('Pick at least one property to quote.'); return; }
+            state.hotels.forEach((h, i) => {
+                h.considered = !keep.has(i);
+                if (h.considered && !h.consideredWhy) h.consideredWhy = '';
+            });
+            // move the picks to the front, keep the set-aside ones after
+            state.hotels.sort((a, b) => (a.considered === b.considered) ? 0 : (a.considered ? 1 : -1));
+            $('convModal').classList.remove('is-open');
+            setMode('quote');
+            toast('Now a quote — add the room and rate for each kept property. The rest show as “also considered”.');
+        });
+
         function buildProposalFromClaude(p) {
             if (p.preparedFor) $('fPrepared').value = titleWords(String(p.preparedFor));
             if (p.title) $('fTitle').value = String(p.title);
@@ -2400,6 +2570,7 @@
             if (p.validUntil) $('fValid').value = String(p.validUntil);
             if (p.closeTitle) $('fCloseTitle').value = String(p.closeTitle);
             if (p.closeLede) $('fCloseLede').value = String(p.closeLede);
+            if (p.mode === 'lookbook' || p.mode === 'quote') setMode(p.mode);
 
             const libEntries = libEntriesForMatching();
             const fromLibrary = [], custom = [], notes = [], partners = [];
@@ -2417,6 +2588,9 @@
                     bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
                     amenitiesNote: String(h.amenitiesNote || ''),
                     advisorNote: String(h.advisorNote || ''),
+                    gettingThere: String(h.gettingThere || ''),
+                    considered: !!h.considered,
+                    consideredWhy: String(h.consideredWhy || ''),
                     flight: '', flightDetails: '',
                     usePerks: !!(h.perks && h.perks.length),
                     perksText: (h.perks || []).join('\n'),
@@ -2541,14 +2715,14 @@
             const slug = card.dataset.slug;
             const rateFrom = lib[slug] && lib[slug].rateFrom ? 'From *' + stripHtml(lib[slug].rateFrom) + '*' : '';
             const libPerks = (lib[slug] && lib[slug].perks) ? lib[slug].perks.join('\n') : '';
-            state.hotels.push({ slug, room: '', rate: rateFrom, rateNote: '', flight: '', roomDesc: '', desc: '', usePerks: !!libPerks, perksText: libPerks, useBooking: false, bookingUrl: '' });
+            state.hotels.push({ slug, room: '', rate: rateFrom, rateNote: '', flight: '', roomDesc: '', desc: '', gettingThere: '', considered: false, usePerks: !!libPerks, perksText: libPerks, useBooking: false, bookingUrl: '' });
             renderHotels(); onChange();
             renderLibrary($('libSearch').value);
         });
         $('libSearch').addEventListener('input', () => renderLibrary($('libSearch').value));
         $('btnAddLibrary').addEventListener('click', () => { renderLibrary(''); $('libSearch').value = ''; $('libModal').classList.add('is-open'); });
         $('btnAddCustom').addEventListener('click', () => {
-            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', flight: '', roomDesc: '', usePerks: false, perksText: '', useBooking: false, bookingUrl: '' });
+            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', flight: '', roomDesc: '', gettingThere: '', considered: false, usePerks: false, perksText: '', useBooking: false, bookingUrl: '' });
             renderHotels(); onChange();
         });
 
@@ -2680,6 +2854,7 @@
         function loadProposal(id, P) {
             state = {
                 id,
+                mode: P.mode === 'lookbook' ? 'lookbook' : 'quote',
                 hotels: (P.hotels || []).map(h => {
                     const isLib = h.slug && lib[h.slug];
                     return {
@@ -2694,6 +2869,9 @@
                         bookingPartners: h.bookingPartners || '',
                         amenitiesNote: h.amenitiesNote || '',
                         advisorNote: h.advisorNote || '',
+                        gettingThere: h.gettingThere || '',
+                        considered: !!h.considered,
+                        consideredWhy: h.consideredWhy || '',
                         room: h.room || '',
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
