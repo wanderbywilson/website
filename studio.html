@@ -2414,7 +2414,7 @@
             box.hidden = false;
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
                 (fromLibrary.length ? fromLibrary.length + ' came from our own pages (' + esc(fromLibrary.join(', ')) + ') with approved photos and amenities. ' : '') +
-                (custom.length ? custom.length + ' aren\u2019t on our site yet (' + esc(custom.join(', ')) + ') — using Claude\u2019s sourced copy, and queued as hotel-page drafts.' : '') +
+                (custom.length ? custom.length + (custom.length === 1 ? ' isn\u2019t' : ' aren\u2019t') + ' on our site yet (' + esc(custom.join(', ')) + ') — using Claude\u2019s sourced copy, and queued as ' + (custom.length === 1 ? 'a hotel-page draft' : 'hotel-page drafts') + '.' : '') +
                 (notes.length ? '<br><br><strong>Why Claude picked these</strong> (for you, not the client):<br>' + esc(notes.join('\n')).replace(/\n/g, '<br>') : '');
             toast('Proposal built — review every field below before publishing.');
             if (custom.length) {
