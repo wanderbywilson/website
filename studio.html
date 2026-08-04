@@ -1024,6 +1024,7 @@
                         <button class="btn btn-small" id="sDownload" type="button">Download slides</button>
                         <button class="btn btn-ghost btn-small" id="sSave" type="button">Save as draft</button>
                         <button class="btn btn-ghost btn-small" id="sReady" type="button">Mark ready to post</button>
+                        <button class="btn btn-ghost btn-small" id="sUndo" type="button" hidden>Undo</button>
                         <button class="btn btn-ghost btn-small" id="sCopyCaption" type="button">Copy caption</button>
                         <button class="btn btn-ghost btn-small" id="sRefresh" type="button">Update preview</button>
                         <button class="btn btn-ghost btn-small" id="sRefill" type="button">Refill from proposal</button>
@@ -3124,6 +3125,7 @@
         $('btnSocial').addEventListener('click', () => {
             if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
             $('socialModal').classList.add('is-open');
+            socialUndo = null; setUndo('');
             if (social.forId !== (state.id || 'draft')) {
                 social.forId = state.id || 'draft';
                 social.postId = null;
@@ -3380,6 +3382,7 @@
         }
 
         function openComposerForDeck() {
+            socialUndo = null; setUndo('');
             social.postId = null;
             social.forId = null;
             $('socialModal').classList.add('is-open');
@@ -3496,6 +3499,7 @@
                     showView('editor');
                 }
                 $('socialModal').classList.add('is-open');
+                socialUndo = null; setUndo('');
                 social.forId = socialDeck ? null : (state.id || 'draft');
                 social.postId = id;
                 prefillSocial();
@@ -3513,6 +3517,41 @@
                 renderSocial();
             } catch (err) { toast('Couldn’t open that post.'); }
         }
+        /* One level of undo for slide removal — a snapshot of everything the
+           composer holds, taken before the deck is rebuilt. */
+        let socialUndo = null;
+        function socialSnapshot() {
+            return {
+                deck: socialDeck ? JSON.parse(JSON.stringify(socialDeck)) : null,
+                fields: {
+                    hook: $('sHook').value, briefIntro: $('sBriefIntro').value, brief: $('sBrief').value,
+                    ctaTitle: $('sCtaTitle').value, ctaSub: $('sCtaSub').value,
+                    caption: $('sCaption').value, category: $('sCategory').value,
+                    showRates: $('sShowRates').checked,
+                    lines: Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value),
+                    images: Array.from(document.querySelectorAll('[data-simg]')).map(t => t.value)
+                }
+            };
+        }
+        function socialRestore(snap) {
+            socialDeck = snap.deck;
+            prefillSocial();
+            const f = snap.fields;
+            $('sHook').value = f.hook; $('sBriefIntro').value = f.briefIntro; $('sBrief').value = f.brief;
+            $('sCtaTitle').value = f.ctaTitle; $('sCtaSub').value = f.ctaSub;
+            $('sShowRates').checked = f.showRates;
+            socCategoryOptions(f.category);
+            f.lines.forEach((v, i) => { const t = document.querySelector(`[data-sline="${i}"]`); if (t) t.value = v; });
+            f.images.forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t) t.value = v; });
+            $('sCaption').value = f.caption;
+            renderSocial();
+        }
+        function setUndo(label) {
+            const b = $('sUndo');
+            b.hidden = !socialUndo;
+            if (socialUndo) b.textContent = 'Undo — restore ' + label;
+        }
+
         /* Remove a slide. The deck is rebuilt from the CURRENT field values so
            nothing typed is lost, and because numbering is derived from position
            the remaining slides renumber themselves. */
@@ -3523,7 +3562,7 @@
             const m = collectSocial();
             if (!m.hotels[idx]) return;
             const name = plain(m.hotels[idx].name) || 'this slide';
-            if (!confirm('Remove “' + name + '” from the carousel? The slides after it renumber automatically.')) return;
+            const snap = socialSnapshot();
             const slides = m.hotels.filter((_, i) => i !== idx);
             if (!slides.length) { toast('A carousel needs at least one slide.'); return; }
             socialDeck = Object.assign({}, socialDeck || {
@@ -3540,11 +3579,32 @@
             prefillSocial();
             $('sCaption').value = socialDeck.caption || buildCaption();
             renderSocial();
-            toast('Slide removed — the rest renumbered.');
+            socialUndo = snap;
+            setUndo(name.length > 28 ? name.slice(0, 28) + '…' : name);
+            toast('Removed “' + name + '” — the rest renumbered. Undo is next to Download.');
+        });
+
+        $('sUndo').addEventListener('click', () => {
+            if (!socialUndo) return;
+            const snap = socialUndo;
+            socialUndo = null;
+            setUndo('');
+            socialRestore(snap);
+            toast('Slide restored.');
+        });
+        // ⌘Z / Ctrl-Z while the composer is open
+        document.addEventListener('keydown', (e) => {
+            if (!(e.key === 'z' && (e.metaKey || e.ctrlKey))) return;
+            if (!$('socialModal').classList.contains('is-open') || !socialUndo) return;
+            const tag = (e.target.tagName || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+            e.preventDefault();
+            $('sUndo').click();
         });
 
         $('sRefresh').addEventListener('click', () => { $('sCaption').value = buildCaption(); renderSocial(); });
         $('sRefill').addEventListener('click', () => {
+            socialUndo = null; setUndo('');
             if (!confirm('Refill every field from the current proposal? Your edits in this panel will be replaced.')) return;
             social.forId = state.id || 'draft';
             prefillSocial();
