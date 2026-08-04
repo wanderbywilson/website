@@ -2430,7 +2430,7 @@
             });
             renderHotels();
             onChange();
-            return { fromLibrary, custom, notes };
+            return { fromLibrary, custom, notes, partners };
         }
 
         async function queueDraftsForCustomHotels(names, tripLabel) {
@@ -2460,7 +2460,7 @@
             let p;
             try { p = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
             if (!p || !Array.isArray(p.hotels) || !p.hotels.length) { toast('That JSON has no "hotels" — check the reply.'); return; }
-            const { fromLibrary, custom, notes } = buildProposalFromClaude(p);
+            const { fromLibrary, custom, notes, partners } = buildProposalFromClaude(p);
             const box = $('pbResult');
             box.hidden = false;
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
