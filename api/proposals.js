@@ -131,6 +131,7 @@ module.exports = async (req, res) => {
 
             const index = (await blobGetJSON(INDEX_PATH)) || {};
             index[id] = {
+                status: proposal.status === 'draft' ? 'draft' : 'live',
                 title: (proposal.title || '').replace(/<[^>]+>/g, ''),
                 preparedFor: proposal.preparedFor || '',
                 dates: (proposal.dates || '').replace(/<[^>]+>/g, ''),

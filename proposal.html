@@ -799,6 +799,17 @@
                 };
             }
 
+            /* A proposal saved as a draft is work in progress — anyone who
+               reaches the link before it's published sees a holding note, not a
+               half-finished shortlist. The team (?preview=1) always sees it. */
+            function isHeldBack(P) {
+                if (!P || P.status !== 'draft') return false;
+                const q = new URLSearchParams(window.location.search);
+                if (q.get('preview') === '1') return false;
+                try { if (localStorage.getItem('wndr-team') === '1') return false; } catch (e) {}
+                return true;
+            }
+
             const arrow = '<svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 4.5h13m0 0L9 1m4 3.5L9 8" stroke="currentColor" stroke-width="1" stroke-linecap="square"/></svg>';
 
             // Click-to-edit marker (Studio live preview only)
@@ -963,6 +974,18 @@
 
             function render(P) {
                 applyMeta(P);
+                if (isHeldBack(P)) {
+                    document.getElementById('proposalRoot').innerHTML = `
+                        <section class="prop-hero">
+                            <div class="prop-container">
+                                <p class="prop-hero-kicker">Wander by Wilson</p>
+                                <h1 class="prop-hero-title">Still <em>in the works.</em></h1>
+                                <p class="prop-hero-lede">This proposal isn&rsquo;t finished yet &mdash; we&rsquo;re still pulling the options together.
+                                You&rsquo;ll have the link as soon as it&rsquo;s ready.</p>
+                            </div>
+                        </section>`;
+                    return;
+                }
                 const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || 'Photography is provided by each property. Actual rooms may differ from the images shown.'}</p>`;
                 document.getElementById('proposalRoot').innerHTML =
                     heroSection(P) +

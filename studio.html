@@ -617,6 +617,7 @@
             <span class="studio-top-spacer"></span>
             <span class="studio-status editor-only" id="statusText">New proposal</span>
             <button class="btn btn-ghost btn-small mobile-toggle editor-only" id="btnMobilePreview" type="button">Preview</button>
+            <button class="btn btn-ghost btn-small editor-only" id="btnSaveDraft" type="button">Save as draft</button>
             <button class="btn btn-small editor-only" id="btnPublish" type="button">Publish</button>
         </div>
 
@@ -953,7 +954,10 @@
                     </div>
                 </section>
 
-                <button class="btn" id="btnPublishBottom" type="button" style="width:100%; justify-content:center">Publish proposal</button>
+                <div style="display:flex; gap:10px">
+                    <button class="btn btn-ghost" id="btnSaveDraftBottom" type="button" style="flex:1; justify-content:center">Save as draft</button>
+                    <button class="btn" id="btnPublishBottom" type="button" style="flex:1; justify-content:center">Publish proposal</button>
+                </div>
 
             </div>
 
@@ -2545,27 +2549,42 @@
             m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('is-open'); }));
 
         /* ── Publish ──────────────────────────────────────────────────── */
-        async function publish() {
-            if (!state.hotels.length) { toast('Add at least one hotel before publishing.'); return; }
-            const btns = [$('btnPublish'), $('btnPublishBottom')];
-            btns.forEach(b => { b.disabled = true; b.textContent = 'Publishing…'; });
+        /* status 'draft' saves the work without making it a live client link;
+           'live' publishes. A draft URL shows a holding page to anyone but us. */
+        async function publish(status) {
+            if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
+            const draft = status === 'draft';
+            const btns = [$('btnPublish'), $('btnPublishBottom'), $('btnSaveDraft')];
+            btns.forEach(b => { if (b) b.disabled = true; });
+            const busy = draft ? 'Saving…' : 'Publishing…';
+            [$('btnPublish'), $('btnPublishBottom')].forEach(b => { if (b && !draft) b.textContent = busy; });
+            if (draft && $('btnSaveDraft')) $('btnSaveDraft').textContent = busy;
             try {
-                const data = await api({ action: 'save', id: state.id, proposal: serialize() });
+                const proposal = serialize();
+                proposal.status = draft ? 'draft' : 'live';
+                const data = await api({ action: 'save', id: state.id, proposal });
                 state.id = data.id;
-                $('statusText').textContent = 'Editing: ' + data.id;
+                $('statusText').textContent = (draft ? 'Draft: ' : 'Editing: ') + data.id;
                 $('pubLink').textContent = data.url.replace('https://www.', '');
                 $('pubLink').href = '/proposals/' + data.id + '?preview=1';
-                $('pubBar').classList.add('is-open');
+                $('pubBar').classList.toggle('is-open', !draft);
                 $('pubBar')._url = data.url;
                 try { localStorage.removeItem('wndr-studio-draft'); } catch (e) {}
-                toast('Published — the link is live.');
+                toast(draft
+                    ? 'Draft saved — it’s in Your proposals, and the link isn’t live yet.'
+                    : 'Published — the link is live.');
             } catch (err) {
-                if (err.message !== 'unauthorized') toast('Publish failed: ' + err.message);
+                if (err.message !== 'unauthorized') toast((draft ? 'Save' : 'Publish') + ' failed: ' + err.message);
             }
-            btns.forEach((b, i) => { b.disabled = false; b.textContent = i === 0 ? 'Publish' : 'Publish proposal'; });
+            btns.forEach(b => { if (b) b.disabled = false; });
+            $('btnPublish').textContent = 'Publish';
+            $('btnPublishBottom').textContent = 'Publish proposal';
+            if ($('btnSaveDraft')) $('btnSaveDraft').textContent = 'Save as draft';
         }
-        $('btnPublish').addEventListener('click', publish);
-        $('btnPublishBottom').addEventListener('click', publish);
+        $('btnPublish').addEventListener('click', () => publish('live'));
+        $('btnPublishBottom').addEventListener('click', () => publish('live'));
+        $('btnSaveDraft').addEventListener('click', () => publish('draft'));
+        $('btnSaveDraftBottom').addEventListener('click', () => publish('draft'));
         $('btnCopyLink').addEventListener('click', async () => {
             try { await navigator.clipboard.writeText($('pubBar')._url); toast('Link copied.'); }
             catch (e) { toast($('pubBar')._url); }
