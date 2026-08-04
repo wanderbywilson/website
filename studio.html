@@ -384,6 +384,8 @@
         .mode-switch button.is-on { border-color: #2a63a8; background: rgba(42,99,168,0.07); }
         .mode-switch button.is-on strong { color: #2a63a8; }
         .quote-only-hidden { display: none !important; }
+        #metaWarn mark { background: rgba(150,101,10,0.22); color: inherit; padding: 0 2px; font-weight: 600; }
+        #metaWarn li { margin-bottom: 8px; }
         .conv-row { display: flex; gap: 10px; align-items: flex-start; padding: 9px 2px; border-top: 1px solid var(--st-line); cursor: pointer; }
         .conv-row span { font-size: 13px; color: var(--st-text); }
         .conv-row em { display: block; font-style: normal; font-size: 11px; color: var(--st-dim-2); margin-top: 2px; }
@@ -889,8 +891,6 @@
         <div class="studio-main view" id="viewEditor">
             <div class="studio-form" id="formPane">
 
-                <div class="social-qa has-issues" id="metaWarn" hidden style="margin-bottom:18px"></div>
-
                 <div class="pub-bar" id="pubBar">
                     <span>Live at&nbsp;<a href="#" target="_blank" rel="noopener" id="pubLink"></a></span>
                     <button class="btn btn-ghost btn-small" id="btnCopyLink" type="button">Copy link</button>
@@ -918,6 +918,8 @@
                     <p class="claude-build-note" id="pbResult" hidden></p>
                     <button class="btn btn-ghost btn-small" id="btnConvert" type="button" hidden style="margin-top:12px">Convert to a quote &mdash; pick what they liked</button>
                 </section>
+
+                <div class="social-qa has-issues" id="metaWarn" hidden style="margin:0 0 22px"></div>
 
                 <p class="manual-divider"><span>or build it by hand &mdash; and edit anything Claude wrote</span></p>
 
@@ -2806,10 +2808,24 @@
             const box = $('metaWarn');
             if (!hits.length) { box.hidden = true; box.innerHTML = ''; return true; }
             box.hidden = false;
-            box.innerHTML = '<strong>This text is written to us, not the client &mdash; it cannot go live:</strong><ul>' +
-                hits.map(h => '<li><strong>' + esc(h.where) + ':</strong> &ldquo;' +
-                    esc(String(h.text).replace(/\s+/g, ' ').slice(0, 160)) + '&rdquo;</li>').join('') +
-                '</ul>Rewrite it as copy the client should read, or clear the field. Notes for yourself belong in the advisor block on each hotel.';
+            box.innerHTML = '<strong>' + hits.length + ' thing' + (hits.length === 1 ? '' : 's') +
+                ' here ' + (hits.length === 1 ? 'is' : 'are') + ' written to us, not the client.</strong> ' +
+                'This is a client-facing page, so Publish is blocked until it&rsquo;s gone:<ul>' +
+                hits.map(h => {
+                    const full = String(h.text).replace(/\s+/g, ' ');
+                    const m = full.match(META_TEXT);
+                    // quote the offending phrase in context, not the whole field
+                    let snippet = full;
+                    if (m) {
+                        const at = full.indexOf(m[0]);
+                        snippet = (at > 40 ? '…' : '') + full.slice(Math.max(0, at - 40), at) +
+                                  '⟪' + m[0] + '⟫' + full.slice(at + m[0].length, at + m[0].length + 60) +
+                                  (full.length > at + m[0].length + 60 ? '…' : '');
+                    }
+                    return '<li><strong>' + esc(h.where) + '</strong><br>' +
+                        esc(snippet).replace('⟪', '<mark>').replace('⟫', '</mark>') + '</li>';
+                }).join('') +
+                '</ul>Rewrite it as something the client should read, or clear the field. Notes to yourself belong in the advisor block on each hotel card.';
             return false;
         }
 
