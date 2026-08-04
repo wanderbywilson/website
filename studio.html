@@ -1222,7 +1222,9 @@
                         <div class="dash-row-title">${esc(p.preparedFor || p.title || p.id)}</div>
                         <div class="dash-row-sub">${esc(stripTags(p.title || ''))}${p.viewed && p.lastViewedAt ? ' · last viewed ' + fmtWhen(p.lastViewedAt) : ''}</div>
                     </div>
-                    ${p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Not viewed yet</span>'}
+                    ${p.status === 'draft'
+                        ? '<span class="chip chip-draft">Draft — not live</span>'
+                        : (p.viewed ? `<span class="chip chip-viewed">Viewed${p.views > 1 ? ' · ' + p.views : ''} ✓</span>` : '<span class="chip chip-published">Not viewed yet</span>')}
                 </button>`).join('') + moreBar('proposals', all.length);
         }
         function renderDashSocial() {
@@ -2673,7 +2675,7 @@
                         </div>
                         <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}" ${p.firstViewedAt ? `title="First opened ${new Date(p.firstViewedAt).toLocaleString()}"` : ''}>${p.viewed
                             ? ('✓ Opened' + (p.views > 1 ? ' · ' + p.views + ' views' : '') + (p.lastViewedAt ? '<br>last viewed ' + new Date(p.lastViewedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''))
-                            : 'Not yet opened'}</span>
+                            : (p.status === 'draft' ? 'Draft — not live' : 'Not yet opened')}</span>
                         <div class="plist-actions">
                             <a class="btn btn-ghost btn-small" href="${esc(p.url)}?preview=1" target="_blank" rel="noopener">View</a>
                             <button class="btn btn-ghost btn-small" data-edit="${p.id}" type="button">Edit</button>
