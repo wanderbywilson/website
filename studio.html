@@ -2573,7 +2573,7 @@
             if (p.mode === 'lookbook' || p.mode === 'quote') setMode(p.mode);
 
             const libEntries = libEntriesForMatching();
-            const fromLibrary = [], custom = [], notes = [], partners = [];
+            const fromLibrary = [], custom = [], customSource = [], notes = [], partners = [];
             state.hotels = (p.hotels || []).map(h => {
                 const name = String(h.name || '').trim();
                 const hit = matchLibHotel(name, libEntries, new Set());
@@ -2603,6 +2603,7 @@
                         common.usePerks ? {} : { usePerks: false, perksText: '' });
                 }
                 custom.push(name);
+                customSource.push(h);
                 return Object.assign({
                     custom: true, name, location: String(h.location || ''),
                     heroImage: String(h.heroImage || ''),
@@ -2620,23 +2621,46 @@
             });
             renderHotels();
             onChange();
-            return { fromLibrary, custom, notes, partners };
+            return { fromLibrary, custom, customSource, notes, partners };
         }
 
-        async function queueDraftsForCustomHotels(names, tripLabel) {
+        async function queueDraftsForCustomHotels(hotels, tripLabel) {
             let made = 0;
-            for (const nm of names) {
+            for (const h of hotels) {
+                const nm = typeof h === 'string' ? h : String(h.name || '');
+                const src = typeof h === 'string' ? {} : h;
                 const slug = normName(nm).replace(/\s+/g, '-').slice(0, 60);
                 if (!slug) continue;
+                const gallery = (src.gallery || []).map(String).filter(Boolean);
+                const hero = String(src.heroImage || '');
+                const entry = {
+                    name: nm,
+                    location: String(src.location || ''),
+                    rateFrom: '',
+                    heroImage: hero,
+                    description: String(src.desc || ''),
+                    perks: (src.perks || []).map(String),
+                    gallery,
+                    idealFor: '',
+                    agentTip: '',
+                    bookingUrl: ''
+                };
+                // Anything already sourced means this is reviewable, not a blank stub.
+                const rich = !!(entry.description && hero);
                 try {
                     await contentApi({ action: 'save', kind: 'hoteldraft', id: slug, doc: {
-                        slug, name: nm, location: '', status: 'idea', heroImage: '', images: [],
-                        entry: { name: nm, location: '', rateFrom: '', heroImage: '', description: '',
-                                 perks: [], gallery: [], idealFor: '', agentTip: '', bookingUrl: '' },
-                        notes: 'Queued automatically: quoted in the proposal "' + (tripLabel || 'untitled') +
-                               '" but we have no page for it on the site.\n\nNothing here is researched yet — ask Claude to ' +
-                               '"draft the hotel page for ' + nm + '" and it will fill this in against HOTEL-PAGE-SPEC.md.'
-                    }, meta: { name: nm, location: '', status: 'idea', heroImage: '' } });
+                        slug, name: nm, location: entry.location,
+                        status: rich ? 'in-review' : 'idea',
+                        heroImage: hero, images: [hero].concat(gallery).filter(Boolean),
+                        entry,
+                        notes: 'Started automatically from the proposal "' + (tripLabel || 'untitled') +
+                               '" — this property was quoted but has no page on the site.\n\n' +
+                               (rich
+                                  ? 'The description, photos and amenities came through with the proposal, so they are already here. Still missing: the entry-level rate, the Best-for line, an advisor tip and the Virtuoso booking link — ask Claude to "finish the hotel page for ' + nm + '" and it will research those against HOTEL-PAGE-SPEC.md.'
+                                  : 'Nothing is researched yet — ask Claude to "draft the hotel page for ' + nm + '" and it will fill this in against HOTEL-PAGE-SPEC.md.') +
+                               (src.bookingPartners && src.bookingPartners.length
+                                  ? '\n\nBookable through: ' + src.bookingPartners.map(String).join(' · ') : '')
+                    }, meta: { name: nm, location: entry.location, status: rich ? 'in-review' : 'idea', heroImage: hero } });
                     made++;
                 } catch (err) { /* keep going */ }
             }
@@ -2650,7 +2674,7 @@
             let p;
             try { p = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
             if (!p || !Array.isArray(p.hotels) || !p.hotels.length) { toast('That JSON has no "hotels" — check the reply.'); return; }
-            const { fromLibrary, custom, notes, partners } = buildProposalFromClaude(p);
+            const { fromLibrary, custom, customSource, notes, partners } = buildProposalFromClaude(p);
             const box = $('pbResult');
             box.hidden = false;
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
@@ -2660,7 +2684,7 @@
                 (partners.length ? '<br><br><strong>Where to book each one</strong> (advisor-only, saved on each hotel card):<br>' + esc(partners.join('\n')).replace(/\n/g, '<br>') : '');
             toast('Proposal built — review every field below before publishing.');
             if (custom.length) {
-                const made = await queueDraftsForCustomHotels(custom, stripHtml($('fTitle').value));
+                const made = await queueDraftsForCustomHotels(customSource, stripHtml($('fTitle').value));
                 if (made) toast(made + ' hotel page' + (made === 1 ? '' : 's') + ' queued for drafting.');
             }
         });
