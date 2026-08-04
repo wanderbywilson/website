@@ -378,6 +378,16 @@
             content: ''; flex: 1; height: 1px; background: var(--st-line);
         }
 
+        /* Advisor-only block on a hotel card — never reaches the client page */
+        .advisor-note {
+            background: rgba(42,99,168,0.05); border: 1px dashed rgba(42,99,168,0.35);
+            padding: 12px 14px 4px; margin: 12px 0;
+        }
+        .advisor-note-head {
+            font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+            color: #2a63a8; font-weight: 600; margin: 0 0 8px;
+        }
+
         /* Quote steps */
         .quote-steps { border: 1px solid var(--studio-line); background: var(--paper-cream); padding: 14px 16px; margin: 14px 0 10px; }
         .quote-steps-head { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep, #a8894f); margin: 0 0 10px; font-weight: 600; }
@@ -1991,6 +2001,10 @@
                 if ((h.desc || '').trim()) out.desc = sentenceCap(h.desc.trim());
             }
             if ((h.socialHook || '').trim()) out.socialHook = h.socialHook.trim();
+            // Advisor-only: where we can book this and whose amenities apply.
+            // Never rendered on the client page.
+            if ((h.bookingPartners || '').trim()) out.bookingPartners = h.bookingPartners.trim();
+            if ((h.amenitiesNote || '').trim()) out.amenitiesNote = h.amenitiesNote.trim();
             if ((h.room || '').trim()) out.room = titleWords(h.room.trim());
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
@@ -2140,6 +2154,13 @@
                             <textarea class="f-area" data-pastearea="${i}" placeholder='2 · Paste Claude&#39;s reply here — it starts with { and ends with } — and every field fills in automatically.'></textarea>
                         </div>
                     </div>
+                    <div class="advisor-note">
+                        <p class="advisor-note-head">Booking &amp; amenities &mdash; only you see this</p>
+                        <div class="f-row"><label class="f-label">Where we can book it</label>
+                            <input class="f-input" data-i="${i}" data-k="bookingPartners" value="${esc(h.bookingPartners || '')}" placeholder="Virtuoso · Wanderluxe · Tablet · Belmond"></div>
+                        <div class="f-row"><label class="f-label">Amenity programs <span style="text-transform:none">(perks above default to Virtuoso)</span></label>
+                            <input class="f-input" data-i="${i}" data-k="amenitiesNote" value="${esc(h.amenitiesNote || '')}" placeholder="Also in Mr &amp; Mrs Smith — different package"></div>
+                    </div>
                     <details class="manual-fields"${(h.room || h.rate || h.deposit || h.flight) ? ' open' : ''}>
                     <summary>Enter or edit the quote fields manually</summary>
                     <div class="f-grid2">
@@ -2252,9 +2273,21 @@
             '',
             'Read all of it before recommending anything. Then state back, in two or three lines, what you found: who is travelling, the occasion, the destination and dates, the nights, the budget, and anything explicitly ruled out. If you cannot find the client at all, say so and stop \u2014 do not invent a brief.',
             '',
-            'STEP 2 \u2014 CHECK WHAT WE ALREADY HAVE. Browse wanderbywilson.com/hotels and prefer properties we already have pages for; those come into the proposal with our own approved photography, copy and amenities. Only go outside the library when the brief genuinely calls for it.',
+            'STEP 2 \u2014 RECOMMEND 3\u20135 PROPERTIES that genuinely fit what you read, ordered strongest-fit first, each with a line on why it answers their brief. Vary them meaningfully \u2014 not five versions of the same hotel. Pick the best hotels for THIS client, wherever they are; do not narrow to what we have written about before.',
             '',
-            'STEP 3 \u2014 RECOMMEND 3\u20135 PROPERTIES that fit what you read, ordered strongest-fit first, each with a line on why it answers their brief. Vary them meaningfully \u2014 not five versions of the same hotel. Favour properties bookable through Virtuoso or SmartFlyer so preferred-partner amenities apply.',
+            'Two hard filters on every recommendation:',
+            '',
+            'A. LUXURY ONLY \u2014 never below a genuine 4-star standard. If it would not sit comfortably beside a Four Seasons, an Aman or a Relais & Ch\u00e2teaux member in the same market, do not put it forward.',
+            '',
+            'B. WE MUST BE ABLE TO BOOK IT. Every property must be reachable through at least ONE of our partners below. Verify the affiliation \u2014 do not assume it. If you cannot place a hotel with any of these, leave it out however good it is:',
+            '  \u2022 Representation companies: Antipodal \u00b7 Bennett & Mercado \u00b7 Claudia Da Rin \u00b7 Creative Destinations \u00b7 Dominique Debay \u00b7 Heloise\u2019s Choice \u00b7 Hidden Doorways \u00b7 Hotel Labs \u00b7 House of Kooser \u00b7 Index Select \u00b7 Insieme \u00b7 Island Luxe \u00b7 Janine Cifanelli \u00b7 JMAK \u00b7 KAI \u00b7 Lush Experiences \u00b7 MJL Select \u00b7 Namron Hospitality \u00b7 Passages of Distinction \u00b7 Querido \u00b7 Rebecca Recommends \u00b7 TL Portfolio \u00b7 Vitae Collection \u00b7 Waterstone Marketing \u00b7 Wanderluxe \u00b7 Muse Collection \u00b7 All About Rep Terra \u00b7 Reiimagine \u00b7 Selected Escapes \u00b7 Roe & Co',
+            '  \u2022 Wholesalers: Classic Vacations \u00b7 Ultimate Jet Vacations',
+            '  \u2022 Booking platforms: Tablet (tablet.com) \u00b7 Mr & Mrs Smith \u00b7 Small Luxury Hotels of the World \u00b7 Leading Hotels of the World \u00b7 Virtuoso \u00b7 Excellence Collection \u00b7 meliaPRO \u00b7 Sandals \u00b7 Secrets',
+            '  \u2022 Brand preferred-partner programs: Marriott \u00b7 IHG \u00b7 Hilton \u00b7 Hyatt \u00b7 Belmond \u00b7 Dorchester Collection \u00b7 Accor \u00b7 Four Seasons \u00b7 and any brand featured on smartflyer.com',
+            '',
+            'A hotel is often reachable several ways at once \u2014 repped by Wanderluxe, in Virtuoso, bookable on Tablet, and part of Belmond. That is fine and useful: record EVERY affiliation you can confirm in "bookingPartners" so Wilson knows where to book if the client picks it. This is advisor information and never shows to the client.',
+            '',
+            'AMENITIES \u2014 always default to the VIRTUOSO amenities shown on the hotel\u2019s Virtuoso page, and put those in "perks". If the property also carries a different amenity package through another program (Tablet Plus, Mr & Mrs Smith, a brand program, a rep company), do NOT mix them into "perks" \u2014 describe the alternative in "amenitiesNote" so Wilson can compare. If the hotel is not in Virtuoso, use the package from whichever partner you would book it through and say which one in "amenitiesNote".',
             '',
             'COMPLIANCE \u2014 non-negotiable, we are legally liable for what a client books on:',
             '1. Every hotel description must be VERBATIM from the hotel\u2019s own website or its Virtuoso/SmartFlyer listing. NEVER write, paraphrase or embellish your own marketing copy. One coherent passage per hotel, 400\u2013900 characters; do not stitch several pages together.',
@@ -2262,9 +2295,9 @@
             '3. Rates: if a real quote exists in the email thread, use it exactly. Otherwise give a researched figure, name the season it reflects, and say plainly it needs confirming. Never invent precision.',
             '4. If you cannot verify something, leave the field empty rather than guessing. Never write TODO or placeholder text.',
             '',
-            'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model. For properties already on wanderbywilson.com you can leave the photo fields empty; our page supplies them.',
+            'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model. If a property already has a page on wanderbywilson.com we will use ours, but send the URLs anyway \u2014 they cost you nothing and cover the case where we do not.',
             '',
-            'STEP 4 \u2014 reply with your two-line summary of what you found, then ONLY this JSON block:',
+            'STEP 3 \u2014 reply with your two-line summary of what you found, then ONLY this JSON block:',
             '',
             '{',
             '  "preparedFor": "how to address them on the page, e.g. The Apfels \u2014 match how they signed their emails",',
@@ -2279,9 +2312,11 @@
             '      "name": "official hotel name exactly as the hotel writes it",',
             '      "location": "Town, Region, Country \u00b7 Brand if the affiliation is part of its identity",',
             '      "whyRecommended": "1\u20132 sentences for WILSON (not the client) on why this fits what you read in their file \u2014 this does NOT print on the proposal",',
-            '      "desc": "the property overview, VERBATIM \u2014 see compliance rule 1. Empty string if the hotel is already on wanderbywilson.com.",',
-            '      "heroImage": "direct image URL from the hotel\u2019s own site \u2014 empty if the hotel is already on our site",',
-            '      "gallery": ["up to 5 more direct image URLs telling the story of the place \u2014 empty if already on our site"],',
+            '      "bookingPartners": ["every confirmed way we can book this hotel, e.g. Virtuoso, Wanderluxe, Tablet, Belmond \u2014 advisor-only, never shown to the client"],',
+            '      "amenitiesNote": "advisor-only: which program the perks above come from, and any DIFFERENT package available through another partner. Empty string if Virtuoso is the only option.",',
+            '      "desc": "the property overview, VERBATIM \u2014 see compliance rule 1",',
+            '      "heroImage": "direct image URL from the hotel\u2019s own site",',
+            '      "gallery": ["up to 5 more direct image URLs telling the story of the place"],',
             '      "room": "the room category you are quoting, marketing name only, max 6 words",',
             '      "roomDesc": "ONE readable sentence on that room, from the hotel\u2019s own description",',
             '      "rate": "total or nightly, max 30 characters, e.g. $8,128 \u00b7 4-night total",',
@@ -2352,7 +2387,7 @@
             if (p.closeLede) $('fCloseLede').value = String(p.closeLede);
 
             const libEntries = libEntriesForMatching();
-            const fromLibrary = [], custom = [], notes = [];
+            const fromLibrary = [], custom = [], notes = [], partners = [];
             state.hotels = (p.hotels || []).map(h => {
                 const name = String(h.name || '').trim();
                 const hit = matchLibHotel(name, libEntries, new Set());
@@ -2364,6 +2399,8 @@
                     deposit: String(h.deposit || ''),
                     cancellation: String(h.cancellation || ''),
                     socialHook: String(h.socialHook || ''),
+                    bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
+                    amenitiesNote: String(h.amenitiesNote || ''),
                     flight: '', flightDetails: '',
                     usePerks: !!(h.perks && h.perks.length),
                     perksText: (h.perks || []).join('\n'),
@@ -2385,6 +2422,11 @@
             });
             (p.hotels || []).forEach(h => {
                 if (h.whyRecommended) notes.push('• ' + String(h.name || '') + ' — ' + String(h.whyRecommended));
+                const bp = (h.bookingPartners || []).map(String).join(' · ');
+                if (bp || h.amenitiesNote) {
+                    partners.push('• ' + String(h.name || '') + ' — ' + (bp || 'no partner recorded') +
+                        (h.amenitiesNote ? ' — ' + String(h.amenitiesNote) : ''));
+                }
             });
             renderHotels();
             onChange();
@@ -2424,7 +2466,8 @@
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
                 (fromLibrary.length ? fromLibrary.length + ' came from our own pages (' + esc(fromLibrary.join(', ')) + ') with approved photos and amenities. ' : '') +
                 (custom.length ? custom.length + (custom.length === 1 ? ' isn\u2019t' : ' aren\u2019t') + ' on our site yet (' + esc(custom.join(', ')) + ') — using Claude\u2019s sourced copy, and queued as ' + (custom.length === 1 ? 'a hotel-page draft' : 'hotel-page drafts') + '.' : '') +
-                (notes.length ? '<br><br><strong>Why Claude picked these</strong> (for you, not the client):<br>' + esc(notes.join('\n')).replace(/\n/g, '<br>') : '');
+                (notes.length ? '<br><br><strong>Why Claude picked these</strong> (for you, not the client):<br>' + esc(notes.join('\n')).replace(/\n/g, '<br>') : '') +
+                (partners.length ? '<br><br><strong>Where to book each one</strong> (advisor-only, saved on each hotel card):<br>' + esc(partners.join('\n')).replace(/\n/g, '<br>') : '');
             toast('Proposal built — review every field below before publishing.');
             if (custom.length) {
                 const made = await queueDraftsForCustomHotels(custom, stripHtml($('fTitle').value));
@@ -2558,6 +2601,8 @@
                         galleryText: (isLib ? '' : (h.gallery || []).join('\n')),
                         desc: h.desc || '',
                         socialHook: h.socialHook || '',
+                        bookingPartners: h.bookingPartners || '',
+                        amenitiesNote: h.amenitiesNote || '',
                         room: h.room || '',
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
