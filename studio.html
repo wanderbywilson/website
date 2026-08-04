@@ -871,6 +871,8 @@
         <div class="studio-main view" id="viewEditor">
             <div class="studio-form" id="formPane">
 
+                <div class="social-qa has-issues" id="metaWarn" hidden style="margin-bottom:18px"></div>
+
                 <div class="pub-bar" id="pubBar">
                     <span>Live at&nbsp;<a href="#" target="_blank" rel="noopener" id="pubLink"></a></span>
                     <button class="btn btn-ghost btn-small" id="btnCopyLink" type="button">Copy link</button>
@@ -2013,6 +2015,7 @@
             // Never rendered on the client page.
             if ((h.bookingPartners || '').trim()) out.bookingPartners = h.bookingPartners.trim();
             if ((h.amenitiesNote || '').trim()) out.amenitiesNote = h.amenitiesNote.trim();
+            if ((h.advisorNote || '').trim()) out.advisorNote = h.advisorNote.trim();
             if ((h.room || '').trim()) out.room = titleWords(h.room.trim());
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
@@ -2093,6 +2096,7 @@
         }
         let debounceT = null;
         function onChange() {
+            try { renderMetaWarning(); } catch (e) {}
             clearTimeout(debounceT);
             debounceT = setTimeout(() => { pushPreview(); saveDraft(); }, 250);
         }
@@ -2168,6 +2172,8 @@
                             <input class="f-input" data-i="${i}" data-k="bookingPartners" value="${esc(h.bookingPartners || '')}" placeholder="Virtuoso · Wanderluxe · Tablet · Belmond"></div>
                         <div class="f-row"><label class="f-label">Amenity programs <span style="text-transform:none">(perks above default to Virtuoso)</span></label>
                             <input class="f-input" data-i="${i}" data-k="amenitiesNote" value="${esc(h.amenitiesNote || '')}" placeholder="Also in Mr &amp; Mrs Smith — different package"></div>
+                        <div class="f-row"><label class="f-label">Caveats &amp; what to check</label>
+                            <textarea class="f-area" data-i="${i}" data-k="advisorNote" placeholder="Rate is researched, not quoted. Couldn't source verbatim copy — pull it from the hotel site before publishing.">${esc(h.advisorNote || '')}</textarea></div>
                     </div>
                     <details class="manual-fields"${(h.room || h.rate || h.deposit || h.flight) ? ' open' : ''}>
                     <summary>Enter or edit the quote fields manually</summary>
@@ -2301,7 +2307,7 @@
             '1. Every hotel description must be VERBATIM from the hotel\u2019s own website or its Virtuoso/SmartFlyer listing. NEVER write, paraphrase or embellish your own marketing copy. One coherent passage per hotel, 400\u2013900 characters; do not stitch several pages together.',
             '2. Amenities must be the ones actually documented for THAT hotel. Never assume a generic package. NEVER include an advisor\u2019s \u201cpersonalized welcome note on arrival\u201d \u2014 it is meant to be a surprise.',
             '3. Rates: if a real quote exists in the email thread, use it exactly. Otherwise give a researched figure, name the season it reflects, and say plainly it needs confirming. Never invent precision.',
-            '4. If you cannot verify something, leave the field empty rather than guessing. Never write TODO or placeholder text.',
+            '4. EVERY field in the JSON is printed on a page the CLIENT reads. Never write a note to us inside one \u2014 no \u201cVERBATIM COPY NEEDED\u201d, no \u201creplace this before sending\u201d, no \u201cresearched estimate only\u201d, no bracketed placeholders, no source URLs, no instructions of any kind. If you cannot verify something, leave that field an EMPTY STRING and put the caveat in "advisorNote", which never prints. A half-empty proposal is fine; one with instructions in it is not \u2014 it goes straight to a client.',
             '',
             'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model. If a property already has a page on wanderbywilson.com we will use ours, but send the URLs anyway \u2014 they cost you nothing and cover the case where we do not.',
             '',
@@ -2322,6 +2328,7 @@
             '      "whyRecommended": "1\u20132 sentences for WILSON (not the client) on why this fits what you read in their file \u2014 this does NOT print on the proposal",',
             '      "bookingPartners": ["every confirmed way we can book this hotel, e.g. Virtuoso, Wanderluxe, Tablet, Belmond \u2014 advisor-only, never shown to the client"],',
             '      "amenitiesNote": "advisor-only: which program the perks above come from, and any DIFFERENT package available through another partner. Empty string if Virtuoso is the only option.",',
+            '      "advisorNote": "advisor-only: anything you could not verify, where the rate came from, copy you could not source verbatim, what Wilson should check. This is where caveats go \u2014 NEVER inside a client-facing field.",',
             '      "desc": "the property overview, VERBATIM \u2014 see compliance rule 1",',
             '      "heroImage": "direct image URL from the hotel\u2019s own site",',
             '      "gallery": ["up to 5 more direct image URLs telling the story of the place"],',
@@ -2409,6 +2416,7 @@
                     socialHook: String(h.socialHook || ''),
                     bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
                     amenitiesNote: String(h.amenitiesNote || ''),
+                    advisorNote: String(h.advisorNote || ''),
                     flight: '', flightDetails: '',
                     usePerks: !!(h.perks && h.perks.length),
                     perksText: (h.perks || []).join('\n'),
@@ -2553,9 +2561,68 @@
         /* ── Publish ──────────────────────────────────────────────────── */
         /* status 'draft' saves the work without making it a live client link;
            'live' publishes. A draft URL shows a holding page to anyone but us. */
+        /* Nothing addressed to US may ever reach a client page. Wilson caught
+           "VERBATIM COPY NEEDED — replace with the hotel's official overview
+           before sending" rendered inside a live proposal description
+           (2026-08-03): "this should never happen ... this could easily be
+           missed in the review process." So the Studio refuses to publish it. */
+        const META_TEXT = new RegExp([
+            '\\bTODO\\b', '\\bTBD\\b', '\\bFIXME\\b', '\\bN/?A\\b\\s*[-—]',
+            'verbatim', 'placeholder', 'lorem ipsum',
+            'replace (this|with|before)', 'before (sending|publishing|you send)',
+            'needs? (confirming with|verifying|sourcing|checking) ',
+            'no live quote', 'researched estimate only', 'estimate only',
+            'insert (the|a|your)\\b', '\\[[^\\]]{0,60}\\]',
+            'copy needed', 'source (the|this) copy', 'add (the|a) real',
+            'if you can(not|\\u2019t) (browse|verify)', 'see [a-z0-9.-]+\\.(com|it|co\\.uk)\\b'
+        ].join('|'), 'i');
+
+        const CLIENT_FIELDS = {
+            fTitle: 'Proposal title', fLede: 'Intro line', fDates: 'Travel dates',
+            fValid: 'Rates valid until', fCloseTitle: 'Closing headline', fCloseLede: 'Closing line',
+            fPrepared: 'Prepared for'
+        };
+        const HOTEL_CLIENT_FIELDS = {
+            name: 'hotel name', location: 'location', desc: 'description', room: 'room category',
+            rate: 'rate', rateNote: 'rate note', roomDesc: 'room description',
+            perksText: 'amenities', deposit: 'deposit', cancellation: 'cancellation',
+            flight: 'flight note', flightDetails: 'flight details', gettingThere: 'how to get there'
+        };
+        function findMetaText() {
+            const hits = [];
+            Object.keys(CLIENT_FIELDS).forEach(id => {
+                const el = $(id);
+                if (el && META_TEXT.test(el.value || '')) hits.push({ where: CLIENT_FIELDS[id], text: el.value });
+            });
+            state.hotels.forEach((h, i) => {
+                Object.keys(HOTEL_CLIENT_FIELDS).forEach(k => {
+                    if (META_TEXT.test(h[k] || '')) {
+                        hits.push({ where: 'Hotel ' + (i + 1) + ' — ' + HOTEL_CLIENT_FIELDS[k], text: h[k] });
+                    }
+                });
+            });
+            return hits;
+        }
+        function renderMetaWarning() {
+            const hits = findMetaText();
+            const box = $('metaWarn');
+            if (!hits.length) { box.hidden = true; box.innerHTML = ''; return true; }
+            box.hidden = false;
+            box.innerHTML = '<strong>This text is written to us, not the client &mdash; it cannot go live:</strong><ul>' +
+                hits.map(h => '<li><strong>' + esc(h.where) + ':</strong> &ldquo;' +
+                    esc(String(h.text).replace(/\s+/g, ' ').slice(0, 160)) + '&rdquo;</li>').join('') +
+                '</ul>Rewrite it as copy the client should read, or clear the field. Notes for yourself belong in the advisor block on each hotel.';
+            return false;
+        }
+
         async function publish(status) {
             if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
             const draft = status === 'draft';
+            if (!draft && !renderMetaWarning()) {
+                toast('Can’t publish — instruction text would show to the client. See the warning above.');
+                $('metaWarn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
             const btns = [$('btnPublish'), $('btnPublishBottom'), $('btnSaveDraft')];
             btns.forEach(b => { if (b) b.disabled = true; });
             const busy = draft ? 'Saving…' : 'Publishing…';
@@ -2626,6 +2693,7 @@
                         socialHook: h.socialHook || '',
                         bookingPartners: h.bookingPartners || '',
                         amenitiesNote: h.amenitiesNote || '',
+                        advisorNote: h.advisorNote || '',
                         room: h.room || '',
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
