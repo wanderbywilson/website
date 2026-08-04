@@ -1636,6 +1636,94 @@ const ITINERARIES = {
         ]
     },
 
+    'grand-velas-riviera-maya': {
+        name: 'Grand Velas Riviera Maya',
+        location: 'Playa del Carmen, Riviera Maya, Mexico',
+        heroImage: '/property-images/grand-velas-riviera-maya/00-hero.jpg',
+        description: 'Immerse yourself in a luxurious all-inclusive experience, blending the beauty of the Caribbean Sea with the lush Yucatán jungle. From spacious suites with private terraces and plunge pools to gourmet dining by Michelin-starred chefs, every detail is designed for indulgence. Enjoy personalized spa treatments, curated excursions to explore the region’s natural wonders, and exceptional concierge service. Whether you’re seeking a romantic escape, family adventure, or wellness retreat, Grand Velas Riviera Maya redefines luxury with unmatched elegance, breathtaking views, and world-class amenities, ensuring each guest has a truly unforgettable stay.',
+        perks: [
+            'Upgrade on arrival, subject to availability (Zen Grand to Zen Grand Pool / Ambassador to Ambassador Pool / Ambassador Pool to Grand Class)',
+            'Complimentary one-way private airport transfer (airport to hotel) &mdash; must be arranged at least 48 hours prior to arrival through the Virtuoso specialist; one transfer confirmed per family (booking) arriving together',
+            '$50 USD spa credit per person, per night, applicable on massages, facials and body wrap treatments of 50 minutes or more (not transferable between guests, not cumulative, not redeemable for cash, unused balances not refunded, not combinable with other spa promotions; not applicable on spa boutique products, the beauty salon, the hydrotherapy circuit, or treatments in the Ambassador outdoor spa cabanas)',
+            'Early check-in and late check-out, upon availability at check-in',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/grand-velas-riviera-maya/01-pool.jpg',
+            '/property-images/grand-velas-riviera-maya/02-se-spa-water-ceremony.jpg',
+            '/property-images/grand-velas-riviera-maya/03-pool-zengrand.jpg',
+            '/property-images/grand-velas-riviera-maya/04-azul-restaurante.jpg',
+            '/property-images/grand-velas-riviera-maya/05-nature-view-suite.jpg'
+        ],
+        idealFor: 'Families and couples who want an AAA Five Diamond all-inclusive without the megaresort sameness — three distinct ambiances (jungle-set Zen Grand, kids’-club Ambassador, oceanfront-romantic Grand Class) let one group travel three different ways.',
+        agentTip: 'Ask your concierge to reserve the Sacred Mayan Bee eco-tour — Wednesdays at 10 a.m. in the Zen Grand jungle, walking an organic orchard to learn about the Melipona bee, with honey tastings from around the country. It’s included in your stay but needs booking ahead, and almost nobody asks.',
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6164474/grand-velas-riviera-maya'
+    },
+    'rock-house': {
+        name: 'Rock House',
+        location: 'Providenciales, Turks and Caicos Islands',
+        heroImage: '/property-images/rock-house/00-hero.jpg',
+        description: 'Embodying the charm and romance of Capri and the South of France, Rock House offers a truly private and soulful escape featuring lush native landscape and pristine ocean views. Relax amongst the ancient trees and limestone cliffs that surround this secluded and exclusive setting while enjoying a full complement of resort activities. Rock House is unlike anything yet seen in the Turks and Caicos, this unique resort and residential vision is located on the north coast of Providenciales upon a majestic 14-acre oceanfront site with 600 feet of frontage and peaks soaring up to 95 feet above sea level. 46 luxurious Suites and Reserve Villas ranging from poolside studios to spacious two-bedroom oceanfront homes. At Vita restaurant, guests can enjoy stunning ocean views while indulging in fine wines and traditional Italian dishes with Caribbean influence.',
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'In-suite welcome amenity on arrival',
+            'Daily breakfast in the restaurant for every guest booked in a room or suite',
+            'Resort credit per room, to be used during your stay &mdash; from $100, rising by room category: Junior Suite $100, One Bedroom $150, Two Bedroom $200, Three Bedroom $250, Four/Five Bedroom &amp; Private Villas $300 (not combinable, not valid on the room rate, no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/rock-house/01-rock-house-scaled.jpg',
+            '/property-images/rock-house/02-rh-selects.jpg',
+            '/property-images/rock-house/03-rock-house.jpg',
+            '/property-images/rock-house/04-rock-house-scaled.jpg',
+            '/property-images/rock-house/05-ridge-studio.jpg'
+        ],
+        idealFor: 'Couples and honeymooners who want the Capri-and-South-of-France side of Turks and Caicos rather than a big resort on Grace Bay.'
+    },
+    'il-borro': {
+        name: 'Il Borro',
+        location: 'San Giustino Valdarno, Tuscany, Italy',
+        rateFrom: '€500 / night',
+        heroImage: '/property-images/il-borro/00-hero-village.jpg',
+        description: 'In the heart of Tuscany lies Il Borro, a thousand-year-old hamlet surrounded by 1,100 organic acres. Restored to its authentic splendor through a meticulous restoration begun in 1993, it is now a guardian of tradition, culture and sustainability, and a spokesman for the most elegant Tuscan hospitality. The ancient medieval village, perfectly preserved and recently renovated, is the beating heart of a luxurious hotel spread — 40 exclusive suites, furnished with elegant simplicity and equipped with every comfort.',
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily breakfast for up to two guests per bedroom, served in the restaurant (already included in property rates)',
+            '$100 USD equivalent hotel credit, applicable towards wine tours, wine tastings and spa treatments (excludes retail; no cash value if not redeemed in full)',
+            'Early check-in / late check-out, subject to availability'
+        ],
+        gallery: [
+            '/property-images/il-borro/01-estate-aerial.jpg',
+            '/property-images/il-borro/02-stables-golden-hour.jpg',
+            '/property-images/il-borro/03-wine-cellar.jpg',
+            '/property-images/il-borro/04-prestige-suite.jpg',
+            '/property-images/il-borro/05-spa-pool.jpg'
+        ],
+        idealFor: 'Couples and families who want Tuscany itself — a private medieval village on a working organic wine estate, where mornings are wine tours and cooking classes and evenings are farm-to-table Tuscan dining.',
+        agentTip: 'Ask for a suite in the medieval village itself rather than the newer Aie del Borro wing — the 40 village suites put you inside the restored hamlet.'
+    },
+    'forestis': {
+        name: 'FORESTIS',
+        location: 'Brixen, South Tyrol, Italy',
+        rateFrom: '€900 / night',
+        heroImage: '/property-images/forestis/00-hero.jpg',
+        description: 'At 1,800 metres and at eye level with the Dolomites UNESCO World Heritage Site lies South Tyrol’s retreat FORESTIS with 62 suites and the almost 2,000 m² FORESTIS Spa on the Ploseberg above Brixen. FORESTIS regards itself as a place of retreat surrounded by nature, where time can once again be sensed and filled with emotional value through physical and mental mindfulness towards oneself.',
+        perks: [
+            'Upgrade priority upon availability',
+            'Complimentary early check in upon availability',
+            'Complimentary late check out upon availability'
+        ],
+        gallery: [
+            '/property-images/forestis/01-forestis-dolomites-luxury-hotel6554.jpg',
+            '/property-images/forestis/02-forestis-dolomites-luxury-hotel2154.jpg',
+            '/property-images/forestis/03-forestis-dolomites-luxury-hotel0694.jpg',
+            '/property-images/forestis/04-forestis-ski-in-ski.jpg',
+            '/property-images/forestis/05-forestis-dolomites-luxury-hotel4373.jpg'
+        ],
+        idealFor: 'Couples and solo travelers who want altitude over sightseeing — adults-only at 1,800 metres, at eye level with the Dolomites, where the 2,000 m² spa and ski-in/ski-out access are the whole point.',
+        agentTip: 'Savor the daily changing signature menus which never repeat and are created by executive chef Roland Lamprecht and his team. And book spa treatments before you arrive — every treatment here is a signature one, and they fill up quickly.'
+    },
     'iconic-greece': {
         title: 'Athens &amp; the Iconic Greek Islands',
         subtitle: 'Athens, Crete, Santorini &amp; Mykonos',

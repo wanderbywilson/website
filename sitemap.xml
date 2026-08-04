@@ -397,6 +397,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.wanderbywilson.com/post/best-honeymoon-destinations</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.wanderbywilson.com/post/best-luxury-honeymoon-trends</loc>
     <lastmod>2026-07-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -639,6 +645,26 @@
   <url>
     <loc>https://www.wanderbywilson.com/post/where-to-babymoon-discover-the-top-luxury-retreats-in-usa</loc>
     <lastmod>2025-02-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wanderbywilson.com/hotels/grand-velas-riviera-maya</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wanderbywilson.com/hotels/rock-house</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wanderbywilson.com/hotels/il-borro</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wanderbywilson.com/hotels/forestis</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
