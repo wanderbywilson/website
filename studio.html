@@ -350,6 +350,34 @@
         .blog-body-edit img { max-width: 100%; }
         .blog-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
         .btn.danger { color: #a33; border-color: rgba(170,51,51,0.35); }
+        /* Build-with-Claude panel — the primary path into a proposal */
+        .claude-build {
+            background: linear-gradient(180deg, rgba(42,99,168,0.09), rgba(42,99,168,0.04));
+            border: 1px solid rgba(42,99,168,0.35);
+            border-left: 3px solid #2a63a8;
+            padding: 20px 22px 18px; margin-bottom: 26px;
+        }
+        .claude-build-kicker {
+            font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+            color: #2a63a8; font-weight: 600; margin: 0 0 6px;
+        }
+        .claude-build-head { font-family: var(--font-serif); font-weight: 400; font-size: 25px; margin: 0 0 8px; color: var(--st-text); }
+        .claude-build-head em { font-style: italic; font-weight: 300; color: #2a63a8; }
+        .claude-build-sub { font-size: 13px; line-height: 1.6; color: var(--st-dim); margin: 0 0 14px; }
+        .claude-build-row { margin-bottom: 12px; }
+        .claude-build .btn { background: #2a63a8; border-color: #2a63a8; }
+        .claude-build .btn:hover { background: transparent; color: #2a63a8; }
+        .claude-build textarea { background: #fff; border-color: rgba(42,99,168,0.4); }
+        .claude-build textarea:focus { border-color: #2a63a8; box-shadow: 0 0 0 3px rgba(42,99,168,0.15); }
+        .claude-build-note { font-size: 12px; line-height: 1.6; margin: 10px 0 0; color: #2a63a8; }
+        .manual-divider {
+            display: flex; align-items: center; gap: 12px; margin: 0 0 22px;
+            font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--st-dim-2);
+        }
+        .manual-divider::before, .manual-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--st-line);
+        }
+
         /* Quote steps */
         .quote-steps { border: 1px solid var(--studio-line); background: var(--paper-cream); padding: 14px 16px; margin: 14px 0 10px; }
         .quote-steps-head { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep, #a8894f); margin: 0 0 10px; font-weight: 600; }
@@ -834,6 +862,20 @@
                     <span>Live at&nbsp;<a href="#" target="_blank" rel="noopener" id="pubLink"></a></span>
                     <button class="btn btn-ghost btn-small" id="btnCopyLink" type="button">Copy link</button>
                 </div>
+
+                <!-- Build it with Claude — the main way in -->
+                <section class="claude-build">
+                    <p class="claude-build-kicker">Start here</p>
+                    <h2 class="claude-build-head">Build a proposal <em>with Claude.</em></h2>
+                    <p class="claude-build-sub">Copy the prompt, open your own Claude, and tell it who you&rsquo;re quoting for and what they&rsquo;re after &mdash; point it at the intake recap, the Asana task, your call notes. It comes back with 3&ndash;5 recommended properties, fully written. Paste the reply here and the whole proposal builds itself.</p>
+                    <div class="claude-build-row">
+                        <button class="btn" id="pbCopyPrompt" type="button">1 &middot; Copy the proposal prompt</button>
+                    </div>
+                    <textarea class="f-area" id="pbPaste" style="min-height:130px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the trip, the hotels and the close all fill in."></textarea>
+                    <p class="claude-build-note" id="pbResult" hidden></p>
+                </section>
+
+                <p class="manual-divider"><span>or build it by hand &mdash; and edit anything Claude wrote</span></p>
 
                 <!-- Trip -->
                 <section class="sec">
@@ -2193,6 +2235,62 @@
         }
         /* Free path: the team's own Claude reads the screenshot; they paste
            its answer here. No API key involved. */
+        /* ── Build a whole proposal from one Claude reply ────────────────
+           The team describes the client to their own Claude, points it at the
+           intake recap / Asana task / call notes, and pastes the JSON back. */
+        const PROPOSAL_PROMPT = [
+            'You are helping Wander by Wilson \u2014 a luxury travel advisory \u2014 build a client hotel proposal.',
+            '',
+            'FIRST, TELL ME ABOUT THE TRIP (replace this section with your own details before sending):',
+            '  \u2022 Who is travelling (couple / family / group, occasion, rough ages \u2014 no surnames needed)',
+            '  \u2022 Destination(s) and travel dates, and how many nights',
+            '  \u2022 Budget per night or per stay, and whether that is before or after taxes',
+            '  \u2022 What they said they want \u2014 paste the inquiry, the intake-call recap email, the Asana task notes, and any call notes you have. If they live in your connected Gmail/Asana/Drive, go and read them.',
+            '  \u2022 Anything ruled out (islands they have done, brands they dislike, no-fly constraints)',
+            '',
+            'THEN RECOMMEND 3\u20135 PROPERTIES that genuinely fit, and explain each choice against what they asked for. Favour properties bookable through Virtuoso or SmartFlyer so preferred-partner amenities apply. Vary them meaningfully \u2014 do not return five versions of the same hotel.',
+            '',
+            'COMPLIANCE \u2014 non-negotiable, we are legally liable for what a client books on:',
+            '1. Every hotel description must be VERBATIM from the hotel\u2019s own website or its Virtuoso/SmartFlyer listing. NEVER write, paraphrase or embellish your own marketing copy. One coherent passage per hotel, 400\u2013900 characters; do not stitch several pages together.',
+            '2. Amenities must be the ones actually documented for THAT hotel. Never assume a generic package. NEVER include an advisor\u2019s \u201cpersonalized welcome note on arrival\u201d \u2014 it is meant to be a surprise.',
+            '3. Rates: give a realistic nightly or total figure with the season it applies to, and say plainly that it needs confirming. Never invent precision.',
+            '4. If you cannot verify something, leave the field empty rather than guessing. Never write TODO or placeholder text.',
+            '',
+            'PHOTOS \u2014 do this work. For each hotel return a direct image URL (ending .jpg/.jpeg/.webp/.png) from the hotel\u2019s OWN website or official media library; many run WordPress and expose /wp-json/wp/v2/media. Verify each URL actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. The hero must be the property\u2019s signature wide shot \u2014 daylight or golden hour, never a plated-food shot, a night shot, a bathroom, or a posed model.',
+            '',
+            'Reply with ONLY this JSON block:',
+            '',
+            '{',
+            '  "preparedFor": "how to address them on the page, e.g. The Apfels \u2014 no surnames if they did not give one",',
+            '  "title": "the proposal headline, e.g. Your Caribbean *celebration.* \u2014 wrap ONE word in *asterisks* to set it in italic gold",',
+            '  "lede": "one or two sentences framing the shortlist and what is included. No prices here.",',
+            '  "dates": "e.g. November 11 \u2014 15, 2026 \u00b7 4 nights",',
+            '  "validUntil": "how long the rates hold, e.g. August 15, 2026 \u2014 empty string if unknown",',
+            '  "closeTitle": "closing headline, e.g. Which one feels like *the one?*",',
+            '  "closeLede": "one or two sentences inviting them to reply and say what happens next",',
+            '  "hotels": [',
+            '    {',
+            '      "name": "official hotel name exactly as the hotel writes it",',
+            '      "location": "Town, Region, Country \u00b7 Brand if the affiliation is part of its identity",',
+            '      "whyRecommended": "1\u20132 sentences for WILSON (not the client) on why this fits their brief \u2014 this does NOT print on the proposal",',
+            '      "desc": "the property overview, VERBATIM from the hotel or Virtuoso \u2014 see compliance rule 1",',
+            '      "heroImage": "direct image URL from the hotel\u2019s own site",',
+            '      "gallery": ["up to 5 more direct image URLs telling the story of the place"],',
+            '      "room": "the room category you are quoting, marketing name only, max 6 words",',
+            '      "roomDesc": "ONE readable sentence on that room, from the hotel\u2019s own description",',
+            '      "rate": "total or nightly, max 30 characters, e.g. $8,128 \u00b7 4-night total",',
+            '      "rateNote": "ONE line: what the rate includes, the season it reflects, and that it needs confirming",',
+            '      "perks": ["each preferred-partner amenity as a short elegant bullet"],',
+            '      "deposit": "1 sentence, plain English",',
+            '      "cancellation": "1\u20132 sentences, plain English, exact deadline and penalty",',
+            '      "socialHook": "ONE line, max ~120 characters: what makes the property unique plus the can\u2019t-miss feature of the quoted room \u2014 used later if we post about this trip"',
+            '    }',
+            '  ]',
+            '}',
+            '',
+            'Order the hotels strongest-fit first. After the JSON, list anything you could not verify and would want Wilson to check.'
+        ].join('\n');
+
         const CLAUDE_PROMPT = [
             'You are helping a Wander by Wilson team member fill our Proposal Studio from a screenshot.',
             'The attached screenshot is either a HOTEL rate quote (often GDS/Virtuoso system output) or a FLIGHT itinerary (e.g. Google Flights).',
@@ -2225,6 +2323,106 @@
             'Also: NEVER include a "personalized note from the agent/advisor" amenity in perks (it is meant to be a surprise for the client). Skip generic filler like Free Wi-Fi only if space demands; keep every amenity with monetary or experiential value.',
             'Hotel quote: leave the two flight fields empty. Flight screenshot: leave the hotel fields and perks empty.'
         ].join('\n');
+        /* Turn one Claude reply into a whole proposal. Hotels we already have
+           pages for come in as LIBRARY entries (our approved photos, copy and
+           amenities); the rest come in as custom hotels using Claude's sourced
+           content — and get queued as hotel-page drafts, since a quoted hotel
+           with no page is a gap in the funnel. */
+        $('pbCopyPrompt').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText(PROPOSAL_PROMPT); toast('Proposal prompt copied — paste it into your Claude and describe the trip.'); }
+            catch (err) { window.prompt('Copy this prompt:', PROPOSAL_PROMPT); }
+        });
+
+        function buildProposalFromClaude(p) {
+            if (p.preparedFor) $('fPrepared').value = titleWords(String(p.preparedFor));
+            if (p.title) $('fTitle').value = String(p.title);
+            if (p.lede) $('fLede').value = String(p.lede);
+            if (p.dates) $('fDates').value = String(p.dates);
+            if (p.validUntil) $('fValid').value = String(p.validUntil);
+            if (p.closeTitle) $('fCloseTitle').value = String(p.closeTitle);
+            if (p.closeLede) $('fCloseLede').value = String(p.closeLede);
+
+            const libEntries = libEntriesForMatching();
+            const fromLibrary = [], custom = [], notes = [];
+            state.hotels = (p.hotels || []).map(h => {
+                const name = String(h.name || '').trim();
+                const hit = matchLibHotel(name, libEntries, new Set());
+                const common = {
+                    room: String(h.room || ''),
+                    rate: h.rate ? String(h.rate).replace(/([$€£]\s?[\d,.]+)/, '*$1*') : '',
+                    rateNote: String(h.rateNote || ''),
+                    roomDesc: String(h.roomDesc || ''),
+                    deposit: String(h.deposit || ''),
+                    cancellation: String(h.cancellation || ''),
+                    socialHook: String(h.socialHook || ''),
+                    flight: '', flightDetails: '',
+                    usePerks: !!(h.perks && h.perks.length),
+                    perksText: (h.perks || []).join('\n'),
+                    useBooking: false, bookingUrl: ''
+                };
+                if (hit) {
+                    fromLibrary.push(lib[hit.k].name);
+                    // our page already carries the description, photos and amenities
+                    return Object.assign({ slug: hit.k, desc: '' }, common,
+                        common.usePerks ? {} : { usePerks: false, perksText: '' });
+                }
+                custom.push(name);
+                return Object.assign({
+                    custom: true, name, location: String(h.location || ''),
+                    heroImage: String(h.heroImage || ''),
+                    galleryText: (h.gallery || []).join('\n'),
+                    desc: String(h.desc || '')
+                }, common);
+            });
+            (p.hotels || []).forEach(h => {
+                if (h.whyRecommended) notes.push('• ' + String(h.name || '') + ' — ' + String(h.whyRecommended));
+            });
+            renderHotels();
+            onChange();
+            return { fromLibrary, custom, notes };
+        }
+
+        async function queueDraftsForCustomHotels(names, tripLabel) {
+            let made = 0;
+            for (const nm of names) {
+                const slug = normName(nm).replace(/\s+/g, '-').slice(0, 60);
+                if (!slug) continue;
+                try {
+                    await contentApi({ action: 'save', kind: 'hoteldraft', id: slug, doc: {
+                        slug, name: nm, location: '', status: 'idea', heroImage: '', images: [],
+                        entry: { name: nm, location: '', rateFrom: '', heroImage: '', description: '',
+                                 perks: [], gallery: [], idealFor: '', agentTip: '', bookingUrl: '' },
+                        notes: 'Queued automatically: quoted in the proposal "' + (tripLabel || 'untitled') +
+                               '" but we have no page for it on the site.\n\nNothing here is researched yet — ask Claude to ' +
+                               '"draft the hotel page for ' + nm + '" and it will fill this in against HOTEL-PAGE-SPEC.md.'
+                    }, meta: { name: nm, location: '', status: 'idea', heroImage: '' } });
+                    made++;
+                } catch (err) { /* keep going */ }
+            }
+            return made;
+        }
+
+        $('pbPaste').addEventListener('input', async (e) => {
+            const raw = e.target.value;
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let p;
+            try { p = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            if (!p || !Array.isArray(p.hotels) || !p.hotels.length) { toast('That JSON has no "hotels" — check the reply.'); return; }
+            const { fromLibrary, custom, notes } = buildProposalFromClaude(p);
+            const box = $('pbResult');
+            box.hidden = false;
+            box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
+                (fromLibrary.length ? fromLibrary.length + ' came from our own pages (' + esc(fromLibrary.join(', ')) + ') with approved photos and amenities. ' : '') +
+                (custom.length ? custom.length + ' aren\u2019t on our site yet (' + esc(custom.join(', ')) + ') — using Claude\u2019s sourced copy, and queued as hotel-page drafts.' : '') +
+                (notes.length ? '<br><br><strong>Why Claude picked these</strong> (for you, not the client):<br>' + esc(notes.join('\n')).replace(/\n/g, '<br>') : '');
+            toast('Proposal built — review every field below before publishing.');
+            if (custom.length) {
+                const made = await queueDraftsForCustomHotels(custom, stripHtml($('fTitle').value));
+                if (made) toast(made + ' hotel page' + (made === 1 ? '' : 's') + ' queued for drafting.');
+            }
+        });
+
         $('hotelList').addEventListener('click', async (e) => {
             const copyBtn = e.target.closest('[data-copyprompt]');
             if (copyBtn) {
