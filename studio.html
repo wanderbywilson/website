@@ -2198,7 +2198,7 @@
             '  "name": "official hotel name exactly as the hotel writes it, e.g. Il Borro. Empty if not shown.",',
             '  "location": "town/region, country \\u00b7 brand/affiliation if part of its official identity, e.g. San Giustino Valdarno, Tuscany, Italy \\u00b7 Relais & Ch\\u00e2teaux. Empty if unknown.",',
             '  "desc": "IF you can browse the web: the property overview copied VERBATIM from the hotel\\u2019s official website or its Virtuoso page \\u2014 NEVER write or paraphrase your own copy (compliance requirement; if you cannot browse, leave empty and say so after the JSON).",',
-            '  "socialHook": "ONE scroll-stopping line for social media, max ~120 characters, combining what makes the PROPERTY unique with the can\\u2019t-miss feature of the QUOTED room \\u2014 factual, never invented. e.g. Mediterranean soul in the Caribbean \\u2014 and the Oceanfront One Bedroom has its own private pool over the sea. Or: The included 20-minute island hop lands you at a beachfront bungalow that opens right onto the sand.",',
+            '  "socialHook": "ONE scroll-stopping line for social media, max ~120 characters (the rate prints underneath, so a longer line gets cut), combining what makes the PROPERTY unique with the can\\u2019t-miss feature of the QUOTED room \\u2014 factual, never invented. e.g. Mediterranean soul in the Caribbean \\u2014 and the Oceanfront One Bedroom has its own private pool over the sea. Or: The included 20-minute island hop lands you at a beachfront bungalow that opens right onto the sand.",',
             '  "heroImage": "IF you can browse: direct URL (https://\\u2026.jpg/.webp) of ONE representative full-size photo from the hotel\\u2019s OFFICIAL website only. Else empty.",',
             '  "gallery": ["IF you can browse: up to 5 more direct image URLs from the official site telling the story of the PLACE \\u2014 a lifestyle/landscape scene, a signature experience, ONE shot of the actual room (bed/living, ideally with its view \\u2014 never bathroom-only), the pool/waterfront. Daylight or golden hour ONLY (no night shots), NO plated-food shots, no posed models, no two angles of the same room. Else empty array."],',
             '  "room": "room category marketing name ONLY, max 6 words, e.g. Prestige Suite Borgo. NEVER spec dumps (1 Double Bed-50-70SQM-...)",',
@@ -2662,7 +2662,7 @@
         // Punchy trim for social: keep whole clauses, never cut mid-thought.
         function socialTrim(s) {
             let t = firstSentence(s, 320);
-            if (t.length <= 118) return t;
+            if (t.length <= 165) return t;
             const chunks = t.split(/,\s+|\s+—\s+|;\s+/);
             let out = chunks[0];
             for (let k = 1; k < chunks.length; k++) {
@@ -2963,7 +2963,11 @@
             m.hotels.forEach((h, i) => {
                 const n = i + 3;
                 const label = `Slide ${n} (${plain(h.name)})`;
-                if ((h.socialLine || '').length > 150) issues.push(`${label}: line is long and may get cut — aim for ~110 characters.`);
+                // Measured budget: 43 characters a line; 4 lines without a rate
+                // line, 3 with one. Past that the slide silently truncates.
+                const lineCap = (m.showRates && h.rateLine) ? 130 : 172;
+                if ((h.socialLine || '').length > lineCap)
+                    issues.push(`${label}: the line is ${(h.socialLine || '').length} characters and will get cut — ${lineCap === 130 ? 'the rate prints underneath, so keep it under ~130' : 'keep it under ~170 (one strong sentence, or two short ones)'}.`);
                 if (!h.heroImage) { issues.push(`${label} has no photo.`); return; }
                 if (seenImg[h.heroImage] !== undefined) {
                     issues.push(`${label} reuses the same photo as slide ${seenImg[h.heroImage] + 3} — give each slide its own image.`);
@@ -3084,7 +3088,7 @@
             '  "briefIntro": "slide 2 opening line — one sentence that sets up the list.",',
             '  "brief": ["3-4 fragments, max ~60 characters EACH \u2014 about 8 words, no trailing periods"],',
             '  "slides": [',
-            '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "ONE scroll-stopping line, max ~120 characters: what makes it special and the can\\u2019t-miss detail. Factual only.", "imageUrl": "REQUIRED — see PHOTOS below" }',
+            '    { "name": "slide heading — a place, hotel, or idea, max 5 words", "location": "region/country, or empty string", "line": "The slide copy. ONE strong sentence (~110 characters) is the default. A SECOND short sentence is welcome when it genuinely strengthens the slide \u2014 a concrete detail or why it matters, never filler \u2014 keeping the TOTAL under 170 characters, which is what fits. Never a third. Factual only.", "imageUrl": "REQUIRED — see PHOTOS below" }',
             '  ],',
             '  "ctaTitle": "closing slide headline, e.g. Which one would you pick?",',
             '  "ctaSub": "closing line — invite them to reach out. Use curation language (we curate / tailored to you), never \\u201cwe design the shortlist\\u201d.",',
@@ -3279,7 +3283,7 @@
             '  "briefIntro": "one sentence on the shape of the trip — how long, where, what kind of traveler it suits. No names, no dates, no prices.",',
             '  "brief": ["3-4 short bullets on what makes this itinerary special — the routing logic, a signature experience, how it is paced"],',
             '  "slides": [',
-            '    { "dayLabel": "which days this slide covers, read off the itinerary, e.g. Days 1\\u20132 or Day 5 \\u2014 this prints on the slide instead of a slide number", "name": "the stop \\u2014 a place or hotel, max 5 words", "location": "region/country", "line": "ONE line, max ~120 characters: what happens here and why it earns its place. Factual, from the itinerary.", "imageUrl": "REQUIRED \\u2014 see PHOTOS below" }',
+            '    { "dayLabel": "which days this slide covers, read off the itinerary, e.g. Days 1\\u20132 or Day 5 \\u2014 this prints on the slide instead of a slide number", "name": "the stop \\u2014 a place or hotel, max 5 words", "location": "region/country", "line": "What happens here and why it earns its place, from the itinerary. ONE strong sentence (~110 characters) is the default; add a SECOND short sentence when it makes the day land better \u2014 total under 170 characters, which is what fits on the slide. Never a third. Factual only.", "imageUrl": "REQUIRED \\u2014 see PHOTOS below" }',
             '  ],',
             '  "ctaTitle": "closing line, e.g. Where should we send you next?",',
             '  "ctaSub": "one sentence inviting a DM or inquiry \\u2014 curation language, e.g. Tell us the occasion and we\\u2019ll curate a shortlist tailored to you.",',
