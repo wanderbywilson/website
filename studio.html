@@ -1783,6 +1783,7 @@
             const existing = new Set(Array.from(body.querySelectorAll('img')).map(i => i.getAttribute('src')));
             const entries = libEntriesForMatching().filter(e => !existing.has(e.img));
             const used = new Set();
+            const usedOrder = [];
             let added = 0;
             // Pass 1 — headings and paragraphs that name a hotel we have.
             Array.from(body.children).forEach(node => {
@@ -1793,17 +1794,18 @@
                 const im = document.createElement('img');
                 im.src = hit.img; im.alt = hit.name;
                 node.parentNode.insertBefore(im, node);
-                used.add(hit.k); added++;
+                used.add(hit.k); usedOrder.push(hit); added++;
             });
-            // Hero: the first hotel the article actually leads with.
-            if (!$('bHero').value.trim() && used.size) {
-                const firstUsed = entries.find(e => used.has(e.k));
-                if (firstUsed) $('bHero').value = firstUsed.img;
-            }
+            // Hero: the first hotel the article actually leads with — document
+            // order, not whichever name happens to be longest.
+            if (!$('bHero').value.trim() && usedOrder.length) $('bHero').value = usedOrder[0].img;
             // Gap report — hotels the post links that we have NO page for.
+            const INTERNAL = /wanderbywilson\.com|^\/(post|hotels|journeys|blog)\b/i;
+            const NOT_A_HOTEL = /\b(guide|best|top|where to|how to|itinerary|things to do|travel|destinations?|resorts? in|hotels? in|read|more)\b/i;
             const linked = Array.from(body.querySelectorAll('a'))
+                .filter(a => !INTERNAL.test(a.getAttribute('href') || ''))
                 .map(a => plain(a.textContent))
-                .filter(t => t && t.length > 3 && t.split(/\s+/).length <= 7 && !/^(here|this|read|more|guide|click)/i.test(t));
+                .filter(t => t && t.length > 3 && t.split(/\s+/).length <= 6 && !NOT_A_HOTEL.test(t));
             const allEntries = libEntriesForMatching();
             const missing = [];
             linked.forEach(t => {
