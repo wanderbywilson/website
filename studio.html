@@ -2819,6 +2819,41 @@
                 if (p) { chosen[k] = { src: p.src, why: 'position' }; p.used = true; }
             });
 
+            // Pass 3 — our own hotel pages. Articles migrated from Google Docs
+            // arrive text-only, so most sections have no inline photo at all.
+            // If the section names a hotel we have a page for, use its approved
+            // hero; failing that, use a hotel photo from the same destination.
+            const libEntries = libEntriesForMatching();
+            const takenSrc = new Set(pics.filter(p => p.used).map(p => p.src));
+            if (heroSrc) takenSrc.add(heroSrc);
+            const usedKeys = new Set();
+            heads.forEach((h, k) => {
+                if (chosen[k]) return;
+                const text = h.name + ' ' + h.body;
+                const hit = matchLibHotel(text, libEntries, usedKeys);
+                if (hit && !takenSrc.has(hit.img)) {
+                    chosen[k] = { src: hit.img, why: 'our ' + hit.name + ' page' };
+                    usedKeys.add(hit.k); takenSrc.add(hit.img);
+                }
+            });
+            // Pass 4 — destination fallback. "Where to Stay" names no hotel, but
+            // the copy names a place; any library property THERE gives us a
+            // beautiful, on-topic photo of the right part of the world.
+            heads.forEach((h, k) => {
+                if (chosen[k]) return;
+                const t = ' ' + normName(h.name + ' ' + h.body) + ' ';
+                const hit = libEntries.find(e => {
+                    if (usedKeys.has(e.k) || takenSrc.has(e.img)) return false;
+                    const place = normName(plain(lib[e.k].location)).split(' ')
+                        .filter(w => w.length > 3);
+                    return place.some(w => t.includes(' ' + w + ' '));
+                });
+                if (hit) {
+                    chosen[k] = { src: hit.img, why: 'destination match — ' + hit.name };
+                    usedKeys.add(hit.k); takenSrc.add(hit.img);
+                }
+            });
+
             return heads.slice(0, 8).map((h, k) => ({
                 name: h.name, location: '',
                 heroImage: chosen[k] ? chosen[k].src : '',
@@ -2832,7 +2867,9 @@
             return {
                 kind: 'blog', sourceSlug: slug,
                 title: plain(post.title), lede: plain(post.dek || ''),
-                coverImage: post.heroImage || '',
+                // Text-only articles have no hero — lead with the strongest
+                // slide photo rather than shipping a blank cover.
+                coverImage: post.heroImage || (slides.find(s => s.heroImage) || {}).heroImage || '',
                 // SEO headlines carry a ": subtitle" tail that reads as clutter
                 // on a cover slide — lead with the punchy half.
                 hook: plain(post.title).split(/:\s+/)[0],
