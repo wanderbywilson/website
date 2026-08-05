@@ -51,6 +51,26 @@ Read in under two seconds, or not at all.
   Virtuoso, then an official tourism board for a destination slide. Never
   Instagram, Pinterest, TripAdvisor, stock sites, or Google Images.
 
+## Partner marketing emails as a source
+
+Partner mail is a steady source of genuinely new news — an opening, a
+renovation, a new suite category, a new route. In the Studio: **New post → From a
+partner email**, copy the prompt, and paste the email's **subject line**. Claude
+finds it in the inbox (both wilson@ and the SmartFlyer address), extracts the
+actual news out of the marketing language, and verifies it against the
+property's own site before anything is written.
+
+Rules specific to this source:
+
+- **Find the fact.** Marketing emails bury one real item in adjectives. If there
+  is no genuine news, don't post — not every email deserves one.
+- **Never repeat** rates or "from $X" pricing · limited-time offers, promo codes
+  or booking deadlines (they expire, the post doesn't) · commission or agent-
+  incentive language, which is trade-only and must never be public · superlatives
+  the hotel doesn't claim itself.
+- **Photos come from the property's own site, not the email** — email images are
+  usually tracking-wrapped, cropped, or low-resolution.
+
 ## Structure
 
 - **Blog posts become chapters.** An article's H2 section heading renders as a
