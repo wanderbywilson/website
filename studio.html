@@ -221,6 +221,8 @@
         .slide-cell:hover .slide-x { opacity: 1; }
         .slide-x:hover { background: #b3453f; }
         .social-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+        .photo-fix { margin-top: 14px; border-top: 1px solid var(--st-line); padding-top: 12px; }
+        .photo-fix > summary { cursor: pointer; font-size: 12.5px; color: var(--st-gold); font-weight: 500; }
         .social-note { font-size: 11px; color: rgba(30,53,82,0.5); line-height: 1.5; margin: 12px 0 0; }
         .social-qa { font-size: 12px; line-height: 1.55; margin: 0 0 10px; padding: 10px 14px; background: #f2f8f2; border: 1px solid rgba(44,122,75,0.35); color: #2c7a4b; }
         .social-qa:empty { display: none; }
@@ -1121,11 +1123,18 @@
                         <button class="btn btn-ghost btn-small" id="sSave" type="button">Save as draft</button>
                         <button class="btn btn-ghost btn-small" id="sReady" type="button">Mark ready to post</button>
                         <button class="btn btn-ghost btn-small" id="sUndo" type="button" hidden>Undo</button>
+                        <button class="btn btn-ghost btn-small" id="sCanva" type="button">Send to Canva</button>
                         <button class="btn btn-ghost btn-small" id="sCopyCaption" type="button">Copy caption</button>
                         <button class="btn btn-ghost btn-small" id="sRefresh" type="button">Update preview</button>
                         <button class="btn btn-ghost btn-small" id="sRefill" type="button">Refill from proposal</button>
-                        <button class="btn btn-ghost btn-small" id="sPhotoCheck" type="button">Check photos with Claude</button>
                     </div>
+                    <details class="photo-fix">
+                        <summary>Fix the photos with Claude</summary>
+                        <p class="f-hint" style="margin:8px 0">Say what&rsquo;s wrong &mdash; &ldquo;slide 4 is too dark&rdquo;, &ldquo;the cover should be the beach, not the room&rdquo; &mdash; then copy the prompt. Claude looks at every image, finds better ones on each hotel&rsquo;s own site, and you paste its reply back to swap them in.</p>
+                        <textarea class="f-area" id="sPhotoFeedback" rows="2" placeholder="Optional: what's wrong with the current photos?"></textarea>
+                        <div style="margin:10px 0"><button class="btn btn-small" id="sPhotoCheck" type="button">1 &middot; Copy the photo prompt</button></div>
+                        <textarea class="f-area" id="sPhotoPaste" rows="3" placeholder="2 · Paste Claude's reply here — the photos swap in automatically."></textarea>
+                    </details>
                     <p class="social-note">Downloads one .zip with numbered 1080 × 1350 PNGs + the caption. The formula never includes the client's name — the QA check above flags anything off, but still give every slide a once-over before posting.</p>
                 </div>
             </div>
@@ -3306,6 +3315,7 @@
             const catText = [$('sHook').value, $('sBriefIntro').value, $('sBrief').value,
                 Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value).join(' '),
                 slides.map(h => plain(h.name) + ' ' + plain(h.location)).join(' ')].join(' ');
+            $('sCoverImg').value = (socialDeck && socialDeck.coverImage) || (slides[0] ? slides[0].heroImage : '') || '';
             socCategoryOptions(guessCategory(catText));
             $('sCaption').value = buildCaption();
         }
@@ -3615,7 +3625,7 @@
                 }
             });
             return {
-                coverImage: (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
+                coverImage: ($('sCoverImg').value || '').trim() || (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
                 hook: $('sHook').value.trim(),
                 briefIntro: $('sBriefIntro').value.trim(),
                 brief: $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean),
@@ -4084,6 +4094,7 @@
                     showRates: m.showRates, ctaTitle: m.ctaTitle, ctaSub: m.ctaSub,
                     lines: Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value),
                     images: Array.from(document.querySelectorAll('[data-simg]')).map(t => t.value),
+                    coverImage: $('sCoverImg').value,
                     caption: $('sCaption').value
                 },
                 status: status || (prev && prev.status) || 'draft',
@@ -4137,6 +4148,7 @@
                 (f.images || []).forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t && v) t.value = v; });
                 if (f.caption) $('sCaption').value = f.caption;
                 if (doc.category) socCategoryOptions(doc.category);
+                if (f.coverImage) $('sCoverImg').value = f.coverImage;
                 renderSocial();
             } catch (err) { toast('Couldn’t open that post.'); }
         }
@@ -4149,7 +4161,7 @@
                 fields: {
                     hook: $('sHook').value, briefIntro: $('sBriefIntro').value, brief: $('sBrief').value,
                     ctaTitle: $('sCtaTitle').value, ctaSub: $('sCtaSub').value,
-                    caption: $('sCaption').value, category: $('sCategory').value,
+                    caption: $('sCaption').value, category: $('sCategory').value, coverImage: $('sCoverImg').value,
                     showRates: $('sShowRates').checked,
                     lines: Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value),
                     images: Array.from(document.querySelectorAll('[data-simg]')).map(t => t.value)
@@ -4164,6 +4176,7 @@
             $('sCtaTitle').value = f.ctaTitle; $('sCtaSub').value = f.ctaSub;
             $('sShowRates').checked = f.showRates;
             socCategoryOptions(f.category);
+            if (f.coverImage !== undefined) $('sCoverImg').value = f.coverImage;
             f.lines.forEach((v, i) => { const t = document.querySelector(`[data-sline="${i}"]`); if (t) t.value = v; });
             f.images.forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t) t.value = v; });
             $('sCaption').value = f.caption;
@@ -4242,27 +4255,82 @@
         /* Eyes on the images. The filename checks above catch the mechanical
            mismatches; this hands the visual judgement to a Claude that can
            actually look at the photos. */
-        $('sPhotoCheck').addEventListener('click', async () => {
+        /* Photo round trip: copy a prompt carrying the whole deck (with your own
+           feedback), let a Claude that can SEE the images pick replacements, and
+           paste the reply back to swap them in. */
+        function photoPrompt(feedback) {
             const m = collectSocial();
             const abs = (u) => /^https?:\/\//i.test(u) ? u : 'https://www.wanderbywilson.com' + (u.startsWith('/') ? '' : '/') + u;
             const lines = m.hotels.map((h, i) => `Slide ${i + 3} — ${plain(h.name)}${h.location ? ' (' + plain(h.location) + ')' : ''}\n  Copy: ${h.socialLine}\n  Photo: ${h.heroImage ? abs(h.heroImage) : '(none yet)'}`).join('\n\n');
-            const prompt = [
-                'You are doing a photo QA pass on an Instagram carousel for Wander by Wilson, a luxury travel advisory. Open every photo URL below and LOOK at the image before answering — do not judge from the filename.',
+            return [
+                'You are fixing the photography on an Instagram carousel for Wander by Wilson, a luxury travel advisory. OPEN EVERY PHOTO URL BELOW AND LOOK AT THE IMAGE before answering — never judge from the filename.',
                 '',
-                'For each slide, answer two things:',
-                '1. MATCH — does the photo actually show the property/place the copy is about? Watch for off-by-one errors, where a slide carries the photo belonging to the slide before or after it. If you cannot tell what property it is, say so.',
-                '2. RULES — does it break any of our photo rules? No plated-food shots · no night/after-dark shots · no bathroom-only room shots · no NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · no dark or flat interiors · no near-duplicates of another slide.',
+                feedback
+                    ? 'WILSON\u2019S FEEDBACK — treat this as the priority; fix exactly what she flags, and check the rest while you are here:\n' + feedback
+                    : 'No specific feedback given — audit every slide yourself.',
                 '',
-                'Then give a verdict line per slide: OK, or SWAP with a one-line reason. If you can browse, suggest a replacement: a direct image URL from that property\'s OWN official website (daylight or golden hour, signature view or the actual room).',
+                'For each slide check two things:',
+                '1. MATCH — does the photo actually show the property or place the copy is about? Watch for off-by-one errors, where a slide carries the photo belonging to the slide before or after it.',
+                '2. RULES — no plated-food shots \u00b7 no night/after-dark shots \u00b7 no bathroom-only room shots \u00b7 NO PEOPLE AS THE SUBJECT: no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about (a few small figures at human scale in a wide view are fine; anyone recognisable, posed or dominating the frame is not) \u00b7 no dark or flat interiors \u00b7 no near-duplicates of another slide \u00b7 nothing that looks like a booking-site thumbnail.',
+                '',
+                'THE COVER matters most: it must be a showstopper — sweeping scenery, the best property\u2019s signature wide shot, or an iconic view of the destination. Never an interior detail, a chair, a lobby corner or a plain room shot. If the strongest image in the deck belongs to a later slide, say so.',
+                '',
+                'REPLACEMENTS: source from the property\u2019s OWN official website or media library (many run WordPress and expose /wp-json/wp/v2/media). Direct URLs ending .jpg/.jpeg/.webp/.png, and verify each one actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. Daylight or golden hour only. Landscape/wide crops read best.',
                 '',
                 'THE CAROUSEL:',
                 '',
+                'COVER — cover line: "' + m.hook + '"\n  Photo: ' + (m.coverImage ? abs(m.coverImage) : '(none)'),
+                '',
                 lines,
                 '',
-                'Cover slide photo: ' + (m.coverImage ? abs(m.coverImage) : '(none)') + '  — cover line: "' + m.hook + '"'
+                'Reply with a short verdict per slide in plain English, then ONLY this JSON block listing what should CHANGE (leave out anything already fine):',
+                '',
+                '{',
+                '  "cover": "replacement URL for the cover, or empty string to leave it",',
+                '  "slides": [',
+                '    { "n": 3, "imageUrl": "replacement direct image URL", "why": "one line on what was wrong" }',
+                '  ]',
+                '}',
+                '',
+                'Use the slide numbers exactly as labelled above. If nothing needs changing, return empty values and say so.'
             ].join('\n');
-            try { await navigator.clipboard.writeText(prompt); toast('Photo-check prompt copied — paste it into your Claude.'); }
-            catch (err) { window.prompt('Copy this prompt:', prompt); }
+        }
+
+        $('sPhotoCheck').addEventListener('click', async () => {
+            const fb = $('sPhotoFeedback').value.trim();
+            const p = photoPrompt(fb);
+            try { await navigator.clipboard.writeText(p); toast(fb ? 'Prompt copied with your feedback — paste it into your Claude.' : 'Photo prompt copied — paste it into your Claude.'); }
+            catch (err) { window.prompt('Copy this prompt:', p); }
+        });
+
+        // paste the reply back: swap only the photos, leave the copy alone
+        $('sPhotoPaste').addEventListener('input', (e) => {
+            const raw = e.target.value;
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let f;
+            try { f = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            let n = 0;
+            if (f.cover && String(f.cover).trim()) { $('sCoverImg').value = String(f.cover).trim(); n++; }
+            (f.slides || []).forEach(sl => {
+                const idx = (+sl.n) - 3;                 // slide 3 is the first content slide
+                const box = document.querySelector(`[data-simg="${idx}"]`);
+                if (box && sl.imageUrl) { box.value = String(sl.imageUrl).trim(); n++; }
+            });
+            if (!n) { toast('That reply had no photo changes in it.'); return; }
+            e.target.value = '';
+            renderSocial();
+            toast(n + ' photo' + (n === 1 ? '' : 's') + ' swapped in.');
+        });
+
+        /* Canva has no public "open these images" endpoint from a static page,
+           so this does the honest version: download the slides, put the caption
+           on the clipboard, and open Canva's uploads tab ready for the drop. */
+        $('sCanva').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText($('sCaption').value); } catch (e) {}
+            await downloadSlides();
+            window.open('https://www.canva.com/media/uploads', '_blank', 'noopener');
+            toast('Slides downloaded and Canva opened — drag the .zip contents into Uploads. Caption is on your clipboard.');
         });
 
         $('sCopyCaption').addEventListener('click', async () => {
@@ -4298,7 +4366,7 @@
             end.setUint32(12, cdLen, true); end.setUint32(16, offset, true);
             return new Blob([...parts, ...central, end.buffer], { type: 'application/zip' });
         }
-        $('sDownload').addEventListener('click', async () => {
+        async function downloadSlides() {
             if (!socialCanvases.length) await renderSocial();
             const files = [];
             for (let i = 0; i < socialCanvases.length; i++) {
@@ -4313,7 +4381,8 @@
             document.body.appendChild(a); a.click(); a.remove();
             toast('Downloaded one .zip with every slide + the caption.');
             saveSocialPost(null, true).catch(() => {});
-        });
+        }
+        $('sDownload').addEventListener('click', () => downloadSlides());
 
         /* ── Mobile preview toggle ────────────────────────────────────── */
         $('btnMobilePreview').addEventListener('click', () => {
