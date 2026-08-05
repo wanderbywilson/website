@@ -1082,6 +1082,8 @@
                         <label class="f-label" for="sHook">Cover line — the hook</label>
                         <textarea class="f-area" id="sHook" rows="2"></textarea>
                         <p class="f-hint">The reason someone stops mid-scroll. Tease the story — don’t just restate the proposal title.</p>
+                        <input class="f-input" id="sCoverImg" style="margin-top:8px" placeholder="Cover photo URL — the showstopper">
+                        <p class="f-hint">Sweeping scenery, the best property’s hero, or an iconic view of the destination. Never an interior detail.</p>
                     </div>
                     <div class="f-row">
                         <label class="f-label" for="sBriefIntro">The brief — intro line</label>
@@ -3315,7 +3317,7 @@
             const catText = [$('sHook').value, $('sBriefIntro').value, $('sBrief').value,
                 Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value).join(' '),
                 slides.map(h => plain(h.name) + ' ' + plain(h.location)).join(' ')].join(' ');
-            $('sCoverImg').value = (socialDeck && socialDeck.coverImage) || (slides[0] ? slides[0].heroImage : '') || '';
+            if ($('sCoverImg')) $('sCoverImg').value = (socialDeck && socialDeck.coverImage) || (slides[0] ? slides[0].heroImage : '') || '';
             socCategoryOptions(guessCategory(catText));
             $('sCaption').value = buildCaption();
         }
@@ -3625,7 +3627,7 @@
                 }
             });
             return {
-                coverImage: ($('sCoverImg').value || '').trim() || (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
+                coverImage: (($('sCoverImg') || {}).value || '').trim() || (socialDeck && socialDeck.coverImage) || (hotels[0] ? hotels[0].heroImage : ''),
                 hook: $('sHook').value.trim(),
                 briefIntro: $('sBriefIntro').value.trim(),
                 brief: $('sBrief').value.split('\n').map(s => s.trim()).filter(Boolean),
@@ -4094,7 +4096,7 @@
                     showRates: m.showRates, ctaTitle: m.ctaTitle, ctaSub: m.ctaSub,
                     lines: Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value),
                     images: Array.from(document.querySelectorAll('[data-simg]')).map(t => t.value),
-                    coverImage: $('sCoverImg').value,
+                    coverImage: ($('sCoverImg') || {}).value || '',
                     caption: $('sCaption').value
                 },
                 status: status || (prev && prev.status) || 'draft',
@@ -4148,7 +4150,7 @@
                 (f.images || []).forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t && v) t.value = v; });
                 if (f.caption) $('sCaption').value = f.caption;
                 if (doc.category) socCategoryOptions(doc.category);
-                if (f.coverImage) $('sCoverImg').value = f.coverImage;
+                if (f.coverImage && $('sCoverImg')) $('sCoverImg').value = f.coverImage;
                 renderSocial();
             } catch (err) { toast('Couldn’t open that post.'); }
         }
@@ -4176,7 +4178,7 @@
             $('sCtaTitle').value = f.ctaTitle; $('sCtaSub').value = f.ctaSub;
             $('sShowRates').checked = f.showRates;
             socCategoryOptions(f.category);
-            if (f.coverImage !== undefined) $('sCoverImg').value = f.coverImage;
+            if (f.coverImage !== undefined && $('sCoverImg')) $('sCoverImg').value = f.coverImage;
             f.lines.forEach((v, i) => { const t = document.querySelector(`[data-sline="${i}"]`); if (t) t.value = v; });
             f.images.forEach((v, i) => { const t = document.querySelector(`[data-simg="${i}"]`); if (t) t.value = v; });
             $('sCaption').value = f.caption;
