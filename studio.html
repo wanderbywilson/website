@@ -3290,6 +3290,11 @@
 
         function prefillSocial() {
             const { P, hotels } = socialModel();
+            // the cover applies to every deck type, so set it before the branch
+            if ($('sCoverImg')) {
+                $('sCoverImg').value = (socialDeck && socialDeck.coverImage)
+                    || (hotels[0] ? hotels[0].heroImage : '') || '';
+            }
             if (socialDeck) { prefillFromDeck(P, hotels); return; }
             const sentences = plain(P.lede).split(/(?<=[.!?])\s+/).filter(Boolean);
             // Hook: lead with what the stays have in common — place + occasion
@@ -3317,7 +3322,6 @@
             const catText = [$('sHook').value, $('sBriefIntro').value, $('sBrief').value,
                 Array.from(document.querySelectorAll('[data-sline]')).map(t => t.value).join(' '),
                 slides.map(h => plain(h.name) + ' ' + plain(h.location)).join(' ')].join(' ');
-            if ($('sCoverImg')) $('sCoverImg').value = (socialDeck && socialDeck.coverImage) || (slides[0] ? slides[0].heroImage : '') || '';
             socCategoryOptions(guessCategory(catText));
             $('sCaption').value = buildCaption();
         }
