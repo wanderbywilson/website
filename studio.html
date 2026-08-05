@@ -1052,6 +1052,11 @@
                     <span class="tmpl-title">From an itinerary</span>
                     <span class="tmpl-sub">Copy the prompt, attach your PDF or itinerary link in Claude, paste the answer back.</span>
                 </button>
+                <button class="tmpl-card" data-tmpl="email" type="button">
+                    <span class="tmpl-icon">✉</span>
+                    <span class="tmpl-title">From a partner email</span>
+                    <span class="tmpl-sub">Paste the subject line &mdash; Claude finds it in your inbox and turns the news into a post.</span>
+                </button>
                 <button class="tmpl-card" data-tmpl="scratch" type="button">
                     <span class="tmpl-icon">✦</span>
                     <span class="tmpl-title">From scratch</span>
@@ -3928,6 +3933,62 @@
             'If you truly cannot find a compliant official photo for a slide, return "" for that imageUrl and say which slides need one AFTER the JSON. Never invent a URL.'
         ].join('\n');
 
+        /* Partner marketing emails are a steady source of genuinely new news —
+           an opening, a renovation, a new suite category. The team gives Claude
+           the subject line; it finds the email itself. */
+        const EMAIL_PROMPT = [
+            'You are helping Wander by Wilson \u2014 a luxury travel advisory (wanderbywilson.com) \u2014 turn a partner\u2019s marketing email into an Instagram carousel.',
+            '',
+            'I will give you the SUBJECT LINE of an email in my inbox. Find it in Gmail (search wilson@wanderbywilson.com and wilson.schubert@smartflyer.com \u2014 partner mail arrives at both) and read the whole thing before you answer. If several emails match, take the most recent and tell me which one you used. If you cannot find it, say so and stop.',
+            '',
+            'WHAT WE ARE LOOKING FOR: the actual NEWS. A new property opening, a renovation, a new suite or villa category, a new restaurant or spa, a new route or season, an anniversary. Marketing emails bury one real fact in a lot of adjectives \u2014 find the fact. If the email carries no genuine news and is purely promotional filler, say so and stop; not every email deserves a post.',
+            '',
+            'THEN VERIFY IT. Go to the property\u2019s own website and confirm what the email claims, because we are publishing it under our name. Prefer the hotel\u2019s own wording over the email\u2019s marketing copy.',
+            '',
+            'DO NOT REPEAT: rates or \u201cfrom $X\u201d pricing \u00b7 limited-time offers, promo codes or booking deadlines (they expire and the post does not) \u00b7 commission or agent-incentive language, which is trade-only and must never be public \u00b7 any superlative the hotel itself does not claim.',
+            '',
+            'COMPLIANCE: every fact must come from the email or the hotel\u2019s own site. Never invent or embellish \u2014 we are liable for what a client books on. If a detail cannot be verified, leave it out.',
+            '',
+            'COVER PHOTO \u2014 the single most important image. A SHOWSTOPPER: sweeping scenery, the property\u2019s signature wide shot, or an iconic view of the destination. NEVER an interior detail, a chair, a lobby corner, a close-up of an object, or a plain room shot.',
+            'BRIEF SLIDE COPY \u2014 read in two seconds. briefIntro: ONE sentence, max ~140 characters. brief: 3-4 fragments, max ~60 characters EACH, no trailing periods.',
+            'PHOTO QUALITY \u2014 every slide photo must be the BEST available image of that property or place: wide, bright, readable at thumbnail size. If there is no great property photo, use a stunning DESTINATION photo rather than a weak hotel shot.',
+            '',
+            'PHOTOS \u2014 do this work, do not skip it. Take image URLs from the PROPERTY\u2019S OWN WEBSITE or official media library, not from the email itself \u2014 email images are usually tracking-wrapped, cropped or low-resolution. Many hotel sites run WordPress and expose /wp-json/wp/v2/media. Return direct URLs ending .jpg/.jpeg/.webp/.png and verify each one actually resolves to an image. Never Instagram, Pinterest, TripAdvisor, stock sites or Google Images. Daylight or golden hour only. NEVER: plated-food shots \u00b7 night shots \u00b7 bathroom-only shots \u00b7 NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about (a few small figures at human scale in a wide view are fine; anyone recognisable, posed or dominating the frame is not) \u00b7 renders when real photos exist \u00b7 near-duplicates.',
+            '',
+            'Reply with which email you used and the news you found, then ONLY this JSON block:',
+            '',
+            '{',
+            '  "hook": "the cover line \u2014 the news in one scroll-stopping phrase, e.g. A 1,000-year-old Tuscan village just opened 20 new suites.",',
+            '  "briefIntro": "one sentence on what has changed and why it matters to someone planning a trip",',
+            '  "brief": ["3-4 fragments \u2014 the concrete details, max ~60 characters each, no trailing periods"],',
+            '  "slides": [',
+            '    { "name": "the property or the thing that is new, max 5 words", "location": "Town, Region, Country", "line": "ONE strong sentence (~110 characters) on this slide; a SECOND short sentence is welcome when it genuinely strengthens it \u2014 total under 170 characters. Factual.", "imageUrl": "REQUIRED \u2014 direct URL from the property\u2019s own site, see PHOTOS above" }',
+            '  ],',
+            '  "ctaTitle": "closing line, e.g. Want to be among the first?",',
+            '  "ctaSub": "one sentence inviting a DM or inquiry, curation language \u2014 e.g. Tell us the occasion and we\u2019ll curate a shortlist tailored to you.",',
+            '  "caption": "the Instagram caption: the news first (the opening ~125 characters are all that shows), then the detail, then an invitation to reach out. End with 5-8 relevant hashtags."',
+            '}',
+            '',
+            'Aim for 3-6 slides. If the email is about ONE property, use the slides to tell that property\u2019s story \u2014 the news, the setting, the rooms, the reason to go.',
+            '',
+            '\u2014\u2014\u2014',
+            'Now find this email and build the post: [PASTE THE SUBJECT LINE HERE]'
+        ].join('\n');
+
+        function startFromEmail() {
+            pickerShell('From a partner email', `
+                <p class="sec-sub" style="margin-bottom:12px">Copy the prompt into your own Claude and paste the email&rsquo;s <strong>subject line</strong> at the end. It finds the email in your inbox, pulls out the actual news, checks it against the hotel&rsquo;s own site, and sources the photos properly &mdash; then paste its reply back here.</p>
+                <button class="btn btn-small" id="tmplCopyEmail" type="button">1 &middot; Copy the email prompt</button>
+                <div class="f-row" style="margin-top:14px">
+                    <textarea class="f-area" id="tmplPasteArea" style="min-height:150px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the carousel builds itself."></textarea>
+                </div>`);
+            $('tmplCopyEmail').addEventListener('click', async () => {
+                try { await navigator.clipboard.writeText(EMAIL_PROMPT); toast('Email prompt copied — paste it into your Claude with the subject line.'); }
+                catch (err) { window.prompt('Copy this prompt:', EMAIL_PROMPT); }
+            });
+            wirePasteDeck('email');
+        }
+
         function startFromItinerary() {
             pickerShell('From an itinerary', `
                 <p class="sec-sub" style="margin-bottom:12px">Turn a finished trip into a post. Copy the prompt, open your own Claude, <strong>attach the itinerary PDF or paste its viewable link</strong>, then paste Claude&rsquo;s reply back here. The prompt keeps the client anonymous — no names, dates or prices.</p>
@@ -3961,6 +4022,7 @@
                 else if (k === 'blog') startFromBlog();
                 else if (k === 'hotel') startFromHotel();
                 else if (k === 'itinerary') startFromItinerary();
+                else if (k === 'email') startFromEmail();
                 else startFromScratch();
                 return;
             }
