@@ -746,6 +746,7 @@
                         <summary style="cursor:pointer; font-size:13px; color:rgba(30,53,82,0.65)">Claude&rsquo;s sourcing notes for this draft</summary>
                         <div class="hd-notes" id="hdNotes" style="margin-top:10px"></div>
                     </details>
+                    <div class="social-qa" id="hdQueued" hidden style="margin-bottom:14px"></div>
                     <div class="social-qa has-issues" id="hdPlaceholderWarn" hidden></div>
                     <div class="blog-actions">
                         <button class="btn" id="hdSave" type="button">Save changes</button>
@@ -1246,7 +1247,7 @@
         }
         const fmtWhen = (iso) => iso ? new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
         const STATUS_CHIP = {
-            'idea': '<span class="chip chip-idea">Idea</span>',
+            'idea': '<span class="chip chip-idea">Queued — researching</span>',
             'draft': '<span class="chip chip-draft">Draft</span>',
             'in-review': '<span class="chip chip-review">Needs review</span>',
             'ready': '<span class="chip chip-ready">Ready to publish</span>',
@@ -1644,6 +1645,16 @@
                 $('hdHero').value = e0.heroImage || '';
                 $('hdGallery').value = (e0.gallery || []).join('\n');
                 $('hdNotes').textContent = doc.notes || '(no notes)';
+                // An 'idea' draft is a queued request, not something for Wilson to type up.
+                const empty = !(e0.description || '').trim() && !(e0.heroImage || '').trim();
+                const q = $('hdQueued');
+                q.hidden = !(doc.status === 'idea' || empty);
+                if (!q.hidden) {
+                    q.innerHTML = '<strong>Not researched yet.</strong> This was queued automatically because the property was quoted but has no page. ' +
+                        'Claude fills these in overnight (7&nbsp;AM) and it will come back as <em>Needs review</em> &mdash; ' +
+                        'you should never have to write one of these by hand. Want it sooner? Ask Claude to ' +
+                        '&ldquo;draft the hotel page for ' + esc(deEnt(e0.name || doc.name || 'this hotel')) + '&rdquo;.';
+                }
                 hdIdealCheck();
                 hdPlaceholderCheck();
                 hdStatusLine();
