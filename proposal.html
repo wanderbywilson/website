@@ -199,8 +199,14 @@
         }
         .prop-hotel-body {
             padding: 104px 64px 104px 64px;
-            max-width: 620px;
-            justify-self: start;
+            /* Centre the column in its half rather than pinning it left, so a
+               wide window grows the margins on both sides instead of stranding
+               all the space on the right. Box-sizing keeps the padding inside
+               the cap, so the measure stays a comfortable ~620px. */
+            max-width: 748px;
+            box-sizing: border-box;
+            justify-self: center;
+            width: 100%;
         }
         .prop-hotel + .prop-hotel .prop-hotel-body { border-top: 1px solid rgba(199, 174, 138, 0.0); }
 
