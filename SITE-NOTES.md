@@ -416,3 +416,23 @@ Two review agents (technical QA + fact-check/compliance). Verdict was **SHIP WIT
 4. **Amex marks** — "American Express" and "Fine Hotels + Resorts" now appear in the copy, meta description and social previews. A one-line non-affiliation note in the footer is cheap insurance.
 
 **Verification note:** the in-app preview browser gave a false reading on `.book-access-copy.is-copied` (reported the rule as not applying when the served CSS is correct and balanced). Contrast was confirmed by computing from the hex values instead. This browser has been unreliable all session — blank screenshots above 375px, timeouts, failed navigations. **Verify colour and layout arithmetically or against the served file, not only through the pane.**
+
+### §13 addendum 11 (2026-08-19) — PUBLISHED to production
+
+`/book` is live at https://www.wanderbywilson.com/book. Two commits:
+- `877ecfa` — the booking-portal feature (75 files)
+- `89daa44` — hotfix, see below
+
+**Deliberately NOT shipped** (Wilson's call — other people's uncommitted WIP was sitting in the tree): the "17 Best Honeymoon Destinations" blog post + `blog-data-v17.js` + its 18 images, and the Proposal Studio "rates by room category" feature in `proposal.html`/`studio.html`. All still on disk, uncommitted. Consequence: the 46 blog post pages, `inspiration.html` and `post.html` were excluded from the commit, so **they don't yet carry the "Book Instantly" nav item** — they'll pick it up whenever the blog work ships.
+
+**🔴 I BROKE THE LIVE BLOG FOR ~4 MINUTES. Read this before any future partial commit.**
+
+`git status` showed `RM blog-data-v16.js -> blog-data-v17.js` — **`R` in the first column means the rename was already STAGED in the index before this session started.** I built a careful include-list of 75 files and ran `git add` on exactly those… but then ran `git commit` **without a pathspec**, which commits *the entire index* — sweeping in that pre-staged rename. Production lost `blog-data-v16.js` while all 46 post pages still referenced it, so every blog article rendered empty.
+
+Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post page still pointed at it). Fixed in `89daa44` by restoring v16 from `13e6f2d` and `git rm --cached`-ing v17.
+
+**Rules going forward:**
+1. **`git status` before committing, and read the FIRST column.** Anything already `A`/`R`/`M` in column 1 is staged and WILL be committed regardless of what you add.
+2. **Use `git commit -- <pathspec>`** (or `git stash --staged` first) when doing a partial commit on a dirty tree. `git add`-ing the right files is not enough.
+3. **Always check for split references after a partial commit**: if file A references file B, they must land in the same commit. A rename is the classic trap — the referrers and the renamed file are separate paths.
+4. The post-deploy checklist in DEPLOY.md is what caught this. **Run it every time**, and include an asset-level check, not just page HTTP codes — every blog page returned 200 while being completely broken.
