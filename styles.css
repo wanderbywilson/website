@@ -9386,24 +9386,40 @@ html, body { overflow-x: clip; max-width: 100%; }
    quiet; the portal is the conversion action and needs to carry weight.
    Gold fill echoes the existing .quiz .cta-primary treatment.
    ========================================================================== */
-.cta-portal {
+/* NOTE ON SPECIFICITY: .cta-portal is a modifier on .cta-primary, so a bare
+   `.cta-portal:hover` is (0,2,0) and LOSES to page-scoped rules such as
+   `.is-home .cta-primary:hover` (0,3,0). That mismatch shipped a hover state
+   of ivory text on a near-transparent seafoam wash — white on white. Every
+   selector below therefore chains .cta-primary, and .is-home is overridden
+   explicitly because its rules are also (0,3,0). */
+.cta-primary.cta-portal {
     background: var(--gold);
     border-color: var(--gold);
     color: var(--ink);
     box-shadow: 0 10px 26px rgba(195, 162, 106, 0.34);
 }
-.cta-portal .cta-primary-label { font-style: italic; }
-.cta-portal::after { color: var(--ink); }
+.cta-primary.cta-portal .cta-primary-label { font-style: italic; }
+.cta-primary.cta-portal::after { color: var(--ink); }
 
-.cta-portal:hover {
+.cta-primary.cta-portal:hover {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--ivory);
     box-shadow: 0 14px 32px rgba(30, 53, 82, 0.28);
 }
-.cta-portal::after,
-.cta-portal:hover::after { transition: color 0.45s var(--ease-soft); }
-.cta-portal:hover::after { color: var(--gold-soft); }
+.cta-primary.cta-portal::after,
+.cta-primary.cta-portal:hover::after { transition: color 0.45s var(--ease-soft); }
+.cta-primary.cta-portal:hover::after { color: var(--gold-soft); }
+
+/* Homepage: .is-home .cta-primary{,:hover,::after} are (0,3,0) and would
+   otherwise repaint these buttons seafoam. */
+.is-home .cta-primary.cta-portal::after { color: var(--ink); }
+.is-home .cta-primary.cta-portal:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--ivory);
+}
+.is-home .cta-primary.cta-portal:hover::after { color: var(--gold-soft); }
 
 /* Beat the page-scoped hero/hotels overrides that would otherwise
    un-fill these (source order + equal specificity). */

@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=244">
+    <link rel="stylesheet" href="/styles.css?v=270">
 
     <style>
         /* ─── Proposal-only typography + layout ───────────────────────── */
@@ -506,6 +506,101 @@
             margin-bottom: 3px;
         }
 
+        /* Rates by room category — the full negotiated rate sheet, so each
+           couple in a group can pick their own category off one page. */
+        .prop-hotel-rates {
+            margin: 22px 0 0;
+            padding-top: 22px;
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .prop-hotel-rates > strong {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 12px;
+        }
+        .prop-hotel-rates ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .prop-hotel-rates li {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(199, 174, 138, 0.22);
+        }
+        .prop-hotel-rates li:last-child { border-bottom: none; }
+        .prop-rate-room {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.4;
+            color: rgba(30, 53, 82, 0.85);
+            flex: 1 1 auto;
+        }
+        .prop-rate-price {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 16px;
+            color: var(--gold);
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+        .prop-rate-note {
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+            color: rgba(30, 53, 82, 0.55);
+            margin: 12px 0 0;
+        }
+
+        /* Good to know — the supplier's terms, in plain English */
+        .prop-hotel-terms {
+            margin: 22px 0 0;
+            padding-top: 22px;
+            border-top: 1px solid rgba(199, 174, 138, 0.36);
+        }
+        .prop-hotel-terms > strong {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(30, 53, 82, 0.55);
+            display: block;
+            margin-bottom: 12px;
+        }
+        .prop-hotel-terms ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+        .prop-hotel-terms li {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: rgba(30, 53, 82, 0.68);
+            padding-left: 18px;
+            position: relative;
+        }
+        .prop-hotel-terms li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: rgba(199, 174, 138, 0.9);
+        }
+
         /* Photo-accuracy disclaimer (auto-rendered above the closing section) */
         .prop-photo-note {
             font-family: var(--font-serif);
@@ -707,8 +802,17 @@
             .prop-hotel-flightwrap, p.prop-hotel-flight { grid-column: 1 / -1; grid-row: 2; margin-top: 12px; }
             .prop-hotel-desc { grid-column: 1; grid-row: 3; margin-top: 12px; }
             .prop-hotel-room-desc { grid-column: 2; grid-row: 3; margin-top: 12px; }
-            .prop-hotel-perks { grid-column: 1; grid-row: 4; }
-            .prop-hotel-fineprint { grid-column: 2; grid-row: 4; }
+            .prop-hotel-rates { grid-column: 1 / -1; grid-row: 4; }
+            .prop-hotel-perks { grid-column: 1; grid-row: 5; }
+            .prop-hotel-fineprint { grid-column: 2; grid-row: 5; }
+            .prop-hotel-terms { grid-column: 1 / -1; grid-row: 6; }
+
+            /* A full rate sheet is more than one page's worth. Let those hotels
+               flow onto a second page rather than clipping — but keep each block
+               whole, so no table row or clause is cut in half. */
+            .prop-hotel:has(.prop-hotel-rates) { break-inside: auto; }
+            .prop-hotel-rates, .prop-hotel-perks, .prop-hotel-fineprint,
+            .prop-hotel-terms, .prop-hotel-room-desc { break-inside: avoid; }
 
             /* Compact type */
             .prop-hotel-num { margin-bottom: 6px; }
@@ -734,6 +838,19 @@
             .prop-hotel-fineprint { margin-top: 10px; padding: 8px 12px; gap: 6px; }
             .prop-hotel-fineprint p { font-size: 9px; line-height: 1.45; }
             .prop-hotel-fineprint strong { font-size: 7.5px; margin-bottom: 1px; }
+            /* Rate sheet in two tight columns so a 15-category quote stays legible */
+            .prop-hotel-rates { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-rates > strong { font-size: 8px; margin-bottom: 6px; }
+            .prop-hotel-rates ul { columns: 2; column-gap: 0.32in; }
+            .prop-hotel-rates li { padding: 3px 0; break-inside: avoid; }
+            .prop-rate-room { font-size: 9px; line-height: 1.35; }
+            .prop-rate-price { font-size: 9.5px; }
+            .prop-rate-note { font-size: 8px; margin-top: 6px; }
+            .prop-hotel-terms { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-terms > strong { font-size: 7.5px; margin-bottom: 5px; }
+            .prop-hotel-terms ul { columns: 2; column-gap: 0.32in; gap: 0; }
+            .prop-hotel-terms li { font-size: 8.5px; line-height: 1.4; padding-left: 12px;
+                margin-bottom: 4px; break-inside: avoid; }
             .prop-hotel-cta { display: none; }
 
             /* Closing gets its own tidy final page */
@@ -841,6 +958,13 @@
                     consideredWhy: h.consideredWhy || '',
                     perksList: h.perksList || [],
                     perksLabel: h.perksLabel || 'Preferred-partner amenities &mdash; included',
+                    // Rates by room category — for group quotes where every couple
+                    // picks their own category off one negotiated rate sheet.
+                    rateTable: h.rateTable || [],
+                    rateTableLabel: h.rateTableLabel || 'Rates by room category',
+                    rateTableNote: h.rateTableNote || '',
+                    terms: h.terms || [],
+                    termsLabel: h.termsLabel || 'Good to know',
                     gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
                     // undefined → inherit the library link; '' (set by the Studio) → no button
                     bookingUrl: h.bookingUrl !== undefined ? h.bookingUrl : libBooking
@@ -908,6 +1032,20 @@
                         ${r.cancellation ? `<p><strong>Cancellation</strong><span${E(`hotels.${i}.cancellation`)}>${r.cancellation}</span></p>` : ''}
                        </div>`
                     : '';
+                // A negotiated group rate sheet: every category, so each couple can
+                // pick their own. Quote mode only — a lookbook carries no pricing.
+                const rateTable = (!lookbook && r.rateTable.length)
+                    ? `<div class="prop-hotel-rates">
+                        <strong>${r.rateTableLabel}</strong>
+                        <ul>${r.rateTable.map(row => `<li><span class="prop-rate-room">${row.room}</span><span class="prop-rate-price">${row.price}</span></li>`).join('')}</ul>
+                        ${r.rateTableNote ? `<p class="prop-rate-note">${r.rateTableNote}</p>` : ''}
+                       </div>`
+                    : '';
+                const terms = (!lookbook && r.terms.length)
+                    ? `<div class="prop-hotel-terms"><strong>${r.termsLabel}</strong><ul>` +
+                      r.terms.map(li => `<li>${li}</li>`).join('') +
+                      '</ul></div>'
+                    : '';
                 const hotelPerks = (r.perksList && r.perksList.length)
                     ? `<div class="prop-hotel-perks"><strong>${r.perksLabel}</strong><ul>` +
                       r.perksList.map(li => `<li>${li}</li>`).join('') +
@@ -940,10 +1078,12 @@
                             : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
                         ${carousel}
+                        ${rateTable}
                         ${lookbook ? '' : roomDesc}
                         ${gettingThere}
                         ${hotelPerks}
                         ${finePrint}
+                        ${terms}
                         ${lookbook ? '' : cta}
                     </div>
                 </section>`;
