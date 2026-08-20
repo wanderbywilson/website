@@ -2110,7 +2110,12 @@
             if (termLines.length) out.terms = termLines;
             if ((h.roomDesc || '').trim()) {
                 out.roomDesc = sentenceCap(h.roomDesc.trim());
-                if ((h.room || '').trim()) out.roomDescLabel = 'About the ' + stripHtml(titleWords(h.room.trim()));
+                // Normally derived from the quoted room. A group quote has a whole
+                // rate sheet instead of one room, so the label has to survive on
+                // its own — otherwise the description renders with no heading.
+                const label = (h.roomDescLabel || '').trim() ||
+                    ((h.room || '').trim() ? 'About the ' + stripHtml(titleWords(h.room.trim())) : '');
+                if (label) out.roomDescLabel = label;
             }
             if (h.usePerks) {
                 const lines = (h.perksText || '').split('\n').map(s => s.trim()).filter(Boolean).map(sentenceCap);
@@ -2315,6 +2320,8 @@
                         <summary>Room description ${h.custom ? '&amp; booking' : '· custom copy · booking'}</summary>
                         <div class="f-row"><label class="f-label">About the room (optional)</label>
                             <textarea class="f-area" data-i="${i}" data-k="roomDesc" placeholder="A few lines on the room category you quoted.">${esc(h.roomDesc)}</textarea></div>
+                        <div class="f-row"><label class="f-label">Heading above it <span style="text-transform:none">(defaults to &ldquo;About the {room category}&rdquo;)</span></label>
+                            <input class="f-input" data-i="${i}" data-k="roomDescLabel" value="${esc(h.roomDescLabel)}" placeholder="About the Junior Suite"></div>
                         ${h.custom ? '' : `
                         <div class="f-row"><label class="f-label">Custom description (optional — otherwise the website's)</label>
                             <textarea class="f-area" data-i="${i}" data-k="desc">${esc(h.desc)}</textarea></div>`}
@@ -2993,6 +3000,7 @@
                         perksText: (h.perksList || []).join('\n'),
                         perksLabel: h.perksLabel || '',
                         roomDesc: h.roomDesc || '',
+                        roomDescLabel: h.roomDescLabel || '',
                         useBooking: !!(h.bookingUrl && h.bookingUrl !== ''),
                         bookingUrl: h.bookingUrl || ''
                     };
