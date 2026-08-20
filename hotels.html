@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=244">
+    <link rel="stylesheet" href="/styles.css?v=269">
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QN83N7QQS"></script>
     <script>
@@ -37,8 +37,9 @@
             <a href="/" class="brand" aria-label="Wander by Wilson — home">
                 <span class="brand-wordmark">Wander by Wilson</span>
             </a>
-            <nav class="nav-primary" aria-label="Primary">
+            <nav class="nav-primary" id="primaryNav" aria-label="Primary">
                 <ul>
+                    <li><a href="/book">Book Instantly</a></li>
                     <li><a href="/hotels">Hotels</a></li>
                     <li><a href="/journeys">Journeys</a></li>
                     <li><a href="/cruises">Cruises</a></li>
@@ -95,13 +96,19 @@
             <p class="hotels-index-count" id="hotelsCount"></p>
             <div class="hotels-index-find-yours">
                 <p class="hotels-index-find-yours-line">
-                    Don&rsquo;t see your hotel? We book far more properties than we list here.
-                    Tell us where you&rsquo;re headed and we&rsquo;ll bring our preferred-partner
-                    perks to your stay.
+                    Already know where you&rsquo;re going? Book it yourself in minutes at our
+                    preferred-partner rates. Rather we handled it &mdash; or can&rsquo;t find
+                    your hotel? We book far more properties than we list here.
                 </p>
-                <a href="/inquire-hotel" class="cta-primary hotels-index-find-yours-cta">
-                    <span class="cta-primary-label">Book a hotel with us</span>
-                </a>
+                <div class="hotels-index-choice">
+                    <a href="/book" class="cta-primary cta-portal">
+                        <span class="cta-primary-label">Book with perks, instantly</span>
+                    </a>
+                    <a href="/inquire-hotel" class="cta-secondary">
+                        <span>Have us book it</span>
+                    </a>
+                </div>
+                <p class="portal-code-note portal-code-note--onphoto">Access code <strong>WANDER</strong></p>
             </div>
         </div>
     </section>
@@ -115,6 +122,33 @@
             <p class="inspo-no-results" id="hotelsNoResults" hidden>
                 No hotels match your search yet &mdash; try a different name or destination.
             </p>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         Booking-portal band — the highest-intent audience on the site is
+         someone who just scrolled the hotel collection.
+         ================================================================ -->
+    <section class="portal-band" aria-label="Book hotels yourself with our perks">
+        <div class="container portal-band-inner">
+            <div class="portal-band-copy">
+                <p class="kicker"><span class="kicker-line"></span><span>Book it yourself</span></p>
+                <h2 class="portal-band-title">
+                    Ready to book<br>
+                    <em>right now?</em>
+                </h2>
+                <p class="portal-band-lede">
+                    Our booking portal holds far more than this collection. Search it
+                    yourself, book at preferred-partner rates, and confirm instantly
+                    &mdash; the perks come attached, and we&rsquo;ll take it from there.
+                </p>
+            </div>
+            <div class="portal-band-action">
+                <a class="cta-primary cta-portal" href="/book">
+                    <span class="cta-primary-label">Browse &amp; book with perks</span>
+                </a>
+                <span class="portal-band-code">Access code <strong>WANDER</strong></span>
+            </div>
         </div>
     </section>
 
@@ -248,6 +282,7 @@
                 <p class="site-footer-tagline">Elevated itineraries. Effortless travel.</p>
             </div>
             <nav class="site-footer-nav" aria-label="Footer">
+                <a href="/book">Book Instantly</a>
                 <a href="/hotels">Hotels</a>
                 <a href="/journeys">Journeys</a>
                 <a href="/cruises">Cruises</a>

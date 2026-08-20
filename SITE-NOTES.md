@@ -31,8 +31,8 @@
 - **Whenever you edit styles.css / data.js / blog-data.js, BUMP `?v=N` across ALL html**, or the browser serves stale cached files.
   - Pattern: `perl -pi -e 's/styles\.css\?v=110/styles.css?v=111/g;' *.html`
 - **HTML files are NOT versioned.** When testing in the browser, append a throwaway `?cb=N` to the URL to force fresh HTML.
-- **Current versions (at this save):** `styles.css?v=244`, `data.js?v=91`, `blog-data-v16.js`.
-  - **Note:** blog data is now cache-busted by FILENAME (`blog-data-v15.js` → `blog-data-v16.js`), not `?v=N`. Bumping it means `git mv` + a perl sweep across all HTML: `grep -rl "blog-data-v16.js" --include="*.html" . | xargs perl -pi -e 's/blog-data-v16\.js/blog-data-v17.js/g'` (48 files).
+- **Current versions (at this save):** `styles.css?v=269`, `data.js?v=92`, `blog-data-v17.js`.
+  - **Note:** blog data is now cache-busted by FILENAME (`blog-data-v15.js` → `blog-data-v17.js`), not `?v=N`. Bumping it means `git mv` + a perl sweep across all HTML: `grep -rl "blog-data-v17.js" --include="*.html" . | xargs perl -pi -e 's/blog-data-v17\.js/blog-data-v18.js/g'` (48 files).
 
 ## 🚀 SEO foundation (2026-05-28) — DEPLOY-READY FILES
 
@@ -205,3 +205,214 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 ## 11. Client proposal workflow (separate from the website)
 - When Wilson asks for a **client proposal**, save it as a **native Google Doc** in the matching client folder inside the **Client Trips** shared drive (`0ABKIQIUtEhG6Uk9PVA`); use `contentMimeType=text/plain` for auto-conversion to a Google Doc. No "advisor on-call" phrasing; vague flavor only; put hotel links on the inclusions.
+
+## 12. Proposal Studio (2026-07-29) — team-built client proposal pages
+
+**What it is:** `/studio` (passcode `WANDER26`, stored server-side as the `STUDIO_PASSCODE` Vercel env var) lets Wilson + team build `/proposals/{id}` hotel-proposal pages without touching code or Claude. Pick hotels from the PROPERTIES library (photos/desc/gallery/booking link auto-pull), fill room/rate/dates, watch a live preview, hit Publish → instant client link (no deploy; stored in the **wndr-proposals** private Vercel Blob store, `store_a0Hhz6oudk0wWLQT`).
+
+**Files:** `studio.html` (builder), `proposal.html` (renders static PROPOSALS first, then falls back to `GET /api/proposals?id=`), `api/proposals.js` (auth/list/load/save/delete, passcode-gated), `api/proposal-viewed.js` (first-open Brevo email to wilson@), `api/_blob.js` (raw Blob REST helper — repo has NO package.json; do not add npm deps).
+
+**Features:** Prepared-for hero line, rates-valid-until note, per-hotel "Book this rate" toggle, per-hotel ✈ flight note (added 2026-07-29 — Wilson sometimes includes flight quotes), custom (non-library) hotels, Save-as-PDF (print CSS), draft autosave (localStorage), edit-after-publish (same link), "Your proposals" list with ✓ Opened flag. First real proposal: `apfel-caribbean-uf47` (Rock House imagery lives in `proposals/apfel-caribbean-images/`).
+
+**Privacy model:** `X-Robots-Tag: noindex, nofollow` headers (vercel.json) on `/proposals/*`, `/proposal.html`, `/studio`, `/studio.html`, `/api/*` + meta noindex. robots.txt `Disallow: /proposals/` was deliberately REMOVED — blocking crawl would hide the noindex from Google (URL-only indexing risk). Never add proposals to the sitemap. Slugs get a random 4-char suffix (not enumerable). Blob store is private (403 without token).
+
+**Beacon logic:** first open of a Studio proposal emails Wilson via Brevo. Suppressed for: browsers that have opened /studio (`localStorage wndr-team=1`), `?preview=1` links, and repeat views in the same session. Views tracked in `views/{id}.json` blobs.
+
+**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=91` / `proposals-data.js?v=92` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
+
+### §12 addendum (2026-07-29, round 2) — compliance + quote screenshots
+- **CONTENT COMPLIANCE (Wilson, non-negotiable):** proposal descriptions/room copy must be VERBATIM from the hotel's site, its Virtuoso page, or our website library — never written or embellished (liability if a client books on an inaccurate claim). Hotel names = official names, plain text. Wilson's personal notes go in her email, not the page. Template auto-renders a photos-are-representative disclaimer.
+- Per-hotel **amenities** (checkbox + editable list, prefilled from PROPERTIES perks), **deposit/cancellation fine-print block**, and **✈ flight note** now render on each hotel card; the global perks band is optional (empty list = hidden).
+- **Quote-screenshot reader:** drop a screenshot on a hotel card in /studio → `api/parse-quote.js` (Claude `claude-opus-5` via raw fetch — NO SDK/package.json) extracts room/rate/rateNote/deposit/cancellation/dates verbatim. Requires `ANTHROPIC_API_KEY` env var on Vercel (returns a friendly 501 until added).
+- Proposal pages now pin the site header visible (`is-scrolled` applied permanently).
+
+### §12 addendum (2026-07-29, round 3) — lookbook layout, click-to-edit, AI writer
+- **Lookbook layout** (Safari Portal-style, Wilson's request): each hotel is a split section — full-bleed photo sticky on the LEFT (100vh, "No. 0N" + name overlaid on a scrim), content scrolling on the RIGHT; the photo hands off to the next option as you scroll. Right panel shows a **3-photo click-through carousel** (gallery capped at 3 — "don't overwhelm"). Mobile (<980px) stacks. Print unsticks.
+- **Click-to-edit preview:** in `?draft=1` mode the template marks fields `contenteditable` + `data-edit="path"`; blur → postMessage `wndr-edit {path,value}` → studio `applyEdit()` syncs state/form + autosaves WITHOUT re-pushing the iframe (no caret loss). Editable: title, prepared-for, lede, dates, valid-until, close title/lede, per-hotel room/rate/rateNote/flight/desc/roomDesc/deposit/cancellation.
+- **AI writing assistant:** sticky bar at the bottom of the Studio form → `api/studio-ai.js` (claude-opus-5, raw fetch). WbW voice, TRIP-LEVEL COPY ONLY — system prompt refuses hotel-description writing (compliance). Insert buttons: title/intro/closing. Needs the same `ANTHROPIC_API_KEY` as parse-quote.
+- ⚠️ **2026-07-29: Wilson's Mac hit 100% disk (< 500MB free)** during this session — flagged to her; avoid image-heavy work until cleared.
+
+## 13. Book With Perks (2026-08-19) — the DIY hotel booking portal
+
+**What it is:** Wilson's TravelWits self-book portal at `https://wanderbywilson.travelwits.com/`, password `WANDER`. Clients browse and book preferred-partner hotel rates themselves, confirm instantly, and manage/cancel their own booking; Wilson is notified on every booking so she can VIP the client before arrival. Complimentary — no planning fee. Goal: drive hotel-only booking volume.
+
+**New page:** `book.html` → served at `/book` (rewrite in vercel.json). Sections: text hero ("Same rate. / Better arrival.") → access card (the code + the handoff button) → perks list → 3-step how-it-works → "Can't find your hotel?" close that falls back to `/inquire-hotel`.
+
+**Password is published openly on the page** — Wilson's decision. The two advisors she cited as references both do the same (JetsetChristina publishes `JETSETTERS`, Go With Gray publishes `VIPTRAVELER`). The alternative pattern in the field is an email-gated form that delivers the code instantly (La Jolla Mom) — that captures leads but adds friction. If Wilson ever wants to switch, the swap is confined to `.book-access-card` plus a new API endpoint.
+
+**Where it's linked from:**
+- Top nav, **first slot**, label "Book With Perks" → `/book`. Added to all 119 nav-bearing pages (+ footer nav on the same 119, + the 404 quicklinks row).
+- Homepage: `.portal-band` inserted between `.benefits` and `.atlas` — right after the perks pitch, where "so how do I get those?" lands.
+- `hotels.html`: same `.portal-band` between the grid and the closing CTA.
+- All 52 property pages (`hotels/*.html` + `property.html`): a `.property-portal-line` under the perks note — "Prefer to book it yourself? Use our booking portal →". Deliberately a SIBLING of `.property-perks-note`, because that note is JS-hidden for inquiry-only properties and this link should survive that.
+
+**Routing (vercel.json):** rewrite `/book` → `/book.html`; 301 `/book.html` → `/book`; 302 alias group `/(book-hotels|book-a-hotel|booking-portal|portal|perks)` → `/book` for Instagram-bio links. In sitemap.xml at priority 0.9. Crawlable on purpose (it's a lead-gen page) — which does mean Google will index the word WANDER.
+
+**Gotchas hit:**
+- **`.cta-primary` already renders its own `→` via `::after`.** Adding an inline `<svg>` arrow gives you a double arrow. Use `<a class="cta-primary"><span class="cta-primary-label">…</span></a>` and nothing else.
+- **The nav is now 7 items and overflows into two-line labels** without help. Fixed with `white-space: nowrap` on `.nav-primary a` + `.brand-wordmark`, plus a `@media (max-width:1320px){ gap: 34px }` step. Verified 1200/1280/1440 — 32px clearance at the tightest point, no wrap, no horizontal overflow.
+- Preview pane can't navigate to subdirectory paths (`/hotels/x.html`) or to files it hasn't seen; only root-level known files load. Verify property-page CSS by injecting the markup into a page that does load, or check markup with `curl`.
+
+**TODO for Wilson (not a website change):** her TravelWits gate screen is still on stock defaults — it reads only "PASSWORD PROTECTED" with an empty field, no explanation of what's behind it. That's customisable in TravelWits settings (Go With Gray has custom heading/body/background there). Worth filling in so the handoff isn't a dead end. Do NOT copy Go With Gray's "TRAVEL ADVISOR LOGIN" caption — it reads as trade-only and will bounce travelers.
+
+**Copy status:** all copy on `/book` and in both bands is **placeholder pending Wilson's wordsmithing**, per §10.
+
+### §13 addendum (2026-08-19) — imagery on /book
+
+Wilson's note: *"NEED AMAZING HOTEL IMAGERY HERE — PHOTOS OF INCREDIBLE HOTELS / HOTEL ROOMS (PRIVATE POOLS - EXPANSIVE VIEWS ETC) FOR THE WANDERLUST."* The page shipped text-only on cream, which was wrong for a wanderlust pitch. Two additions, both sourced **entirely from the existing `property-images/` library** — nothing new downloaded, nothing scraped.
+
+- **Hero is now full-bleed photography** — `passalacqua/00-hero-pool.jpg` (Lake Como, 2000×1334). Reuses the `.property-hero` bg/grain/gradient stack under `.book-hero-*` names, so type legibility is the already-proven treatment. Type is bottom-anchored and left-aligned to match the hotel pages this page feeds. Carries a "Pictured: …" credit linking to the property.
+- **New `.book-gallery` band** between the perks list and the how-it-works steps: 4 tall tiles (3:4, `object-fit: cover`), full-bleed past the container, captions on a bottom scrim, each tile linking to its hotel page — so it feeds internal traffic instead of being decoration. Wymara (private pool) · Caruso (Amalfi view) · Borgo Santandrea (the room shot) · Villa San Michele (infinity pool + Florence). Deliberate mix: 2 pools, 1 view, 1 interior. Collapses 4→2 columns at 860px.
+
+**Hero filter was tuned twice.** First pass copied the property-hero values (`saturate .82 / brightness .76`) and read too muted — the lake went grey. Now `saturate .94 / contrast 1.04 / brightness .86` with a softer gradient (top stop .52→.42, mid .12→.06). **If you reuse the property-hero stack on a marketing page, expect to lift brightness — those values are tuned for text over a busy hotel hero, not for wanderlust.**
+
+**Verification gotcha:** the documented blank-screenshot glitch (§4) hits the gallery band hard — it sits on `#FCFCFB` and captured pure white at every scroll position, through repaint forcing and `zoom`. Verified by DOM instead (all 4 images `naturalWidth > 0`, tiles 293×391 = exact 3:4, captions pinned, no overflow at 375/860/1280), plus a Pillow composite of the real crops to eye the imagery. Photo-backed sections (the hero) screenshot fine; light sections do not.
+
+All four photos were **viewed before use** per §8 — no people, no red/orange clashes, all inside the coastal palette.
+
+### §13 addendum 2 (2026-08-19) — width bug + gallery reshuffle
+
+**🔴 The `/book` sections were locked to a fixed width and never scaled.** Wilson flagged the margins on a 1920px screen. Two separate causes:
+
+1. **`max-width` was set on divs that also carry `.container`.** `.container` adds `--container-pad` (72px) *each side*, so a `max-width: 780px` section rendered only **636px of actual content** — and being a fixed px value, it was 636px at 1280px and at 2560px alike. **Rule: when you put a max-width on a `.container` element, the content width is `max-width − 2×--container-pad`. Budget for the 144px.** All four now use `clamp()`: perks/gallery `clamp(720px, 70vw, 1050px)`, steps `clamp(880px, 82vw, 1300px)`, access card `clamp(560px, 46vw, 840px)`. Perks list measured 636→906px at 1920, and now moves with the window (658 @1100 · 864 @1440 · 906 @1920).
+2. **`.book-hero-inner` was shrink-wrapping to 764px** despite `max-width: 1480px`. Same flex bug already recorded for the blog hero in §3 v125: `.container` brings `margin: 0 auto`, and an `auto`-margined item in a **column** flex container shrink-wraps instead of filling. Fix is `width: 100%`. **This bit us twice now — check it on any `.container` placed inside a flex-column section.**
+
+**Gallery reshuffled** (Wilson: too Italian, feature Kokomo + Cali Mykonos). Now Wymara (Turks & Caicos) · Kokomo (Fiji) · Cali Mykonos (Greece) · Borgo Santandrea (Italy) — Caruso and Villa San Michele dropped. Wymara now uses its own page hero (`01-villa-slide-into-sea.jpg`, matching `heroImage` in data.js) per Wilson's request.
+
+**New `data-focal` hook:** `.book-gallery-tile[data-focal="left"|"right"] img` shifts `object-position` to 30%/70%. Added because Cali Mykonos' pool suite puts its subject off-centre and the default centred 3:4 cover-crop cut the plunge pool out. Compare crops with a Pillow contact sheet before choosing a photo — quicker than reloading.
+
+**The `/hotels/<slug>` 404 Wilson hit is localhost-only, not a bug.** `python3 -m http.server` doesn't serve extensionless URLs; Vercel's `"/hotels/:slug([a-z0-9-]+)" -> "/hotels/:slug.html"` rewrite does. The whole site already uses this pattern (hotels.html builds `a.href = '/hotels/' + slug`), so if it were broken every hotel link everywhere would be. Audited all 24 hrefs on /book against real files: **0 broken.** To test clean URLs locally you need a server that falls back to `.html`.
+
+### §13 addendum 3 (2026-08-19) — steps moved up, access band goes navy
+
+Wilson: *"WE SHOULD MOVE THE STEPS TO BOOK UP TO THE TOP WHERE THE PASSWORD IS - MAKE THE PASSWORD SECTION BLUE OR DIFFERENT COLOR TO STAND OUT."*
+
+**New page order:** hero → **access band (navy)** → perks → gallery → close. The standalone "How it works" section is gone; its three steps now live inside the access band, below the card. One block answers "how does this work / where's the code / go".
+
+**The access band is now the only saturated block on the page** — `background: var(--ink)` (Deep Yacht Blue `#1E3552`) with a 3px `--gold` top border. The code card stays `--ivory` and gained `box-shadow: 0 24px 60px rgba(6,14,26,0.34)` so it reads as a ticket floating on the navy. Steps below it: gold `--gold-soft` numerals, ivory titles, `rgba(255,251,240,0.8)` body. Kicker inverted to ivory (the default kicker is ink and vanishes on navy — invert `.kicker` AND `.kicker-line` on any dark band).
+
+**Gotcha — orphaned section padding.** `.book-steps` was a top-level section with `padding: clamp(56px,6vw,88px) 0`. After it moved inside the band, that bottom padding was still firing and left **87px of dead navy** under the last step (band was 1252px tall instead of 1165px). Now `.book-steps { padding: 0 }` — the band owns the vertical rhythm. **When you relocate a section into another section, hunt its old `padding`/`margin` rule; it does not stop applying just because the element moved.** Also removed `.book-steps-inner`, which no longer exists in the markup.
+
+Verified after restructure: gap card→steps 65px, gap last-step→band-end 87px (= the band's own 86.4px padding, nothing extra), 3-col grid at desktop / 1-col under 900px, copy button still binds and flips to "Copied", CTA target/rel intact, exactly one `<h1>`, no overflow at 375/1100/1440.
+
+**Screenshot glitch note:** desktop captures on this page are now failing *entirely* (full-white frames at every scroll position, including over the navy band) while **375px mobile captures work fine every time**. When verifying this page, resize to mobile for visual proof and use DOM reads for desktop geometry.
+
+### §13 addendum 4 (2026-08-19) — champagne band, quick-hit steps, Amangiri
+
+Wilson rejected the navy access band ("more aesthetic to match the rest of the site"), asked for JetsetChristina-style **quick-hit steps**, replaced the Borgo room photo, and added an after-you-book note.
+
+**Navy → champagne.** The band now uses the site's OWN "this one matters" vocabulary — the `.package--signature` treatment from /services: `linear-gradient(180deg, rgba(195,162,106,0.14), rgba(195,162,106,0.04))` + 3px `--gold` top border + a `::before` hairline inset. The card inside went `--ivory` → **`#FFFFFF`** with a soft navy-tinted shadow. **Lesson: the site has an established way to make one block stand out; reach for that before inventing a saturated colour block.** (Same instinct as §3 v127 — Wilson chose white cards over cream on the homepage testimonials.) Steps reverted to `--ink` text; the ivory kicker/`--gold-soft` overrides for dark backgrounds were removed.
+
+**Steps → quick hits, 3 → 4.** Reference: `jetsetchristina.com/hotels` — numbered steps, a 2–4 word bold title, then ONE short line. Ours were 30–40 word paragraphs; now 8–10 words each: Open the portal · Search your stay · Book it · We take it from there. Grid went `repeat(3,1fr)` → `repeat(4,1fr)` (2-col ≤900px, 1-col ≤560px), type tightened to 19–23px titles / 15–16px bodies. **Tune copy so every cell wraps to the same line count** — step 3 was 3 lines against the others' 2 until shortened; check `height / lineHeight` per body, don't eyeball it.
+
+**New `.book-steps-note`** under the steps: confirmation arrives instantly, we follow up within 24 hours with the official hotel confirmation and to confirm perks/VIP status. Written fresh in WbW voice, NOT copied from JetsetChristina's wording, and it says "by email" rather than naming Virtuoso (our portal is TravelWits). The card note was trimmed so the two don't repeat each other. **⚠️ The "within 24 hours" line is a public service commitment — Wilson should confirm she wants to be held to it.**
+
+**Gallery tile 4: Borgo Santandrea room → Amangiri** (`00-hero.jpg`, Canyon Point Utah, `data-focal="mid-left"` = `object-position: 42%`). Wilson: the Borgo room "isn't aspirational enough". Amangiri also breaks a run of three turquoise tiles — set is now Turks & Caicos · Fiji · Greece · Utah, with sand/ochre against the blues. New `mid-left` focal preset added alongside `left`/`right`.
+
+**Screenshot glitch is now width-gated:** blank at 1000px AND 1440px, reliable at 375px mobile. Verify this page's desktop geometry by DOM and its look at mobile.
+
+### §13 addendum 5 (2026-08-19) — conversion pass on /book + entry points
+
+Reference Wilson gave: `jetsetchristina.com/hotels`. Her page carries **four** portal CTAs (hero, after the intro, after the steps, in the perks list) and holds every outbound link back until a "Not Sure Where to Go?" block at the very bottom. We now mirror that.
+
+**Page order:** hero → access (champagne: card + 4 quick-hit steps + follow-up note) → perks → **partner marquee** → gallery → "Still deciding?" paths.
+
+**4 portal CTAs**, all `target="_blank" rel="noopener noreferrer"`: hero · access card · under the perks list · under the gallery. **Every one carries an "Access code WANDER" callout** via the shared `.portal-code-note` (+ `--onphoto` modifier for light-on-photo). Wilson's rule: never show a portal button without the code beside it.
+
+**Removed the mid-page leak.** The gallery foot used to link to `/hotels` ("See the whole collection") — that sent the highest-intent reader away mid-conversion. It's now a portal CTA. The collection link survives in the bottom paths block, which is the right place for it.
+
+**New `.book-paths`** ("Still deciding where to go?") — 3 white cards on ivory: See the collection → `/hotels` · Read the journal → `/inspiration` · Let us handle it → `/inquire-hotel`. Replaces the old single-CTA `journey-close`. **This is deliberately the only place on the page that sends people anywhere but the portal** (aside from the gallery tiles and the hero photo credit).
+
+**Partner marquee added** (`.book-partners`), lifted verbatim from index.html so the two never drift — same 19 logos, same `.marquee`/`.marquee-track` CSS, same clone-children JS (the loop needs the duplicate or the 0→-50% translate jumps). Sits after the perks list so it reads as proof of the perks just claimed, matching the homepage's placement after its "why book with us" pitch.
+
+**Entry points repointed:**
+- Homepage "Book a Hotel With Perks" → was `/services#package-01`, now **`/book`**.
+- `/hotels` hero is now a decision: **"Book with perks, instantly" → `/book`** (filled ivory) + "Have us book it" → `/inquire-hotel` (ivory outline), with the code callout under.
+- **Gotcha:** the `/hotels` hero sits on a photo (`.is-hotels-index-page .journeys-index-hero::before` = borgo aerial). The default `.cta-primary`/`.cta-secondary` are ink-on-light and were *invisible* there. Any CTA added to that hero needs light overrides — check against the photo, not the DOM.
+
+Audited after: 0 broken links on book/hotels/index, 4 portal CTAs each with a code callout, marquee 19→38 items with all 34 logos loading, no horizontal overflow at 375/1000/1440.
+
+### §13 addendum 6 (2026-08-19) — SEO audit + filled portal buttons
+
+Audited /book properly rather than assuming. **Six real defects found and fixed:**
+
+1. **`og:image` was still `borgo-santandrea/02-aerial-coastal.jpg`** — a leftover from copying hotels.html's `<head>`. Every share of /book showed the wrong hotel. Now the Passalacqua hero + `og:image:alt`. **⚠️ When you build a page by copying another page's head, re-check EVERY og/twitter value, not just title and description.**
+2. **Meta description was 228 chars** (Google truncates ~160) → 145.
+3. **Title was 72 chars** (truncates ~60) → 58: "Book Luxury Hotels Yourself, With Perks | Wander by Wilson".
+4. **Flat heading hierarchy** — the four step titles were `<h2>`, level-equal with the section headings. The card label `<p class="book-access-label">` became the section's `<h2>` and the steps dropped to `<h3>`. Outline is now H1 → H2 → H3×4 → H2 → H2 → H2. No visual change.
+5. **No width/height on any of 22 images** → layout shift (CLS). All 39 rendered imgs now carry intrinsic dimensions (pulled from the files with Pillow).
+6. **Marquee logos were eager-loaded** below the fold — now `loading="lazy"` (38 of 39 imgs lazy; the hero keeps `fetchpriority="high"`).
+
+**Added JSON-LD** (`@graph`: WebPage + **HowTo** + Service). The 4 steps map cleanly to HowTo, which is a real rich-result opportunity for "how to book hotels with perks" queries; step anchors `#step-1..4` were added to the `<li>`s so the schema URLs resolve. Service carries `price: 0` to reinforce "no planning fee".
+
+**`.cta-portal`** — new filled treatment for every button leading to the portal (gold fill, ink italic label, gold shadow; hover flips to ink/ivory). The outlined `.cta-primary` was too quiet for the conversion action. Applied to 4 CTAs on /book, 1 on /hotels, 2 on the homepage. **Gotcha:** the page-scoped `.book-hero .cta-primary` and `.is-hotels-index-page … .cta-primary` overrides sit later in the file and were un-filling it — needed explicit `.cta-primary.cta-portal` rules to win on specificity.
+
+**Copy (Wilson):** H1 "Better arrival." → **"Better outcome."** to match the homepage script tagline. Hero lede "Complimentary, always." → **"You pay nothing extra."**, reusing the phrasing already on /services so the two pages agree.
+
+**Still open / judgement calls:** ~535 visible words is thin for competitive SEO — the page is built to convert, not to rank for broad terms; if ranking matters, the honest lever is an FAQ block (which would also earn FAQPage schema). The published WANDER code will be indexed — inherent to the open-password decision.
+
+### §13 addendum 7 (2026-08-19) — 🔴 REGRESSION from the SEO pass: width/height broke the gallery
+
+Adding `width`/`height` attributes to every `<img>` for CLS (addendum 6) **silently broke the /book gallery**. The four tiles rendered at their raw pixel heights — 788 / 1066 / 1000 / 1200px — instead of a uniform 3:4 row. Wilson caught it visually; my DOM checks had only verified the grid columns and image loading, not the rendered tile heights, so it passed my own audit.
+
+**Cause:** the HTML `height` attribute is a *presentational hint* that sets the used height. `.book-gallery-figure img` had `width: 100%` + `aspect-ratio: 3 / 4` but **no explicit height**, so the attribute won and `aspect-ratio` was ignored. Computed height came back as literally `788px`, `1066px`, etc.
+
+**Fix:** `height: auto` on `.book-gallery-figure img`. That's the standard companion to adding width/height attributes to responsive images.
+
+**RULE — whenever you add `width`/`height` attributes to an `<img>`, the CSS must set an explicit height (`auto`, `100%`, or a value).** Any rule relying on `aspect-ratio` alone, or on the intrinsic ratio, will break. Audit every image rule on the page, not just the one you were thinking about. Here `.book-hero-bg img` (`height: 100%`) and `.marquee-item img` (`height: auto`) were already safe — the gallery was the only casualty, but that was luck, not design.
+
+**Verification lesson:** "all 4 images loaded, grid has 4 equal columns, no overflow" was true AND the layout was still visibly broken. When a change touches image sizing, assert on **rendered width×height and the resulting ratio per element**, not just presence and column count. Confirmed after fix: 4 × 367×490 at 1600px, 4 × 168×223 at 375px, ratio 0.750 on every tile.
+
+### §13 addendum 8 (2026-08-19) — FAQ, steps-first reorder, large-screen type
+
+**🔴 FAQ RICH RESULTS NO LONGER EXIST.** Not the Aug-2023 restriction — **fully removed**. FAQ rich results stopped appearing 2026-05-07; the search appearance, Rich Results Test support and Search Console report were dropped in June 2026; Google deleted the FAQPage documentation page on 2026-06-15. **Nobody can earn them.** Same story for the `HowTo` schema already on /book (deprecated 2023, renders nothing). Both are inert but harmless — Google says unused structured data causes no problems. **Never report FAQ/HowTo schema as an SEO win again.** We keep `FAQPage` only because Bingbot, PerplexityBot and RAG crawlers still parse Q&A, and the value is entirely in the *visible* copy — never schema-only.
+
+**FAQ block added** (`.book-faq`, 8 questions) between `.book-gallery` and `.book-paths`, using the site's existing `<details class="faq-item">` component from services/cruises. Order is objection-strength, not topic: free? → rate parity → who are you → who charges/can I cancel → points & elite → perks guaranteed → after you book → why a code. **Includes a 5th portal CTA at its foot** — without it the FAQ resolves every doubt and then hands the reader straight to the exit block below.
+
+Questions chosen from real evidence, not invention: La Jolla Mom's live advisor FAQ (lajollamom.com/help) and the H2s of the OMAAT Virtuoso guide that ranks #1 for the cluster. **JetsetChristina, Go With Gray and La Jolla Mom's portal pages answer no objections at all** — "who bills me", "can I cancel myself", "are perks guaranteed", "is this a real consortium booking" are unclaimed. The 24-hour human follow-up is a genuine differentiator none of them state.
+
+**Vocabulary gap the FAQ fixes:** the page previously never said *travel advisor*, *travel agent*, *commission*, *points*, *loyalty*, *elite* or *complimentary*, and said *Virtuoso* exactly once — it was written entirely in brand vocabulary and none of the searcher's. Realistic keyword targets are the thin-SERP cluster (self-book with advisor perks · travelwits access code · luxury hotel booking portal access code · cancelling an advisor booking), **not** "virtuoso hotel benefits" — OMAAT/UpgradedPoints own that and a small domain won't take it.
+
+**Steps now lead the access band** (Wilson's call, asked twice — I'd recommended card-first). The "How it works" kicker became an `<h2>` so the four `<h3>` steps sit under a heading instead of preceding one; the top rule moved from the steps onto the card, which is now the divider between "how" and "here's the code".
+
+**Large-screen type scale-up.** Every clamp on the page hit its ceiling around 1400px and then froze — at 2400px the hero title was stuck at 88px and body copy at 16–18px in columns capped at 1050px while the site's container is 1480px. Raised ~20 ceilings (hero title 88→104, section titles 46→56, ledes 19→22, body 16→18/21) and widened the column caps to 1240/1480.
+
+**🔴 GOTCHA I WALKED STRAIGHT INTO — the one §8 already warns about.** I did bare `s.replace('font-size: clamp(...)', ...)` on shared clamp values. Three landed on the wrong rules and silently restyled other pages: `.article-body h3` (undoing the v137 blog heading harmonisation), `.journey-tailor-body`, `.cruise-style-want`. Caught only because a DOM check showed `.book-perks-list li` had not changed. All three reverted and reapplied class-anchored. **ALWAYS anchor to the selector — `re.compile(re.escape(sel) + r'\s*\{[^}]*?font-size:\s*' + re.escape(old))` — and afterwards verify which rule each value actually landed in, don't assume the edit hit the intended one.**
+
+### §13 addendum 9 (2026-08-19) — Wilson's corrections
+
+- **CTA locked below the code box.** `.book-access-code` was `display: inline-flex`, so on wide cards the gold CTA rode up beside it instead of sitting under it. Now `display: flex; width: max-content; margin: 0 auto` — block-level, so nothing can share its line. Verified stacked at 1680 and 2400px.
+- **Type raised again.** /book's ledes already matched the homepage's *section* ledes (22px), but the homepage's own smaller text (services lede 18, founder 17, testimonial 15) is not the bar to hit. Everything went up another step: hero lede →27, access lede →26, section ledes →25, perks →23, FAQ Q →23 / A →20, step body →20, notes →19. Mins raised too so mid-size screens benefit, not just 2400px.
+- **FAQ corrected on Wilson's instruction:** *booking through the portal is a reservation made directly with the hotel, with the client as our client — that is what lets us pass the preferred-partner perks through.* The "Who am I actually booking with?" answer now says exactly that. **This is the accurate description of the model — don't describe the portal as an intermediary or reseller.**
+- **Removed** "Are the perks guaranteed?" and "Why is there an access code?". Down to 7 questions.
+- **"Who charges my card, and can I cancel?" → "Who charges my card?"** — cancellation stays in the answer as reassurance but is no longer a headline. Wilson explicitly does NOT want the page optimised for "how to cancel an advisor booking"; that was my SEO agent's suggestion and it's the wrong intent for this business.
+
+**🔴 SEO POSITIONING — Wilson's direction, overrides the agent's keyword list.** The target is not people researching travel advisors. It is **people who would otherwise use a credit-card hotel program** — searching *best credit cards for travel perks*, *best credit cards with hotel perks*. **The competitor is Amex Fine Hotels + Resorts.** Acted on so far: a new FAQ "How is this different from Amex Fine Hotels + Resorts?" (honest — similar perks; FHR needs an eligible card and covers only its own list; ours needs no card and reaches more; they don't stack), and the meta description now leads with the comparison.
+
+**Reality check to give Wilson before she expects rankings:** head terms like "best credit cards for hotel perks" are owned by points/card affiliate sites (The Points Guy, NerdWallet, Upgraded Points, OMAAT) with enormous authority and affiliate revenue behind them — a 1,000-word conversion page on this domain will not rank there. What IS winnable is the comparison long tail — *amex fhr vs virtuoso*, *hotel perks without amex platinum*, *virtuoso vs fine hotels and resorts* — where advisor sites already rank today. That deserves a dedicated blog post on /inspiration targeting the comparison, internally linked to /book. **Recommend this rather than trying to make /book rank for card queries it structurally can't win.**
+
+### §13 addendum 10 (2026-08-19) — pre-publish QA: NOT ready, then fixed
+
+Two review agents (technical QA + fact-check/compliance). Verdict was **SHIP WITH FIXES**, not ship. Everything below is now applied unless marked ESCALATED.
+
+**Content accuracy — these were liability issues under Wilson's own no-embellishment rule:**
+- **"The perks travel with every booking"** was the single biggest overclaim. TravelWits portals return **standard public rates alongside preferred-partner rates**, so some portal bookings carry no perks at all. Heading → "The perks travel with you", and the fineprint now says outright that a handful of properties book at the standard public rate. **Never state or imply that every portal booking earns perks.**
+- **"comes out of the hotel's budget, not the rate you pay"** — mechanism was wrong. Commission is a percentage of room revenue the hotel nets out, not a separate marketing budget. Reworded to "the hotel pays us a commission on the booking… and your rate is the same either way" — same payoff, defensible mechanism.
+- **Amex FHR comparison** — "the perks are similar" understated FHR (its credit and 4pm checkout are *guaranteed and uniform*; ours are property-specific and our own copy hedges them). "Reaches hotels FHR doesn't" was one-directional and unprovable — Amex publishes only a combined FHR + Hotel Collection figure (3,400+/116 countries), never FHR alone, and Virtuoso's count is login-gated. Now symmetric: "Each list has hotels the other doesn't." **Do NOT add the widely-repeated "FHR breakfast is only continental" claim — it is absent from Amex's own language and is easy to knock down.**
+- **Rate parity** — caveat list was incomplete. Loyalty-member and AAA rates are *flexible* rates that can undercut BAR; that's the complaint clients actually hit. Both caveats now stated, plus the honest upside that ours is sometimes lower.
+- **Points** — "apply as normal" is true at the chains but meaningless at Four Seasons, Aman, Belmond, Oetker and Dorchester, which run **no loyalty program at all**. Now hedged and named.
+- **Third-party outcomes we can't control:** "the front desk knows who you are" → "we make sure the hotel knows who you are"; "make sure your amenities… are in place" → "confirm… on the reservation"; "We VIP you" → "We look after you". **Promise our own action, never the hotel's behavior.**
+- **Unqualified absolutes removed:** "cancel at any time" / "whenever you like" → "under the hotel's own policy". Every flexible rate has a deadline.
+- **"within 24 hours" → "within one business day"** everywhere. The old wording was an unconditional SLA covering weekends and holidays, and it also conflicted with the 48-hour promise on inquire-hotel.html and services.html.
+
+**Technical fixes:** marquee kicker was rendering hard-left (`margin: 0 auto` does nothing on an `inline-flex` box — needed `text-align: center` on the parent); copy button's "Copied" state was white-on-gold at **2.41:1** → ink-on-gold **5.16:1**; five muted greys were below AA (3.69–4.40:1) → raised to 0.78 alpha; the copy button's static `aria-label` was suppressing its own state change → removed, with `aria-live="polite"` on the label; the clipboard fallback claimed "Copied" when it had only selected the text → now says "Press ⌘C"; `aria-controls="primaryNav"` pointed at a non-existent id **on all 119 pages** → `id` added; `hotels.html`'s portal-band CTA was missing `cta-portal` so the highest-intent button on the site was the quiet outline one.
+
+**🔴 GOTCHA — the JSON-LD block sits ABOVE the visible FAQ in the file.** A bare `s.replace(old, new, 1)` on an FAQ answer hits the **schema copy**, not the DOM. Five of six FAQ edits landed correctly; one silently patched only the schema, and rebuilding the schema from the DOM then *reverted* it. **Always anchor FAQ answer edits to their markup (`<p class="faq-a">…</p>`), and always re-verify the visible body separately from the schema.**
+
+**ESCALATED — Wilson must decide, cannot be resolved from code:**
+1. **Publishing the access code.** Removed from the JSON-LD (it was being fed to crawlers) and the "share it with the people you travel with" line is gone. But whether the code may be public at all is a **SmartFlyer / TravelWits contract question** — preferred-partner rates are contractually not publicly bookable. Ask before launch.
+2. **The partner marquee.** ~15 programs named by trademark (Four Seasons Preferred Partner, Marriott STARS | Luminous, Hyatt Privé, Bellini Club…) under "Our partner programs" — those agreements are held by **SmartFlyer, not Wander by Wilson**, and several restrict consumer-facing use of the marks. Confirm before launch.
+3. **Seller-of-travel disclosure.** The page takes bookings but never names SmartFlyer as agency of record. CA/FL/WA/HI/IA have registration and disclosure rules. Confirm /terms covers it and is reachable.
+4. **Amex marks** — "American Express" and "Fine Hotels + Resorts" now appear in the copy, meta description and social previews. A one-line non-affiliation note in the footer is cheap insurance.
+
+**Verification note:** the in-app preview browser gave a false reading on `.book-access-copy.is-copied` (reported the rule as not applying when the served CSS is correct and balanced). Contrast was confirmed by computing from the hex values instead. This browser has been unreliable all session — blank screenshots above 375px, timeouts, failed navigations. **Verify colour and layout arithmetically or against the served file, not only through the pane.**

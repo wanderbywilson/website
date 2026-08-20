@@ -8651,3 +8651,796 @@ html, body { overflow-x: clip; max-width: 100%; }
     .compare-col { border-right: none; }
     .compare-col:not(:last-child) { border-bottom: 1px solid rgba(199, 174, 138, 0.32); }
 }
+
+/* ==========================================================================
+   BOOK WITH PERKS — /book (book.html)
+   The DIY hotel booking portal handoff page. Password-gated TravelWits
+   portal at wanderbywilson.travelwits.com; the access code is published
+   openly here (client's decision — matches JetsetChristina / Go With Gray).
+
+   Sections: photo hero, champagne access band (steps + code card), perks,
+   partner marquee, gallery, FAQ, and the not-ready-yet paths block.
+   ========================================================================== */
+
+.is-book-page { background: #FCFCFB; }
+
+/* ── Hero — full-bleed photograph ──────────────────────────────────────
+   Same bg/grain/gradient stack as .property-hero so type stays legible
+   over any photo. Type is left-aligned and bottom-anchored like the
+   hotel pages this page feeds into. */
+.book-hero {
+    position: relative;
+    min-height: 74vh;
+    min-height: 74svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--ivory);
+    overflow: hidden;
+    isolation: isolate;
+}
+.book-hero-bg { position: absolute; inset: 0; z-index: 0; background: var(--ink); }
+.book-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 58%;
+    transform: scale(1.04);
+    filter: saturate(0.94) contrast(1.04) brightness(0.86);
+}
+.book-hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.22;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+.book-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg,
+            rgba(14, 12, 10, 0.42) 0%,
+            rgba(14, 12, 10, 0.06) 30%,
+            rgba(14, 12, 10, 0.40) 68%,
+            rgba(14, 12, 10, 0.88) 100%);
+}
+.book-hero-inner {
+    position: relative;
+    z-index: 1;
+    /* .container brings margin:0 auto; as a column-flex item that makes it
+       shrink-wrap to its widest child instead of filling. Force it full. */
+    width: 100%;
+    padding-top: 200px;
+    padding-bottom: clamp(52px, 5vw, 84px);
+}
+/* Kicker sits on a dark photo here — invert it off the default ink. */
+.book-hero .kicker { color: rgba(255, 251, 240, 0.82); }
+.book-hero .kicker-line { background: var(--gold-soft); }
+
+.book-hero-title {
+    margin: 16px 0 22px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(44px, 6vw, 104px);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    color: var(--ivory);
+}
+.book-hero-title em { font-style: italic; color: var(--gold-soft); }
+
+.book-hero-lede {
+    margin: 0;
+    max-width: clamp(520px, 46vw, 780px);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 27px);
+    line-height: 1.65;
+    color: rgba(255, 251, 240, 0.92);
+}
+.book-hero-credit {
+    margin: 26px 0 0;
+    font-family: var(--font-sans);
+    font-size: clamp(12px, 0.9vw, 14px);
+    letter-spacing: 0.04em;
+    color: rgba(255, 251, 240, 0.6);
+}
+.book-hero-credit a {
+    color: rgba(255, 251, 240, 0.82);
+    border-bottom: 1px solid rgba(255, 251, 240, 0.32);
+    padding-bottom: 1px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+.book-hero-credit a:hover { color: var(--gold-soft); border-bottom-color: var(--gold-soft); }
+
+
+
+/* ── The access card — the whole point of the page ─────────────────────── */
+/* Champagne "signature" treatment — the same vocabulary the services page
+   uses to mark its conversion hero (.package--signature): a soft gold wash,
+   a 3px gold top border and a hairline inset. Distinguishes the block
+   without breaking the site's white/ivory rhythm. */
+.book-access {
+    position: relative;
+    padding: clamp(52px, 5.5vw, 84px) 0 clamp(56px, 6vw, 88px);
+    background: linear-gradient(180deg, rgba(195, 162, 106, 0.14), rgba(195, 162, 106, 0.04));
+    border-top: 3px solid var(--gold);
+}
+.book-access::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(199, 174, 138, 0.32);
+    border-top: none;
+}
+.book-access-inner { position: relative; z-index: 1; }
+.book-access-inner { max-width: clamp(880px, 82vw, 1480px); }
+.book-access-card {
+    max-width: clamp(560px, 46vw, 960px);
+    margin: 0 auto;
+    padding: clamp(36px, 4vw, 56px) clamp(28px, 4vw, 64px) clamp(32px, 3.6vw, 48px);
+    background: #FFFFFF;
+    border: 1px solid rgba(195, 162, 106, 0.32);
+    box-shadow: 0 18px 44px rgba(30, 53, 82, 0.09);
+    text-align: center;
+}
+.book-access-label {
+    margin: 0 0 14px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.78);
+}
+.book-access-lede {
+    margin: 0 auto 30px;
+    max-width: clamp(480px, 42vw, 660px);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(18px, 1.8vw, 26px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.86);
+    text-wrap: balance;
+}
+
+/* The code itself — the single most important element on the page. */
+.book-access-code {
+    /* flex (not inline-flex) so it always occupies its own line — the CTA
+       below must never ride up beside it on wide cards. */
+    display: flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin: 0 auto 32px;
+    padding: 16px 18px 16px 24px;
+    background: #FFFFFF;
+    border: 1px dashed rgba(30, 53, 82, 0.3);
+}
+.book-access-code-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.72);
+}
+.book-access-code-value {
+    font-family: var(--font-sans);
+    font-size: clamp(22px, 2.4vw, 36px);
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    /* letter-spacing adds trailing space after the last glyph — pull it back
+       so the code reads optically centred against the Copy button. */
+    margin-right: -0.3em;
+    color: var(--ink);
+    user-select: all;
+}
+.book-access-copy {
+    padding: 9px 16px;
+    background: transparent;
+    border: 1px solid rgba(30, 53, 82, 0.28);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.72);
+    transition: background 0.35s var(--ease-soft),
+                border-color 0.35s var(--ease-soft),
+                color 0.35s var(--ease-soft);
+}
+.book-access-copy:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+}
+.book-access-copy.is-copied {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+.book-access-cta { display: inline-flex; }
+.book-access-card > .book-access-cta { margin-top: 0; }
+
+.book-access-note {
+    margin: 26px auto 0;
+    max-width: clamp(420px, 36vw, 560px);
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.25vw, 19px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+    text-wrap: balance;
+}
+
+/* ── Shared section furniture for the lower bands ──────────────────────── */
+.book-section-title {
+    margin: 18px 0 20px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(30px, 3.4vw, 56px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+}
+.book-section-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+.book-section-lede {
+    margin: 0 0 34px;
+    max-width: clamp(520px, 46vw, 780px);
+    font-family: var(--font-sans);
+    font-size: clamp(18px, 1.6vw, 25px);
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.8);
+}
+
+/* ── Perks band ────────────────────────────────────────────────────────── */
+.book-perks {
+    padding: clamp(56px, 6vw, 88px) 0;
+    background: var(--ivory);
+}
+.book-perks-inner { max-width: clamp(720px, 70vw, 1240px); }
+
+.book-perks-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0;
+}
+.book-perks-list li {
+    position: relative;
+    padding: 16px 0 16px 34px;
+    font-family: var(--font-sans);
+    font-size: clamp(17px, 1.5vw, 23px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.88);
+    border-bottom: 1px solid rgba(195, 162, 106, 0.28);
+}
+.book-perks-list li:first-child { border-top: 1px solid rgba(195, 162, 106, 0.28); }
+.book-perks-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1.5em;
+    width: 14px;
+    height: 1px;
+    background: var(--gold);
+}
+.book-perks-fineprint {
+    margin: 24px 0 0;
+    max-width: clamp(520px, 44vw, 680px);
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.25vw, 19px);
+    line-height: 1.65;
+    color: rgba(30, 53, 82, 0.78);
+}
+
+/* ── How it works ──────────────────────────────────────────────────────── */
+/* .book-steps is no longer a standalone section — it sits inside the navy
+   .book-access band, which owns the vertical padding. (The old section
+   padding here was leaving ~88px of dead navy below the last step.) */
+.book-steps { padding: 0; }
+
+
+@media (max-width: 900px) {
+    .book-steps-list { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 560px) {
+    .book-access-code {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        padding: 20px 16px;
+    }
+    .book-access-code-value { margin-right: 0; }
+}
+
+/* ==========================================================================
+   PORTAL PROMO BAND — reusable cross-sell strip pointing at /book.
+   Used on the homepage (after the benefits section) and on /hotels.
+   ========================================================================== */
+
+.portal-band {
+    padding: clamp(48px, 5vw, 76px) 0;
+    background: var(--ivory);
+}
+.portal-band-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(28px, 4vw, 64px);
+    flex-wrap: wrap;
+}
+.portal-band-copy { flex: 1 1 460px; min-width: 0; }
+.portal-band-title {
+    margin: 14px 0 14px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(26px, 2.8vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+}
+.portal-band-title em { font-style: italic; color: var(--gold); }
+.portal-band-lede {
+    margin: 0;
+    max-width: 520px;
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.8);
+}
+.portal-band-action {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+}
+.portal-band-code {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: rgba(30, 53, 82, 0.6);
+}
+.portal-band-code strong {
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+}
+
+@media (max-width: 860px) {
+    .portal-band-inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* Property page — self-serve booking line under the perks note. Sits
+   outside .property-perks-note on purpose: that note is JS-hidden for
+   inquiry-only properties, and the portal link should survive that. */
+.property-portal-line {
+    margin: 14px 0 0;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.62);
+    max-width: 480px;
+}
+.property-portal-line a {
+    color: var(--gold);
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(195, 162, 106, 0.45);
+    padding-bottom: 1px;
+    transition: border-color 0.3s ease;
+}
+.property-portal-line a:hover { border-bottom-color: var(--gold); }
+
+/* Nav now carries a 7th item ("Book With Perks"). Tighten the gap one step
+   earlier so it doesn't collide with the header CTA on ~1280px laptops. */
+@media (max-width: 1320px) {
+    .nav-primary ul { gap: 34px; }
+}
+
+/* 7-item nav: keep every label on one line. Without this, "Book With Perks"
+   and the brand wordmark wrap to two lines at ~1180-1320px instead of the
+   nav simply tightening. */
+.nav-primary a,
+.brand-wordmark { white-space: nowrap; }
+
+/* ── Gallery band — the wanderlust ─────────────────────────────────────
+   Four tall tiles, full-bleed to the viewport edges (breaks the container
+   on purpose so the photos read as imagery, not as content blocks). */
+.book-gallery {
+    padding: clamp(56px, 6vw, 88px) 0 clamp(44px, 4.5vw, 68px);
+    background: #FCFCFB;
+}
+.book-gallery-inner { max-width: clamp(720px, 70vw, 1240px); }
+.book-gallery-inner .book-section-lede { margin-bottom: 0; }
+
+.book-gallery-grid {
+    margin-top: clamp(34px, 3.6vw, 52px);
+    padding: 0 clamp(16px, 2.4vw, 40px);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(10px, 1.2vw, 18px);
+}
+.book-gallery-tile { display: block; color: inherit; }
+.book-gallery-figure {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    background: var(--bone-warm);
+}
+.book-gallery-figure img {
+    display: block;
+    width: 100%;
+    /* height:auto is REQUIRED. The <img> carries width/height attributes for
+       CLS, and the height attribute is a presentational hint that otherwise
+       wins over aspect-ratio — every tile rendered at its raw pixel height
+       (788 / 1066 / 1000 / 1200px) instead of a uniform 3:4. */
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+}
+.book-gallery-tile:hover .book-gallery-figure img { transform: scale(1.05); }
+
+/* Caption sits on the photo, over a bottom scrim, so the grid stays a
+   clean band of imagery rather than photo-then-text-then-photo. */
+.book-gallery-cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 44px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: linear-gradient(180deg,
+        rgba(10, 8, 6, 0) 0%,
+        rgba(10, 8, 6, 0.30) 42%,
+        rgba(10, 8, 6, 0.76) 100%);
+}
+.book-gallery-name {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(16px, 1.45vw, 22px);
+    line-height: 1.25;
+    color: var(--ivory);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.book-gallery-loc {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 251, 240, 0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.book-gallery-foot {
+    margin-top: clamp(28px, 3vw, 42px);
+    text-align: center;
+}
+
+@media (max-width: 860px) {
+    .book-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+    .book-hero-inner { padding-top: 150px; }
+    .book-gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .book-gallery-cap { padding: 34px 12px 12px; }
+}
+
+/* Per-tile focal point. Default cover-crop is centred; a few photos put
+   their subject off-centre and lose it in the 3:4 crop. */
+.book-gallery-tile[data-focal="left"]  img { object-position: 30% center; }
+.book-gallery-tile[data-focal="mid-left"] img { object-position: 42% center; }
+.book-gallery-tile[data-focal="right"] img { object-position: 70% center; }
+
+/* ── Steps — lead the champagne access band, above the code card ─────── */
+/* Steps lead the band now, so they carry no top rule — the card that
+   follows them does, as the divider between "how" and "here's the code". */
+.book-access .book-steps { margin-top: 0; padding-top: 0; }
+.book-access .book-steps-heading { margin-bottom: clamp(26px, 2.8vw, 36px); }
+.book-access .book-access-card {
+    margin-top: clamp(48px, 5vw, 72px);
+}
+
+.book-access .book-steps-list {
+    margin: clamp(24px, 2.6vw, 36px) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(20px, 2.2vw, 38px);
+}
+.book-access .book-step {
+    padding-top: 20px;
+    border-top: 1px solid rgba(195, 162, 106, 0.55);
+}
+.book-access .book-step-title {
+    margin: 0 0 9px;
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(20px, 1.8vw, 29px);
+    line-height: 1.2;
+    color: var(--ink);
+}
+.book-access .book-step-body {
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+    .book-access .book-steps-list { grid-template-columns: repeat(2, 1fr); gap: 26px; }
+}
+@media (max-width: 560px) {
+    .book-access .book-steps-list { grid-template-columns: 1fr; gap: 22px; }
+}
+
+/* What happens after you book — closes the step sequence. */
+.book-steps-note {
+    margin: clamp(28px, 3vw, 40px) auto 0;
+    max-width: clamp(600px, 52vw, 820px);
+    padding-top: clamp(22px, 2.4vw, 30px);
+    border-top: 1px solid rgba(195, 162, 106, 0.4);
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.45vw, 21px);
+    line-height: 1.7;
+    color: rgba(30, 53, 82, 0.78);
+    text-align: center;
+    text-wrap: pretty;
+}
+
+/* Portal CTA under the perks list. */
+.book-perks-cta { margin-top: clamp(30px, 3.2vw, 42px); }
+
+/* ── "Not sure yet?" paths — the only outbound links on the page ───────── */
+.book-paths {
+    padding: clamp(56px, 6vw, 88px) 0 clamp(64px, 6.5vw, 96px);
+    background: var(--ivory);
+}
+.book-paths-inner { max-width: clamp(880px, 82vw, 1480px); }
+
+.book-paths-grid {
+    margin-top: clamp(30px, 3.2vw, 44px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 1.8vw, 26px);
+}
+.book-path {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: clamp(24px, 2.4vw, 32px) clamp(22px, 2.2vw, 30px) clamp(46px, 4vw, 56px);
+    background: #FFFFFF;
+    border: 1px solid rgba(195, 162, 106, 0.3);
+    color: inherit;
+    transition: border-color 0.4s var(--ease-soft),
+                transform 0.4s var(--ease-out),
+                box-shadow 0.4s var(--ease-soft);
+}
+.book-path:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px rgba(30, 53, 82, 0.08);
+}
+.book-path-label {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(21px, 2vw, 30px);
+    line-height: 1.2;
+    color: var(--ink);
+}
+.book-path-body {
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.4vw, 20px);
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.75);
+}
+.book-path-arrow {
+    position: absolute;
+    left: clamp(22px, 2.2vw, 30px);
+    bottom: clamp(22px, 2.2vw, 28px);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: var(--gold);
+    transition: transform 0.4s var(--ease-out);
+}
+.book-path:hover .book-path-arrow { transform: translateX(6px); }
+
+@media (max-width: 860px) {
+    .book-paths-grid { grid-template-columns: 1fr; gap: 14px; }
+    /* Stacked cards are wide and short, so the absolutely-positioned arrow
+       ends up close under the body copy — give it more room. */
+    .book-path { padding-bottom: 54px; }
+    .book-path-arrow { bottom: 20px; }
+}
+
+/* ── Hero CTA — sits on the photo, so it takes the homepage-hero
+   treatment: ivory outline that fills to ivory/ink on hover. ─────────── */
+.book-hero-actions {
+    margin-top: clamp(28px, 3vw, 38px);
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2vw, 28px);
+    flex-wrap: wrap;
+}
+.book-hero .cta-primary {
+    color: var(--ivory);
+    border-color: rgba(255, 251, 240, 0.55);
+}
+.book-hero .cta-primary::after { color: var(--gold-soft); }
+.book-hero .cta-primary:hover {
+    background: var(--ivory);
+    border-color: var(--ivory);
+    color: var(--ink);
+}
+.book-hero .cta-primary:hover::after { color: var(--gold); }
+
+.book-hero-code {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(14px, 1.1vw, 16px);
+    color: rgba(255, 251, 240, 0.78);
+}
+.book-hero-code strong {
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--ivory);
+}
+
+@media (max-width: 620px) {
+    .book-hero-actions { gap: 14px; }
+    .book-hero .cta-primary { padding: 17px 28px; }
+    .book-hero .cta-primary-label { font-size: 18px; }
+}
+
+/* ── Preferred-partner marquee on /book. Sits on crisp white so the
+   .marquee edge mask fades logos into the strip, matching the homepage. ── */
+.book-partners {
+    padding: clamp(44px, 4.5vw, 68px) 0 clamp(48px, 5vw, 72px);
+    background: #FCFCFB;
+    border-top: 1px solid rgba(195, 162, 106, 0.22);
+}
+.book-partners-inner { width: 100%; text-align: center; }
+.book-partners-kicker {
+    justify-content: center;
+    margin: 0 auto clamp(26px, 2.8vw, 38px);
+    padding: 0 var(--container-pad);
+}
+
+/* /hotels hero — the decision point: self-book vs have-us-book. */
+.hotels-index-choice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 2vw, 28px);
+    flex-wrap: wrap;
+}
+@media (max-width: 560px) {
+    .hotels-index-choice { flex-direction: column; gap: 14px; }
+    .hotels-index-choice > a { width: 100%; justify-content: center; }
+}
+
+/* The /hotels hero sits on a photo (borgo aerial), so the default ink-on-light
+   CTA treatment is illegible there. Primary is filled ivory to read as the
+   decision button; secondary is an ivory outline. */
+.is-hotels-index-page .hotels-index-choice .cta-primary {
+    background: var(--ivory);
+    border-color: var(--ivory);
+    color: var(--ink);
+}
+.is-hotels-index-page .hotels-index-choice .cta-primary::after { color: var(--gold); }
+.is-hotels-index-page .hotels-index-choice .cta-primary:hover {
+    background: transparent;
+    border-color: var(--ivory);
+    color: var(--ivory);
+}
+.is-hotels-index-page .hotels-index-choice .cta-primary:hover::after { color: var(--gold-soft); }
+
+.is-hotels-index-page .hotels-index-choice .cta-secondary {
+    margin-top: 0;
+    color: var(--ivory);
+    border-color: rgba(255, 251, 240, 0.5);
+}
+.is-hotels-index-page .hotels-index-choice .cta-secondary:hover {
+    background: rgba(255, 251, 240, 0.12);
+    border-color: var(--ivory);
+    color: var(--ivory);
+}
+
+/* ── Shared "Access code WANDER" callout. Sits under every portal CTA so
+   the code is never more than a glance away from the button. ─────────── */
+.portal-code-note {
+    margin: 16px 0 0;
+    font-family: var(--font-sans);
+    font-size: clamp(14px, 1.1vw, 16px);
+    color: rgba(30, 53, 82, 0.78);
+    text-align: center;
+}
+.portal-code-note strong {
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+}
+/* On a photo (the /hotels hero) it needs the light treatment. */
+.portal-code-note--onphoto { color: rgba(255, 251, 240, 0.78); }
+.portal-code-note--onphoto strong { color: var(--ivory); }
+
+/* The perks CTA is left-aligned in its column, so its note should be too. */
+.book-perks .portal-code-note { text-align: left; }
+
+/* ==========================================================================
+   .cta-portal — the filled, high-contrast treatment for every button that
+   leads to the booking portal. The outlined .cta-primary is deliberately
+   quiet; the portal is the conversion action and needs to carry weight.
+   Gold fill echoes the existing .quiz .cta-primary treatment.
+   ========================================================================== */
+.cta-portal {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+    box-shadow: 0 10px 26px rgba(195, 162, 106, 0.34);
+}
+.cta-portal .cta-primary-label { font-style: italic; }
+.cta-portal::after { color: var(--ink); }
+
+.cta-portal:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--ivory);
+    box-shadow: 0 14px 32px rgba(30, 53, 82, 0.28);
+}
+.cta-portal::after,
+.cta-portal:hover::after { transition: color 0.45s var(--ease-soft); }
+.cta-portal:hover::after { color: var(--gold-soft); }
+
+/* Beat the page-scoped hero/hotels overrides that would otherwise
+   un-fill these (source order + equal specificity). */
+.book-hero .cta-primary.cta-portal,
+.is-hotels-index-page .hotels-index-choice .cta-primary.cta-portal {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+.book-hero .cta-primary.cta-portal::after,
+.is-hotels-index-page .hotels-index-choice .cta-primary.cta-portal::after { color: var(--ink); }
+
+.book-hero .cta-primary.cta-portal:hover,
+.is-hotels-index-page .hotels-index-choice .cta-primary.cta-portal:hover {
+    background: var(--ivory);
+    border-color: var(--ivory);
+    color: var(--ink);
+}
+.book-hero .cta-primary.cta-portal:hover::after,
+.is-hotels-index-page .hotels-index-choice .cta-primary.cta-portal:hover::after { color: var(--gold); }
+
+/* ── FAQ on /book. Reuses the site's <details> .faq component; only the
+   frame differs. .faq's own background is --paper, identical to the
+   gallery above it, so a hairline keeps the two from merging. ────────── */
+.book-faq {
+    padding: clamp(56px, 6vw, 88px) 0 clamp(56px, 6vw, 84px);
+    border-top: 1px solid rgba(195, 162, 106, 0.22);
+}
+.book-faq-inner { max-width: clamp(880px, 82vw, 1480px); }
+.book-faq .faq-list {
+    max-width: clamp(720px, 68vw, 1040px);
+    margin-top: clamp(30px, 3.2vw, 44px);
+    margin-left: 0;
+}
+.book-faq .faq-q { font-size: clamp(18px, 1.6vw, 23px); }
+.book-faq .faq-a { font-size: clamp(16px, 1.45vw, 20px); }
+.book-faq-foot {
+    margin-top: clamp(36px, 3.8vw, 52px);
+    text-align: center;
+}

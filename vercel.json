@@ -7,6 +7,16 @@
       "permanent": false
     },
     {
+      "source": "/book.html",
+      "destination": "/book",
+      "permanent": true
+    },
+    {
+      "source": "/(book-hotels|book-a-hotel|booking-portal|portal|perks)",
+      "destination": "/book",
+      "permanent": false
+    },
+    {
       "source": "/cruises.html",
       "destination": "/cruises",
       "permanent": true
@@ -791,6 +801,10 @@
     {
       "source": "/proposals/:id([a-z0-9-]+)",
       "destination": "/proposal.html?id=:id"
+    },
+    {
+      "source": "/book",
+      "destination": "/book.html"
     },
     {
       "source": "/hotels",
