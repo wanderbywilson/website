@@ -35,6 +35,19 @@ function parseLink(link) {
 
 const titleCase = (s) => String(s || '').toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
 
+// Everything here is third-party feed text that a human may never read before
+// it lands on a published page, and proposal.html writes these fields as HTML.
+// Angle brackets are stripped rather than entity-escaped: entities would show
+// up raw in the Studio's editor boxes, and no legitimate hotel field needs one.
+function clean(s) {
+    return String(s == null ? '' : s)
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/[<>]/g, '')
+        .replace(/[\x00-\x1f\x7f]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
 function money(n, currency) {
     if (typeof n !== 'number' || !isFinite(n)) return '';
     const whole = Math.round(n) === n;
@@ -145,6 +158,16 @@ function hotelLocation(hotel) {
     return [town ? titleCase(town) : '', country].filter(Boolean).join(', ');
 }
 
+// The feed's one thumbnail per hotel is too small to publish, but it is handy
+// in the builder. Only ever hand back a plain http(s) URL — never a javascript:
+// or data: URI, which would end up in an src attribute on the client page.
+function imageUrl(hotel) {
+    const first = (hotel.images || [])[0];
+    if (!first) return '';
+    const raw = String(first.url || first).trim().replace(/^\/\//, 'https://');
+    return /^https?:\/\/[^\s"'<>]+$/i.test(raw) ? raw : '';
+}
+
 function pickProduct(hotel, selectedCode) {
     const products = (hotel && hotel.products) || [];
     if (!products.length) return null;
@@ -183,9 +206,10 @@ function normalize(payload) {
         const valueAdds = (product && product.valueAdds) || [];
         const alternates = ((hotel.products || []).length) - 1;
         if (alternates > 0) {
-            warnings.push(`${hotel.name}: ${alternates} other rate plan${alternates > 1 ? 's' : ''} quoted — check you are showing the right one.`);
+            warnings.push(`${clean(hotel.name)}: ${alternates} other rate plan${alternates > 1 ? 's' : ''} quoted — check you are showing the right one.`);
         }
-        if (!bed.category) warnings.push(`${hotel.name}: no rate plan name on the quote.`);
+        if (!bed.category) warnings.push(`${clean(hotel.name)}: no rate plan name on the quote.`);
+        if (total == null) warnings.push(`${clean(hotel.name)}: no price on the quote — the rate line is empty.`);
 
         const noteBits = [];
         if (price.markupTaxesAndFees) noteBits.push('Includes taxes & fees');
@@ -193,17 +217,17 @@ function normalize(payload) {
         if (valueAdds.length) noteBits.push(valueAdds.join(', '));
 
         hotels.push({
-            name: hotel.name || '',
-            location: hotelLocation(hotel),
-            address: hotel.fullAddress || '',
+            name: clean(hotel.name),
+            location: clean(hotelLocation(hotel)),
+            address: clean(hotel.fullAddress),
             // chain names arrive as "Oetker Hotels(16551)"
-            brand: String(hotel.hotelChainName || hotel.brand || '').replace(/\s*\(\d+\)\s*$/, ''),
+            brand: clean(String(hotel.hotelChainName || hotel.brand || '').replace(/\s*\(\d+\)\s*$/, '')),
             starRating: hotel.starRating || null,
             allInclusive: !!hotel.isAllInclusive || valueAdds.some(v => /all.inclusive/i.test(v)),
-            room: roomName(bed.formattedDesc || bed.desc),
-            roomRaw: bed.formattedDesc || bed.desc || '',
-            beds: (bed.bedTypes || []).join(', '),
-            ratePlan: plan,
+            room: clean(roomName(bed.formattedDesc || bed.desc)),
+            roomRaw: clean(bed.formattedDesc || bed.desc),
+            beds: clean((bed.bedTypes || []).join(', ')),
+            ratePlan: clean(plan),
             // The Studio's rate box uses *asterisks* for the gold italic figure.
             rate: total != null
                 ? (nights ? `*${money(total, currency)}* · ${nights}-night total`
@@ -213,12 +237,11 @@ function normalize(payload) {
             total, nightly: price.markupAverageNightlyRate != null ? price.markupAverageNightlyRate : null,
             beforeTax: price.amountBeforeTax != null ? price.amountBeforeTax : null,
             taxesAndFees: price.markupTaxesAndFees != null ? price.markupTaxesAndFees : null,
-            currency,
-            valueAdds,
-            deposit: deposit(product),
-            cancellation: cancellation(product && product.cancellationPolicy),
-            image: (hotel.images && hotel.images[0] &&
-                    String(hotel.images[0].url || hotel.images[0]).replace(/^\/\//, 'https://')) || ''
+            currency: clean(currency),
+            valueAdds: valueAdds.map(clean).filter(Boolean),
+            deposit: clean(deposit(product)),
+            cancellation: clean(cancellation(product && product.cancellationPolicy)),
+            image: imageUrl(hotel)
         });
     });
 
@@ -226,9 +249,9 @@ function normalize(payload) {
 
     return {
         trip: {
-            createdFor: compare.createdFor || payload.createdFor || '',
+            createdFor: clean(compare.createdFor || payload.createdFor),
             start, end, nights, adults,
-            id: payload.id || compare.id || ''
+            id: clean(payload.id || compare.id)
         },
         hotels,
         warnings
@@ -259,12 +282,19 @@ module.exports = async (req, res) => {
             return res.status(400).json({ error: 'That does not look like a TravelWits compare link — paste the whole URL.' });
         }
 
+        // The host is fixed and the id/agency are pattern-matched, so there is
+        // nothing here a caller can point at another server.
         const url = `${SOURCE}?id=${encodeURIComponent(link.id)}&travelAgencyAliasName=${encodeURIComponent(link.agency)}`;
-        const upstream = await fetch(url, { headers: { Accept: 'application/json' } });
+        const stop = AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined;
+        const upstream = await fetch(url, { headers: { Accept: 'application/json' }, signal: stop });
         if (!upstream.ok) {
             return res.status(502).json({ error: `TravelWits returned ${upstream.status}. Check the link is still live.` });
         }
-        const payload = await upstream.json();
+        const text = await upstream.text();
+        if (text.length > 8e6) {
+            return res.status(502).json({ error: 'That compare link is unexpectedly large — send it to Claude instead.' });
+        }
+        const payload = JSON.parse(text);
 
         return res.status(200).json({ ok: true, ...normalize(payload) });
     } catch (err) {

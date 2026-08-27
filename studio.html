@@ -2946,7 +2946,15 @@
                         usePerks: false, perksText: '', perksLabel: '',
                         useBooking: false, bookingUrl: ''
                     };
-                    if (hit) { fromLibrary.push(lib[hit.k].name); return Object.assign({ slug: hit.k, desc: '' }, quote); }
+                    if (hit) {
+                        // Match what the library picker does: our own page already
+                        // holds this hotel's preferred-partner amenities, and the
+                        // quote feed carries none, so bring ours along.
+                        const libPerks = (lib[hit.k] && lib[hit.k].perks) ? lib[hit.k].perks.join('\n') : '';
+                        fromLibrary.push(lib[hit.k].name);
+                        return Object.assign({ slug: hit.k, desc: '' }, quote,
+                            { usePerks: !!libPerks, perksText: libPerks });
+                    }
                     custom.push(h.name);
                     return Object.assign({
                         custom: true, name: h.name, location: h.location,
@@ -2956,10 +2964,11 @@
                 renderHotels();
                 onChange();
 
+                // Hotel names and warnings come from the feed — escape them.
                 const bits = [`<strong>${state.hotels.length} hotel${state.hotels.length === 1 ? '' : 's'} imported.</strong>`];
-                if (fromLibrary.length) bits.push(`From our library (photos and copy came too): ${fromLibrary.join(', ')}.`);
-                if (custom.length) bits.push(`Still needs a description, amenities and photos: ${custom.join(', ')} — that part is Claude's job, the quote feed carries none of it.`);
-                (data.warnings || []).forEach(w => bits.push('⚠ ' + w));
+                if (fromLibrary.length) bits.push(`From our library, so the photos, copy and amenities came too: ${esc(fromLibrary.join(', '))}.`);
+                if (custom.length) bits.push(`Still needs a description, amenities and photos: ${esc(custom.join(', '))} — that part is Claude's job, the quote feed carries none of it.`);
+                (data.warnings || []).forEach(w => bits.push('⚠ ' + esc(String(w))));
                 note.innerHTML = bits.join('<br>');
                 note.hidden = false;
                 toast('Quote imported.');
