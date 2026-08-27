@@ -192,12 +192,18 @@ function normalize(payload) {
         const price = (product && (product.roomPrice || product.convertedRoomPrice)) || {};
         const bed = (product && product.rooms && product.rooms[0]) || {};
 
-        if (!start && it.startDateTime) {
-            start = String(it.startDateTime).slice(0, 10);
-            end = String(it.endDateTime || '').slice(0, 10);
-            if (start && end) {
-                nights = Math.round((new Date(end) - new Date(start)) / 86400000);
-            }
+        // Dates are per option in this feed — each stay carries its own
+        // start/end and duration, and one compare can hold different stay
+        // lengths. Never let the first hotel's length speak for the rest.
+        const oStart = String(it.startDateTime || opt.startDateTime || '').slice(0, 10);
+        const oEnd = String(it.endDateTime || opt.endDateTime || '').slice(0, 10);
+        let oNights = (typeof it.duration === 'number' && it.duration > 0) ? it.duration : 0;
+        if (!oNights && oStart && oEnd) {
+            oNights = Math.round((new Date(oEnd) - new Date(oStart)) / 86400000);
+        }
+        if (!start && oStart) { start = oStart; end = oEnd; nights = oNights; }
+        else if (oStart && (oStart !== start || oEnd !== end)) {
+            warnings.push(`${clean(hotel.name)}: this stay runs ${oStart} to ${oEnd}, not the ${start} to ${end} on the others — the trip dates line only describes the first hotel.`);
         }
 
         const currency = price.currencyCode || 'USD';
@@ -230,8 +236,8 @@ function normalize(payload) {
             ratePlan: clean(plan),
             // The Studio's rate box uses *asterisks* for the gold italic figure.
             rate: total != null
-                ? (nights ? `*${money(total, currency)}* · ${nights}-night total`
-                          : `*${money(total, currency)}* total`)
+                ? (oNights ? `*${money(total, currency)}* · ${oNights}-night total`
+                           : `*${money(total, currency)}* total`)
                 : '',
             rateNote: noteBits.join(' · '),
             total, nightly: price.markupAverageNightlyRate != null ? price.markupAverageNightlyRate : null,

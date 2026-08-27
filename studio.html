@@ -1021,6 +1021,16 @@
                         </div>
                         <p class="claude-build-note" id="twResult" hidden></p>
                     </div>
+
+                    <!-- Flights: one prompt, however many screenshots -->
+                    <div class="tw-import">
+                        <p class="tw-import-lead"><strong>Add the flights.</strong> Copy the prompt, drop your flight screenshots into Claude with it, and paste the reply back. The prompt carries the hotels you already have, so Claude works out which route belongs to which property &mdash; and a flight into an island lands on every hotel on that island.</p>
+                        <div class="claude-build-row">
+                            <button class="btn btn-ghost" id="flCopyPrompt" type="button">Copy the flight prompt</button>
+                        </div>
+                        <textarea class="f-area" id="flPaste" style="min-height:110px" placeholder="Paste Claude's flight reply here — it starts with { and ends with } — and each hotel gets its expandable flight details."></textarea>
+                        <p class="claude-build-note" id="flResult" hidden></p>
+                    </div>
                 </section>
 
                 <div class="social-qa has-issues" id="metaWarn" hidden style="margin:0 0 22px"></div>
@@ -2873,6 +2883,122 @@
             const text = state.mode === 'lookbook' ? LOOKBOOK_PROMPT : PROPOSAL_PROMPT;
             try { await navigator.clipboard.writeText(text); toast((state.mode === 'lookbook' ? 'Lookbook' : 'Quote') + ' prompt copied — paste it into your Claude and name the client.'); }
             catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+
+        /* ── Flights ──────────────────────────────────────────────────────
+           One prompt, however many screenshots. The hotels already in the
+           builder are pasted into the prompt so Claude can work out which
+           route serves which property — three islands and four hotels means
+           one Anguilla flight belongs to two of them. */
+        function flightPrompt() {
+            const rows = state.hotels.map((h, i) => {
+                const name = h.custom ? (h.name || '') : ((lib[h.slug] && stripHtml(lib[h.slug].name)) || h.slug || '');
+                const where = h.custom ? (h.location || '') : ((lib[h.slug] && stripHtml(lib[h.slug].location)) || '');
+                return `${i + 1}. ${name}${where ? ' — ' + where : ''}`;
+            }).filter(r => r.replace(/^\d+\.\s*/, '').trim());
+
+            return [
+                'Attached are screenshots of flight options (Google Flights or similar). Turn them into flight blocks for a luxury travel proposal.',
+                '',
+                rows.length
+                    ? ['THE PROPOSAL ALREADY HAS THESE HOTELS. Work out which route serves which one and say so in the JSON:',
+                       rows.join('\n'),
+                       '',
+                       'Match on geography, not wording. A route into an island\u2019s airport serves EVERY hotel on that island \u2014 if two of the hotels are on the same island, list them both on that flight. If a screenshot goes somewhere none of these hotels are, still return it and leave "hotels" empty; I will place it myself.'
+                      ].join('\n')
+                    : 'The proposal has no hotels in it yet, so leave "hotels" empty on each flight and name the destination clearly.',
+                '',
+                'RULES',
+                '1. Every fact \u2014 airline, times, dates, durations, stops, layover airport and length, fares \u2014 must come from the screenshot exactly. Never estimate, never fill a gap from memory.',
+                '2. Format it for a client, not a booking engine: real airport names, readable times, plain-English durations.',
+                '3. NEVER include emissions or CO2 figures.',
+                '4. Give the fare tiers by name with their prices, cheapest first. If a tier is basic economy, say what it does not include (seat selection, changes) \u2014 that is the part clients need warning about.',
+                '5. If two screenshots are the same route at different fares, merge them into ONE flight and list the fares together.',
+                '',
+                'Reply with ONLY this JSON block:',
+                '',
+                '{',
+                '  "flights": [',
+                '    {',
+                '      "destination": "airport city and code, e.g. Providenciales (PLS)",',
+                '      "hotels": ["exact hotel names from the list above that this flight serves \\u2014 empty array if none"],',
+                '      "summary": "ONE line, max ~95 characters: ORIGIN \\u21c4 Destination \\u00b7 Airline \\u00b7 stops (via) \\u00b7 \\u2248duration \\u00b7 from $X pp round-trip",',
+                '      "details": "multiline with \\\\n:\\nOutbound \\u00b7 day, date\\nAirline \\u00b7 DEP 0:00 AM \\u2013 ARR 0:00 PM\\nduration \\u00b7 stops \\u00b7 exact layover length + airport\\n\\nReturn \\u00b7 day, date\\n(same three lines)\\n\\nFares\\ntier $X pp \\u00b7 tier $Y pp \\u00b7 tier $Z pp"',
+                '    }',
+                '  ]',
+                '}',
+                '',
+                'Lines beginning Outbound, Return or Fares become headings in the client\u2019s view, so keep those exact words at the start of those lines.'
+            ].join('\n');
+        }
+
+        $('flCopyPrompt').addEventListener('click', async () => {
+            const text = flightPrompt();
+            try {
+                await navigator.clipboard.writeText(text);
+                toast(state.hotels.length
+                    ? 'Flight prompt copied — it lists your ' + state.hotels.length + ' hotels so Claude can match the routes.'
+                    : 'Flight prompt copied — add hotels first and Claude can match routes to them.');
+            } catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+
+        // Which hotel row does this flight belong to? Claude names them; fall
+        // back to matching the destination against each hotel's location.
+        function hotelIndexesForFlight(f) {
+            const named = (f.hotels || []).map(n => stripHtml(String(n)).toLowerCase().trim()).filter(Boolean);
+            const hit = new Set();
+            state.hotels.forEach((h, i) => {
+                const name = (h.custom ? (h.name || '') : ((lib[h.slug] && lib[h.slug].name) || '')).toString();
+                const where = (h.custom ? (h.location || '') : ((lib[h.slug] && lib[h.slug].location) || '')).toString();
+                const nameL = stripHtml(name).toLowerCase(), whereL = stripHtml(where).toLowerCase();
+                if (named.some(n => nameL && (nameL.includes(n) || n.includes(nameL)))) { hit.add(i); return; }
+                // Geography fallback: "Providenciales (PLS)" vs "…, Providenciales, Turks & Caicos"
+                const words = stripHtml(String(f.destination || '')).toLowerCase()
+                    .replace(/\([^)]*\)/g, ' ').split(/[^a-z]+/).filter(w => w.length > 4);
+                if (words.some(w => whereL.includes(w))) hit.add(i);
+            });
+            return [...hit];
+        }
+
+        function applyFlights(p) {
+            const flights = Array.isArray(p.flights) ? p.flights : [];
+            const placed = [], loose = [];
+            flights.forEach(f => {
+                const summary = stripHtml(String(f.summary || '')).trim();
+                const details = String(f.details || '').replace(/<[^>]+>/g, '').trim();
+                if (!summary && !details) return;
+                const idxs = hotelIndexesForFlight(f);
+                if (!idxs.length) { loose.push(stripHtml(String(f.destination || 'a route'))); return; }
+                idxs.forEach(i => {
+                    state.hotels[i].flight = summary;
+                    state.hotels[i].flightDetails = details;
+                });
+                const names = idxs.map(i => state.hotels[i].custom
+                    ? state.hotels[i].name
+                    : ((lib[state.hotels[i].slug] && stripHtml(lib[state.hotels[i].slug].name)) || ''));
+                placed.push(stripHtml(String(f.destination || '')) + ' → ' + names.join(', '));
+            });
+            renderHotels();
+            onChange();
+            return { placed, loose, total: flights.length };
+        }
+
+        $('flPaste').addEventListener('input', (e) => {
+            const raw = e.target.value;
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let p;
+            try { p = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            if (!p || !Array.isArray(p.flights) || !p.flights.length) { toast('That JSON has no "flights" — check the reply.'); return; }
+            if (!state.hotels.length) { toast('Add the hotels first, then paste the flights onto them.'); return; }
+            const { placed, loose, total } = applyFlights(p);
+            const box = $('flResult');
+            const bits = [`<strong>${total} flight${total === 1 ? '' : 's'} read.</strong>`];
+            if (placed.length) bits.push('Attached to: ' + esc(placed.join(' · ')) + '.');
+            if (loose.length) bits.push('Could not tell which hotel these belong to, so nothing was changed: ' + esc(loose.join(', ')) + '. Add them by hand on the hotel below.');
+            box.innerHTML = bits.join('<br>');
+            box.hidden = false;
+            toast(placed.length ? 'Flights added.' : 'No flight matched a hotel — check the names.');
         });
 
         /* ── TravelWits import ────────────────────────────────────────────
