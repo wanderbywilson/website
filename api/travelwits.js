@@ -1,10 +1,12 @@
-// /api/travelwits — turn a TravelWits "compare" link into proposal hotels.
+// /api/travelwits — turn a TravelWits share link into proposal hotels.
 //
 //   POST {passcode, link}  → {ok, trip:{...}, hotels:[...], warnings:[...]}
 //
-// The compare page at smartflyer.travelwits.com is a JavaScript app, but it
-// reads from one public JSON endpoint keyed only on the compare id, so we can
-// fetch it straight from the server — no browser, no login.
+// Handles both link shapes: a /compare on smartflyer.travelwits.com and a
+// /brochure on Wilson's own wanderbywilson.travelwits.com portal. Both pages
+// are JavaScript apps, but each reads from one public JSON endpoint keyed only
+// on the id, so we fetch server-side — no browser, no login. The alias must
+// match the agency that owns the record, so candidates are tried in turn.
 //
 // What comes back is quote data, not story: room categories, rate plans,
 // totals and cancellation terms. Descriptions, preferred-partner amenities and
@@ -12,7 +14,8 @@
 // written, which the compliance rule forbids us from using), so those stay a
 // research job. This endpoint exists to kill the retyping, not the writing.
 
-const SOURCE = 'https://www.travelwitsapi.com/compare/get';
+const API = 'https://www.travelwitsapi.com';
+const KINDS = ['compare', 'brochure'];   // both endpoints hold the same shape
 const DEFAULT_AGENCY = 'smartflyer';
 
 function noRobots(res) {
@@ -20,17 +23,31 @@ function noRobots(res) {
     res.setHeader('Cache-Control', 'no-store');
 }
 
-// Accepts a full compare URL, or a bare uuid pasted on its own.
+// Accepts any TravelWits share link — a /compare or a /brochure, on the
+// SmartFlyer site or on Wilson's own wanderbywilson.travelwits.com portal —
+// or a bare uuid. The alias has to match the agency that owns the record
+// (asking for a SmartFlyer compare as "wanderbywilson" returns a 500), so the
+// candidates are ordered best-guess first and tried in turn.
 function parseLink(link) {
     const s = String(link || '').trim();
     const id = (s.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i) || [])[0];
     if (!id) return null;
-    let agency = DEFAULT_AGENCY;
-    const fromPath = s.match(/travelwits\.com\/([a-z0-9-]+)\//i);
-    const fromQuery = s.match(/[?&]travelAgencyAliasName=([a-z0-9-]+)/i);
-    if (fromQuery) agency = fromQuery[1];
-    else if (fromPath && fromPath[1] !== 'compare') agency = fromPath[1];
-    return { id: id.toLowerCase(), agency: agency.toLowerCase() };
+
+    const agencies = [];
+    const add = (a) => {
+        const v = String(a || '').toLowerCase();
+        if (v && v !== 'compare' && v !== 'brochure' && !agencies.includes(v)) agencies.push(v);
+    };
+    add((s.match(/[?&]travelAgencyAliasName=([a-z0-9-]+)/i) || [])[1]);
+    add((s.match(/travelwits\.com\/([a-z0-9-]+)/i) || [])[1]);   // /{agency}/compare
+    add((s.match(/https?:\/\/([a-z0-9-]+)\.travelwits\.com/i) || [])[1]);  // agency subdomain
+    add(DEFAULT_AGENCY);
+
+    // Whichever kind the link names goes first; the other is the fallback.
+    const named = /\/brochure\b/i.test(s) ? 'brochure' : (/\/compare\b/i.test(s) ? 'compare' : null);
+    const kinds = named ? [named, ...KINDS.filter(k => k !== named)] : KINDS.slice();
+
+    return { id: id.toLowerCase(), agencies, kinds };
 }
 
 const titleCase = (s) => String(s || '').toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
@@ -63,24 +80,45 @@ function money(n, currency) {
 // The marketing name is the leading run of words before the specs start.
 const SPEC = /^(?:\d|king|queen|twin|double|dbl|\d?k\b|\d?q\b|sgl|bath|max ?occ|sq\b|sqm|sqft|approx|free|wi-?fi|a\/?c\b|air ?con|livingrm|living ?room|terrace|balcony|minibar|mini-?bar|tv\b|dvd|cd\b|coffee|tub|shower|vanit|view|views|seaview|oceanview|non-?smoking|smoking|inclusive|bed|beds)/i;
 
-function roomName(raw) {
-    let s = String(raw || '').replace(/\s+/g, ' ').trim();
-    if (!s) return '';
-    // Sabre delimits with hyphens; keep segments until the specs begin.
-    const parts = s.split(/\s*-\s*/);
+// A room name has to name a room. Some rate loads prefix the string with the
+// rate's inclusions instead — Jumby Bay's begins "Usd100 Spa Credit Per Suite -
+// Vip Welcome Amenity…" and only reaches "Ocean Cottage" 480 characters in.
+const ROOM_NOUN = /\b(suite|room|villa|pavilion|cottage|bungalow|casita|residence|studio|penthouse|cabana|chalet|lodge|tent|apartment|loft|house)\b/i;
+// If any of these appear we are reading an inclusions blurb, not a room. The
+// welcome-card wording matters most: the advisor's welcome note is meant to be
+// a surprise and must never appear anywhere a client can read it.
+const NOT_A_ROOM = /\b(credit|amenity|welcome|upgrad|tax|service charge|subject to|breakfast|lunch|dinner|beverage|cocktail|wine|champagne|water sports|fitness|croquet|tennis|party|excluded|complimentary|per (?:suite|room|night|person))\b/i;
+
+function roomSegment(chunk) {
+    const parts = String(chunk).split(/\s*-\s*/);
     const kept = [];
     for (const part of parts) {
         if (kept.length && SPEC.test(part.trim())) break;
         kept.push(part.trim());
         if (kept.join(' ').split(/\s+/).length >= 6) break;
     }
-    s = kept.join(' ');
+    let s = kept.join(' ');
     // Space-separated tails: "One Bedroom Ocean View Suite King Bed Ocean Views"
     s = s.replace(/\s+(?:king|queen|twin|double)\s+bed(?:s)?\b.*$/i, '');
     s = s.replace(/\s+(?:with|w\/)\s+.*$/i, '');
     s = s.replace(/[\s.,;:]+$/, '');
-    const words = s.split(/\s+/).slice(0, 6).join(' ');
-    return titleCase(words);
+    return s.split(/\s+/).slice(0, 6).join(' ');
+}
+
+function roomName(raw) {
+    const s = String(raw || '').replace(/\s+/g, ' ').trim();
+    if (!s) return '';
+    // Walk sentence-ish chunks and take the first that actually names a room.
+    for (const chunk of s.split(/(?<=\.)\s+/)) {
+        if (!chunk.trim()) continue;
+        const candidate = roomSegment(chunk);
+        if (candidate && ROOM_NOUN.test(candidate) && !NOT_A_ROOM.test(candidate)) {
+            return titleCase(candidate);
+        }
+    }
+    // Nothing named a room — better an empty box Wilson fills than an
+    // inclusions blurb printed to a client as their room category.
+    return '';
 }
 
 // "PP ROOM RATE W BKFST" → "Preferred Partner rate with breakfast"
@@ -147,13 +185,20 @@ const COUNTRIES = { AG: 'Antigua', AI: 'Anguilla', TC: 'Turks & Caicos', BS: 'Ba
 
 // Both city and the address chunk trail the country code and postcode:
 // "St Johns AG 00000" and even city itself as "St Johns AG".
-const cleanTown = (s) => String(s || '').replace(/\b[A-Z]{2}\b\s*\d{0,6}\s*$/, '').trim();
+// Case varies by feed: "St Johns AG 00000" from a compare, "St johns ag" from
+// a brochure. Only strip the trailing pair when it is this hotel's country code.
+function cleanTown(s, code) {
+    let t = String(s || '').trim();
+    if (code) t = t.replace(new RegExp('\\b' + code + '\\b\\s*\\d{0,6}\\s*$', 'i'), '');
+    return t.replace(/\b[A-Z]{2}\b\s*\d{0,6}\s*$/, '').trim();
+}
 
 function hotelLocation(hotel) {
+    const code = String(hotel.country || '').trim();
     const country = COUNTRIES[hotel.country] || hotel.country || '';
-    const town = cleanTown(hotel.city) || (() => {
+    const town = cleanTown(hotel.city, code) || (() => {
         const parts = String(hotel.fullAddress || '').split(',').map(p => p.trim()).filter(Boolean);
-        return parts.length >= 2 ? cleanTown(parts[parts.length - 2]) : '';
+        return parts.length >= 2 ? cleanTown(parts[parts.length - 2], code) : '';
     })();
     return [town ? titleCase(town) : '', country].filter(Boolean).join(', ');
 }
@@ -175,9 +220,63 @@ function pickProduct(hotel, selectedCode) {
     return chosen || products[0];
 }
 
+// A compare keeps its hotels at compareTravelOptions.hotelOptions, and the
+// top-level hotelOptions is an empty decoy. A brochure may nest them somewhere
+// else again, so find the first non-empty hotelOptions array wherever it is and
+// treat its parent as the trip container.
+function findHotelOptions(payload, depth = 0) {
+    const empty = { options: [], container: payload || {} };
+    if (!payload || typeof payload !== 'object' || depth > 4) return empty;
+    if (Array.isArray(payload.hotelOptions) && payload.hotelOptions.length) {
+        return { options: payload.hotelOptions, container: payload };
+    }
+    if (depth === 0 && Array.isArray(payload.trips) && payload.trips.length) {
+        const options = optionsFromBrochure(payload);
+        if (options.length) {
+            return {
+                options,
+                container: Object.assign({}, payload, {
+                    roomSearchInput: (payload.trips[0] || {}).roomSearchInput
+                })
+            };
+        }
+    }
+    for (const value of Object.values(payload)) {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            const found = findHotelOptions(value, depth + 1);
+            if (found.options.length) return found;
+        }
+    }
+    return empty;
+}
+
+// A brochure is shaped differently from a compare: one "trip" per hotel option,
+// each holding tripSegments[].itinerary, which is the same object a compare
+// calls hotelItinerary. Reshape so one normalizer serves both.
+function optionsFromBrochure(payload) {
+    const options = [];
+    (payload.trips || []).forEach((trip) => {
+        (trip.tripSegments || []).forEach((seg) => {
+            const it = seg && seg.itinerary;
+            if (!it || !it.hotel) return;
+            options.push({
+                startDateTime: seg.startDateTime || trip.tripStartDate || '',
+                endDateTime: seg.endDateTime || trip.tripEndDate || '',
+                hotelItinerary: Object.assign({}, it, {
+                    startDateTime: it.startDateTime || seg.startDateTime || trip.tripStartDate || '',
+                    endDateTime: it.endDateTime || seg.endDateTime || trip.tripEndDate || ''
+                })
+            });
+        });
+    });
+    return options;
+}
+
 function normalize(payload) {
-    const compare = payload.compareTravelOptions || payload;
-    const options = compare.hotelOptions || payload.hotelOptions || [];
+    const found = findHotelOptions(payload);
+    const options = found.options;
+    // Trip-level fields can sit on the container or at the top of the payload.
+    const compare = Object.assign({}, payload, found.container);
     const warnings = [];
     const hotels = [];
     let start = '', end = '', nights = 0, adults = 0;
@@ -215,6 +314,9 @@ function normalize(payload) {
             warnings.push(`${clean(hotel.name)}: ${alternates} other rate plan${alternates > 1 ? 's' : ''} quoted — check you are showing the right one.`);
         }
         if (!bed.category) warnings.push(`${clean(hotel.name)}: no rate plan name on the quote.`);
+        if (!roomName(bed.formattedDesc || bed.desc)) {
+            warnings.push(`${clean(hotel.name)}: the quote's room field is a rate-inclusions blurb, not a room name — add the room category by hand.`);
+        }
         if (total == null) warnings.push(`${clean(hotel.name)}: no price on the quote — the rate line is empty.`);
 
         const noteBits = [];
@@ -231,7 +333,6 @@ function normalize(payload) {
             starRating: hotel.starRating || null,
             allInclusive: !!hotel.isAllInclusive || valueAdds.some(v => /all.inclusive/i.test(v)),
             room: clean(roomName(bed.formattedDesc || bed.desc)),
-            roomRaw: clean(bed.formattedDesc || bed.desc),
             beds: clean((bed.bedTypes || []).join(', ')),
             ratePlan: clean(plan),
             // The Studio's rate box uses *asterisks* for the gold italic figure.
@@ -289,18 +390,40 @@ module.exports = async (req, res) => {
         }
 
         // The host is fixed and the id/agency are pattern-matched, so there is
-        // nothing here a caller can point at another server.
-        const url = `${SOURCE}?id=${encodeURIComponent(link.id)}&travelAgencyAliasName=${encodeURIComponent(link.agency)}`;
-        const stop = AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined;
-        const upstream = await fetch(url, { headers: { Accept: 'application/json' }, signal: stop });
-        if (!upstream.ok) {
-            return res.status(502).json({ error: `TravelWits returned ${upstream.status}. Check the link is still live.` });
+        // nothing here a caller can point at another server. TravelWits 500s
+        // rather than 404s when the kind or the agency is wrong, so walk the
+        // candidates until one answers.
+        let payload = null, lastStatus = 0;
+        outer:
+        for (const kind of link.kinds) {
+            for (const agency of link.agencies) {
+                const url = `${API}/${kind}/get?id=${encodeURIComponent(link.id)}` +
+                            `&travelAgencyAliasName=${encodeURIComponent(agency)}`;
+                let upstream;
+                try {
+                    upstream = await fetch(url, {
+                        headers: { Accept: 'application/json' },
+                        signal: AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined
+                    });
+                } catch (e) { lastStatus = 504; continue; }
+                if (!upstream.ok) { lastStatus = upstream.status; continue; }
+                const text = await upstream.text();
+                if (text.length > 8e6) {
+                    return res.status(502).json({ error: 'That link is unexpectedly large — send it to Claude instead.' });
+                }
+                try { payload = JSON.parse(text); } catch (e) { lastStatus = 502; continue; }
+                if (findHotelOptions(payload).options.length) break outer;
+                payload = null;   // right shape, wrong record — keep looking
+            }
         }
-        const text = await upstream.text();
-        if (text.length > 8e6) {
-            return res.status(502).json({ error: 'That compare link is unexpectedly large — send it to Claude instead.' });
+
+        if (!payload) {
+            return res.status(502).json({
+                error: lastStatus
+                    ? `TravelWits had nothing for that link (${lastStatus}). Check it is still live, and that it is a compare or brochure link.`
+                    : 'TravelWits had no hotels on that link.'
+            });
         }
-        const payload = JSON.parse(text);
 
         return res.status(200).json({ ok: true, ...normalize(payload) });
     } catch (err) {
@@ -314,3 +437,4 @@ module.exports.normalize = normalize;
 module.exports.roomName = roomName;
 module.exports.cancellation = cancellation;
 module.exports.parseLink = parseLink;
+module.exports.findHotelOptions = findHotelOptions;
