@@ -181,6 +181,22 @@
         .linklike:hover { color: var(--ink); }
         .claude-paste .f-area { min-height: 90px; background: #fdfbf6; }
 
+        /* TravelWits import — a quieter second way in, under the Claude prompt */
+        .tw-import {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(30, 53, 82, 0.12);
+        }
+        .tw-import-lead {
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(30, 53, 82, 0.72);
+            margin: 0 0 10px;
+        }
+        .tw-import-row { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+        .tw-import-row .f-input { flex: 1 1 320px; min-width: 0; }
+        .tw-import-row .btn { flex: 0 0 auto; }
+
         .add-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
         /* Library picker modal */
@@ -312,6 +328,68 @@
         .ig-preview div { position: relative; aspect-ratio: 4/5; background: var(--st-bg); overflow: hidden; }
         .ig-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .ig-preview .ig-when { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9px; color: #fff; background: linear-gradient(transparent, rgba(20,38,62,.8)); padding: 12px 4px 3px; text-align: center; }
+
+        /* Grid planner — the real @wanderbywilson feed with the posts we
+           haven't sent yet stacked on top of it. Planned tiles carry a gold
+           edge so it stays obvious which half of the grid is still hypothetical. */
+        .soc-mode { display: flex; gap: 0; border: 1px solid var(--st-line-2); }
+        .soc-mode button {
+            font-family: var(--font-sans); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+            background: #fff; color: var(--st-dim); border: 0; padding: 7px 14px; cursor: pointer;
+        }
+        .soc-mode button + button { border-left: 1px solid var(--st-line-2); }
+        .soc-mode button.is-on { background: var(--st-text); color: #fff; }
+        .soc-split[data-socmode="calendar"] { grid-template-columns: 300px 1fr; }
+        .soc-split[data-socmode="calendar"] .soc-col-grid { display: none; }
+        .soc-split[data-socmode="grid"] { grid-template-columns: 300px 1fr; }
+        .soc-split[data-socmode="grid"] .soc-col-cal { display: none; }
+        @media (max-width: 780px) { .soc-split[data-socmode] { grid-template-columns: 1fr; } }
+
+        .ig-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .ig-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; background: var(--st-bg); flex: none; }
+        .ig-who { flex: 1; min-width: 0; line-height: 1.4; }
+        .ig-who strong { display: block; font-size: 14px; color: var(--st-text); }
+        .ig-who span { font-size: 11.5px; color: var(--st-dim-2); }
+        .ig-note { font-size: 11.5px; color: var(--st-dim-2); margin: 0 0 12px; }
+        .ig-note.is-stale { color: #96650a; }
+
+        .ig-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 640px; }
+        .ig-slot { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--st-bg); }
+        .ig-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .ig-slot.is-planned { cursor: grab; outline: 3px solid var(--st-gold); outline-offset: -3px; }
+        .ig-slot.is-planned.is-dragging { opacity: .4; }
+        .ig-slot.is-live { cursor: pointer; }
+        .ig-slot.is-live::after {
+            content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.55);
+            opacity: 0; transition: opacity .15s ease;
+        }
+        .ig-slot.is-live:hover::after { opacity: 1; }
+        .ig-slot.is-over { outline: 3px solid var(--st-gold); outline-offset: -3px; }
+        .ig-slot.is-over::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+            background: var(--st-gold); z-index: 3;
+        }
+        .ig-order {
+            position: absolute; top: 4px; left: 4px; z-index: 2;
+            font-size: 9px; letter-spacing: .06em; text-transform: uppercase;
+            background: var(--st-gold); color: #fff; padding: 2px 5px; line-height: 1.3;
+        }
+        .ig-order.is-next { background: var(--st-text); }
+        .ig-kind {
+            position: absolute; top: 4px; right: 4px; z-index: 2;
+            font-size: 9px; color: #fff; text-shadow: 0 1px 3px rgba(20,38,62,.9);
+        }
+        .ig-cap {
+            position: absolute; inset: auto 0 0 0; z-index: 2;
+            font-size: 9.5px; line-height: 1.35; color: #fff;
+            background: linear-gradient(transparent, rgba(20,38,62,.85));
+            padding: 16px 5px 4px;
+        }
+        .ig-drop-empty {
+            grid-column: 1 / -1; border: 1px dashed var(--st-line-2); padding: 26px 14px;
+            text-align: center; font-size: 12px; color: var(--st-dim-2);
+        }
+        .ig-drop-empty.is-over { border-color: var(--st-gold); background: rgba(156,124,66,.08); }
         .tmpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
         @media (max-width: 720px) { .tmpl-grid { grid-template-columns: 1fr; } }
         .tmpl-card {
@@ -768,20 +846,24 @@
             <div class="dash" style="max-width:1420px">
                 <div class="dash-head">
                     <h1 class="dash-title">Social <em>studio.</em></h1>
-                    <p class="dash-sub">Everything the funnel feeds — proposals, hotel pages and blog posts become posts here. Drag a post onto a date to schedule it; the grid shows how the feed will look as they go out.</p>
+                    <p class="dash-sub">Everything the funnel feeds — proposals, hotel pages and blog posts become posts here. <strong>Calendar</strong> is for when a post goes out; <strong>grid planner</strong> is for what the feed looks like when it does.</p>
                 </div>
                 <div class="list-controls">
                     <div class="filter-tabs" id="socialFilters"></div>
                     <span class="studio-top-spacer"></span>
+                    <div class="soc-mode" id="socModeSwitch">
+                        <button type="button" data-socmode="calendar" class="is-on">Calendar</button>
+                        <button type="button" data-socmode="grid">Grid planner</button>
+                    </div>
                     <button class="btn btn-small" id="socNew" type="button">New post</button>
                 </div>
-                <div class="soc-split">
-                    <section class="soc-col">
+                <div class="soc-split" id="socSplit" data-socmode="calendar">
+                    <section class="soc-col soc-col-lib">
                         <h2 class="soc-col-head">Content library <span id="socLibCount"></span></h2>
-                        <p class="f-hint" style="margin:0 0 10px">Drag any post onto a date to schedule it.</p>
+                        <p class="f-hint" style="margin:0 0 10px" id="socLibHint">Drag any post onto a date to schedule it.</p>
                         <div id="socLibrary" class="soc-library"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="soc-col">
+                    <section class="soc-col soc-col-cal">
                         <div class="soc-cal-head">
                             <button class="icon-btn" id="socPrev" type="button">&larr;</button>
                             <h2 class="soc-col-head" id="socMonth" style="margin:0; flex:1; text-align:center"></h2>
@@ -790,10 +872,18 @@
                         <div class="soc-cal" id="socCalendar"></div>
                         <p class="f-hint">Drag a post from the library onto a day. Drag a scheduled post back to the library to unschedule it.</p>
                     </section>
-                    <section class="soc-col">
-                        <h2 class="soc-col-head">Instagram grid</h2>
-                        <p class="f-hint" style="margin:0 0 10px">Scheduled posts, newest first — how <strong>@wanderbywilson</strong> will look.</p>
-                        <div class="ig-preview" id="socGrid"></div>
+                    <section class="soc-col soc-col-grid">
+                        <div class="ig-head">
+                            <img class="ig-avatar" id="socIgAvatar" alt="" referrerpolicy="no-referrer">
+                            <div class="ig-who">
+                                <strong id="socIgName">@wanderbywilson</strong>
+                                <span id="socIgStats">Loading the live grid…</span>
+                            </div>
+                            <button class="btn btn-ghost btn-small" id="socIgRefresh" type="button">Refresh from Instagram</button>
+                        </div>
+                        <p class="ig-note" id="socIgNote">Your real feed, with the posts you haven&rsquo;t sent yet sitting on top of it. Drag from the library into the grid, and drag tiles around to change the order. <strong>Top-left is the newest</strong>, so the last planned tile is the one that goes out next.</p>
+                        <p class="ig-note is-stale" id="socIgWarn" hidden></p>
+                        <div class="ig-plan" id="socGrid"></div>
                     </section>
                 </div>
             </div>
@@ -920,6 +1010,17 @@
                     <textarea class="f-area" id="pbPaste" style="min-height:130px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the trip, the hotels and the close all fill in."></textarea>
                     <p class="claude-build-note" id="pbResult" hidden></p>
                     <button class="btn btn-ghost btn-small" id="btnConvert" type="button" hidden style="margin-top:12px">Convert to a quote &mdash; pick what they liked</button>
+
+                    <!-- Already quoted it in TravelWits? Skip the retyping. -->
+                    <div class="tw-import">
+                        <p class="tw-import-lead"><strong>Already have a TravelWits quote?</strong> Paste the compare link and the rooms, rates and cancellation terms come straight in &mdash; then let Claude write around them.</p>
+                        <div class="tw-import-row">
+                            <input class="f-input" id="twLink" type="url" spellcheck="false"
+                                   placeholder="https://smartflyer.travelwits.com/…/compare?id=…">
+                            <button class="btn btn-ghost" id="twImport" type="button">Import quote</button>
+                        </div>
+                        <p class="claude-build-note" id="twResult" hidden></p>
+                    </div>
                 </section>
 
                 <div class="social-qa has-issues" id="metaWarn" hidden style="margin:0 0 22px"></div>
@@ -1426,6 +1527,7 @@
             { key: 'published', label: 'Posted' }
         ];
         let socItems = [], socFilter = 'all', socMonth = null, socDragId = null;
+        let socMode = 'calendar', socDragFrom = '', igGrid = null, socPlan = [], socPlanLoaded = false;
 
         /* Post categories — what the calendar chip announces at a glance, so a
            month of scheduled posts reads as a mix rather than a wall of photos.
@@ -1469,7 +1571,25 @@
                 const { items } = await contentApi({ action: 'list', kind: 'social' });
                 socItems = items;
             } catch (err) { socItems = []; }
+            if (!socPlanLoaded) {
+                try {
+                    const { order } = await contentApi({ action: 'getplan', kind: 'social' });
+                    socPlan = (order || []).filter(id => socItems.some(s => s.id === id));
+                } catch (err) { socPlan = []; }
+                // Nothing planned yet: start from whatever is already on the
+                // calendar, newest first, so the grid opens with something in it.
+                if (!socPlan.length) {
+                    socPlan = socItems
+                        .filter(s => s.scheduledFor && s.status !== 'published')
+                        .sort((a, b) => b.scheduledFor.localeCompare(a.scheduledFor))
+                        .map(s => s.id);
+                }
+                socPlanLoaded = true;
+            } else {
+                socPlan = socPlan.filter(id => socItems.some(s => s.id === id));
+            }
             renderSocFilters(); renderSocLibrary(); renderSocCalendar(); renderSocGrid();
+            if (socMode === 'grid' && !igGrid) loadIgGrid(false);
         }
         function renderSocFilters() {
             const counts = {};
@@ -1490,7 +1610,7 @@
                 <div class="soc-item" draggable="true" data-socid="${esc(s.id)}">
                     ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : '<img alt="">'}
                     <span class="soc-item-t">${esc((s.title || s.id).slice(0, 70))}
-                        <span class="soc-item-s">${esc(s.category || guessCategory(s.title) || '')}${(s.category || guessCategory(s.title)) ? ' · ' : ''}${STATUS_LABEL[socStatusOf(s)] || ''}${s.scheduledFor ? ' · ' + s.scheduledFor : ''}</span>
+                        <span class="soc-item-s">${esc(s.category || guessCategory(s.title) || '')}${(s.category || guessCategory(s.title)) ? ' · ' : ''}${STATUS_LABEL[socStatusOf(s)] || ''}${s.scheduledFor ? ' · ' + s.scheduledFor : ''}${socPlan.includes(s.id) ? ' · in the grid' : ''}</span>
                     </span>
                 </div>`).join('')
                 : '<p class="dash-empty">Nothing here yet. <strong>New post</strong> builds one from a proposal, hotel page, blog post or itinerary.</p>';
@@ -1519,14 +1639,129 @@
             }
             $('socCalendar').innerHTML = html;
         }
+        /* ── Instagram grid planner ──────────────────────────────────
+           The real @wanderbywilson feed with the posts we haven't sent yet
+           stacked on top of it, so what's on screen is what the profile will
+           look like once they've all gone out. One continuous grid on purpose:
+           Instagram reflows the feed when you post, and a planned block that
+           doesn't divide by three pushes the existing rows across exactly like
+           this. Newest sits top-left, so the LAST planned tile posts first.
+           The running order lives in one blob rather than a field per post —
+           dragging a tile is a single write, not one save per tile that moved. */
+        const IG_KIND = { reel: '▶', carousel: '▦', photo: '' };
+        // Instagram's CDN sends Cross-Origin-Resource-Policy: same-origin, so the
+        // browser won't paint its images on our origin. /api/img is already here
+        // for this exact problem (the composer uses it for hotel photos).
+        const igImg = (u) => u ? '/api/img?u=' + encodeURIComponent(u) : '';
+        const socShortDate = (d) => new Date(d + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        async function igApi(payload) {
+            const res = await fetch('/api/instagram', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ passcode }, payload))
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+            return data;
+        }
+        async function loadIgGrid(force) {
+            const stats = $('socIgStats'), warn = $('socIgWarn'), btn = $('socIgRefresh');
+            stats.textContent = force ? 'Asking Instagram…' : 'Loading the live grid…';
+            btn.disabled = true;
+            try {
+                const data = await igApi({ action: force ? 'refresh' : 'grid' });
+                igGrid = data.grid;
+                $('socIgName').textContent = '@' + igGrid.username;
+                if (igGrid.avatar) $('socIgAvatar').src = igImg(igGrid.avatar);
+                stats.textContent = `${(igGrid.postCount || 0).toLocaleString()} posts · ${(igGrid.followers || 0).toLocaleString()} followers · checked ${fmtWhen(igGrid.fetchedAt)}`;
+                warn.hidden = !data.warning;
+                if (data.warning) warn.textContent = data.warning;
+            } catch (err) {
+                stats.textContent = 'Couldn’t reach Instagram';
+                warn.hidden = false;
+                warn.textContent = err.message + ' — you can still plan the order; only the posted rows are missing.';
+            }
+            btn.disabled = false;
+            renderSocGrid();
+        }
+
+        const socPlanItems = () => socPlan.map(id => socItems.find(s => s.id === id)).filter(Boolean);
+
         function renderSocGrid() {
-            const sched = socItems.filter(s => s.scheduledFor).sort((a, b) => b.scheduledFor.localeCompare(a.scheduledFor));
-            $('socGrid').innerHTML = sched.length ? sched.slice(0, 12).map(s => `
-                <div title="${esc(s.title || '')}">
-                    ${s.thumb ? `<img src="${esc(s.thumb)}" alt="">` : ''}
-                    <span class="ig-when">${esc(s.category || guessCategory(s.title) || '')} · ${new Date(s.scheduledFor + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                </div>`).join('')
-                : '<p class="dash-empty" style="grid-column:1/-1">Schedule a post to see the grid fill in.</p>';
+            const planned = socPlanItems();
+            const live = (igGrid && igGrid.posts) || [];
+            let html = '';
+
+            if (!planned.length) {
+                html += '<div class="ig-drop-empty" data-dropidx="0">Drag a post here from the library to start planning the order.</div>';
+            }
+            planned.forEach((s, i) => {
+                // Counted from the bottom of the block: the tile furthest down
+                // is the one that has to go out first for the grid to end up
+                // looking like this.
+                const out = planned.length - i;
+                const cat = s.category || guessCategory(s.title) || '';
+                html += `<div class="ig-slot is-planned" draggable="true" data-socid="${esc(s.id)}" data-dropidx="${i}" title="${esc(s.title || '')}">
+                    <span class="ig-order${out === 1 ? ' is-next' : ''}">${out === 1 ? 'Next out' : '#' + out + ' out'}</span>
+                    ${s.thumb ? `<img src="${esc(s.thumb)}" alt="" referrerpolicy="no-referrer">` : ''}
+                    <span class="ig-cap">${esc((s.title || s.id).slice(0, 46))}${s.scheduledFor ? ' · ' + socShortDate(s.scheduledFor) : (cat ? ' · ' + esc(cat) : '')}</span>
+                </div>`;
+            });
+            if (planned.length && !live.length) {
+                html += `<div class="ig-drop-empty" data-dropidx="${planned.length}">Drop here to put a post at the end of the queue.</div>`;
+            }
+            live.forEach((post, i) => {
+                // Only the first posted tile takes a drop — it's the seam
+                // between what's planned and what's already up. You can't slot
+                // a post in between two that are already published.
+                html += `<div class="ig-slot is-live"${i === 0 ? ` data-dropidx="${planned.length}"` : ''} data-igopen="${esc(post.permalink)}" title="${esc(post.caption || '')}">
+                    ${post.pinned ? '<span class="ig-kind">📌</span>' : (IG_KIND[post.type] ? `<span class="ig-kind">${IG_KIND[post.type]}</span>` : '')}
+                    ${post.thumb ? `<img src="${esc(igImg(post.thumb))}" alt="">` : ''}
+                </div>`;
+            });
+            $('socGrid').innerHTML = html;
+        }
+
+        function planMove(id, idx) {
+            if (!socItems.some(s => s.id === id)) return;
+            const next = socPlan.slice();
+            const from = next.indexOf(id);
+            if (from !== -1) next.splice(from, 1);
+            // Pulling the tile out first shifts every later slot back one.
+            let to = (from !== -1 && from < idx) ? idx - 1 : idx;
+            to = Math.max(0, Math.min(to, next.length));
+            if (from === to && from !== -1) return;
+            next.splice(to, 0, id);
+            savePlan(next, from === -1 ? 'Added to the grid.' : 'Order updated.');
+        }
+        function planRemove(id) {
+            if (!socPlan.includes(id)) return;
+            savePlan(socPlan.filter(x => x !== id), 'Taken out of the grid.');
+        }
+        async function savePlan(order, msg) {
+            const prev = socPlan;
+            socPlan = order;
+            renderSocGrid(); renderSocLibrary();
+            try {
+                await contentApi({ action: 'setplan', kind: 'social', order });
+                if (msg) toast(msg);
+            } catch (err) {
+                socPlan = prev;
+                renderSocGrid(); renderSocLibrary();
+                toast('Couldn’t save the new order — put it back the way it was.');
+            }
+        }
+        function setSocMode(mode) {
+            socMode = mode === 'grid' ? 'grid' : 'calendar';
+            $('socSplit').dataset.socmode = socMode;
+            document.querySelectorAll('[data-socmode]').forEach(b => {
+                if (b.tagName === 'BUTTON') b.classList.toggle('is-on', b.dataset.socmode === socMode);
+            });
+            $('socLibHint').innerHTML = socMode === 'grid'
+                ? 'Drag any post into the grid. Drag it back here to take it out.'
+                : 'Drag any post onto a date to schedule it.';
+            if (socMode === 'grid' && !igGrid) loadIgGrid(false);
         }
         async function socSchedule(id, date) {
             const item = socItems.find(s => s.id === id);
@@ -1548,6 +1783,8 @@
             const it = e.target.closest('[data-socid]');
             if (!it) return;
             socDragId = it.dataset.socid;
+            socDragFrom = it.classList.contains('ig-slot') ? 'grid'
+                : (it.classList.contains('soc-chip') ? 'calendar' : 'library');
             it.classList.add('is-dragging');
             e.dataTransfer.effectAllowed = 'move';
             try { e.dataTransfer.setData('text/plain', socDragId); } catch (err) {}
@@ -1556,6 +1793,13 @@
             document.querySelectorAll('.is-dragging').forEach(n => n.classList.remove('is-dragging'));
         });
         document.addEventListener('dragover', (e) => {
+            const slot = e.target.closest('[data-dropidx]');
+            if (slot) {
+                e.preventDefault();
+                document.querySelectorAll('[data-dropidx].is-over').forEach(n => n.classList.remove('is-over'));
+                slot.classList.add('is-over');
+                return;
+            }
             const day = e.target.closest('.soc-day'), lib = e.target.closest('#socLibrary');
             if (!day && !lib) return;
             e.preventDefault();
@@ -1564,18 +1808,33 @@
         document.addEventListener('dragleave', (e) => {
             const day = e.target.closest('.soc-day');
             if (day) day.classList.remove('is-over');
+            const slot = e.target.closest('[data-dropidx]');
+            if (slot) slot.classList.remove('is-over');
         });
         document.addEventListener('drop', (e) => {
+            const slot = e.target.closest('[data-dropidx]');
             const day = e.target.closest('.soc-day'), lib = e.target.closest('#socLibrary');
-            if (!day && !lib) return;
+            if (!slot && !day && !lib) return;
             e.preventDefault();
             if (day) day.classList.remove('is-over');
+            document.querySelectorAll('[data-dropidx].is-over').forEach(n => n.classList.remove('is-over'));
             const id = socDragId || (e.dataTransfer && e.dataTransfer.getData('text/plain'));
+            const from = socDragFrom;
+            socDragId = null; socDragFrom = '';
             if (!id) return;
+            if (slot) { planMove(id, Number(slot.dataset.dropidx) || 0); return; }
+            // A tile dragged out of the grid and back into the library is being
+            // taken off the plan, not unscheduled — those are separate things.
+            if (lib && from === 'grid') { planRemove(id); return; }
             socSchedule(id, day ? day.dataset.day : '');
-            socDragId = null;
         });
         document.addEventListener('click', (e) => {
+            const igOpen = e.target.closest('[data-igopen]');
+            if (igOpen) { window.open(igOpen.dataset.igopen, '_blank', 'noopener'); return; }
+            const planned = e.target.closest('.ig-slot.is-planned');
+            if (planned) { openSavedSocial(planned.dataset.socid); return; }
+            const mode = e.target.closest('button[data-socmode]');
+            if (mode) { setSocMode(mode.dataset.socmode); return; }
             const f = e.target.closest('[data-socfilter]');
             if (f) { socFilter = f.dataset.socfilter; renderSocFilters(); renderSocLibrary(); return; }
             const un = e.target.closest('[data-socunschedule]');
@@ -1586,6 +1845,7 @@
         $('socPrev').addEventListener('click', () => { socMonth = new Date(socMonth.getFullYear(), socMonth.getMonth() - 1, 1); renderSocCalendar(); });
         $('socNext').addEventListener('click', () => { socMonth = new Date(socMonth.getFullYear(), socMonth.getMonth() + 1, 1); renderSocCalendar(); });
         $('socNew').addEventListener('click', () => openSocialPicker());
+        $('socIgRefresh').addEventListener('click', () => loadIgGrid(true));
         $('dashOpenSocial').addEventListener('click', () => showView('social'));
 
         /* ── Hotel-page drafts — edit the fields, see the real page ───── */
@@ -2614,6 +2874,104 @@
             try { await navigator.clipboard.writeText(text); toast((state.mode === 'lookbook' ? 'Lookbook' : 'Quote') + ' prompt copied — paste it into your Claude and name the client.'); }
             catch (err) { window.prompt('Copy this prompt:', text); }
         });
+
+        /* ── TravelWits import ────────────────────────────────────────────
+           A compare link already holds the rooms, rates and cancellation
+           terms. Pull those in so nobody retypes them; the description,
+           amenities and photos are still Claude's job (the feed has none we
+           are allowed to use). */
+        const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+            'August', 'September', 'October', 'November', 'December'];
+
+        function tripDates(startISO, endISO, nights) {
+            if (!startISO || !endISO) return '';
+            const a = new Date(startISO + 'T00:00:00Z'), b = new Date(endISO + 'T00:00:00Z');
+            if (isNaN(a) || isNaN(b)) return '';
+            const day = (d) => DAYS[d.getUTCDay()] + ' ' + d.getUTCDate();
+            const sameMonth = a.getUTCMonth() === b.getUTCMonth() && a.getUTCFullYear() === b.getUTCFullYear();
+            const head = sameMonth
+                ? `${day(a)} to ${day(b)} ${MONTHS[b.getUTCMonth()]} ${b.getUTCFullYear()}`
+                : `${day(a)} ${MONTHS[a.getUTCMonth()]} to ${day(b)} ${MONTHS[b.getUTCMonth()]} ${b.getUTCFullYear()}`;
+            return nights ? `${head} · ${nights} night${nights === 1 ? '' : 's'}` : head;
+        }
+
+        // "Sagree Pillay - December Escape!" is a file label, not a salutation.
+        function preparedFromLabel(label) {
+            return titleWords(String(label || '').split(/\s+[-–—]\s+/)[0].replace(/[!.]+$/, '').trim());
+        }
+
+        async function importTravelWits() {
+            const link = $('twLink').value.trim();
+            const note = $('twResult');
+            if (!link) { toast('Paste the compare link first.'); return; }
+            if (state.hotels.length &&
+                !confirm(`This replaces the ${state.hotels.length} hotel${state.hotels.length === 1 ? '' : 's'} already in the builder. Continue?`)) return;
+
+            const btn = $('twImport');
+            btn.disabled = true; btn.textContent = 'Reading the quote…';
+            note.hidden = true;
+            try {
+                const res = await fetch('/api/travelwits', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode, link })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.status === 401) { showGate('Session expired — enter the passcode again.'); return; }
+                if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+
+                setMode('quote');
+                if (!$('fPrepared').value.trim() && data.trip.createdFor) {
+                    $('fPrepared').value = preparedFromLabel(data.trip.createdFor);
+                }
+                if (!$('fDates').value.trim()) {
+                    $('fDates').value = tripDates(data.trip.start, data.trip.end, data.trip.nights);
+                }
+
+                const libEntries = libEntriesForMatching();
+                const used = new Set();
+                const fromLibrary = [], custom = [];
+                state.hotels = (data.hotels || []).map(h => {
+                    const hit = matchLibHotel(h.name, libEntries, used);
+                    const quote = {
+                        room: h.room, rate: h.rate ? unEm(h.rate).replace(/([$€£]\s?[\d,.]+)/, '*$1*') : '',
+                        rateNote: h.rateNote, deposit: h.deposit, cancellation: h.cancellation,
+                        roomDesc: '', flight: '', flightDetails: '',
+                        rateTableText: '', rateTableNote: '', termsText: '',
+                        socialHook: '', gettingThere: '', considered: false, consideredWhy: '',
+                        bookingPartners: [h.ratePlan ? h.ratePlan.replace(/ rate.*$/i, '') : '', h.brand]
+                            .filter(Boolean).join(' · '),
+                        amenitiesNote: '', advisorNote: '',
+                        usePerks: false, perksText: '', perksLabel: '',
+                        useBooking: false, bookingUrl: ''
+                    };
+                    if (hit) { fromLibrary.push(lib[hit.k].name); return Object.assign({ slug: hit.k, desc: '' }, quote); }
+                    custom.push(h.name);
+                    return Object.assign({
+                        custom: true, name: h.name, location: h.location,
+                        heroImage: '', galleryText: '', desc: ''
+                    }, quote);
+                });
+                renderHotels();
+                onChange();
+
+                const bits = [`<strong>${state.hotels.length} hotel${state.hotels.length === 1 ? '' : 's'} imported.</strong>`];
+                if (fromLibrary.length) bits.push(`From our library (photos and copy came too): ${fromLibrary.join(', ')}.`);
+                if (custom.length) bits.push(`Still needs a description, amenities and photos: ${custom.join(', ')} — that part is Claude's job, the quote feed carries none of it.`);
+                (data.warnings || []).forEach(w => bits.push('⚠ ' + w));
+                note.innerHTML = bits.join('<br>');
+                note.hidden = false;
+                toast('Quote imported.');
+            } catch (err) {
+                note.innerHTML = 'Could not import that link — ' + (err.message || 'try again') + '.';
+                note.hidden = false;
+            } finally {
+                btn.disabled = false; btn.textContent = 'Import quote';
+            }
+        }
+        $('twImport').addEventListener('click', importTravelWits);
+        $('twLink').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); importTravelWits(); } });
 
         /* Turning a lookbook into a quote: the client picked favourites, so keep
            those, set the rest aside on the page, and switch on the commercial
