@@ -2935,7 +2935,7 @@
                 state.hotels = (data.hotels || []).map(h => {
                     const hit = matchLibHotel(h.name, libEntries, used);
                     const quote = {
-                        room: h.room, rate: h.rate ? unEm(h.rate).replace(/([$€£]\s?[\d,.]+)/, '*$1*') : '',
+                        room: h.room, rate: h.rate || '',
                         rateNote: h.rateNote, deposit: h.deposit, cancellation: h.cancellation,
                         roomDesc: '', flight: '', flightDetails: '',
                         rateTableText: '', rateTableNote: '', termsText: '',

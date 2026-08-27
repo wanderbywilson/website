@@ -126,9 +126,11 @@ function deposit(product) {
 // The feed rarely fills city/state, but fullAddress is a postal string:
 // "Long Island, Po Box 243, St Johns AG 00000, AG" → "St Johns, Antigua".
 // Anything we cannot read cleanly is left for Wilson rather than guessed at.
-const COUNTRIES = { AG: 'Antigua', AI: 'Anguilla', TC: 'Turks &amp; Caicos', BS: 'Bahamas',
+// Plain characters throughout, not HTML entities: everything this endpoint
+// returns lands in a Studio text input that Wilson reads and edits.
+const COUNTRIES = { AG: 'Antigua', AI: 'Anguilla', TC: 'Turks & Caicos', BS: 'Bahamas',
     BB: 'Barbados', JM: 'Jamaica', MX: 'Mexico', DO: 'Dominican Republic', VG: 'British Virgin Islands',
-    LC: 'St Lucia', VC: 'St Vincent', KN: 'St Kitts &amp; Nevis', CW: 'Cura&ccedil;ao', AW: 'Aruba' };
+    LC: 'St Lucia', VC: 'St Vincent', KN: 'St Kitts & Nevis', CW: 'Curaçao', AW: 'Aruba' };
 
 // Both city and the address chunk trail the country code and postcode:
 // "St Johns AG 00000" and even city itself as "St Johns AG".
@@ -186,7 +188,7 @@ function normalize(payload) {
         if (!bed.category) warnings.push(`${hotel.name}: no rate plan name on the quote.`);
 
         const noteBits = [];
-        if (price.markupTaxesAndFees) noteBits.push('Includes taxes &amp; fees');
+        if (price.markupTaxesAndFees) noteBits.push('Includes taxes & fees');
         if (plan) noteBits.push(plan);
         if (valueAdds.length) noteBits.push(valueAdds.join(', '));
 
@@ -202,8 +204,12 @@ function normalize(payload) {
             roomRaw: bed.formattedDesc || bed.desc || '',
             beds: (bed.bedTypes || []).join(', '),
             ratePlan: plan,
-            rate: total != null ? `<em>${money(total, currency)}</em> &middot; ${nights || ''}-night total`.replace(' · -night', '') : '',
-            rateNote: noteBits.join(' &middot; '),
+            // The Studio's rate box uses *asterisks* for the gold italic figure.
+            rate: total != null
+                ? (nights ? `*${money(total, currency)}* · ${nights}-night total`
+                          : `*${money(total, currency)}* total`)
+                : '',
+            rateNote: noteBits.join(' · '),
             total, nightly: price.markupAverageNightlyRate != null ? price.markupAverageNightlyRate : null,
             beforeTax: price.amountBeforeTax != null ? price.amountBeforeTax : null,
             taxesAndFees: price.markupTaxesAndFees != null ? price.markupTaxesAndFees : null,
