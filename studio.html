@@ -730,7 +730,7 @@
         <div class="view" id="viewHome">
             <div class="dash">
                 <div class="dash-head">
-                    <h1 class="dash-title" id="dashHello">Good to see you.</h1>
+                    <h1 class="dash-title">Good to see you.</h1>
                     <p class="dash-sub">Everything the team is working on, in one place.</p>
                 </div>
                 <div class="dash-grid">
@@ -923,7 +923,7 @@
                         <p class="quote-steps-head">Write it with Claude — nothing typed by hand</p>
                         <div class="claude-row">
                             <button class="btn btn-small" id="bCopyPrompt" type="button">1 · Copy the blog prompt</button>
-                            &nbsp;give it to your Claude with the topic (or Sajad&rsquo;s copy), then paste the reply below.
+                            &nbsp;give it to your Claude with the topic (or a draft you&rsquo;ve written), then paste the reply below.
                         </div>
                         <div class="f-row" style="margin:0">
                             <textarea class="f-area" id="bPasteArea" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the whole post fills in, photos included."></textarea>
@@ -1353,7 +1353,6 @@
         function openStudio(auth) {
             if (auth && auth.role) me = { role: auth.role, name: auth.name || '' };
             $('studio').dataset.role = me.role;
-            if (!isOwner()) $('dashHello').textContent = 'Good to see you, ' + me.name + '.';
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}

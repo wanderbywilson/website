@@ -543,6 +543,86 @@
       "permanent": true
     },
     {
+      "source": "/blog/the-ultimate-guide-to-luxury-hotels-in-santorini-mykonos-and-athens-greece",
+      "destination": "/post/the-ultimate-guide-to-luxury-hotels-in-santorini-mykonos-and-athens",
+      "permanent": true
+    },
+    {
+      "source": "/blog/the-ultimate-guide-to-luxury-hotels-in-santorini-mykonos-and-athens-greece/",
+      "destination": "/post/the-ultimate-guide-to-luxury-hotels-in-santorini-mykonos-and-athens",
+      "permanent": true
+    },
+    {
+      "source": "/blog/discover-mexicos-finest-luxury-retreats-exclusive-hotels-you-need-to-experience",
+      "destination": "/post/discover-mexicos-finest-luxury-retreats-top-hotels-and-resorts-for-unforgettable-beach-getaways",
+      "permanent": true
+    },
+    {
+      "source": "/blog/discover-mexicos-finest-luxury-retreats-exclusive-hotels-you-need-to-experience/",
+      "destination": "/post/discover-mexicos-finest-luxury-retreats-top-hotels-and-resorts-for-unforgettable-beach-getaways",
+      "permanent": true
+    },
+    {
+      "source": "/blog/3-top-honeymoon-destinations-for-february-2025",
+      "destination": "/post/3-top-honeymoon-destinations-for-february",
+      "permanent": true
+    },
+    {
+      "source": "/blog/3-top-honeymoon-destinations-for-february-2025/",
+      "destination": "/post/3-top-honeymoon-destinations-for-february",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-3-honeymoon-destinations-for-may-2025",
+      "destination": "/post/top-3-honeymoon-destinations-for-may",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-3-honeymoon-destinations-for-may-2025/",
+      "destination": "/post/top-3-honeymoon-destinations-for-may",
+      "permanent": true
+    },
+    {
+      "source": "/blog/2025s-ultimate-travel-trend-discover-the-world-aboard-the-four-seasons-private-jet",
+      "destination": "/post/ultimate-travel-trend-discover-the-world-aboard-the-four-seasons-private-jet",
+      "permanent": true
+    },
+    {
+      "source": "/blog/2025s-ultimate-travel-trend-discover-the-world-aboard-the-four-seasons-private-jet/",
+      "destination": "/post/ultimate-travel-trend-discover-the-world-aboard-the-four-seasons-private-jet",
+      "permanent": true
+    },
+    {
+      "source": "/blog/25-of-the-best-honeymoon-destinations-around-the-world-for-2025",
+      "destination": "/post/25-of-the-best-honeymoon-destinations-around-the-world",
+      "permanent": true
+    },
+    {
+      "source": "/blog/25-of-the-best-honeymoon-destinations-around-the-world-for-2025/",
+      "destination": "/post/25-of-the-best-honeymoon-destinations-around-the-world",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-honeymoon-destinations-for-april-2025",
+      "destination": "/post/top-honeymoon-destinations-for-april",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-honeymoon-destinations-for-april-2025/",
+      "destination": "/post/top-honeymoon-destinations-for-april",
+      "permanent": true
+    },
+    {
+      "source": "/blog/3-top-honeymoon-destinations-for-january-2025",
+      "destination": "/post/3-top-honeymoon-destinations-for-january",
+      "permanent": true
+    },
+    {
+      "source": "/blog/3-top-honeymoon-destinations-for-january-2025/",
+      "destination": "/post/3-top-honeymoon-destinations-for-january",
+      "permanent": true
+    },
+    {
       "source": "/blog",
       "destination": "/inspiration.html",
       "permanent": true
