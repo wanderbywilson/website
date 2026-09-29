@@ -12,7 +12,7 @@
 // Requires ANTHROPIC_API_KEY on the Vercel project. No SDK — this repo has no
 // package.json, so we speak raw HTTP to the Messages API.
 
-const { whoIs } = require('./_auth');
+const { whoIs, can } = require('./_auth');
 
 const SCHEMA = {
     type: 'object',
@@ -49,7 +49,7 @@ module.exports = async (req, res) => {
 
         const user = await whoIs(body.passcode);
         if (!user) return res.status(401).json({ error: 'Wrong passcode' });
-        if (user.role !== 'owner') return res.status(403).json({ error: 'Owner-only tool' });
+        if (!can(user, 'proposals')) return res.status(403).json({ error: 'You don’t have access to proposals' });
 
         const apiKey = process.env.ANTHROPIC_API_KEY;
         if (!apiKey) {

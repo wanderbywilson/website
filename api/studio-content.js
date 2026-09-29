@@ -15,9 +15,9 @@
 //     setstatus {id, status}     → doc.status + index status
 //     delete  {id}
 //
-// Sign-in: see _auth.js. Managers get kind "blog" only (everything on the
-// Blog page, including the live-post import), but can't delete the Studio
-// copy of a live post.
+// Sign-in: see _auth.js. Team members reach only the kinds for the areas
+// Wilson ticked on the Team card (blog → blog, hoteldraft → hotels,
+// social → social). Nobody can delete the Studio copy of a live post.
 //
 // Blog docs with `liveSlug` are posts already on the site (imported from
 // blog-data by scripts/import-live-posts.js). Marking one "ready" makes the
@@ -29,7 +29,7 @@
 // "idea" is the blog pipeline's backlog — a title with no copy written yet.
 
 const { blobPutJSON, blobGetJSON, blobDelete, blobList } = require('./_blob');
-const { whoIs } = require('./_auth');
+const { whoIs, can } = require('./_auth');
 
 const KINDS = ['social', 'hoteldraft', 'blog'];
 const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
@@ -73,8 +73,9 @@ module.exports = async (req, res) => {
 
         const kind = body.kind;
         if (!KINDS.includes(kind)) return res.status(400).json({ error: 'Unknown kind' });
-        // Managers (the website manager) run the blog; everything else is owner-only.
-        if (user.role !== 'owner' && kind !== 'blog') return res.status(403).json({ error: 'Owner-only area' });
+        // Team members only reach the Studio areas Wilson gave them on the Team card.
+        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social' };
+        if (!can(user, AREA_OF[kind])) return res.status(403).json({ error: 'You don’t have access to this part of the Studio' });
         const INDEX = `content/${kind}/_index.json`;
         const path = (id) => `content/${kind}/${id}.json`;
         const action = body.action || '';

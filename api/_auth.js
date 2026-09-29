@@ -7,10 +7,10 @@
 //                      the env value stops working (it leaked, see SITE-NOTES).
 //   Team members     — added by Wilson on the Studio's Team card (api/team.js),
 //                      stored in Blob at team/_members.json with the passcode
-//                      hashed. Role "manager": blog posts only (write, edit
-//                      live posts, publish). No proposals, social, hotel
-//                      drafts or AI tools.
-//   STUDIO_MANAGERS  — optional env fallback, "Name:CODE,Name:CODE", same role.
+//                      hashed. Role "manager", limited to the Studio areas
+//                      Wilson ticks for them (AREAS below; default blog only).
+//                      The Team card itself is always owner-only.
+//   STUDIO_MANAGERS  — optional env fallback, "Name:CODE,Name:CODE", blog only.
 //
 // Each person has their own code, so removing one never affects anyone else.
 
@@ -18,6 +18,21 @@ const crypto = require('crypto');
 const { blobGetJSON, blobPutJSON } = require('./_blob');
 
 const MEMBERS = 'team/_members.json';
+
+// Studio areas a team member can be given. "proposals" covers the proposal
+// builder and its tools (quote-screenshot reader, TravelWits import).
+const AREAS = ['proposals', 'social', 'hotels', 'blog'];
+const DEFAULT_AREAS = ['blog'];
+
+function cleanAreas(list) {
+    const out = AREAS.filter(a => Array.isArray(list) && list.includes(a));
+    return out;
+}
+
+// Can this signed-in user use this area?
+function can(user, area) {
+    return !!user && (user.role === 'owner' || (user.areas || []).includes(area));
+}
 const OWNER = 'team/_owner.json';
 
 // Codes are typed by people: ignore case, spaces and dashes.
@@ -63,26 +78,27 @@ async function whoIs(passcode) {
     if (!code) return null;
     const ownerRec = await blobGetJSON(OWNER);
     if (ownerRec && ownerRec.codeHash) {
-        if (hashMatches(code, ownerRec)) return { role: 'owner', name: 'Wilson' };
+        if (hashMatches(code, ownerRec)) return { role: 'owner', name: 'Wilson', areas: AREAS.slice() };
     } else {
         const owner = norm(process.env.STUDIO_PASSCODE);
         if (owner && code.length === owner.length &&
             crypto.timingSafeEqual(Buffer.from(code), Buffer.from(owner))) {
-            return { role: 'owner', name: 'Wilson' };
+            return { role: 'owner', name: 'Wilson', areas: AREAS.slice() };
         }
     }
     for (const pair of (process.env.STUDIO_MANAGERS || '').split(',')) {
         const i = pair.indexOf(':');
         if (i < 1) continue;
         const managerCode = norm(pair.slice(i + 1));
-        if (managerCode.length >= 8 && code === managerCode) return { role: 'manager', name: pair.slice(0, i).trim() };
+        if (managerCode.length >= 8 && code === managerCode) return { role: 'manager', name: pair.slice(0, i).trim(), areas: DEFAULT_AREAS.slice() };
     }
     for (const m of await loadMembers()) {
         if (hashMatches(code, m)) {
-            return { role: m.role || 'manager', name: m.name, memberId: m.id };
+            return { role: 'manager', name: m.name, memberId: m.id,
+                     areas: Array.isArray(m.areas) ? cleanAreas(m.areas) : DEFAULT_AREAS.slice() };
         }
     }
     return null;
 }
 
-module.exports = { whoIs, newCode, hashCode, loadMembers, saveMembers, setOwnerCode, norm };
+module.exports = { whoIs, can, AREAS, DEFAULT_AREAS, cleanAreas, newCode, hashCode, loadMembers, saveMembers, setOwnerCode, norm };

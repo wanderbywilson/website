@@ -14,7 +14,7 @@
 // written, which the compliance rule forbids us from using), so those stay a
 // research job. This endpoint exists to kill the retyping, not the writing.
 
-const { whoIs } = require('./_auth');
+const { whoIs, can } = require('./_auth');
 
 const API = 'https://www.travelwitsapi.com';
 const KINDS = ['compare', 'brochure'];   // both endpoints hold the same shape
@@ -382,7 +382,7 @@ module.exports = async (req, res) => {
 
         const user = await whoIs(body.passcode);
         if (!user) return res.status(401).json({ error: 'Wrong passcode' });
-        if (user.role !== 'owner') return res.status(403).json({ error: 'Owner-only tool' });
+        if (!can(user, 'proposals')) return res.status(403).json({ error: 'You don’t have access to proposals' });
 
         const link = parseLink(body.link);
         if (!link) {

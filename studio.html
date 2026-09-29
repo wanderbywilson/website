@@ -253,6 +253,7 @@
         .studio[data-view="social"] #viewSocial,
         .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
+        .studio[data-view="team"] #viewTeam,
         .studio[data-view="editor"] #viewEditor { display: block; }
         /* the editor is a flex row (form | live preview) — never grid, or the
            preview stacks underneath the form */
@@ -260,6 +261,13 @@
         .studio:not([data-view="editor"]) .editor-only { display: none !important; }
         /* Team logins (role "manager") see the blog only; the server enforces it too. */
         .studio[data-role="manager"] .owner-only { display: none !important; }
+        /* Team members see only the areas ticked for them on the Team card. */
+        .studio:not([data-areas~="proposals"]) .area-proposals,
+        .studio:not([data-areas~="social"]) .area-social,
+        .studio:not([data-areas~="hotels"]) .area-hotels,
+        .studio:not([data-areas~="blog"]) .area-blog { display: none !important; }
+        .team-areas { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-size: 12px; }
+        .team-areas label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
         .seo-count { float: right; text-transform: none; letter-spacing: 0; font-weight: 400; }
         .seo-count.is-over { color: #b3261e; }
         .chip-live { background: #e6f2ea; color: #1e6b3a; }
@@ -606,6 +614,45 @@
         .studio-brand em { color: var(--st-gold); }
         .studio-status { color: var(--st-dim); }
 
+        /* Sidebar navigation */
+        .studio.is-open { padding-left: 232px; }
+        .studio-side {
+            position: fixed; top: 0; left: 0; bottom: 0; width: 232px; z-index: 50;
+            display: flex; flex-direction: column; gap: 2px;
+            padding: 20px 14px; background: var(--st-panel);
+            border-right: 1px solid var(--st-line); overflow-y: auto;
+        }
+        .studio:not(.is-open) .studio-side { display: none; }
+        .side-brand { font-family: var(--font-serif); font-size: 22px; color: var(--st-text); text-decoration: none; padding: 0 10px 18px; }
+        .side-brand em { font-style: italic; font-weight: 300; color: var(--st-gold); }
+        .side-label { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--st-dim); padding: 16px 10px 6px; }
+        .side-item {
+            display: flex; align-items: center; gap: 10px; width: 100%;
+            padding: 9px 10px; border: 0; border-radius: 6px; background: transparent;
+            font-family: var(--font-sans); font-size: 14px; color: var(--st-text);
+            text-align: left; text-decoration: none; cursor: pointer;
+        }
+        .side-item:hover { background: rgba(30, 53, 82, 0.05); }
+        .side-item.is-active { background: rgba(156, 124, 66, 0.12); color: var(--st-gold); font-weight: 500; }
+        .side-item.side-sub { font-size: 13px; padding: 6px 10px 6px 34px; color: var(--st-dim); }
+        .side-item.side-sub:hover { color: var(--st-text); }
+        .side-icon { width: 16px; text-align: center; opacity: 0.7; }
+        .side-count { margin-left: auto; font-size: 11px; padding: 1px 7px; border-radius: 10px; background: rgba(30, 53, 82, 0.08); color: var(--st-text); }
+        .side-count:empty { display: none; }
+        .side-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--st-line); }
+        .studio-top-title { font-family: var(--font-serif); font-size: 17px; color: var(--st-text); }
+        @media (max-width: 880px) {
+            .studio.is-open { padding-left: 0; }
+            .studio-side {
+                position: static; width: auto; flex-direction: row; align-items: center;
+                padding: 8px 10px; border-right: 0; border-bottom: 1px solid var(--st-line);
+                overflow-x: auto; gap: 4px;
+            }
+            .side-brand { padding: 0 8px 0 4px; font-size: 18px; white-space: nowrap; }
+            .side-label, .side-item.side-sub, .side-foot { display: none; }
+            .side-item { width: auto; white-space: nowrap; }
+        }
+
         /* Controls */
         .btn { background: var(--st-text); color: #fff; border-color: var(--st-text); }
         .btn:hover { background: transparent; color: var(--st-text); }
@@ -713,17 +760,39 @@
 
     <!-- ── App ───────────────────────────────────────────────────────── -->
     <div class="studio" id="studio" data-view="home">
+        <nav class="studio-side" aria-label="Studio">
+            <a class="side-brand" href="#home" id="brandHome">The <em>Studio</em></a>
+            <button class="side-item" data-nav="home" type="button"><span class="side-icon">⌂</span>Dashboard</button>
+
+            <div class="side-label area-proposals">Clients</div>
+            <button class="side-item area-proposals" data-nav="proposals" type="button"><span class="side-icon">✉</span>Proposals</button>
+            <button class="side-item side-sub area-proposals" data-nav="newproposal" type="button">+ New proposal</button>
+
+            <div class="side-label">Content</div>
+            <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
+            <button class="side-item side-sub area-blog" data-nav="newblog" type="button">+ New post</button>
+            <button class="side-item area-hotels" data-nav="hotels" type="button"><span class="side-icon">⌘</span>Hotel pages<span class="side-count" id="sideCountHotels"></span></button>
+            <button class="side-item area-social" data-nav="social" type="button"><span class="side-icon">◫</span>Social posts</button>
+
+            <div class="side-label owner-only">Settings</div>
+            <button class="side-item owner-only" data-nav="team" type="button"><span class="side-icon">☺</span>Team</button>
+
+            <div class="side-foot">
+                <a class="side-item" href="/" target="_blank" rel="noopener"><span class="side-icon">↗</span>View the website</a>
+                <button class="side-item" data-nav="signout" type="button"><span class="side-icon">⎋</span>Sign out</button>
+            </div>
+        </nav>
         <div class="studio-top">
-            <a class="studio-brand" href="#home" id="brandHome">The <em>Studio</em></a>
-            <button class="btn btn-ghost btn-small" id="btnHome" type="button">Dashboard</button>
-            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnList" type="button">Your proposals</button>
-            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnNew" type="button">New proposal</button>
-            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnSocial" type="button">Create social post</button>
+            <span class="studio-top-title" id="topTitle">Dashboard</span>
+            <button class="btn btn-ghost btn-small" id="btnHome" type="button" style="display:none">Dashboard</button>
+            <button class="btn btn-ghost btn-small editor-only area-proposals" id="btnList" type="button">Your proposals</button>
+            <button class="btn btn-ghost btn-small editor-only area-proposals" id="btnNew" type="button">New proposal</button>
+            <button class="btn btn-ghost btn-small editor-only area-social" id="btnSocial" type="button">Create social post</button>
             <span class="studio-top-spacer"></span>
             <span class="studio-status editor-only" id="statusText">New proposal</span>
             <button class="btn btn-ghost btn-small mobile-toggle editor-only" id="btnMobilePreview" type="button">Preview</button>
-            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnSaveDraft" type="button">Save as draft</button>
-            <button class="btn btn-small editor-only owner-only" id="btnPublish" type="button">Publish</button>
+            <button class="btn btn-ghost btn-small editor-only area-proposals" id="btnSaveDraft" type="button">Save as draft</button>
+            <button class="btn btn-small editor-only area-proposals" id="btnPublish" type="button">Publish</button>
         </div>
 
         <!-- ── Dashboard home ────────────────────────────────────────── -->
@@ -734,14 +803,14 @@
                     <p class="dash-sub">Everything the team is working on, in one place.</p>
                 </div>
                 <div class="dash-grid">
-                    <section class="dash-card owner-only" id="dashProposalsCard">
+                    <section class="dash-card area-proposals" id="dashProposalsCard">
                         <div class="dash-card-head">
                             <h2>Proposals</h2>
                             <button class="btn btn-small" id="dashNewProposal" type="button">New proposal</button>
                         </div>
                         <div class="dash-card-body" id="dashProposals"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card owner-only" id="dashSocialCard">
+                    <section class="dash-card area-social" id="dashSocialCard">
                         <div class="dash-card-head">
                             <h2>Social posts</h2>
                             <button class="btn btn-ghost btn-small" id="dashOpenSocial" type="button">Open studio</button>
@@ -749,27 +818,39 @@
                         </div>
                         <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card owner-only" id="dashHotelsCard">
+                    <section class="dash-card area-hotels" id="dashHotelsCard">
                         <div class="dash-card-head">
                             <h2>Hotel pages</h2>
                             <span class="dash-hint">drafts awaiting review</span>
                         </div>
                         <div class="dash-card-body" id="dashHotels"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card" id="dashBlogCard">
+                    <section class="dash-card area-blog" id="dashBlogCard">
                         <div class="dash-card-head">
                             <h2>Blog posts</h2>
                             <button class="btn btn-small" id="dashNewBlog" type="button">New post</button>
                         </div>
                         <div class="dash-card-body" id="dashBlog"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card owner-only" id="dashTeamCard">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Team ──────────────────────────────────────────────────── -->
+        <div class="view" id="viewTeam">
+            <div class="dash">
+                <div class="dash-head">
+                    <h1 class="dash-title">Team <em>access.</em></h1>
+                    <p class="dash-sub">Who can sign in to the Studio, and which parts they can use.</p>
+                </div>
+                    <section class="dash-card" id="dashTeamCard" style="max-width:720px">
                         <div class="dash-card-head">
                             <h2>Team</h2>
-                            <span class="dash-hint">blog-only logins</span>
+                            <span class="dash-hint">who can sign in, and to what</span>
                         </div>
                         <div class="dash-card-body">
-                            <p class="dash-sub" style="margin:0 0 12px">Everyone here signs in at <strong>wanderbywilson.com/studio</strong> with their own passcode and sees blog posts only — no proposals, social or hotel pages.</p>
+                            <p class="dash-sub" style="margin:0 0 12px">Everyone here signs in at <strong>wanderbywilson.com/studio</strong> with their own passcode and sees only the areas ticked for them. New people start with Blog posts only.</p>
                             <form id="teamAddForm" style="display:flex; gap:8px; margin-bottom:12px">
                                 <input class="f-input" id="teamName" placeholder="Name, e.g. Sajjad" autocomplete="off" style="flex:1">
                                 <button class="btn btn-small" type="submit">Add</button>
@@ -787,7 +868,6 @@
                             </details>
                         </div>
                     </section>
-                </div>
             </div>
         </div>
 
@@ -1340,9 +1420,15 @@
            fields) or { custom:true, name, location, heroImage, galleryText }  */
         let state = { id: null, mode: 'quote', hotels: [] };
         let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
-        let me = { role: 'owner', name: 'Wilson' };   // set by the gate's auth call
+        const ALL_AREAS = ['proposals', 'social', 'hotels', 'blog'];
+        const AREA_LABELS = { proposals: 'Proposals', social: 'Social posts', hotels: 'Hotel pages', blog: 'Blog posts' };
+        let me = { role: 'owner', name: 'Wilson', areas: ALL_AREAS };   // set by the gate's auth call
         const isOwner = () => me.role === 'owner';
-        const MANAGER_VIEWS = ['home', 'bloglist', 'blog'];
+        const canUse = (area) => isOwner() || me.areas.includes(area);
+        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals' };
+        // Which sidebar item lights up, and the top-bar title, for each view.
+        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team' };
+        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team' };
         let previewReady = false;
 
         /* ── Tiny helpers ─────────────────────────────────────────────── */
@@ -1375,8 +1461,9 @@
             if (msg) $('gateError').textContent = msg;
         }
         function openStudio(auth) {
-            if (auth && auth.role) me = { role: auth.role, name: auth.name || '' };
+            if (auth && auth.role) me = { role: auth.role, name: auth.name || '', areas: auth.areas || (auth.role === 'owner' ? ALL_AREAS : ['blog']) };
             $('studio').dataset.role = me.role;
+            $('studio').dataset.areas = (isOwner() ? ALL_AREAS : me.areas).join(' ');
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
@@ -1385,8 +1472,12 @@
 
         /* ── Views & dashboard ────────────────────────────────────────── */
         function showView(v) {
-            if (!isOwner() && !MANAGER_VIEWS.includes(v)) v = 'home';
+            if (VIEW_AREA[v] && !canUse(VIEW_AREA[v])) v = 'home';
+            if (v === 'team' && !isOwner()) v = 'home';
             $('studio').dataset.view = v;
+            document.querySelectorAll('.side-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === VIEW_NAV[v]));
+            $('topTitle').textContent = VIEW_TITLE[v] || '';
+            if (v === 'team') loadTeam();
             window.scrollTo(0, 0);
             if (v === 'home') loadDashboard();
             if (v === 'social') loadSocialStudio();
@@ -1478,19 +1569,25 @@
         });
 
         async function loadDashboard() {
-            if (isOwner()) loadOwnerDashboard();
-            loadDashBlog();
+            if (canUse('proposals')) loadDashProposals();
+            if (canUse('social')) loadDashSocial();
+            if (canUse('hotels')) loadDashHotels();
+            if (canUse('blog')) loadDashBlog();
         }
-        function loadOwnerDashboard() {
-            loadTeam();
+        function loadDashProposals() {
             api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
                 .catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
+        }
+        function loadDashSocial() {
             contentApi({ action: 'list', kind: 'social' }).then(({ items }) => { dashData.social = items; renderDashSocial(); })
                 .catch(() => { $('dashSocial').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; });
+        }
+        function loadDashHotels() {
             contentApi({ action: 'list', kind: 'hoteldraft' }).then(({ items }) => {
                 // Drafts needing a human first, published ones last
                 const rank = { 'in-review': 0, draft: 1, ready: 2, published: 3 };
                 dashData.hotels = items.slice().sort((a, b) => (rank[a.status] ?? 0) - (rank[b.status] ?? 0));
+                $('sideCountHotels').textContent = items.filter(i => i.status === 'in-review').length || '';
                 renderDashHotels();
             }).catch(() => { $('dashHotels').innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; });
         }
@@ -1499,6 +1596,8 @@
             contentApi({ action: 'list', kind: 'blog' }).then(async ({ items }) => {
                 blogItems = items;
                 if (await fixAuthorNames()) return loadDashBlog();
+                const waiting = items.filter(i => i.status === 'in-review' || i.status === 'ready').length;
+                $('sideCountBlog').textContent = waiting || '';
                 if (!items.length) {
                     $('dashBlog').innerHTML = '<p class="dash-empty">No posts yet — draft one here and see it exactly as it’ll look live.</p>';
                     return;
@@ -1544,6 +1643,9 @@
                         <div class="dash-row-main">
                             <div class="dash-row-title">${esc(m.name)}</div>
                             <div class="dash-row-sub">${m.lastSeenAt ? 'last signed in ' + fmtWhen(m.lastSeenAt) : 'hasn’t signed in yet'}</div>
+                            <div class="team-areas">${ALL_AREAS.map(a => `
+                                <label><input type="checkbox" data-teamarea="${a}" data-teamid="${esc(m.id)}" ${(m.areas || []).includes(a) ? 'checked' : ''}> ${AREA_LABELS[a]}</label>`).join('')}
+                            </div>
                         </div>
                         <button class="btn btn-ghost btn-small" data-teamreset="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Reset passcode</button>
                         <button class="btn btn-ghost btn-small danger" data-teamremove="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Remove</button>
@@ -1562,6 +1664,19 @@
                 Send it to ${esc(name)} with the link <strong>wanderbywilson.com/studio</strong>. This is the only time it’s shown — if it gets lost, hit <em>Reset passcode</em> for a new one.${isReset ? ' The old passcode no longer works.' : ''}
                 <div style="margin-top:8px"><button class="btn btn-ghost btn-small" id="teamRevealDone" type="button">Done</button></div>`;
         }
+        // Ticking a box saves straight away; the server is what enforces it.
+        document.addEventListener('change', async (e) => {
+            const box = e.target.closest('[data-teamarea]');
+            if (!box) return;
+            const id = box.dataset.teamid;
+            const areas = [...document.querySelectorAll(`[data-teamarea][data-teamid="${id}"]`)].filter(b => b.checked).map(b => b.dataset.teamarea);
+            if (areas.includes('proposals') && box.dataset.teamarea === 'proposals' && box.checked &&
+                !confirm('Proposals include client names, trip details and rates. Give this person access?')) { box.checked = false; return; }
+            try {
+                await teamApi({ action: 'setareas', id, areas });
+                toast(areas.length ? 'Saved — they’ll see ' + areas.map(a => AREA_LABELS[a]).join(', ') + ' next time they sign in or refresh.' : 'Saved — they can sign in but see nothing until you tick an area.');
+            } catch (err) { box.checked = !box.checked; toast('Couldn’t save that — ' + err.message); }
+        });
         $('ownerPassForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const next = $('ownerPassNew').value, again = $('ownerPassAgain').value;
@@ -1609,6 +1724,26 @@
         });
 
         $('btnHome').addEventListener('click', () => showView('home'));
+        document.querySelector('.studio-side').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-nav]');
+            if (!b) return;
+            const n = b.dataset.nav;
+            // Leaving a page closes any pop-up that was open on it.
+            document.querySelectorAll('.modal-wrap.is-open').forEach(m => m.classList.remove('is-open'));
+            if (n === 'home') showView('home');
+            else if (n === 'proposals') { showView('editor'); $('btnList').click(); }
+            else if (n === 'newproposal') { showView('editor'); $('btnNew').click(); }
+            else if (n === 'blog') { blogFilter = 'all'; showBlogList(); }
+            else if (n === 'newblog') openBlogEditor(null);
+            else if (n === 'hotels') { showView('hotels'); showHotelDraftList(); }
+            else if (n === 'social') showView('social');
+            else if (n === 'team') showView('team');
+            else if (n === 'signout') {
+                try { sessionStorage.removeItem('wndr-studio-pass'); } catch (err) {}
+                passcode = '';
+                location.reload();
+            }
+        });
         $('brandHome').addEventListener('click', (e) => { e.preventDefault(); showView('home'); });
         $('dashNewProposal').addEventListener('click', () => { showView('editor'); $('btnNew').click(); });
         $('dashNewBlog').addEventListener('click', () => openBlogEditor(null));
@@ -2466,7 +2601,7 @@
                 (blogMissingHotels.length === 1 ? 'y is' : 'ies are') +
                 ' linked here but have no page on our site</strong> — so this post sends traffic away and we have no photos for them:' +
                 '<ul>' + blogMissingHotels.map(m => `<li>${esc(m)}</li>`).join('') + '</ul>' +
-                (isOwner() ? '<button class="btn btn-ghost btn-small" id="bDraftMissing" type="button">Queue hotel-page drafts for these</button>'
+                (canUse('hotels') ? '<button class="btn btn-ghost btn-small" id="bDraftMissing" type="button">Queue hotel-page drafts for these</button>'
                            : '<p style="margin:8px 0 0">Flag these to Wilson if they should get pages.</p>');
         }
         document.addEventListener('click', async (e) => {

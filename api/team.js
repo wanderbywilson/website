@@ -2,7 +2,8 @@
 //
 //   POST {passcode, action}:
 //     list                → [{id, name, role, createdAt, lastSeenAt}]
-//     add    {name}       → {id, passcode}   (passcode shown once, never stored)
+//     add    {name, areas?}  → {id, passcode}   (passcode shown once, never stored)
+//     setareas {id, areas}   → which Studio areas they can use (see _auth.js AREAS)
 //     reset  {id}         → {passcode}       (the old one stops working)
 //     remove {id}
 //     setowner {newPasscode}  → Wilson's own passcode (replaces STUDIO_PASSCODE)
@@ -10,10 +11,11 @@
 // Passcodes are stored only as salted scrypt hashes (see _auth.js).
 
 const crypto = require('crypto');
-const { whoIs, newCode, hashCode, loadMembers, saveMembers, setOwnerCode, norm } = require('./_auth');
+const { whoIs, DEFAULT_AREAS, cleanAreas, newCode, hashCode, loadMembers, saveMembers, setOwnerCode, norm } = require('./_auth');
 
 function publicView(m) {
-    return { id: m.id, name: m.name, role: m.role, createdAt: m.createdAt, lastSeenAt: m.lastSeenAt || '' };
+    return { id: m.id, name: m.name, role: m.role, createdAt: m.createdAt, lastSeenAt: m.lastSeenAt || '',
+             areas: Array.isArray(m.areas) ? cleanAreas(m.areas) : DEFAULT_AREAS.slice() };
 }
 
 module.exports = async (req, res) => {
@@ -58,7 +60,8 @@ module.exports = async (req, res) => {
             if (!name) return res.status(400).json({ error: 'Add a name first' });
             const passcode = newCode();
             const salt = crypto.randomBytes(16).toString('hex');
-            const m = { id: crypto.randomBytes(6).toString('hex'), name, role: 'manager',
+            const areas = Array.isArray(body.areas) ? cleanAreas(body.areas) : DEFAULT_AREAS.slice();
+            const m = { id: crypto.randomBytes(6).toString('hex'), name, role: 'manager', areas,
                         salt, codeHash: hashCode(passcode, salt), createdAt: new Date().toISOString() };
             members.push(m);
             await saveMembers(members);
@@ -67,6 +70,12 @@ module.exports = async (req, res) => {
 
         const m = members.find(x => x.id === body.id);
         if (!m) return res.status(404).json({ error: 'Not found' });
+
+        if (action === 'setareas') {
+            m.areas = cleanAreas(body.areas);
+            await saveMembers(members);
+            return res.status(200).json({ ok: true, member: publicView(m) });
+        }
 
         if (action === 'reset') {
             const passcode = newCode();

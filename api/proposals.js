@@ -5,7 +5,7 @@
 //                            in proposals-data.js and never hit this endpoint).
 //   POST {passcode, action} → Studio operations (see _auth.js for who can sign in):
 //        action:'auth'                  → validate passcode for the Studio gate → {role, name}
-//        everything below is owner-only
+//        everything below needs the "proposals" area (owner, or ticked on the Team card)
 //        action:'list'                  → index of proposals (+ viewed flag)
 //        action:'load'   {id}           → full proposal JSON for editing
 //        action:'save'   {id?, proposal}→ create/update; returns {id, url}
@@ -16,7 +16,7 @@
 // N reads. View records live at views/{id}.json (see proposal-viewed.js).
 
 const { blobPutJSON, blobGetJSON, blobList, blobDelete } = require('./_blob');
-const { whoIs, loadMembers, saveMembers } = require('./_auth');
+const { whoIs, can, loadMembers, saveMembers } = require('./_auth');
 
 const INDEX_PATH = 'proposals/_index.json';
 const SITE = 'https://www.wanderbywilson.com';
@@ -84,11 +84,11 @@ module.exports = async (req, res) => {
                     if (m) { m.lastSeenAt = new Date().toISOString(); await saveMembers(members); }
                 } catch (e) { console.error('lastSeenAt update failed:', e); }
             }
-            return res.status(200).json({ ok: true, role: user.role, name: user.name });
+            return res.status(200).json({ ok: true, role: user.role, name: user.name, areas: user.areas });
         }
 
-        // Proposals carry client names and rates: owner only.
-        if (user.role !== 'owner') return res.status(403).json({ error: 'Proposals are owner-only' });
+        // Proposals carry client names and rates: only for people given that area.
+        if (!can(user, 'proposals')) return res.status(403).json({ error: 'You don’t have access to proposals' });
 
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX_PATH)) || {};
