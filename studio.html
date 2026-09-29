@@ -1576,6 +1576,15 @@
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
+            // Back from "Sign in with Google" (see api/google-oauth.js).
+            const q = new URLSearchParams(location.search);
+            if (q.get('view') === 'performance') {
+                history.replaceState(null, '', '/studio');
+                showView('performance');
+                if (q.get('google') === 'connected') toast('Google connected — loading your numbers.');
+                else if (q.get('google') === 'error') setTimeout(() => { const m = $('perfConnectMsg'); if (m) m.textContent = 'Google sign-in didn’t finish: ' + (q.get('msg') || 'unknown error'); }, 1500);
+                return;
+            }
             showView('home');
         }
 
@@ -2038,41 +2047,58 @@
             if (!perf.data || refresh) pane.innerHTML = '<p class="dash-empty">Loading your numbers from Google…</p>';
             try {
                 const data = await statsApi({ action: 'overview', days: perf.days, refresh: !!refresh });
-                if (!data.connected) { renderPerfConnect(); return; }
+                if (!data.connected) { renderPerfConnect(!!data.hasClient); return; }
                 perf.data = data;
                 renderPerf();
             } catch (err) { pane.innerHTML = '<p class="dash-empty">Couldn’t load stats — ' + esc(err.message) + '</p>'; }
         }
 
-        function renderPerfConnect() {
+        // Sign in with Google, in two steps: paste the Studio's OAuth client
+        // (made once in Google Cloud), then approve read-only access.
+        function renderPerfConnect(hasClient) {
             const pane = $('blogPerfPane');
             if (!isOwner()) {
-                pane.innerHTML = '<div class="perf-card"><h2>Not connected yet</h2><p class="perf-note" style="margin:6px 0 0">Wilson still needs to connect Google Analytics and Search Console. Once she has, your posts’ numbers show up here.</p></div>';
+                pane.innerHTML = '<div class="perf-card"><h2>Not connected yet</h2><p class="perf-note" style="margin:6px 0 0">Wilson still needs to connect Google Analytics and Search Console. Once she has, the numbers show up here.</p></div>';
                 return;
             }
             pane.innerHTML = `
                 <div class="perf-card" style="max-width:760px">
                     <h2>Connect Google</h2>
-                    <p class="perf-note" style="margin:6px 0 14px">One-time setup. It uses a read-only “robot” Google account that can see your Analytics and Search Console numbers and can’t change anything. Claude will walk you through making it; then choose the key file it gave you below.</p>
-                    <input type="file" id="perfKeyFile" accept=".json,application/json" style="margin-bottom:10px">
-                    <div><button class="btn btn-small" id="perfConnect" type="button">Connect</button></div>
-                    <p class="perf-note" id="perfConnectMsg" style="margin-top:10px"></p>
+                    <p class="perf-note" style="margin:6px 0 16px">One-time setup. You sign in with your own Google account and approve <strong>read-only</strong> access to Analytics and Search Console. Nothing can be changed from here, and you can revoke it anytime in your Google account.</p>
+                    <div style="${hasClient ? 'opacity:.55' : ''}">
+                        <p style="margin:0 0 8px; font-weight:500">1 · The Studio’s sign-in codes from Google Cloud ${hasClient ? '✓' : ''}</p>
+                        <p class="perf-note" style="margin:0 0 8px">When Google asks for an <em>Authorized redirect URI</em>, use exactly:<br><code id="perfRedirect">https://www.wanderbywilson.com/api/google-oauth</code></p>
+                        ${hasClient ? '<p class="perf-note" style="margin:0 0 14px">Saved. <a href="#" id="perfClientRedo">Enter them again</a></p>' : `
+                        <input class="f-input" id="perfClientId" placeholder="Client ID (ends in .apps.googleusercontent.com)" autocomplete="off" style="margin-bottom:8px">
+                        <input class="f-input" id="perfClientSecret" type="password" placeholder="Client secret" autocomplete="off" style="margin-bottom:8px">
+                        <button class="btn btn-small" id="perfSaveClient" type="button" style="margin-bottom:14px">Save</button>`}
+                    </div>
+                    <div style="${hasClient ? '' : 'opacity:.45; pointer-events:none'}">
+                        <p style="margin:0 0 8px; font-weight:500">2 · Sign in</p>
+                        <button class="btn" id="perfSignIn" type="button">Sign in with Google</button>
+                        <p class="perf-note" style="margin:8px 0 0">Use the Google account that owns your Analytics and Search Console (wilson@wanderbywilson.com).</p>
+                    </div>
+                    <p class="perf-note" id="perfConnectMsg" style="margin-top:12px"></p>
                 </div>`;
         }
         document.addEventListener('click', async (e) => {
-            if (e.target.closest('#perfConnect')) {
-                const f = $('perfKeyFile').files[0];
-                if (!f) { $('perfConnectMsg').textContent = 'Choose the key file first.'; return; }
+            if (e.target.closest('#perfSaveClient')) {
                 try {
-                    const out = await statsApi({ action: 'connect', keyJson: await f.text() });
-                    $('perfConnectMsg').innerHTML = 'Connected. Last step: add <strong>' + esc(out.clientEmail) + '</strong> as a Viewer in Google Analytics and as a user in Search Console, then refresh this tab.';
-                    setTimeout(() => loadPerf(true), 1500);
-                } catch (err) { $('perfConnectMsg').textContent = 'Couldn’t connect — ' + err.message; }
+                    await statsApi({ action: 'setclient', clientId: $('perfClientId').value, clientSecret: $('perfClientSecret').value });
+                    renderPerfConnect(true);
+                } catch (err) { $('perfConnectMsg').textContent = 'Couldn’t save — ' + err.message; }
+                return;
+            }
+            if (e.target.closest('#perfClientRedo')) { e.preventDefault(); renderPerfConnect(false); return; }
+            if (e.target.closest('#perfSignIn')) {
+                try { const { url } = await statsApi({ action: 'authurl' }); location.href = url; }
+                catch (err) { $('perfConnectMsg').textContent = 'Couldn’t start sign-in — ' + err.message; }
                 return;
             }
             if (e.target.closest('#perfDisconnect')) {
-                if (!confirm('Disconnect Google? The Performance tab stops updating until you connect it again.')) return;
-                try { await statsApi({ action: 'disconnect' }); perf.data = null; renderPerfConnect(); } catch (err) { toast('Couldn’t disconnect — ' + err.message); }
+                e.preventDefault();
+                if (!confirm('Disconnect Google? The Performance page stops updating until you sign in again.')) return;
+                try { await statsApi({ action: 'disconnect' }); perf.data = null; renderPerfConnect(false); } catch (err) { toast('Couldn’t disconnect — ' + err.message); }
                 return;
             }
             const r = e.target.closest('[data-perfdays]');
@@ -2172,7 +2198,7 @@
                         </div>
                     </div>
                 </div>
-                ${isOwner() && !d.demo ? '<p class="perf-note">Connected to Google. <a href="#" id="perfDisconnect">Disconnect</a></p>' : ''}`;
+                ${isOwner() && !d.demo ? '<p class="perf-note">Connected to Google' + (d.account ? ' as ' + esc(d.account) : '') + '. <a href="#" id="perfDisconnect">Disconnect</a></p>' : ''}`;
             drawLineChart($('perfChart'), d.daily || [], 'views');
         }
 

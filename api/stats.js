@@ -3,13 +3,14 @@
 // impressions, ranking, search queries) for /post/* pages.
 //
 //   POST {passcode, action}:
-//     status                        → {connected, clientEmail, propertyId, siteUrl}
+//     status                        → {connected, hasClient, account}
 //     overview {days}               → totals, daily views, per-post table, sources,
 //                                     site-wide Google searches, and which posts
 //                                     lead to the inquiry pages (and sent inquiries)
 //     post     {slug, days}         → one post: daily views, totals, top searches
-//     connect  {keyJson, propertyId?, siteUrl?}   owner only
-//     disconnect                                  owner only
+//     setclient {clientId, clientSecret}   owner: step 1 of Sign in with Google
+//     authurl                              owner: step 2, returns Google's consent URL
+//     disconnect                           owner
 //
 // Anyone with the Performance area can read stats. Results are cached in Blob for a
 // few hours so the tab is quick and Google's quotas stay untouched; pass
@@ -18,7 +19,7 @@
 
 const { whoIs, can } = require('./_auth');
 const { blobGetJSON, blobPutJSON } = require('./_blob');
-const { loadSettings, saveSettings, clearSettings, ga4, gsc } = require('./_google');
+const { loadSettings, clearSettings, isConnected, saveClient, authUrl, ga4, gsc } = require('./_google');
 
 const SITE = 'https://www.wanderbywilson.com';
 const CACHE_MS = 3 * 60 * 60 * 1000;
@@ -45,12 +46,17 @@ function windows(days, lag) {
 
 // Friendlier text for the two setup mistakes that will actually happen.
 function explain(err, settings) {
-    const who = settings && settings.clientEmail;
+    const who = (settings && (settings.account || settings.clientEmail)) || 'the connected Google account';
+    if (err.status === 403 && /has not been used|is disabled|SERVICE_DISABLED/i.test(err.message)) {
+        return /Analytics/.test(err.message)
+            ? 'Turn on the “Google Analytics Data API” in Google Cloud (APIs & Services → Library), then refresh.'
+            : 'Turn on the “Google Search Console API” in Google Cloud (APIs & Services → Library), then refresh.';
+    }
     if (err.status === 403 && /Analytics/.test(err.message)) {
-        return `Google Analytics hasn’t given the robot account access yet. In Analytics → Admin → Property access management, add ${who} as a Viewer.`;
+        return `${who} can’t see the Wander by Wilson Analytics property. Sign in with the Google account that owns it.`;
     }
     if (err.status === 403 && /Search Console/.test(err.message)) {
-        return `Search Console hasn’t given the robot account access yet. In Search Console → Settings → Users and permissions, add ${who} (Restricted is enough).`;
+        return `${who} can’t see wanderbywilson.com in Search Console. Sign in with the Google account that owns it.`;
     }
     return err.message;
 }
@@ -243,25 +249,28 @@ module.exports = async (req, res) => {
         if (!can(user, 'performance')) return res.status(403).json({ error: 'You don’t have access to Performance' });
         const action = body.action || '';
 
-        if (action === 'connect' || action === 'disconnect') {
+        if (['setclient', 'authurl', 'disconnect'].includes(action)) {
             if (user.role !== 'owner') return res.status(403).json({ error: 'Only Wilson can connect Google' });
-            if (action === 'disconnect') { await clearSettings(); return res.status(200).json({ ok: true, connected: false }); }
-            const s = await saveSettings(body.keyJson, body.propertyId, body.siteUrl);
-            return res.status(200).json({ ok: true, connected: true, clientEmail: s.clientEmail, propertyId: s.propertyId, siteUrl: s.siteUrl });
+            try {
+                if (action === 'disconnect') { await clearSettings(); return res.status(200).json({ ok: true, connected: false }); }
+                if (action === 'setclient') { await saveClient(body.clientId, body.clientSecret); return res.status(200).json({ ok: true, hasClient: true }); }
+                return res.status(200).json({ ok: true, url: await authUrl() });
+            } catch (e) { return res.status(400).json({ error: e.message }); }
         }
 
         const settings = await loadSettings();
+        const notConnected = { ok: true, connected: false, hasClient: !!(settings && settings.clientId) };
         if (action === 'status') {
-            return res.status(200).json(settings
-                ? { ok: true, connected: true, clientEmail: settings.clientEmail, propertyId: settings.propertyId, siteUrl: settings.siteUrl }
-                : { ok: true, connected: false });
+            return res.status(200).json(isConnected(settings)
+                ? { ok: true, connected: true, hasClient: true, account: settings.account || settings.clientEmail || '' }
+                : notConnected);
         }
-        if (!settings) return res.status(200).json({ ok: true, connected: false });
+        if (!isConnected(settings)) return res.status(200).json(notConnected);
 
         const days = [7, 28, 90].includes(Number(body.days)) ? Number(body.days) : 28;
         if (action === 'overview') {
             const data = await cached(`overview-${days}`, !!body.refresh, () => overview(settings, days));
-            return res.status(200).json(Object.assign({ ok: true, connected: true }, data));
+            return res.status(200).json(Object.assign({ ok: true, connected: true, account: settings.account || '' }, data));
         }
         if (action === 'post') {
             const slug = typeof body.slug === 'string' && /^[a-z0-9-]{1,120}$/.test(body.slug) ? body.slug : null;
