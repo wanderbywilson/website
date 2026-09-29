@@ -53,14 +53,42 @@ async function saveClient(clientId, clientSecret) {
     return saveSettings({ mode: 'oauth', clientId, clientSecret, propertyId: DEFAULT_PROPERTY, siteUrl: DEFAULT_SITE });
 }
 
-// Step 2: send Wilson to Google's consent screen. `state` ties the answer
-// that comes back to this request (checked in /api/google-oauth).
+// Blob reads can lag a fresh write by up to ~60s, so nothing in the sign-in
+// round trip may depend on reading back what was just written. The `state`
+// Google echoes back is therefore self-checking: an expiry plus an HMAC keyed
+// by a server-only secret (the Blob token never leaves the server).
+function stateKey() {
+    return crypto.createHash('sha256').update('studio-google-oauth:' + (process.env.BLOB_READ_WRITE_TOKEN || '')).digest();
+}
+function makeState() {
+    const payload = `${Date.now() + 15 * 60 * 1000}.${crypto.randomBytes(8).toString('hex')}`;
+    return payload + '.' + crypto.createHmac('sha256', stateKey()).update(payload).digest('hex');
+}
+function checkState(state) {
+    const parts = String(state || '').split('.');
+    if (parts.length !== 3) return false;
+    const payload = parts[0] + '.' + parts[1];
+    const want = Buffer.from(crypto.createHmac('sha256', stateKey()).update(payload).digest('hex'));
+    const got = Buffer.from(parts[2]);
+    return want.length === got.length && crypto.timingSafeEqual(want, got) && Number(parts[0]) > Date.now();
+}
+
+// Settings with the OAuth client in them, allowing for that read lag right
+// after "Save" (a few short retries rather than a false failure).
+async function loadClientSettings() {
+    for (let i = 0; i < 6; i++) {
+        const s = await loadSettings();
+        if (s && s.clientId && s.clientSecret) return s;
+        await new Promise(r => setTimeout(r, 1500));
+    }
+    return null;
+}
+
+// Step 2: send Wilson to Google's consent screen.
 async function authUrl() {
-    const s = await loadSettings();
-    if (!s || !s.clientId) throw new Error('Add the Client ID and secret first');
-    const state = crypto.randomBytes(16).toString('hex');
-    s.oauthState = { value: state, exp: Date.now() + 10 * 60 * 1000 };
-    await saveSettings(s);
+    const s = await loadClientSettings();
+    if (!s) throw new Error('Add the Client ID and secret first');
+    const state = makeState();
     return 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({
         client_id: s.clientId, redirect_uri: REDIRECT_URI, response_type: 'code',
         scope: SCOPES, access_type: 'offline', prompt: 'consent', state
@@ -69,10 +97,11 @@ async function authUrl() {
 
 // Google sends her back with ?code&state: swap the code for a refresh token.
 async function finishAuth(code, state) {
-    const s = await loadSettings();
-    if (!s || !s.oauthState || s.oauthState.value !== state || s.oauthState.exp < Date.now()) {
+    if (!checkState(state)) {
         throw new Error('That sign-in link expired. Go back to the Studio and click Sign in with Google again.');
     }
+    const s = await loadClientSettings();
+    if (!s) throw new Error('The Studio’s sign-in codes weren’t found. Enter them again on the Performance page.');
     const res = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -82,7 +111,7 @@ async function finishAuth(code, state) {
     if (!res.ok || !data.refresh_token) throw new Error('Google didn’t finish the sign-in: ' + (data.error_description || data.error || res.status));
     let account = '';
     try { account = JSON.parse(Buffer.from(data.id_token.split('.')[1], 'base64').toString()).email || ''; } catch (e) {}
-    delete s.oauthState;
+    delete s.oauthState;   // left over from the first version
     Object.assign(s, { refreshToken: data.refresh_token, account, connectedAt: new Date().toISOString() });
     await saveSettings(s);
     return s;

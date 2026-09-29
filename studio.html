@@ -1580,8 +1580,9 @@
             const q = new URLSearchParams(location.search);
             if (q.get('view') === 'performance') {
                 history.replaceState(null, '', '/studio');
+                if (q.get('google') === 'connected') perf.justConnected = true;
                 showView('performance');
-                if (q.get('google') === 'connected') toast('Google connected — loading your numbers.');
+                if (q.get('google') === 'connected') { perf.justConnected = true; toast('Google connected — loading your numbers.'); }
                 else if (q.get('google') === 'error') setTimeout(() => { const m = $('perfConnectMsg'); if (m) m.textContent = 'Google sign-in didn’t finish: ' + (q.get('msg') || 'unknown error'); }, 1500);
                 return;
             }
@@ -2047,7 +2048,17 @@
             if (!perf.data || refresh) pane.innerHTML = '<p class="dash-empty">Loading your numbers from Google…</p>';
             try {
                 const data = await statsApi({ action: 'overview', days: perf.days, refresh: !!refresh });
-                if (!data.connected) { renderPerfConnect(!!data.hasClient); return; }
+                if (!data.connected) {
+                    // Just back from Google: storage can take up to a minute to catch up.
+                    if (perf.justConnected && (perf.waits = (perf.waits || 0) + 1) <= 12) {
+                        pane.innerHTML = '<p class="dash-empty">Connected — waiting for Google’s first numbers…</p>';
+                        setTimeout(() => loadPerf(true), 5000);
+                        return;
+                    }
+                    renderPerfConnect(!!data.hasClient);
+                    return;
+                }
+                perf.justConnected = false;
                 perf.data = data;
                 renderPerf();
             } catch (err) { pane.innerHTML = '<p class="dash-empty">Couldn’t load stats — ' + esc(err.message) + '</p>'; }
