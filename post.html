@@ -126,7 +126,7 @@
         })();
 
         function renderPost(post, slug) {
-            document.title = post.title + ' | Wander by Wilson';
+            document.title = post.seoTitle || (post.title + ' | Wander by Wilson');
 
             // Per-post SEO: canonical URL, meta description, OG tags
             const canonicalUrl = 'https://www.wanderbywilson.com/post/' + slug;
@@ -141,16 +141,16 @@
                 el.setAttribute(attr, value);
             };
             setHead('link[rel="canonical"]', 'href', canonicalUrl);
-            setHead('meta[name="description"]', 'content', post.dek || post.title);
-            setHead('meta[property="og:title"]', 'content', post.title);
-            setHead('meta[property="og:description"]', 'content', post.dek || '');
+            setHead('meta[name="description"]', 'content', post.metaDescription || post.dek || post.title);
+            setHead('meta[property="og:title"]', 'content', post.seoTitle || post.title);
+            setHead('meta[property="og:description"]', 'content', post.metaDescription || post.dek || '');
             setHead('meta[property="og:image"]', 'content', 'https://www.wanderbywilson.com' + (post.heroImage||'').replace(/^\/?/, '/'));
             setHead('meta[property="og:url"]', 'content', canonicalUrl);
             setHead('meta[property="og:type"]', 'content', 'article');
             setHead('meta[property="og:site_name"]', 'content', 'Wander by Wilson');
             setHead('meta[name="twitter:card"]', 'content', 'summary_large_image');
-            setHead('meta[name="twitter:title"]', 'content', post.title);
-            setHead('meta[name="twitter:description"]', 'content', post.dek || '');
+            setHead('meta[name="twitter:title"]', 'content', post.seoTitle || post.title);
+            setHead('meta[name="twitter:description"]', 'content', post.metaDescription || post.dek || '');
             setHead('meta[name="twitter:image"]', 'content', 'https://www.wanderbywilson.com' + (post.heroImage||'').replace(/^\/?/, '/'));
 
             // BlogPosting + BreadcrumbList JSON-LD for rich results in Google

@@ -258,6 +258,11 @@
            preview stacks underneath the form */
         .studio[data-view="editor"] #viewEditor { display: flex; }
         .studio:not([data-view="editor"]) .editor-only { display: none !important; }
+        /* Team logins (role "manager") see the blog only; the server enforces it too. */
+        .studio[data-role="manager"] .owner-only { display: none !important; }
+        .seo-count { float: right; text-transform: none; letter-spacing: 0; font-weight: 400; }
+        .seo-count.is-over { color: #b3261e; }
+        .chip-live { background: #e6f2ea; color: #1e6b3a; }
         .dash { max-width: 1180px; margin: 0 auto; padding: 34px 28px 80px; }
         .dash-head { margin-bottom: 26px; }
         .dash-title { font-family: var(--font-serif); font-weight: 400; font-size: 34px; margin: 0 0 6px; }
@@ -711,32 +716,32 @@
         <div class="studio-top">
             <a class="studio-brand" href="#home" id="brandHome">The <em>Studio</em></a>
             <button class="btn btn-ghost btn-small" id="btnHome" type="button">Dashboard</button>
-            <button class="btn btn-ghost btn-small editor-only" id="btnList" type="button">Your proposals</button>
-            <button class="btn btn-ghost btn-small editor-only" id="btnNew" type="button">New proposal</button>
-            <button class="btn btn-ghost btn-small editor-only" id="btnSocial" type="button">Create social post</button>
+            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnList" type="button">Your proposals</button>
+            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnNew" type="button">New proposal</button>
+            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnSocial" type="button">Create social post</button>
             <span class="studio-top-spacer"></span>
             <span class="studio-status editor-only" id="statusText">New proposal</span>
             <button class="btn btn-ghost btn-small mobile-toggle editor-only" id="btnMobilePreview" type="button">Preview</button>
-            <button class="btn btn-ghost btn-small editor-only" id="btnSaveDraft" type="button">Save as draft</button>
-            <button class="btn btn-small editor-only" id="btnPublish" type="button">Publish</button>
+            <button class="btn btn-ghost btn-small editor-only owner-only" id="btnSaveDraft" type="button">Save as draft</button>
+            <button class="btn btn-small editor-only owner-only" id="btnPublish" type="button">Publish</button>
         </div>
 
         <!-- ── Dashboard home ────────────────────────────────────────── -->
         <div class="view" id="viewHome">
             <div class="dash">
                 <div class="dash-head">
-                    <h1 class="dash-title">Good to see you.</h1>
+                    <h1 class="dash-title" id="dashHello">Good to see you.</h1>
                     <p class="dash-sub">Everything the team is working on, in one place.</p>
                 </div>
                 <div class="dash-grid">
-                    <section class="dash-card" id="dashProposalsCard">
+                    <section class="dash-card owner-only" id="dashProposalsCard">
                         <div class="dash-card-head">
                             <h2>Proposals</h2>
                             <button class="btn btn-small" id="dashNewProposal" type="button">New proposal</button>
                         </div>
                         <div class="dash-card-body" id="dashProposals"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card" id="dashSocialCard">
+                    <section class="dash-card owner-only" id="dashSocialCard">
                         <div class="dash-card-head">
                             <h2>Social posts</h2>
                             <button class="btn btn-ghost btn-small" id="dashOpenSocial" type="button">Open studio</button>
@@ -744,7 +749,7 @@
                         </div>
                         <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card" id="dashHotelsCard">
+                    <section class="dash-card owner-only" id="dashHotelsCard">
                         <div class="dash-card-head">
                             <h2>Hotel pages</h2>
                             <span class="dash-hint">drafts awaiting review</span>
@@ -901,6 +906,7 @@
                     <input class="f-input list-search" id="blogSearch" placeholder="Search titles…">
                     <button class="btn btn-small" id="blogListNew" type="button">New post</button>
                 </div>
+                <div class="social-qa owner-only" id="blogImportBar" hidden style="margin-bottom:16px"></div>
                 <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
             </div>
         </div>
@@ -931,6 +937,15 @@
                         <label class="f-label" for="bDek">Dek — one-line summary <span style="text-transform:none">(shows under the headline &amp; in Google)</span></label>
                         <input class="f-input" id="bDek" placeholder="Where to stay, what to skip, and the suites worth the splurge.">
                     </div>
+                    <div class="f-row">
+                        <label class="f-label" for="bSeoTitle">SEO title <span style="text-transform:none">(optional — the browser tab &amp; Google headline; defaults to the headline)</span><span class="seo-count" id="bSeoTitleCount"></span></label>
+                        <input class="f-input" id="bSeoTitle" placeholder="Best Amalfi Coast Hotels (2026 Guide)">
+                    </div>
+                    <div class="f-row">
+                        <label class="f-label" for="bMetaDesc">Meta description <span style="text-transform:none">(optional — the snippet under the link in Google; defaults to the dek)</span><span class="seo-count" id="bMetaDescCount"></span></label>
+                        <textarea class="f-area" id="bMetaDesc" rows="2" style="min-height:0" placeholder="Where to stay on the Amalfi Coast, from cliffside icons to quiet boutique hideaways."></textarea>
+                    </div>
+                    <p class="social-note" id="bUrlLine" style="margin:-4px 0 14px"></p>
                     <div class="f-grid2">
                         <div class="f-row">
                             <label class="f-label" for="bHero">Hero image URL</label>
@@ -972,7 +987,7 @@
                         <button class="btn btn-ghost" id="bBack" type="button">All posts</button>
                         <button class="btn btn-ghost danger" id="bDelete" type="button">Delete</button>
                     </div>
-                    <p class="social-note">Ready posts go live automatically with the next daily publish run (8&nbsp;AM) — you&rsquo;ll see the status flip to Published here.</p>
+                    <p class="social-note" id="bPublishNote">Ready posts go live automatically with the next daily publish run (8&nbsp;AM) — you&rsquo;ll see the status flip to Published here.</p>
                 </div>
                 <div class="studio-preview blog-preview">
                     <span class="studio-preview-tag">Live preview — exactly how it will look on the site</span>
@@ -1301,6 +1316,9 @@
            fields) or { custom:true, name, location, heroImage, galleryText }  */
         let state = { id: null, mode: 'quote', hotels: [] };
         let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
+        let me = { role: 'owner', name: 'Wilson' };   // set by the gate's auth call
+        const isOwner = () => me.role === 'owner';
+        const MANAGER_VIEWS = ['home', 'bloglist', 'blog'];
         let previewReady = false;
 
         /* ── Tiny helpers ─────────────────────────────────────────────── */
@@ -1332,7 +1350,10 @@
             $('studio').classList.remove('is-open');
             if (msg) $('gateError').textContent = msg;
         }
-        function openStudio() {
+        function openStudio(auth) {
+            if (auth && auth.role) me = { role: auth.role, name: auth.name || '' };
+            $('studio').dataset.role = me.role;
+            if (!isOwner()) $('dashHello').textContent = 'Good to see you, ' + me.name + '.';
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
@@ -1341,6 +1362,7 @@
 
         /* ── Views & dashboard ────────────────────────────────────────── */
         function showView(v) {
+            if (!isOwner() && !MANAGER_VIEWS.includes(v)) v = 'home';
             $('studio').dataset.view = v;
             window.scrollTo(0, 0);
             if (v === 'home') loadDashboard();
@@ -1433,6 +1455,10 @@
         });
 
         async function loadDashboard() {
+            if (isOwner()) loadOwnerDashboard();
+            loadDashBlog();
+        }
+        function loadOwnerDashboard() {
             api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
                 .catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
             contentApi({ action: 'list', kind: 'social' }).then(({ items }) => { dashData.social = items; renderDashSocial(); })
@@ -1443,6 +1469,8 @@
                 dashData.hotels = items.slice().sort((a, b) => (rank[a.status] ?? 0) - (rank[b.status] ?? 0));
                 renderDashHotels();
             }).catch(() => { $('dashHotels').innerHTML = '<p class="dash-empty">Couldn’t load drafts.</p>'; });
+        }
+        function loadDashBlog() {
             // Blog — surface what needs a human first, plus pipeline counts
             contentApi({ action: 'list', kind: 'blog' }).then(({ items }) => {
                 blogItems = items;
@@ -1505,9 +1533,9 @@
                 <button class="dash-row" data-openblog="${esc(b.id)}" type="button">
                     <div class="dash-row-main">
                         <div class="dash-row-title">${esc(b.title || b.id)}</div>
-                        <div class="dash-row-sub">${esc([b.category, b.author].filter(Boolean).join(' · '))}${b.updatedAt ? ' · updated ' + fmtWhen(b.updatedAt) : ''}</div>
+                        <div class="dash-row-sub">${esc([b.category, b.author].filter(Boolean).join(' · '))}${b.updatedAt ? ' · updated ' + fmtWhen(b.updatedAt) : ''}${b.lastEditedBy ? ' by ' + esc(b.lastEditedBy) : ''}</div>
                     </div>
-                    ${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
+                    ${b.liveUrl && b.status !== 'published' ? '<span class="chip chip-live">Live</span> ' : ''}${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
                 </button>`).join('') + '</div>'
                 : '<p class="dash-empty">Nothing here yet.</p>';
         }
@@ -1520,9 +1548,61 @@
                 const { items } = await contentApi({ action: 'list', kind: 'blog' });
                 blogItems = items;
                 renderBlogRows();
+                renderBlogImportBar();
             } catch (err) { $('blogListRows').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; }
         }
         $('blogSearch').addEventListener('input', renderBlogRows);
+
+        /* Live posts that aren't in the Studio yet. Bringing them in (owner
+           only, one click) is what lets the team edit posts already on the
+           site; each keeps its URL via liveSlug. */
+        const SITE_URL = 'https://www.wanderbywilson.com';
+        function livePostsNotInStudio() {
+            if (typeof BLOG_POSTS === 'undefined') return [];
+            const have = new Set();
+            blogItems.forEach(b => {
+                have.add(b.id);
+                const m = (b.liveUrl || '').match(/\/post\/([a-z0-9-]+)/);
+                if (m) have.add(m[1]);
+            });
+            return Object.keys(BLOG_POSTS).filter(slug => !have.has(slug));
+        }
+        function renderBlogImportBar() {
+            const bar = $('blogImportBar');
+            const missing = isOwner() ? livePostsNotInStudio() : [];
+            bar.hidden = !missing.length;
+            if (!missing.length) return;
+            bar.innerHTML = '<strong>' + missing.length + ' live post' + (missing.length === 1 ? ' isn’t' : 's aren’t') +
+                ' in the Studio yet</strong>, so nobody can edit ' + (missing.length === 1 ? 'it' : 'them') + ' here. ' +
+                '<button class="btn btn-small" id="blogImportBtn" type="button" style="margin-left:8px">Bring them in</button>';
+        }
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('#blogImportBtn');
+            if (!btn) return;
+            btn.disabled = true;
+            btn.textContent = 'Bringing them in…';
+            const items = livePostsNotInStudio().map(slug => {
+                const p = BLOG_POSTS[slug];
+                const doc = {
+                    title: p.title || slug, dek: p.dek || '', heroImage: p.heroImage || '',
+                    tags: p.tags || [], bodyHtml: p.bodyHtml || '', readTime: p.readTime || '',
+                    date: p.date || '', datePublished: p.datePublished || '',
+                    location: p.location || '', tripTypes: p.tripTypes || [],
+                    seoTitle: p.seoTitle || '', metaDescription: p.metaDescription || '',
+                    author: 'Wilson', status: 'published',
+                    liveSlug: slug, liveUrl: SITE_URL + '/post/' + slug
+                };
+                return { id: slug, doc, meta: { title: doc.title, author: doc.author, category: '', status: 'published', liveUrl: doc.liveUrl } };
+            });
+            try {
+                const out = await contentApi({ action: 'saveMany', kind: 'blog', items });
+                toast(out.saved + ' live posts are now editable in the Studio.');
+                showBlogList();
+            } catch (err) {
+                toast('Couldn’t bring them in — ' + err.message);
+                btn.disabled = false; btn.textContent = 'Bring them in';
+            }
+        });
         $('blogListNew').addEventListener('click', () => openBlogEditor(null));
 
         /* ── Social studio ───────────────────────────────────────────────
@@ -2033,6 +2113,8 @@
                 dek: $('bDek').value.trim(),
                 heroImage: $('bHero').value.trim(),
                 tags: $('bTags').value.split(',').map(s => s.trim()).filter(Boolean),
+                seoTitle: $('bSeoTitle').value.trim(),
+                metaDescription: $('bMetaDesc').value.trim(),
                 bodyHtml: $('bBody').innerHTML,
                 readTime: Math.max(1, Math.round(words / 200)) + ' min read',
                 status: $('bStatus').value
@@ -2065,26 +2147,39 @@
                     $('bHero').value = doc.heroImage || '';
                     $('bTags').value = (doc.tags || []).join(', ');
                     $('bBody').innerHTML = doc.bodyHtml || '';
+                    $('bSeoTitle').value = doc.seoTitle || '';
+                    $('bMetaDesc').value = doc.metaDescription || '';
                     blogStatus = doc.status || 'draft';
                     // Carry migration provenance & notes through saves untouched
-                    ['author', 'category', 'sourceDoc', 'notionId', 'liveUrl', 'migrationNotes', 'heroImageHint', 'hotelsMentioned'].forEach(k => {
+                    ['author', 'category', 'sourceDoc', 'notionId', 'liveUrl', 'liveSlug', 'date', 'datePublished', 'location', 'tripTypes', 'migrationNotes', 'heroImageHint', 'hotelsMentioned'].forEach(k => {
                         if (doc[k] !== undefined) blogDocExtra[k] = doc[k];
                     });
+                    // Posts the publish run put live before liveSlug existed only have a liveUrl.
+                    if (!blogDocExtra.liveSlug && blogDocExtra.liveUrl) {
+                        const m = blogDocExtra.liveUrl.match(/\/post\/([a-z0-9-]+)/);
+                        if (m) blogDocExtra.liveSlug = m[1];
+                    }
                 } catch (err) { toast('Couldn’t load that post.'); }
             } else {
                 $('bTitle').value = ''; $('bDek').value = ''; $('bHero').value = ''; $('bTags').value = ''; $('bBody').innerHTML = '';
-                blogDocExtra = { author: 'Studio' };
+                $('bSeoTitle').value = ''; $('bMetaDesc').value = '';
+                blogDocExtra = { author: isOwner() ? 'Studio' : me.name };
             }
             $('bStatus').value = blogStatus;
             const notes = blogDocExtra.migrationNotes ? ' · <span style="color:#8a6110">' + esc(blogDocExtra.migrationNotes) + '</span>' : '';
             blogMissingHotels = []; renderBlogGaps();
             $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '') + notes;
+            renderBlogLiveState();
+            renderSeoCounts();
             pushBlogPreview();
         }
         async function saveBlog(status) {
             const doc = blogDocFromForm();
             if (!doc.title) { toast('Give the post a headline first.'); return; }
             if (status) doc.status = status;
+            // Editing a live post: the site keeps the old version until these
+            // changes are marked ready, so the saved copy is a draft of it.
+            else if (blogDocExtra.liveSlug && doc.status === 'published') doc.status = 'draft';
             try {
                 const out = await contentApi({ action: 'save', kind: 'blog', id: blogId, doc,
                     meta: { title: doc.title, author: doc.author || '', category: doc.category || '', status: doc.status } });
@@ -2246,7 +2341,8 @@
                 (blogMissingHotels.length === 1 ? 'y is' : 'ies are') +
                 ' linked here but have no page on our site</strong> — so this post sends traffic away and we have no photos for them:' +
                 '<ul>' + blogMissingHotels.map(m => `<li>${esc(m)}</li>`).join('') + '</ul>' +
-                '<button class="btn btn-ghost btn-small" id="bDraftMissing" type="button">Queue hotel-page drafts for these</button>';
+                (isOwner() ? '<button class="btn btn-ghost btn-small" id="bDraftMissing" type="button">Queue hotel-page drafts for these</button>'
+                           : '<p style="margin:8px 0 0">Flag these to Wilson if they should get pages.</p>');
         }
         document.addEventListener('click', async (e) => {
             if (!e.target.closest('#bDraftMissing')) return;
@@ -2299,6 +2395,33 @@
         });
         ['bTitle', 'bDek', 'bHero', 'bTags'].forEach(id => $(id).addEventListener('input', () => { clearTimeout(blogT); blogT = setTimeout(pushBlogPreview, 500); }));
         $('bBody').addEventListener('input', () => { clearTimeout(blogT); blogT = setTimeout(pushBlogPreview, 500); });
+
+        /* Live posts keep their URL forever (changing it would break Google's
+           links to it), can't be deleted from here, and publish as an update. */
+        function renderBlogLiveState() {
+            const live = !!blogDocExtra.liveSlug;
+            const url = live ? '/post/' + blogDocExtra.liveSlug : '';
+            $('bUrlLine').innerHTML = live
+                ? 'Live at <a href="' + esc(url) + '" target="_blank" rel="noopener">wanderbywilson.com' + esc(url) + '</a> — the URL stays the same when you change the headline.'
+                : 'The URL is made from the headline when the post first goes live.';
+            $('bDelete').hidden = live;
+            $('bReady').textContent = live ? 'Publish these changes' : 'Mark ready to publish';
+            $('bPublishNote').innerHTML = live
+                ? 'Saving keeps your changes here as a draft; the live post doesn&rsquo;t change until you hit <strong>Publish these changes</strong>. They go live with the next daily publish run (8&nbsp;AM).'
+                : 'Ready posts go live automatically with the next daily publish run (8&nbsp;AM) — you&rsquo;ll see the status flip to Published here.';
+        }
+        // Google shows roughly 60 characters of a title and 155 of a description.
+        function renderSeoCounts() {
+            [['bSeoTitle', 'bSeoTitleCount', 60, 'bTitle'], ['bMetaDesc', 'bMetaDescCount', 155, 'bDek']].forEach(([inp, out, max, fallback]) => {
+                const own = $(inp).value.trim();
+                const base = $(fallback).value.trim();
+                // Without an SEO title the page title is "Headline | Wander by Wilson".
+                const n = own ? own.length : (base && fallback === 'bTitle' ? (base + ' | Wander by Wilson').length : base.length);
+                $(out).textContent = n ? n + ' / ' + max + (own ? '' : ' (using ' + (fallback === 'bTitle' ? 'headline' : 'dek') + ')') : '';
+                $(out).classList.toggle('is-over', n > max);
+            });
+        }
+        ['bSeoTitle', 'bMetaDesc', 'bTitle', 'bDek'].forEach(id => $(id).addEventListener('input', renderSeoCounts));
         $('gateForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const code = $('gateInput').value.trim();
@@ -2306,9 +2429,9 @@
             $('gateError').textContent = '';
             passcode = code;
             try {
-                await api({ action: 'auth' });
+                const auth = await api({ action: 'auth' });
                 sessionStorage.setItem('wndr-studio-pass', code);
-                openStudio();
+                openStudio(auth);
             } catch (err) {
                 if (err.message !== 'unauthorized') $('gateError').textContent = 'That passcode isn’t right — try again.';
                 else $('gateError').textContent = 'That passcode isn’t right — try again.';
@@ -2316,7 +2439,7 @@
         });
         // Silent re-auth if a passcode is stored from this session
         if (passcode) {
-            api({ action: 'auth' }).then(openStudio).catch(() => showGate(''));
+            api({ action: 'auth' }).then(auth => openStudio(auth)).catch(() => showGate(''));
         }
 
         /* ── Auto-capitalization (Wilson's rule): lowercase proper nouns

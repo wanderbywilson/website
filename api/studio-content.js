@@ -15,18 +15,29 @@
 //     setstatus {id, status}     → doc.status + index status
 //     delete  {id}
 //
+// Sign-in: see _auth.js. Managers get kind "blog" only, and can't bulk-import,
+// reindex, or delete the Studio copy of a live post.
+//
+// Blog docs with `liveSlug` are posts already on the site (imported from
+// blog-data by scripts/import-live-posts.js). Marking one "ready" makes the
+// daily publish run update that live post in place at the same URL.
+//
 // Docs live at content/{kind}/{id}.json, index at content/{kind}/_index.json.
 // Status flow for hoteldraft/blog: idea → draft|in-review → ready → published
 // (the daily publish pipeline picks up "ready" and flips to "published").
 // "idea" is the blog pipeline's backlog — a title with no copy written yet.
 
 const { blobPutJSON, blobGetJSON, blobDelete, blobList } = require('./_blob');
+const { whoIs } = require('./_auth');
 
 const KINDS = ['social', 'hoteldraft', 'blog'];
 const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
+// Fields a live post has that the Studio editor doesn't show (they came over
+// from blog-data): kept on save so the next publish doesn't drop them.
+const LIVE_FIELDS = ['date', 'datePublished', 'location', 'tripTypes'];
 
 function cleanId(id) {
-    return typeof id === 'string' && /^[a-z0-9-]{1,80}$/.test(id) ? id : null;
+    return typeof id === 'string' && /^[a-z0-9-]{1,120}$/.test(id) ? id : null;
 }
 function slugify(s) {
     return (s || '')
@@ -56,14 +67,14 @@ module.exports = async (req, res) => {
         if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
         body = body || {};
 
-        const expected = process.env.STUDIO_PASSCODE;
-        if (!expected) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured' });
-        if ((body.passcode || '').trim().toUpperCase() !== expected.trim().toUpperCase()) {
-            return res.status(401).json({ error: 'Wrong passcode' });
-        }
+        if (!process.env.STUDIO_PASSCODE) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured' });
+        const user = whoIs(body.passcode);
+        if (!user) return res.status(401).json({ error: 'Wrong passcode' });
 
         const kind = body.kind;
         if (!KINDS.includes(kind)) return res.status(400).json({ error: 'Unknown kind' });
+        // Managers (the website manager) run the blog; everything else is owner-only.
+        if (user.role !== 'owner' && kind !== 'blog') return res.status(403).json({ error: 'Owner-only area' });
         const INDEX = `content/${kind}/_index.json`;
         const path = (id) => `content/${kind}/${id}.json`;
         const action = body.action || '';
@@ -94,11 +105,23 @@ module.exports = async (req, res) => {
             }
             const now = new Date().toISOString();
             const existing = await blobGetJSON(path(id));
+            // A live post's link to its URL is set by the publish run, never by
+            // the editor: carry it over so a save can't re-slug a live page.
+            if (existing && existing.liveSlug) {
+                doc.liveSlug = existing.liveSlug;
+                doc.liveUrl = existing.liveUrl;
+                LIVE_FIELDS.forEach(f => { if (!(f in doc) && f in existing) doc[f] = existing[f]; });
+            }
             doc.createdAt = (existing && existing.createdAt) || now;
             doc.updatedAt = now;
+            doc.lastEditedBy = user.name;
             await blobPutJSON(path(id), doc);
             const index = (await blobGetJSON(INDEX)) || {};
-            index[id] = Object.assign({}, body.meta || {}, { updatedAt: now });
+            index[id] = Object.assign({}, body.meta || {}, {
+                updatedAt: now,
+                lastEditedBy: user.name,
+                liveUrl: doc.liveUrl || ''
+            });
             await blobPutJSON(INDEX, index);
             return res.status(200).json({ ok: true, id });
         }
@@ -120,6 +143,10 @@ module.exports = async (req, res) => {
 
         // Bulk import. One index write at the end — writing the index per item
         // races itself, because Blob reads lag writes by up to ~60s.
+        if ((action === 'saveMany' || action === 'reindex') && user.role !== 'owner') {
+            return res.status(403).json({ error: 'Owner-only action' });
+        }
+
         if (action === 'saveMany') {
             const items = Array.isArray(body.items) ? body.items : null;
             if (!items || !items.length) return res.status(400).json({ error: 'items[] required' });
@@ -166,6 +193,8 @@ module.exports = async (req, res) => {
                     author: doc.author || '',
                     category: doc.category || '',
                     proposalId: doc.proposalId || '',
+                    liveUrl: doc.liveUrl || '',
+                    lastEditedBy: doc.lastEditedBy || '',
                     status: doc.status || 'draft',
                     updatedAt: doc.updatedAt || doc.createdAt || ''
                 };
@@ -177,6 +206,10 @@ module.exports = async (req, res) => {
         if (action === 'delete') {
             const id = cleanId(body.id);
             if (!id) return res.status(400).json({ error: 'Missing or invalid id' });
+            // Deleting the Studio copy of a live post wouldn't take it off the
+            // site, just orphan it, so it's blocked for everyone.
+            const doc = await blobGetJSON(path(id));
+            if (doc && doc.liveSlug) return res.status(409).json({ error: 'This post is live on the site. Taking a live post down is Wilson’s call, so ask her.' });
             await blobDelete([path(id)]);
             const index = (await blobGetJSON(INDEX)) || {};
             delete index[id];

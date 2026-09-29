@@ -3,8 +3,9 @@
 //   GET  ?id={id}          → public read of a published proposal (powers /proposals/{id}
 //                            for proposals created in the Studio; static ones still live
 //                            in proposals-data.js and never hit this endpoint).
-//   POST {passcode, action} → Studio operations, all gated by STUDIO_PASSCODE:
-//        action:'auth'                  → validate passcode for the Studio gate
+//   POST {passcode, action} → Studio operations (see _auth.js for who can sign in):
+//        action:'auth'                  → validate passcode for the Studio gate → {role, name}
+//        everything below is owner-only (STUDIO_PASSCODE)
 //        action:'list'                  → index of proposals (+ viewed flag)
 //        action:'load'   {id}           → full proposal JSON for editing
 //        action:'save'   {id?, proposal}→ create/update; returns {id, url}
@@ -15,6 +16,7 @@
 // N reads. View records live at views/{id}.json (see proposal-viewed.js).
 
 const { blobPutJSON, blobGetJSON, blobList, blobDelete } = require('./_blob');
+const { whoIs } = require('./_auth');
 
 const INDEX_PATH = 'proposals/_index.json';
 const SITE = 'https://www.wanderbywilson.com';
@@ -66,17 +68,20 @@ module.exports = async (req, res) => {
         if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
         body = body || {};
 
-        const expected = process.env.STUDIO_PASSCODE;
-        if (!expected) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured on the server' });
-        if ((body.passcode || '').trim().toUpperCase() !== expected.trim().toUpperCase()) {
-            return res.status(401).json({ error: 'Wrong passcode' });
-        }
+        if (!process.env.STUDIO_PASSCODE) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured on the server' });
+        const user = whoIs(body.passcode);
+        if (!user) return res.status(401).json({ error: 'Wrong passcode' });
 
         const action = body.action || '';
 
+        // The Studio gate calls this for every login, so managers pass here;
+        // the role tells the Studio which areas to show.
         if (action === 'auth') {
-            return res.status(200).json({ ok: true });
+            return res.status(200).json({ ok: true, role: user.role, name: user.name });
         }
+
+        // Proposals carry client names and rates: owner only.
+        if (user.role !== 'owner') return res.status(403).json({ error: 'Proposals are owner-only' });
 
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX_PATH)) || {};

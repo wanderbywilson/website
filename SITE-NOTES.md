@@ -208,7 +208,7 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 ## 12. Proposal Studio (2026-07-29) — team-built client proposal pages
 
-**What it is:** `/studio` (passcode `WANDER26`, stored server-side as the `STUDIO_PASSCODE` Vercel env var) lets Wilson + team build `/proposals/{id}` hotel-proposal pages without touching code or Claude. Pick hotels from the PROPERTIES library (photos/desc/gallery/booking link auto-pull), fill room/rate/dates, watch a live preview, hit Publish → instant client link (no deploy; stored in the **wndr-proposals** private Vercel Blob store, `store_a0Hhz6oudk0wWLQT`).
+**What it is:** `/studio` (owner passcode stored server-side as the `STUDIO_PASSCODE` Vercel env var — never write it in this file: the repo is PUBLIC) lets Wilson + team build `/proposals/{id}` hotel-proposal pages without touching code or Claude. Pick hotels from the PROPERTIES library (photos/desc/gallery/booking link auto-pull), fill room/rate/dates, watch a live preview, hit Publish → instant client link (no deploy; stored in the **wndr-proposals** private Vercel Blob store, `store_a0Hhz6oudk0wWLQT`).
 
 **Files:** `studio.html` (builder), `proposal.html` (renders static PROPOSALS first, then falls back to `GET /api/proposals?id=`), `api/proposals.js` (auth/list/load/save/delete, passcode-gated), `api/proposal-viewed.js` (first-open Brevo email to wilson@), `api/_blob.js` (raw Blob REST helper — repo has NO package.json; do not add npm deps).
 
@@ -436,3 +436,15 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 2. **Use `git commit -- <pathspec>`** (or `git stash --staged` first) when doing a partial commit on a dirty tree. `git add`-ing the right files is not enough.
 3. **Always check for split references after a partial commit**: if file A references file B, they must land in the same commit. A rename is the classic trap — the referrers and the renamed file are separate paths.
 4. The post-deploy checklist in DEPLOY.md is what caught this. **Run it every time**, and include an asset-level check, not just page HTTP codes — every blog page returned 200 while being completely broken.
+
+## 14. Studio team logins (2026-09-29) — Sajaad, website manager & SEO
+
+**Why:** Sajaad (website manager, blog writer, SEO) needs to edit and publish posts, including ones already live, without access to Wilson's Claude or to client proposals.
+
+**Logins (api/_auth.js):** `STUDIO_PASSCODE` = Wilson, role `owner`, everything. `STUDIO_MANAGERS` = comma-separated `Name:CODE` pairs (codes 8+ chars), role `manager`. Managers get the blog only; the server enforces it (proposals, social, hotel drafts, bulk import/reindex → 403; the parse-quote/TravelWits tools still check `STUDIO_PASSCODE` directly, so owner-only). To revoke someone: remove their pair in Vercel env and redeploy.
+
+**Editing live posts:** Studio blog docs with `liveSlug` are posts already on the site. Owner-only **Bring them in** bar on the Blog list imports any `BLOG_POSTS` slug not yet in the Studio (id = slug, status published). Saving a live post flips it to draft (the site keeps the old version); **Publish these changes** marks it ready and the 8 AM publish run updates it in place at the same URL. The server carries `liveSlug`/`liveUrl`/date/location/tripTypes over on every save, so the editor can't re-slug a live page, and refuses to delete the Studio copy of a live post. Each save stamps `lastEditedBy`.
+
+**SEO fields:** optional `seoTitle` + `metaDescription` per post (Studio shows Google-length counters: 60 / 155). post.html and every post/*.html prefer them over title/dek for `<title>`, meta description, og/twitter tags; the H1 stays the headline.
+
+**Security note:** the old owner passcode was written in this file and the repo is public, so it had to be rotated (2026-09-29). The publish job reads the passcode from `.env.local` (`vercel env pull .env.local --environment=production`), never from a file in git.
