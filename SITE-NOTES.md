@@ -437,9 +437,9 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 3. **Always check for split references after a partial commit**: if file A references file B, they must land in the same commit. A rename is the classic trap — the referrers and the renamed file are separate paths.
 4. The post-deploy checklist in DEPLOY.md is what caught this. **Run it every time**, and include an asset-level check, not just page HTTP codes — every blog page returned 200 while being completely broken.
 
-## 14. Studio team logins (2026-09-29) — Sajaad, website manager & SEO
+## 14. Studio team logins (2026-09-29) — Sajjad, website manager & SEO
 
-**Why:** Sajaad (website manager, blog writer, SEO) needs to edit and publish posts, including ones already live, without access to Wilson's Claude or to client proposals. Wilson wants to touch Vercel as little as possible, so logins are managed inside the Studio.
+**Why:** Sajjad (website manager, blog writer, SEO) needs to edit and publish posts, including ones already live, without access to Wilson's Claude or to client proposals. Wilson wants to touch Vercel as little as possible, so logins are managed inside the Studio.
 
 **Logins (api/_auth.js, api/team.js):** everything is managed on the owner-only **Team** card on the Studio dashboard.
 - **Owner (Wilson):** "Change my passcode" stores a salted scrypt hash at Blob `team/_owner.json`. Once that exists, the `STUDIO_PASSCODE` env var no longer works (it leaked, see below). If the owner record is ever deleted, the env var works again (recovery path).

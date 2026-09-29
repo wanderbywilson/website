@@ -15,8 +15,9 @@
 //     setstatus {id, status}     → doc.status + index status
 //     delete  {id}
 //
-// Sign-in: see _auth.js. Managers get kind "blog" only, and can't bulk-import,
-// reindex, or delete the Studio copy of a live post.
+// Sign-in: see _auth.js. Managers get kind "blog" only (everything on the
+// Blog page, including the live-post import), but can't delete the Studio
+// copy of a live post.
 //
 // Blog docs with `liveSlug` are posts already on the site (imported from
 // blog-data by scripts/import-live-posts.js). Marking one "ready" makes the
@@ -142,8 +143,28 @@ module.exports = async (req, res) => {
 
         // Bulk import. One index write at the end — writing the index per item
         // races itself, because Blob reads lag writes by up to ~60s.
-        if ((action === 'saveMany' || action === 'reindex') && user.role !== 'owner') {
-            return res.status(403).json({ error: 'Owner-only action' });
+        // Author names fixed in bulk (a misspelled writer name across many
+        // posts). Rewrites doc.author/lastEditedBy and the index; one index write.
+        if (action === 'renameAuthor') {
+            const from = (Array.isArray(body.from) ? body.from : []).map(String).filter(Boolean);
+            const to = String(body.to || '').replace(/[<>]/g, '').trim().slice(0, 60);
+            if (!from.length || !to) return res.status(400).json({ error: 'from[] and to required' });
+            const index = (await blobGetJSON(INDEX)) || {};
+            let changed = 0;
+            for (const [id, meta] of Object.entries(index)) {
+                if (!from.includes(meta.author) && !from.includes(meta.lastEditedBy)) continue;
+                const doc = await blobGetJSON(path(id));
+                if (doc) {
+                    if (from.includes(doc.author)) doc.author = to;
+                    if (from.includes(doc.lastEditedBy)) doc.lastEditedBy = to;
+                    await blobPutJSON(path(id), doc);
+                }
+                if (from.includes(meta.author)) meta.author = to;
+                if (from.includes(meta.lastEditedBy)) meta.lastEditedBy = to;
+                changed++;
+            }
+            if (changed) await blobPutJSON(INDEX, index);
+            return res.status(200).json({ ok: true, changed });
         }
 
         if (action === 'saveMany') {

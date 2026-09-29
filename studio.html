@@ -771,7 +771,7 @@
                         <div class="dash-card-body">
                             <p class="dash-sub" style="margin:0 0 12px">Everyone here signs in at <strong>wanderbywilson.com/studio</strong> with their own passcode and sees blog posts only — no proposals, social or hotel pages.</p>
                             <form id="teamAddForm" style="display:flex; gap:8px; margin-bottom:12px">
-                                <input class="f-input" id="teamName" placeholder="Name, e.g. Sajaad" autocomplete="off" style="flex:1">
+                                <input class="f-input" id="teamName" placeholder="Name, e.g. Sajjad" autocomplete="off" style="flex:1">
                                 <button class="btn btn-small" type="submit">Add</button>
                             </form>
                             <div class="social-qa" id="teamReveal" hidden style="margin-bottom:12px"></div>
@@ -930,7 +930,7 @@
                     <input class="f-input list-search" id="blogSearch" placeholder="Search titles…">
                     <button class="btn btn-small" id="blogListNew" type="button">New post</button>
                 </div>
-                <div class="social-qa owner-only" id="blogImportBar" hidden style="margin-bottom:16px"></div>
+                <div class="social-qa" id="blogImportBar" hidden style="margin-bottom:16px"></div>
                 <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
             </div>
         </div>
@@ -1496,8 +1496,9 @@
         }
         function loadDashBlog() {
             // Blog — surface what needs a human first, plus pipeline counts
-            contentApi({ action: 'list', kind: 'blog' }).then(({ items }) => {
+            contentApi({ action: 'list', kind: 'blog' }).then(async ({ items }) => {
                 blogItems = items;
+                if (await fixAuthorNames()) return loadDashBlog();
                 if (!items.length) {
                     $('dashBlog').innerHTML = '<p class="dash-empty">No posts yet — draft one here and see it exactly as it’ll look live.</p>';
                     return;
@@ -1655,11 +1656,27 @@
             try {
                 const { items } = await contentApi({ action: 'list', kind: 'blog' });
                 blogItems = items;
+                if (await fixAuthorNames()) return showBlogList();
                 renderBlogRows();
                 renderBlogImportBar();
             } catch (err) { $('blogListRows').innerHTML = '<p class="dash-empty">Couldn’t load posts.</p>'; }
         }
         $('blogSearch').addEventListener('input', renderBlogRows);
+
+        /* His name is Sajjad; older posts were saved as "Sajad"/"Sajaad".
+           Fixed once, the first time anyone opens the list with those in it. */
+        const AUTHOR_FIXES = { to: 'Sajjad', from: ['Sajad', 'Sajaad'] };
+        let authorFixTried = false;
+        async function fixAuthorNames() {
+            if (authorFixTried) return false;
+            if (!blogItems.some(b => AUTHOR_FIXES.from.includes(b.author) || AUTHOR_FIXES.from.includes(b.lastEditedBy))) return false;
+            authorFixTried = true;
+            try {
+                const out = await contentApi({ action: 'renameAuthor', kind: 'blog', from: AUTHOR_FIXES.from, to: AUTHOR_FIXES.to });
+                return out.changed > 0;
+            } catch (err) { /* names stay as they were; nothing else depends on them */ }
+            return false;
+        }
 
         /* Live posts that aren't in the Studio yet. Bringing them in (owner
            only, one click) is what lets the team edit posts already on the
@@ -1677,7 +1694,7 @@
         }
         function renderBlogImportBar() {
             const bar = $('blogImportBar');
-            const missing = isOwner() ? livePostsNotInStudio() : [];
+            const missing = livePostsNotInStudio();
             bar.hidden = !missing.length;
             if (!missing.length) return;
             bar.innerHTML = '<strong>' + missing.length + ' live post' + (missing.length === 1 ? ' isn’t' : 's aren’t') +
