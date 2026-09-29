@@ -20,8 +20,9 @@ const { blobGetJSON, blobPutJSON } = require('./_blob');
 const MEMBERS = 'team/_members.json';
 
 // Studio areas a team member can be given. "proposals" covers the proposal
-// builder and its tools (quote-screenshot reader, TravelWits import).
-const AREAS = ['proposals', 'social', 'hotels', 'blog'];
+// builder and its tools (quote-screenshot reader, TravelWits import). The
+// Studio groups blog + hotels + performance as its "Website" section.
+const AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social'];
 const DEFAULT_AREAS = ['blog'];
 
 function cleanAreas(list) {

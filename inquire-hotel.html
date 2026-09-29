@@ -290,6 +290,9 @@
                         body: JSON.stringify(payload)
                     });
                     if (res.ok) {
+                        // Counts in Google Analytics as a lead; the Studio's Performance tab
+                        // credits it to the page the visitor landed on (e.g. a blog post).
+                        if (typeof gtag === 'function') gtag('event', 'generate_lead', { form: 'hotel' });
                         form.hidden = true;
                         if (successEl) {
                             successEl.hidden = false;

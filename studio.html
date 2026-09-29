@@ -254,6 +254,7 @@
         .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
         .studio[data-view="team"] #viewTeam,
+        .studio[data-view="performance"] #viewPerformance,
         .studio[data-view="editor"] #viewEditor { display: block; }
         /* the editor is a flex row (form | live preview) — never grid, or the
            preview stacks underneath the form */
@@ -265,7 +266,11 @@
         .studio:not([data-areas~="proposals"]) .area-proposals,
         .studio:not([data-areas~="social"]) .area-social,
         .studio:not([data-areas~="hotels"]) .area-hotels,
-        .studio:not([data-areas~="blog"]) .area-blog { display: none !important; }
+        .studio:not([data-areas~="blog"]) .area-blog,
+        .studio:not([data-areas~="performance"]) .area-performance { display: none !important; }
+        .dash-group { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--st-dim); margin: 26px 0 12px; font-weight: 500; }
+        .dash-group:first-of-type { margin-top: 4px; }
+        .team-group { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--st-dim); margin-right: 2px; }
         .team-areas { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-size: 12px; }
         .team-areas label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
         .seo-count { float: right; text-transform: none; letter-spacing: 0; font-weight: 400; }
@@ -614,6 +619,62 @@
         .studio-brand em { color: var(--st-gold); }
         .studio-status { color: var(--st-dim); }
 
+        /* Blog page tabs + Performance */
+        .view-tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--st-line); margin: 0 0 22px; }
+        .view-tabs button {
+            background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
+            padding: 10px 2px; font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+            color: var(--st-dim); cursor: pointer;
+        }
+        .view-tabs button.is-on { color: var(--st-text); border-bottom-color: var(--st-gold); }
+        .perf-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+        .perf-bar .filter-tabs { flex: 0 0 auto; }
+        .perf-note { font-size: 12px; color: var(--st-dim); }
+        .perf-demo { background: #fff7e6; border: 1px solid #eed9a8; color: #6b4e12; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
+        .perf-warn { background: #fdf0ef; border: 1px solid #f0c9c5; color: #8a2c24; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+        .perf-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .perf-tile { background: var(--st-panel); border: 1px solid var(--st-line); padding: 16px 18px; }
+        .perf-tile-label { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--st-dim); }
+        .perf-tile-value { font-family: var(--font-serif); font-size: 30px; line-height: 1.1; color: var(--st-text); margin: 8px 0 4px; font-variant-numeric: tabular-nums; }
+        .perf-tile-sub { font-size: 12px; color: var(--st-dim); }
+        .perf-delta { font-size: 12px; font-weight: 500; }
+        .perf-delta.up { color: #1e6b3a; }
+        .perf-delta.down { color: #b3261e; }
+        .perf-delta.flat { color: var(--st-dim); font-weight: 400; }
+        .perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        @media (max-width: 1100px) { .perf-grid { grid-template-columns: 1fr; } }
+        .perf-card { background: var(--st-panel); border: 1px solid var(--st-line); padding: 18px 20px; margin-bottom: 16px; min-width: 0; }
+        .perf-grid .perf-card { margin-bottom: 0; }
+        .perf-card h2 { font-family: var(--font-serif); font-weight: 400; font-size: 20px; color: var(--st-text); margin: 0 0 2px; }
+        .perf-card .perf-note { margin: 0 0 12px; }
+        .perf-chart { position: relative; }
+        #perfPostModal .modal { max-height: 88vh; overflow-y: auto; }
+        .perf-chart svg { display: block; width: 100%; overflow: visible; }
+        .perf-chart text { font-family: var(--font-sans); font-size: 11px; fill: var(--st-dim); }
+        .perf-tip {
+            position: absolute; pointer-events: none; background: var(--st-text); color: #fff;
+            font-size: 12px; padding: 6px 9px; white-space: nowrap; transform: translate(-50%, -110%);
+        }
+        .perf-table-wrap { overflow-x: auto; }
+        .perf-table { width: 100%; border-collapse: collapse; font-size: 13px; color: var(--st-text); }
+        .perf-table th {
+            text-align: right; font-weight: 500; color: var(--st-dim); font-size: 11px; letter-spacing: 0.8px;
+            text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--st-line); white-space: nowrap;
+        }
+        .perf-table th[data-sort] { cursor: pointer; }
+        .perf-table th[data-sort]:hover, .perf-table th.is-sorted { color: var(--st-text); }
+        .perf-table td { text-align: right; padding: 9px 10px; border-bottom: 1px solid var(--st-line); font-variant-numeric: tabular-nums; }
+        .perf-table th:first-child, .perf-table td:first-child { text-align: left; }
+        .perf-table td:first-child { max-width: 380px; }
+        .perf-table tr[data-perfpost] { cursor: pointer; }
+        .perf-table tr[data-perfpost]:hover td { background: rgba(30, 53, 82, 0.035); }
+        .perf-rank { color: var(--st-dim); margin-right: 8px; font-size: 12px; }
+        .perf-bars { display: grid; gap: 10px; }
+        .perf-bars-row { display: grid; grid-template-columns: 130px 1fr 60px; align-items: center; gap: 10px; font-size: 13px; color: var(--st-text); }
+        .perf-bars-track { height: 10px; background: rgba(30, 53, 82, 0.06); border-radius: 0 4px 4px 0; }
+        .perf-bars-fill { height: 100%; background: var(--st-text); border-radius: 0 4px 4px 0; }
+        .perf-bars-row span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+
         /* Sidebar navigation */
         .studio.is-open { padding-left: 232px; }
         .studio-side {
@@ -768,10 +829,13 @@
             <button class="side-item area-proposals" data-nav="proposals" type="button"><span class="side-icon">✉</span>Proposals</button>
             <button class="side-item side-sub area-proposals" data-nav="newproposal" type="button">+ New proposal</button>
 
-            <div class="side-label">Content</div>
+            <div class="side-label" id="sideWebsiteLabel">Website</div>
             <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
             <button class="side-item side-sub area-blog" data-nav="newblog" type="button">+ New post</button>
             <button class="side-item area-hotels" data-nav="hotels" type="button"><span class="side-icon">⌘</span>Hotel pages<span class="side-count" id="sideCountHotels"></span></button>
+            <button class="side-item area-performance" data-nav="performance" type="button"><span class="side-icon">↗</span>Performance</button>
+
+            <div class="side-label area-social">Social</div>
             <button class="side-item area-social" data-nav="social" type="button"><span class="side-icon">◫</span>Social posts</button>
 
             <div class="side-label owner-only">Settings</div>
@@ -802,7 +866,8 @@
                     <h1 class="dash-title">Good to see you.</h1>
                     <p class="dash-sub">Everything the team is working on, in one place.</p>
                 </div>
-                <div class="dash-grid">
+                <h2 class="dash-group area-proposals">Clients</h2>
+                <div class="dash-grid area-proposals">
                     <section class="dash-card area-proposals" id="dashProposalsCard">
                         <div class="dash-card-head">
                             <h2>Proposals</h2>
@@ -810,13 +875,15 @@
                         </div>
                         <div class="dash-card-body" id="dashProposals"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card area-social" id="dashSocialCard">
+                </div>
+                <h2 class="dash-group" id="dashWebsiteLabel">Website</h2>
+                <div class="dash-grid">
+                    <section class="dash-card area-blog" id="dashBlogCard">
                         <div class="dash-card-head">
-                            <h2>Social posts</h2>
-                            <button class="btn btn-ghost btn-small" id="dashOpenSocial" type="button">Open studio</button>
-                            <button class="btn btn-small" id="dashNewSocial" type="button">New post</button>
+                            <h2>Blog posts</h2>
+                            <button class="btn btn-small" id="dashNewBlog" type="button">New post</button>
                         </div>
-                        <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
+                        <div class="dash-card-body" id="dashBlog"><p class="dash-empty">Loading…</p></div>
                     </section>
                     <section class="dash-card area-hotels" id="dashHotelsCard">
                         <div class="dash-card-head">
@@ -825,14 +892,24 @@
                         </div>
                         <div class="dash-card-body" id="dashHotels"><p class="dash-empty">Loading…</p></div>
                     </section>
-                    <section class="dash-card area-blog" id="dashBlogCard">
+                    <section class="dash-card area-performance" id="dashPerfCard">
                         <div class="dash-card-head">
-                            <h2>Blog posts</h2>
-                            <button class="btn btn-small" id="dashNewBlog" type="button">New post</button>
+                            <h2>Performance</h2>
+                            <button class="btn btn-ghost btn-small" id="dashOpenPerf" type="button">See all</button>
                         </div>
-                        <div class="dash-card-body" id="dashBlog"><p class="dash-empty">Loading…</p></div>
+                        <div class="dash-card-body" id="dashPerf"><p class="dash-empty">Loading…</p></div>
                     </section>
-
+                </div>
+                <h2 class="dash-group area-social">Social</h2>
+                <div class="dash-grid area-social">
+                    <section class="dash-card area-social" id="dashSocialCard">
+                        <div class="dash-card-head">
+                            <h2>Social posts</h2>
+                            <button class="btn btn-ghost btn-small" id="dashOpenSocial" type="button">Open studio</button>
+                            <button class="btn btn-small" id="dashNewSocial" type="button">New post</button>
+                        </div>
+                        <div class="dash-card-body" id="dashSocial"><p class="dash-empty">Loading…</p></div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -1005,13 +1082,27 @@
                     <h1 class="dash-title">Blog <em>posts.</em></h1>
                     <p class="dash-sub">The whole content pipeline — ideas through published. Click any row to write, preview and publish it.</p>
                 </div>
-                <div class="list-controls">
-                    <div class="filter-tabs" id="blogFilters"></div>
-                    <input class="f-input list-search" id="blogSearch" placeholder="Search titles…">
-                    <button class="btn btn-small" id="blogListNew" type="button">New post</button>
+                <div id="blogPostsPane">
+                    <div class="list-controls">
+                        <div class="filter-tabs" id="blogFilters"></div>
+                        <input class="f-input list-search" id="blogSearch" placeholder="Search titles…">
+                        <button class="btn btn-small" id="blogListNew" type="button">New post</button>
+                    </div>
+                    <div class="social-qa" id="blogImportBar" hidden style="margin-bottom:16px"></div>
+                    <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
                 </div>
-                <div class="social-qa" id="blogImportBar" hidden style="margin-bottom:16px"></div>
-                <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
+
+            </div>
+        </div>
+
+        <!-- ── Performance ───────────────────────────────────────────── -->
+        <div class="view" id="viewPerformance">
+            <div class="dash">
+                <div class="dash-head">
+                    <h1 class="dash-title">Website <em>performance.</em></h1>
+                    <p class="dash-sub">From Google Analytics and Search Console: which posts bring inquiries, what people search to find you, and how every post is doing.</p>
+                </div>
+                <div id="blogPerfPane"></div>
             </div>
         </div>
 
@@ -1049,7 +1140,8 @@
                         <label class="f-label" for="bMetaDesc">Meta description <span style="text-transform:none">(optional — the snippet under the link in Google; defaults to the dek)</span><span class="seo-count" id="bMetaDescCount"></span></label>
                         <textarea class="f-area" id="bMetaDesc" rows="2" style="min-height:0" placeholder="Where to stay on the Amalfi Coast, from cliffside icons to quiet boutique hideaways."></textarea>
                     </div>
-                    <p class="social-note" id="bUrlLine" style="margin:-4px 0 14px"></p>
+                    <p class="social-note" id="bUrlLine" style="margin:-4px 0 6px"></p>
+                    <p class="social-note" id="bStatsLine" style="margin:0 0 14px" hidden></p>
                     <div class="f-grid2">
                         <div class="f-row">
                             <label class="f-label" for="bHero">Hero image URL</label>
@@ -1246,6 +1338,17 @@
         </div>
     </div>
 
+    <!-- ── One post's performance ─────────────────────────────────────── -->
+    <div class="modal-wrap" id="perfPostModal">
+        <div class="modal" style="max-width:760px">
+            <div class="modal-head">
+                <h2 class="modal-title" id="perfPostTitle">Post</h2>
+                <button class="btn btn-ghost btn-small" data-close="perfPostModal" type="button">Close</button>
+            </div>
+            <div id="perfPostBody"><p class="sec-sub">Loading…</p></div>
+        </div>
+    </div>
+
     <!-- ── Your proposals ────────────────────────────────────────────── -->
     <div class="modal-wrap" id="listModal">
         <div class="modal">
@@ -1420,15 +1523,17 @@
            fields) or { custom:true, name, location, heroImage, galleryText }  */
         let state = { id: null, mode: 'quote', hotels: [] };
         let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
-        const ALL_AREAS = ['proposals', 'social', 'hotels', 'blog'];
-        const AREA_LABELS = { proposals: 'Proposals', social: 'Social posts', hotels: 'Hotel pages', blog: 'Blog posts' };
+        const ALL_AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social'];
+        const AREA_LABELS = { proposals: 'Proposals', blog: 'Blog posts', hotels: 'Hotel pages', performance: 'Performance', social: 'Social posts' };
+        // How the Studio groups them, in the sidebar, on the dashboard and on the Team page.
+        const AREA_GROUPS = [['Clients', ['proposals']], ['Website', ['blog', 'hotels', 'performance']], ['Social', ['social']]];
         let me = { role: 'owner', name: 'Wilson', areas: ALL_AREAS };   // set by the gate's auth call
         const isOwner = () => me.role === 'owner';
         const canUse = (area) => isOwner() || me.areas.includes(area);
-        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals' };
+        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance' };
         // Which sidebar item lights up, and the top-bar title, for each view.
-        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team' };
-        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team' };
+        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance' };
+        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance' };
         let previewReady = false;
 
         /* ── Tiny helpers ─────────────────────────────────────────────── */
@@ -1464,6 +1569,10 @@
             if (auth && auth.role) me = { role: auth.role, name: auth.name || '', areas: auth.areas || (auth.role === 'owner' ? ALL_AREAS : ['blog']) };
             $('studio').dataset.role = me.role;
             $('studio').dataset.areas = (isOwner() ? ALL_AREAS : me.areas).join(' ');
+            // The "Website" heading only when they have something under it.
+            const web = ['blog', 'hotels', 'performance'].some(canUse);
+            $('sideWebsiteLabel').hidden = !web;
+            $('dashWebsiteLabel').hidden = !web;
             $('gate').style.display = 'none';
             $('studio').classList.add('is-open');
             try { localStorage.setItem('wndr-team', '1'); } catch (e) {}
@@ -1478,6 +1587,7 @@
             document.querySelectorAll('.side-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === VIEW_NAV[v]));
             $('topTitle').textContent = VIEW_TITLE[v] || '';
             if (v === 'team') loadTeam();
+            if (v === 'performance') loadPerf(false);
             window.scrollTo(0, 0);
             if (v === 'home') loadDashboard();
             if (v === 'social') loadSocialStudio();
@@ -1573,6 +1683,27 @@
             if (canUse('social')) loadDashSocial();
             if (canUse('hotels')) loadDashHotels();
             if (canUse('blog')) loadDashBlog();
+            if (canUse('performance')) loadDashPerf();
+        }
+        // Dashboard snapshot: the two things Wilson asked for, plus views.
+        async function loadDashPerf() {
+            try {
+                const d = await statsApi({ action: 'overview', days: 28 });
+                if (!d.connected) {
+                    $('dashPerf').innerHTML = '<p class="dash-empty">' + (isOwner() ? 'Connect Google on the Performance page to see your numbers here.' : 'Not connected to Google yet.') + '</p>';
+                    return;
+                }
+                const t = d.totals || {}, inq = d.inquiries || {}, q = (d.siteQueries || []).slice(0, 3);
+                const topInq = (d.posts || []).filter(p => p.inquiryVisits).sort((a, b) => b.inquiryVisits - a.inquiryVisits)[0];
+                $('dashPerf').innerHTML = `
+                    <div class="perf-tiles" style="margin-bottom:12px">
+                        ${tile('Blog views', fmtNum(t.views), delta(t.views, t.viewsPrev), 'last 28 days')}
+                        ${tile('Inquiry visits', fmtNum(inq.visitsFromPosts), '', 'from blog readers')}
+                    </div>
+                    ${topInq ? `<p class="perf-note" style="margin:0 0 6px">Top post for inquiries: <strong style="color:var(--st-text)">${esc(postTitle(topInq.slug))}</strong></p>` : ''}
+                    ${q.length ? `<p class="perf-note" style="margin:0">Top searches: ${q.map(x => '“' + esc(x.query) + '”').join(', ')}</p>` : ''}
+                    ${d.demo ? '<p class="perf-note" style="margin:8px 0 0; color:#6b4e12">Sample numbers (test copy).</p>' : ''}`;
+            } catch (err) { $('dashPerf').innerHTML = '<p class="dash-empty">Couldn’t load stats.</p>'; }
         }
         function loadDashProposals() {
             api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
@@ -1643,9 +1774,9 @@
                         <div class="dash-row-main">
                             <div class="dash-row-title">${esc(m.name)}</div>
                             <div class="dash-row-sub">${m.lastSeenAt ? 'last signed in ' + fmtWhen(m.lastSeenAt) : 'hasn’t signed in yet'}</div>
-                            <div class="team-areas">${ALL_AREAS.map(a => `
+                            ${AREA_GROUPS.map(([group, areas]) => `<div class="team-areas"><span class="team-group">${group}</span>${areas.map(a => `
                                 <label><input type="checkbox" data-teamarea="${a}" data-teamid="${esc(m.id)}" ${(m.areas || []).includes(a) ? 'checked' : ''}> ${AREA_LABELS[a]}</label>`).join('')}
-                            </div>
+                            </div>`).join('')}
                         </div>
                         <button class="btn btn-ghost btn-small" data-teamreset="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Reset passcode</button>
                         <button class="btn btn-ghost btn-small danger" data-teamremove="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Remove</button>
@@ -1734,6 +1865,7 @@
             else if (n === 'proposals') { showView('editor'); $('btnList').click(); }
             else if (n === 'newproposal') { showView('editor'); $('btnNew').click(); }
             else if (n === 'blog') { blogFilter = 'all'; showBlogList(); }
+            else if (n === 'performance') showView('performance');
             else if (n === 'newblog') openBlogEditor(null);
             else if (n === 'hotels') { showView('hotels'); showHotelDraftList(); }
             else if (n === 'social') showView('social');
@@ -1747,6 +1879,7 @@
         $('brandHome').addEventListener('click', (e) => { e.preventDefault(); showView('home'); });
         $('dashNewProposal').addEventListener('click', () => { showView('editor'); $('btnNew').click(); });
         $('dashNewBlog').addEventListener('click', () => openBlogEditor(null));
+        $('dashOpenPerf').addEventListener('click', () => showView('performance'));
         document.addEventListener('click', async (e) => {
             const pr = e.target.closest('[data-openproposal]');
             if (pr) {
@@ -1864,6 +1997,317 @@
             }
         });
         $('blogListNew').addEventListener('click', () => openBlogEditor(null));
+
+        /* ── Blog → Performance tab ───────────────────────────────────────
+           Google Analytics + Search Console via /api/stats. Leads with what
+           Wilson asked for: which posts send people to the inquiry pages, and
+           what people search on Google to find the site. */
+        const perf = { days: 28, data: null, sort: 'views', dir: -1, loading: false };
+        async function statsApi(payload) {
+            const res = await fetch('/api/stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ passcode }, payload))
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+            return data;
+        }
+        const fmtNum = (n) => (n == null || isNaN(n)) ? '—' : Math.round(n).toLocaleString('en-US');
+        const fmtDur = (sec) => !sec ? '—' : (sec >= 60 ? Math.floor(sec / 60) + 'm ' + String(Math.round(sec % 60)).padStart(2, '0') + 's' : Math.round(sec) + 's');
+        const fmtDay = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        // Change vs the previous period of the same length. Ranking: lower is better.
+        function delta(cur, prev, lowerIsBetter) {
+            if (cur == null || prev == null) return '<span class="perf-delta flat">no earlier data</span>';
+            if (!prev) return cur ? '<span class="perf-delta flat">new this period</span>' : '<span class="perf-delta flat">—</span>';
+            const pct = Math.round((cur - prev) / prev * 100);
+            if (!pct) return '<span class="perf-delta flat">no change</span>';
+            const good = lowerIsBetter ? pct < 0 : pct > 0;
+            return `<span class="perf-delta ${good ? 'up' : 'down'}">${pct > 0 ? '▲' : '▼'} ${Math.abs(pct)}%</span>`;
+        }
+        // Titles are stored as HTML (&amp;, &rsquo;); show them as text.
+        const decodeEntities = (h) => { const t = document.createElement('textarea'); t.innerHTML = h || ''; return t.value; };
+        function postTitle(slug) {
+            if (typeof BLOG_POSTS !== 'undefined' && BLOG_POSTS[slug]) return decodeEntities(BLOG_POSTS[slug].title);
+            const b = blogItems.find(x => x.id === slug || (x.liveUrl || '').endsWith('/post/' + slug));
+            return b ? decodeEntities(b.title) : slug.replace(/-/g, ' ');
+        }
+
+        async function loadPerf(refresh) {
+            const pane = $('blogPerfPane');
+            if (!perf.data || refresh) pane.innerHTML = '<p class="dash-empty">Loading your numbers from Google…</p>';
+            try {
+                const data = await statsApi({ action: 'overview', days: perf.days, refresh: !!refresh });
+                if (!data.connected) { renderPerfConnect(); return; }
+                perf.data = data;
+                renderPerf();
+            } catch (err) { pane.innerHTML = '<p class="dash-empty">Couldn’t load stats — ' + esc(err.message) + '</p>'; }
+        }
+
+        function renderPerfConnect() {
+            const pane = $('blogPerfPane');
+            if (!isOwner()) {
+                pane.innerHTML = '<div class="perf-card"><h2>Not connected yet</h2><p class="perf-note" style="margin:6px 0 0">Wilson still needs to connect Google Analytics and Search Console. Once she has, your posts’ numbers show up here.</p></div>';
+                return;
+            }
+            pane.innerHTML = `
+                <div class="perf-card" style="max-width:760px">
+                    <h2>Connect Google</h2>
+                    <p class="perf-note" style="margin:6px 0 14px">One-time setup. It uses a read-only “robot” Google account that can see your Analytics and Search Console numbers and can’t change anything. Claude will walk you through making it; then choose the key file it gave you below.</p>
+                    <input type="file" id="perfKeyFile" accept=".json,application/json" style="margin-bottom:10px">
+                    <div><button class="btn btn-small" id="perfConnect" type="button">Connect</button></div>
+                    <p class="perf-note" id="perfConnectMsg" style="margin-top:10px"></p>
+                </div>`;
+        }
+        document.addEventListener('click', async (e) => {
+            if (e.target.closest('#perfConnect')) {
+                const f = $('perfKeyFile').files[0];
+                if (!f) { $('perfConnectMsg').textContent = 'Choose the key file first.'; return; }
+                try {
+                    const out = await statsApi({ action: 'connect', keyJson: await f.text() });
+                    $('perfConnectMsg').innerHTML = 'Connected. Last step: add <strong>' + esc(out.clientEmail) + '</strong> as a Viewer in Google Analytics and as a user in Search Console, then refresh this tab.';
+                    setTimeout(() => loadPerf(true), 1500);
+                } catch (err) { $('perfConnectMsg').textContent = 'Couldn’t connect — ' + err.message; }
+                return;
+            }
+            if (e.target.closest('#perfDisconnect')) {
+                if (!confirm('Disconnect Google? The Performance tab stops updating until you connect it again.')) return;
+                try { await statsApi({ action: 'disconnect' }); perf.data = null; renderPerfConnect(); } catch (err) { toast('Couldn’t disconnect — ' + err.message); }
+                return;
+            }
+            const r = e.target.closest('[data-perfdays]');
+            if (r) { perf.days = Number(r.dataset.perfdays); perf.data = null; loadPerf(false); return; }
+            if (e.target.closest('#perfRefresh')) { loadPerf(true); return; }
+            const th = e.target.closest('.perf-table th[data-sort]');
+            if (th && th.closest('#perfAllPosts')) {
+                perf.dir = perf.sort === th.dataset.sort ? -perf.dir : -1;
+                perf.sort = th.dataset.sort;
+                $('perfAllPosts').innerHTML = allPostsTable();
+                return;
+            }
+            const row = e.target.closest('[data-perfpost]');
+            if (row) openPerfPost(row.dataset.perfpost);
+        });
+
+        function tile(label, value, deltaHtml, sub) {
+            return `<div class="perf-tile"><div class="perf-tile-label">${label}</div><div class="perf-tile-value">${value}</div>
+                <div>${deltaHtml || ''}</div>${sub ? `<div class="perf-tile-sub">${sub}</div>` : ''}</div>`;
+        }
+
+        function renderPerf() {
+            const d = perf.data;
+            const t = d.totals || {}, s = d.search || {}, inq = d.inquiries || {};
+            const posts = d.posts || [];
+            const leadsOn = (inq.leadsAll || 0) > 0;
+            const inquiryRows = posts.filter(p => p.inquiryVisits || p.leads)
+                .sort((a, b) => (b.leads || 0) - (a.leads || 0) || (b.inquiryVisits || 0) - (a.inquiryVisits || 0)).slice(0, 10);
+            const warn = [d.analyticsError, d.inquiryError, d.searchError].filter(Boolean)
+                .map(m => `<div class="perf-warn">${esc(m)}</div>`).join('');
+            const range = d.ranges && d.ranges.analytics ? `${fmtDay(d.ranges.analytics.startDate)} – ${fmtDay(d.ranges.analytics.endDate)}` : '';
+            const sources = d.sources || [];
+            const maxSrc = Math.max(1, ...sources.map(x => x.views));
+            $('blogPerfPane').innerHTML = `
+                ${d.demo ? '<div class="perf-demo"><strong>Sample numbers.</strong> This is the test copy on your Mac, so these figures are made up to show the layout. Once Google is connected on the live Studio, this shows your real data.</div>' : ''}
+                <div class="perf-bar">
+                    <div class="filter-tabs">${[7, 28, 90].map(n => `<button data-perfdays="${n}" class="${perf.days === n ? 'is-on' : ''}" type="button">Last ${n} days</button>`).join('')}</div>
+                    <span class="perf-note">${range}${d.fetchedAt ? ' · updated ' + fmtWhen(d.fetchedAt) : ''}</span>
+                    <button class="btn btn-ghost btn-small" id="perfRefresh" type="button" style="margin-left:auto">Refresh</button>
+                </div>
+                ${warn}
+                <div class="perf-tiles">
+                    ${tile('Blog views', fmtNum(t.views), delta(t.views, t.viewsPrev))}
+                    ${tile('Readers', fmtNum(t.readers), delta(t.readers, t.readersPrev))}
+                    ${tile('Clicks from Google', fmtNum(s.clicks), delta(s.clicks, s.clicksPrev), 'to blog posts')}
+                    ${tile('Inquiry page visits', fmtNum(inq.visitsFromPosts), '', 'from readers who landed on a post')}
+                    ${tile('Inquiries sent', leadsOn ? fmtNum(inq.leadsFromPosts) : '—', '', leadsOn ? 'by readers who landed on a post' : 'counting starts once this update is live')}
+                </div>
+
+                <div class="perf-grid" style="grid-template-columns: 1fr">
+                    <div class="perf-card">
+                        <h2>Posts that bring inquiries</h2>
+                        <p class="perf-note">Readers who arrived on the post, then opened an inquiry page${leadsOn ? ' or sent an inquiry' : ''} in the same visit.</p>
+                        ${inquiryRows.length ? `<div class="perf-table-wrap"><table class="perf-table">
+                            <thead><tr><th>Post</th><th>Inquiry visits</th><th>Inquiries sent</th><th>Readers</th></tr></thead>
+                            <tbody>${inquiryRows.map((p, i) => `<tr data-perfpost="${esc(p.slug)}"><td><span class="perf-rank">${i + 1}</span>${esc(postTitle(p.slug))}</td>
+                                <td>${fmtNum(p.inquiryVisits || 0)}</td><td>${leadsOn ? fmtNum(p.leads || 0) : '—'}</td><td>${fmtNum(p.readers)}</td></tr>`).join('')}</tbody>
+                        </table></div>` : '<p class="dash-empty">No inquiry visits from blog readers in this period yet.</p>'}
+                    </div>
+                    <div class="perf-card">
+                        <h2>What people search to find you</h2>
+                        <p class="perf-note">Top Google searches that showed your website, any page. Google reports these about 3 days late.</p>
+                        ${(d.siteQueries || []).length ? `<div class="perf-table-wrap"><table class="perf-table">
+                            <thead><tr><th>Search</th><th>Clicks</th><th>Shown</th><th>Avg rank</th></tr></thead>
+                            <tbody>${d.siteQueries.slice(0, 15).map((q, i) => `<tr><td><span class="perf-rank">${i + 1}</span>${esc(q.query)}</td>
+                                <td>${fmtNum(q.clicks)}</td><td>${fmtNum(q.impressions)}</td><td>${q.position}</td></tr>`).join('')}</tbody>
+                        </table></div>` : '<p class="dash-empty">No search data for this period.</p>'}
+                    </div>
+                </div>
+
+                <div class="perf-card">
+                    <h2>Blog views per day</h2>
+                    <p class="perf-note">All blog posts combined. Hover for the exact number.</p>
+                    <div class="perf-chart" id="perfChart"></div>
+                </div>
+
+                <div class="perf-card">
+                    <h2>Every post</h2>
+                    <p class="perf-note">Click a column to sort, or a post to see its own chart and the searches that find it.</p>
+                    <div class="perf-table-wrap" id="perfAllPosts">${allPostsTable()}</div>
+                </div>
+
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <h2>Where readers come from</h2>
+                        <p class="perf-note">Blog views by how the visit started.</p>
+                        <div class="perf-bars">${sources.map(x => `<div class="perf-bars-row"><span>${esc(x.channel)}</span>
+                            <div class="perf-bars-track"><div class="perf-bars-fill" style="width:${Math.max(2, x.views / maxSrc * 100)}%"></div></div>
+                            <span>${fmtNum(x.views)}</span></div>`).join('') || '<p class="dash-empty">No data.</p>'}</div>
+                    </div>
+                    <div class="perf-card">
+                        <h2>Google search, blog only</h2>
+                        <p class="perf-note">How the blog shows up in Google (about 3 days behind).</p>
+                        <div class="perf-tiles" style="margin:0">
+                            ${tile('Shown in Google', fmtNum(s.impressions), delta(s.impressions, s.impressionsPrev))}
+                            ${tile('Avg ranking', s.position == null ? '—' : s.position, '', 'lower is better; 1–10 is page one')}
+                        </div>
+                    </div>
+                </div>
+                ${isOwner() && !d.demo ? '<p class="perf-note">Connected to Google. <a href="#" id="perfDisconnect">Disconnect</a></p>' : ''}`;
+            drawLineChart($('perfChart'), d.daily || [], 'views');
+        }
+
+        const PERF_COLS = [
+            ['views', 'Views'], ['change', 'Change'], ['readers', 'Readers'], ['avgTime', 'Avg time'],
+            ['clicks', 'Google clicks'], ['impressions', 'Shown'], ['position', 'Avg rank'], ['inquiryVisits', 'Inquiry visits']
+        ];
+        function allPostsTable() {
+            // "New this period" sorts above any percentage.
+            const rows = (perf.data.posts || []).map(p => Object.assign({}, p, {
+                change: p.viewsPrev ? (p.views - p.viewsPrev) / p.viewsPrev : (p.views ? 1e9 : 0)
+            }));
+            const k = perf.sort;
+            rows.sort((a, b) => {
+                const av = a[k], bv = b[k];
+                if (av == null && bv == null) return 0;
+                if (av == null) return 1;               // missing values always last
+                if (bv == null) return -1;
+                const best = k === 'position' ? av - bv : bv - av;   // ranking: lower is better
+                return perf.dir < 0 ? best : -best;
+            });
+            return `<table class="perf-table"><thead><tr><th>Post</th>${PERF_COLS.map(([key, label]) =>
+                `<th data-sort="${key}" class="${perf.sort === key ? 'is-sorted' : ''}">${label}${perf.sort === key ? (perf.dir < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead>
+                <tbody>${rows.map(p => `<tr data-perfpost="${esc(p.slug)}"><td>${esc(postTitle(p.slug))}</td>
+                    <td>${fmtNum(p.views)}</td><td>${delta(p.views, p.viewsPrev)}</td><td>${fmtNum(p.readers)}</td><td>${fmtDur(p.avgTime)}</td>
+                    <td>${fmtNum(p.clicks)}</td><td>${fmtNum(p.impressions)}</td><td>${p.position == null ? '—' : p.position}</td>
+                    <td>${fmtNum(p.inquiryVisits || 0)}</td></tr>`).join('')}</tbody></table>`;
+        }
+
+        // One-series line chart with a hover crosshair. Plain SVG, redrawn on resize.
+        function drawLineChart(el, series, unit) {
+            if (!el) return;
+            if (!series.length) { el.innerHTML = '<p class="dash-empty">No data for this period.</p>'; return; }
+            const W = Math.max(280, el.clientWidth), H = 220, L = 44, R = 12, T = 12, B = 28;
+            const max = Math.max(1, ...series.map(p => p.views));
+            const step = Math.pow(10, Math.floor(Math.log10(max)));
+            const top = Math.ceil(max / step) * step;
+            const x = (i) => L + (series.length === 1 ? 0 : i / (series.length - 1) * (W - L - R));
+            const y = (v) => T + (1 - v / top) * (H - T - B);
+            const pts = series.map((p, i) => `${x(i).toFixed(1)},${y(p.views).toFixed(1)}`);
+            const grid = [0, 0.25, 0.5, 0.75, 1].map(f => {
+                const v = Math.round(top * f), yy = y(v).toFixed(1);
+                return `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="rgba(30,53,82,0.08)"/>
+                        <text x="${L - 8}" y="${yy}" dy="4" text-anchor="end">${fmtNum(v)}</text>`;
+            }).join('');
+            const every = Math.max(1, Math.ceil(series.length / 6));
+            const xl = series.map((p, i) => (i % every === 0 || i === series.length - 1)
+                ? `<text x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${fmtDay(p.date)}</text>` : '').join('');
+            el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" height="${H}" role="img" aria-label="${unit} per day">
+                ${grid}${xl}
+                <path d="M${pts[0].split(',')[0]},${y(0)} L${pts.join(' L')} L${x(series.length - 1)},${y(0)} Z" fill="rgba(30,53,82,0.06)"/>
+                <polyline points="${pts.join(' ')}" fill="none" stroke="var(--st-text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                <line id="perfCross" y1="${T}" y2="${H - B}" stroke="rgba(30,53,82,0.35)" stroke-dasharray="3 3" visibility="hidden"/>
+                <circle id="perfDot" r="4.5" fill="var(--st-text)" stroke="#fff" stroke-width="2" visibility="hidden"/>
+                <rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent" id="perfHit"/>
+            </svg><div class="perf-tip" hidden></div>`;
+            const svg = el.querySelector('svg'), tip = el.querySelector('.perf-tip');
+            const cross = svg.querySelector('#perfCross'), dot = svg.querySelector('#perfDot');
+            const hit = svg.querySelector('#perfHit');
+            hit.addEventListener('mousemove', (ev) => {
+                const r = svg.getBoundingClientRect();
+                const px = (ev.clientX - r.left) * (W / r.width);
+                const i = Math.max(0, Math.min(series.length - 1, Math.round((px - L) / (W - L - R) * (series.length - 1))));
+                const cx = x(i), cy = y(series[i].views);
+                cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+                dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('visibility', 'visible');
+                tip.hidden = false;
+                tip.style.left = (cx / W * r.width) + 'px';
+                tip.style.top = (cy / H * r.height) + 'px';
+                tip.innerHTML = `<strong>${fmtNum(series[i].views)}</strong> ${unit} · ${fmtDay(series[i].date)}`;
+            });
+            hit.addEventListener('mouseleave', () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); });
+        }
+        let perfResizeT = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(perfResizeT);
+            perfResizeT = setTimeout(() => {
+                if (perf.data && !$('blogPerfPane').hidden) drawLineChart($('perfChart'), perf.data.daily || [], 'views');
+            }, 150);
+        });
+
+        async function openPerfPost(slug) {
+            $('perfPostTitle').textContent = postTitle(slug);
+            $('perfPostBody').innerHTML = '<p class="sec-sub">Loading…</p>';
+            $('perfPostModal').classList.add('is-open');
+            try {
+                const d = await statsApi({ action: 'post', slug, days: perf.days });
+                const t = d.totals || {};
+                const row = (perf.data && (perf.data.posts || []).find(p => p.slug === slug)) || {};
+                const editId = (blogItems.find(b => b.id === slug || (b.liveUrl || '').endsWith('/post/' + slug)) || {}).id;
+                $('perfPostBody').innerHTML = `
+                    ${[d.analyticsError, d.searchError].filter(Boolean).map(m => `<div class="perf-warn">${esc(m)}</div>`).join('')}
+                    <div class="perf-tiles">
+                        ${tile('Views', fmtNum(t.views), delta(row.views, row.viewsPrev))}
+                        ${tile('Avg time', fmtDur(t.avgTime), '')}
+                        ${tile('Google clicks', fmtNum(row.clicks), '')}
+                        ${tile('Inquiry visits', fmtNum(row.inquiryVisits || 0), '')}
+                    </div>
+                    <div class="perf-chart" id="perfPostChart" style="margin-bottom:18px"></div>
+                    <h3 style="font-family:var(--font-serif); font-weight:400; font-size:18px; margin:0 0 4px">Searches that find this post</h3>
+                    <p class="perf-note" style="margin:0 0 8px">Useful for the SEO title and headings: these are the words people actually type.</p>
+                    ${(d.queries || []).length ? `<div class="perf-table-wrap"><table class="perf-table">
+                        <thead><tr><th>Search</th><th>Clicks</th><th>Shown</th><th>Avg rank</th></tr></thead>
+                        <tbody>${d.queries.map(q => `<tr><td>${esc(q.query)}</td><td>${fmtNum(q.clicks)}</td><td>${fmtNum(q.impressions)}</td><td>${q.position}</td></tr>`).join('')}</tbody>
+                    </table></div>` : '<p class="dash-empty">Google hasn’t shown this post for any searches in this period.</p>'}
+                    <div style="display:flex; gap:8px; margin-top:16px">
+                        ${editId ? `<button class="btn btn-small" data-perfedit="${esc(editId)}" type="button">Edit this post</button>` : ''}
+                        <a class="btn btn-ghost btn-small" href="/post/${esc(slug)}" target="_blank" rel="noopener">View live</a>
+                    </div>`;
+                drawLineChart($('perfPostChart'), d.daily || [], 'views');
+            } catch (err) { $('perfPostBody').innerHTML = '<p class="dash-empty">Couldn’t load this post — ' + esc(err.message) + '</p>'; }
+        }
+        document.addEventListener('click', (e) => {
+            const b = e.target.closest('[data-perfedit]');
+            if (!b) return;
+            $('perfPostModal').classList.remove('is-open');
+            openBlogEditor(b.dataset.perfedit);
+        });
+
+        // A live post's own numbers, under its URL in the editor.
+        async function renderBlogStatsLine() {
+            const line = $('bStatsLine');
+            line.hidden = true;
+            const slug = blogDocExtra.liveSlug;
+            if (!slug || !canUse('performance')) return;
+            try {
+                const d = await statsApi({ action: 'post', slug, days: 28 });
+                if (!d.connected || blogDocExtra.liveSlug !== slug) return;
+                const t = d.totals || {}, q = (d.queries || [])[0];
+                line.innerHTML = `Last 28 days: <strong>${fmtNum(t.views)}</strong> views · ${fmtNum(t.readers)} readers · avg ${fmtDur(t.avgTime)}` +
+                    (q ? ` · top Google search: “${esc(q.query)}”` : '');
+                line.hidden = false;
+            } catch (err) { /* stats are a bonus here; the editor works without them */ }
+        }
+
 
         /* ── Social studio ───────────────────────────────────────────────
            Library (everything the funnel produced) + a drag-and-drop month
@@ -2430,6 +2874,7 @@
             blogMissingHotels = []; renderBlogGaps();
             $('blogStatusLine').innerHTML = (id ? 'Editing — ' : 'New draft — ') + (STATUS_CHIP[blogStatus] || '') + notes;
             renderBlogLiveState();
+            renderBlogStatsLine();
             renderSeoCounts();
             pushBlogPreview();
         }
