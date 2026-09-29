@@ -5,7 +5,7 @@
 //                            in proposals-data.js and never hit this endpoint).
 //   POST {passcode, action} → Studio operations (see _auth.js for who can sign in):
 //        action:'auth'                  → validate passcode for the Studio gate → {role, name}
-//        everything below is owner-only (STUDIO_PASSCODE)
+//        everything below is owner-only
 //        action:'list'                  → index of proposals (+ viewed flag)
 //        action:'load'   {id}           → full proposal JSON for editing
 //        action:'save'   {id?, proposal}→ create/update; returns {id, url}
@@ -16,7 +16,7 @@
 // N reads. View records live at views/{id}.json (see proposal-viewed.js).
 
 const { blobPutJSON, blobGetJSON, blobList, blobDelete } = require('./_blob');
-const { whoIs } = require('./_auth');
+const { whoIs, loadMembers, saveMembers } = require('./_auth');
 
 const INDEX_PATH = 'proposals/_index.json';
 const SITE = 'https://www.wanderbywilson.com';
@@ -68,8 +68,7 @@ module.exports = async (req, res) => {
         if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
         body = body || {};
 
-        if (!process.env.STUDIO_PASSCODE) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured on the server' });
-        const user = whoIs(body.passcode);
+        const user = await whoIs(body.passcode);
         if (!user) return res.status(401).json({ error: 'Wrong passcode' });
 
         const action = body.action || '';
@@ -77,6 +76,14 @@ module.exports = async (req, res) => {
         // The Studio gate calls this for every login, so managers pass here;
         // the role tells the Studio which areas to show.
         if (action === 'auth') {
+            // "Last signed in" on Wilson's Team card. Best effort: never block a login on it.
+            if (user.memberId) {
+                try {
+                    const members = await loadMembers();
+                    const m = members.find(x => x.id === user.memberId);
+                    if (m) { m.lastSeenAt = new Date().toISOString(); await saveMembers(members); }
+                } catch (e) { console.error('lastSeenAt update failed:', e); }
+            }
             return res.status(200).json({ ok: true, role: user.role, name: user.name });
         }
 

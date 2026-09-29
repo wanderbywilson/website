@@ -67,8 +67,7 @@ module.exports = async (req, res) => {
         if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
         body = body || {};
 
-        if (!process.env.STUDIO_PASSCODE) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured' });
-        const user = whoIs(body.passcode);
+        const user = await whoIs(body.passcode);
         if (!user) return res.status(401).json({ error: 'Wrong passcode' });
 
         const kind = body.kind;

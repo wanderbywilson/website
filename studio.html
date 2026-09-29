@@ -763,6 +763,30 @@
                         </div>
                         <div class="dash-card-body" id="dashBlog"><p class="dash-empty">Loading…</p></div>
                     </section>
+                    <section class="dash-card owner-only" id="dashTeamCard">
+                        <div class="dash-card-head">
+                            <h2>Team</h2>
+                            <span class="dash-hint">blog-only logins</span>
+                        </div>
+                        <div class="dash-card-body">
+                            <p class="dash-sub" style="margin:0 0 12px">Everyone here signs in at <strong>wanderbywilson.com/studio</strong> with their own passcode and sees blog posts only — no proposals, social or hotel pages.</p>
+                            <form id="teamAddForm" style="display:flex; gap:8px; margin-bottom:12px">
+                                <input class="f-input" id="teamName" placeholder="Name, e.g. Sajaad" autocomplete="off" style="flex:1">
+                                <button class="btn btn-small" type="submit">Add</button>
+                            </form>
+                            <div class="social-qa" id="teamReveal" hidden style="margin-bottom:12px"></div>
+                            <div id="dashTeam"><p class="dash-empty">Loading…</p></div>
+                            <details style="margin-top:16px; border-top:1px solid var(--st-line, #e5e5e5); padding-top:12px">
+                                <summary style="cursor:pointer; font-size:13px">Change my passcode</summary>
+                                <form id="ownerPassForm" style="margin-top:10px">
+                                    <input class="f-input" id="ownerPassNew" type="password" placeholder="New passcode (10+ letters and numbers)" autocomplete="new-password" style="margin-bottom:8px">
+                                    <input class="f-input" id="ownerPassAgain" type="password" placeholder="Type it again" autocomplete="new-password" style="margin-bottom:8px">
+                                    <button class="btn btn-small" type="submit">Save new passcode</button>
+                                    <p class="social-note" style="margin-top:8px">Your old passcode stops working as soon as you save. Team members&rsquo; passcodes don&rsquo;t change.</p>
+                                </form>
+                            </details>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -1458,6 +1482,7 @@
             loadDashBlog();
         }
         function loadOwnerDashboard() {
+            loadTeam();
             api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
                 .catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
             contentApi({ action: 'list', kind: 'social' }).then(({ items }) => { dashData.social = items; renderDashSocial(); })
@@ -1497,6 +1522,90 @@
                         <button class="btn btn-ghost btn-small" data-blogfilter="all" type="button" style="margin-left:auto">View all ${items.length}</button></div>`;
             }).catch(() => { $('dashBlog').innerHTML = '<p class="dash-empty">Couldn’t load blog posts.</p>'; });
         }
+
+        /* ── Team: blog-only logins Wilson hands out. A passcode is shown
+           once, right after Add or Reset; the server keeps only a hash. ── */
+        async function teamApi(payload) {
+            const res = await fetch('/api/team', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ passcode }, payload))
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+            return data;
+        }
+        async function loadTeam() {
+            try {
+                const { members } = await teamApi({ action: 'list' });
+                $('dashTeam').innerHTML = members.length ? members.map(m => `
+                    <div class="dash-row" style="cursor:default">
+                        <div class="dash-row-main">
+                            <div class="dash-row-title">${esc(m.name)}</div>
+                            <div class="dash-row-sub">${m.lastSeenAt ? 'last signed in ' + fmtWhen(m.lastSeenAt) : 'hasn’t signed in yet'}</div>
+                        </div>
+                        <button class="btn btn-ghost btn-small" data-teamreset="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Reset passcode</button>
+                        <button class="btn btn-ghost btn-small danger" data-teamremove="${esc(m.id)}" data-teamname="${esc(m.name)}" type="button">Remove</button>
+                    </div>`).join('')
+                    : '<p class="dash-empty">No one yet. Add a name above to create their login.</p>';
+            } catch (err) { $('dashTeam').innerHTML = '<p class="dash-empty">Couldn’t load the team.</p>'; }
+        }
+        function revealPasscode(name, code, isReset) {
+            const box = $('teamReveal');
+            box.hidden = false;
+            box.innerHTML = `<strong>${esc(name)}’s ${isReset ? 'new ' : ''}passcode:</strong>
+                <div style="display:flex; gap:8px; align-items:center; margin:8px 0">
+                    <code id="teamCode" style="font-size:18px; letter-spacing:2px">${esc(code)}</code>
+                    <button class="btn btn-small" id="teamCopy" type="button">Copy</button>
+                </div>
+                Send it to ${esc(name)} with the link <strong>wanderbywilson.com/studio</strong>. This is the only time it’s shown — if it gets lost, hit <em>Reset passcode</em> for a new one.${isReset ? ' The old passcode no longer works.' : ''}
+                <div style="margin-top:8px"><button class="btn btn-ghost btn-small" id="teamRevealDone" type="button">Done</button></div>`;
+        }
+        $('ownerPassForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const next = $('ownerPassNew').value, again = $('ownerPassAgain').value;
+            if (next !== again) { toast('Those two don’t match.'); return; }
+            try {
+                await teamApi({ action: 'setowner', newPasscode: next });
+                passcode = next.trim();
+                sessionStorage.setItem('wndr-studio-pass', passcode);
+                $('ownerPassNew').value = ''; $('ownerPassAgain').value = '';
+                $('ownerPassForm').closest('details').open = false;
+                toast('Passcode changed. Use the new one next time you sign in.');
+            } catch (err) { toast('Couldn’t change it — ' + err.message); }
+        });
+        $('teamAddForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = $('teamName').value.trim();
+            if (!name) { toast('Type a name first.'); return; }
+            try {
+                const out = await teamApi({ action: 'add', name });
+                $('teamName').value = '';
+                revealPasscode(out.member.name, out.passcode, false);
+                loadTeam();
+            } catch (err) { toast('Couldn’t add them — ' + err.message); }
+        });
+        document.addEventListener('click', async (e) => {
+            if (e.target.closest('#teamCopy')) {
+                try { await navigator.clipboard.writeText($('teamCode').textContent); toast('Passcode copied.'); }
+                catch (err) { window.prompt('Copy this passcode:', $('teamCode').textContent); }
+                return;
+            }
+            if (e.target.closest('#teamRevealDone')) { $('teamReveal').hidden = true; $('teamReveal').innerHTML = ''; return; }
+            const rs = e.target.closest('[data-teamreset]');
+            if (rs) {
+                if (!confirm('Give ' + rs.dataset.teamname + ' a new passcode? Their current one stops working right away.')) return;
+                try { const out = await teamApi({ action: 'reset', id: rs.dataset.teamreset }); revealPasscode(rs.dataset.teamname, out.passcode, true); }
+                catch (err) { toast('Couldn’t reset it — ' + err.message); }
+                return;
+            }
+            const rm = e.target.closest('[data-teamremove]');
+            if (rm) {
+                if (!confirm('Remove ' + rm.dataset.teamname + '? They won’t be able to sign in to the Studio anymore. Their blog posts stay.')) return;
+                try { await teamApi({ action: 'remove', id: rm.dataset.teamremove }); toast(rm.dataset.teamname + ' removed.'); loadTeam(); }
+                catch (err) { toast('Couldn’t remove them — ' + err.message); }
+            }
+        });
 
         $('btnHome').addEventListener('click', () => showView('home'));
         $('brandHome').addEventListener('click', (e) => { e.preventDefault(); showView('home'); });

@@ -14,6 +14,8 @@
 // written, which the compliance rule forbids us from using), so those stay a
 // research job. This endpoint exists to kill the retyping, not the writing.
 
+const { whoIs } = require('./_auth');
+
 const API = 'https://www.travelwitsapi.com';
 const KINDS = ['compare', 'brochure'];   // both endpoints hold the same shape
 const DEFAULT_AGENCY = 'smartflyer';
@@ -378,11 +380,9 @@ module.exports = async (req, res) => {
         if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
         body = body || {};
 
-        const expected = process.env.STUDIO_PASSCODE;
-        if (!expected) return res.status(500).json({ error: 'STUDIO_PASSCODE not configured on the server' });
-        if ((body.passcode || '').trim().toUpperCase() !== expected.trim().toUpperCase()) {
-            return res.status(401).json({ error: 'Wrong passcode' });
-        }
+        const user = await whoIs(body.passcode);
+        if (!user) return res.status(401).json({ error: 'Wrong passcode' });
+        if (user.role !== 'owner') return res.status(403).json({ error: 'Owner-only tool' });
 
         const link = parseLink(body.link);
         if (!link) {

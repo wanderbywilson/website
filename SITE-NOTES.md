@@ -439,12 +439,15 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 
 ## 14. Studio team logins (2026-09-29) — Sajaad, website manager & SEO
 
-**Why:** Sajaad (website manager, blog writer, SEO) needs to edit and publish posts, including ones already live, without access to Wilson's Claude or to client proposals.
+**Why:** Sajaad (website manager, blog writer, SEO) needs to edit and publish posts, including ones already live, without access to Wilson's Claude or to client proposals. Wilson wants to touch Vercel as little as possible, so logins are managed inside the Studio.
 
-**Logins (api/_auth.js):** `STUDIO_PASSCODE` = Wilson, role `owner`, everything. `STUDIO_MANAGERS` = comma-separated `Name:CODE` pairs (codes 8+ chars), role `manager`. Managers get the blog only; the server enforces it (proposals, social, hotel drafts, bulk import/reindex → 403; the parse-quote/TravelWits tools still check `STUDIO_PASSCODE` directly, so owner-only). To revoke someone: remove their pair in Vercel env and redeploy.
+**Logins (api/_auth.js, api/team.js):** everything is managed on the owner-only **Team** card on the Studio dashboard.
+- **Owner (Wilson):** "Change my passcode" stores a salted scrypt hash at Blob `team/_owner.json`. Once that exists, the `STUDIO_PASSCODE` env var no longer works (it leaked, see below). If the owner record is ever deleted, the env var works again (recovery path).
+- **Team members:** Add a name → a 12-character passcode (XXXX-XXXX-XXXX, no 0/O/1/I/L) is shown ONCE; only its hash is stored in `team/_members.json`. Reset / Remove per person. Role `manager` = blog only; the server enforces it (proposals, social, hotel drafts, bulk import/reindex, team, parse-quote, TravelWits → 403). "Last signed in" is stamped on each login.
+- Codes ignore case, spaces and dashes. `STUDIO_MANAGERS` env (`Name:CODE,…`) still works as a fallback but isn't needed.
 
 **Editing live posts:** Studio blog docs with `liveSlug` are posts already on the site. Owner-only **Bring them in** bar on the Blog list imports any `BLOG_POSTS` slug not yet in the Studio (id = slug, status published). Saving a live post flips it to draft (the site keeps the old version); **Publish these changes** marks it ready and the 8 AM publish run updates it in place at the same URL. The server carries `liveSlug`/`liveUrl`/date/location/tripTypes over on every save, so the editor can't re-slug a live page, and refuses to delete the Studio copy of a live post. Each save stamps `lastEditedBy`.
 
 **SEO fields:** optional `seoTitle` + `metaDescription` per post (Studio shows Google-length counters: 60 / 155). post.html and every post/*.html prefer them over title/dek for `<title>`, meta description, og/twitter tags; the H1 stays the headline.
 
-**Security note:** the old owner passcode was written in this file and the repo is public, so it had to be rotated (2026-09-29). The publish job reads the passcode from `.env.local` (`vercel env pull .env.local --environment=production`), never from a file in git.
+**Security note:** the original owner passcode was written in this file and the repo is PUBLIC. Never write a passcode into any file in this repo. The daily publish job must not keep a passcode in git either.
