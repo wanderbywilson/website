@@ -15,7 +15,7 @@
 // store; a light index at proposals/_index.json powers the Studio list without
 // N reads. View records live at views/{id}.json (see proposal-viewed.js).
 
-const { blobPutJSON, blobGetJSON, blobList, blobDelete, blobPutBinary } = require('./_blob');
+const { blobPutJSON, blobGetJSON, blobList, blobDelete, blobPutBinary, blobGetRaw } = require('./_blob');
 const { whoIs, can, loadMembers, saveMembers } = require('./_auth');
 
 const INDEX_PATH = 'proposals/_index.json';
@@ -71,6 +71,18 @@ module.exports = async (req, res) => {
 
     try {
         if (req.method === 'GET') {
+            // Photos uploaded through the Studio's photo manager (?img=key).
+            // Served from here rather than a separate function: the Hobby plan
+            // allows 12 serverless functions and the repo is at that limit.
+            const img = (req.query && req.query.img) || '';
+            if (img) {
+                if (!/^[a-z0-9-]{1,120}\.jpg$/.test(String(img))) return res.status(400).json({ error: 'Bad image key' });
+                const file = await blobGetRaw(`proposal-images/${img}`);
+                if (!file || !file.type.startsWith('image/')) return res.status(404).json({ error: 'Not found' });
+                res.setHeader('Content-Type', file.type);
+                res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+                return res.status(200).send(file.buf);
+            }
             const id = cleanId((req.query && req.query.id) || '');
             if (!id) return res.status(400).json({ error: 'Missing or invalid id' });
             const doc = await blobGetJSON(`proposals/${id}.json`);
@@ -142,7 +154,7 @@ module.exports = async (req, res) => {
 
         // Photo upload from the Studio's photo manager. The browser downscales
         // first (≤2000px JPEG), so the body stays well under Vercel's limit.
-        // Stored privately; served to client pages by /api/proposal-image.
+        // Stored privately; served to client pages by GET /api/proposals?img=.
         if (action === 'uploadImage') {
             const data = typeof body.data === 'string' ? body.data : '';
             if (!data) return res.status(400).json({ error: 'No image data' });
@@ -150,7 +162,7 @@ module.exports = async (req, res) => {
             if (!buf.length || buf.length > 4 * 1024 * 1024) return res.status(400).json({ error: 'Image too large' });
             const key = `${Date.now().toString(36)}-${randomSuffix()}${randomSuffix()}-${slugify(body.filename || 'photo').slice(0, 40) || 'photo'}.jpg`;
             await blobPutBinary(`proposal-images/${key}`, buf, 'image/jpeg');
-            return res.status(200).json({ url: `/api/proposal-image?k=${encodeURIComponent(key)}` });
+            return res.status(200).json({ url: `/api/proposals?img=${encodeURIComponent(key)}` });
         }
 
         if (action === 'save') {
