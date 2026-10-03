@@ -1315,8 +1315,8 @@
                         <input class="f-input" id="fCloseTitle">
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="fCloseLede">Closing line</label>
-                        <textarea class="f-area" id="fCloseLede"></textarea>
+                        <label class="f-label" for="fCloseLede">Closing line <span style="text-transform:none">(fixed for every lookbook and quote; set in rules.js)</span></label>
+                        <textarea class="f-area" id="fCloseLede" readonly style="opacity:.75"></textarea>
                     </div>
                     <div class="f-grid2">
                         <div class="f-row">
@@ -3316,7 +3316,7 @@
                 hotels: state.hotels.map(serializeHotel),
                 // no global perks band — amenities live on each hotel card
                 closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || mdEm(state.mode === 'lookbook' ? window.WBW_RULES.fixed.closeTitleLookbook : window.WBW_RULES.fixed.closeTitleQuote),
-                closeLede: sentenceCap($('fCloseLede').value.trim()),
+                closeLede: window.WBW_RULES.fixed.closeLede, // fixed copy, never reworded
                 signatureName: titleWords($('fSigName').value.trim()) || 'Wilson',
                 signatureRole: sentenceCap($('fSigRole').value.trim()) || 'Founder · Wander by Wilson',
                 slugBase: $('fPrepared').value.trim() || stripHtml(title)
@@ -3327,7 +3327,7 @@
         const frame = $('previewFrame');
         function saveDraft() {
             try {
-                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, hotels: state.hotels, fields: fieldValues() }));
+                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, hotels: state.hotels, fields: fieldValues() }));
             } catch (e) {}
         }
         const stripTags = (s) => { const t = document.createElement('div'); t.innerHTML = s || ''; return t.textContent.trim(); };
@@ -4240,7 +4240,7 @@
             if (p.dates) $('fDates').value = String(p.dates);
             if (p.validUntil) $('fValid').value = String(p.validUntil);
             if (p.closeTitle) $('fCloseTitle').value = String(p.closeTitle);
-            if (p.closeLede) $('fCloseLede').value = String(p.closeLede);
+            $('fCloseLede').value = window.WBW_RULES.fixed.closeLede; // fixed copy: ignore any other closing line
             if (p.mode === 'lookbook' || p.mode === 'quote') setMode(p.mode);
 
             const libEntries = libEntriesForMatching();
@@ -4527,12 +4527,7 @@
                 const el = $(id);
                 if (el) check(CLIENT_FIELDS[id], el.value, OUR_WORDS_TRIP.includes(id));
             });
-            // The closing line is fixed copy (Wilson, 2026-10-02): never reworded.
-            const close = ($('fCloseLede').value || '').trim();
-            if (close !== window.WBW_RULES.fixed.closeLede) {
-                hits.push({ where: 'Closing line', text: close || '(empty)', re: /^.{0,40}/,
-                    why: 'must be exactly: \u201c' + window.WBW_RULES.fixed.closeLede + '\u201d' });
-            }
+            // The closing line is fixed copy (rules.js): the Studio always uses it, so no check is needed.
             state.hotels.forEach((h, i) => {
                 if (h.considered) return; // internal only, never on the page
                 Object.keys(HOTEL_CLIENT_FIELDS).forEach(k => {
@@ -4556,9 +4551,10 @@
             });
             return out;
         }
-        function renderMetaWarning() {
+        function renderMetaWarning(publishing) {
             const hits = findMetaText();
-            const ups = findHeadsUps();
+            // "Before you send" reminders only when Publish is pressed, not while building.
+            const ups = publishing ? findHeadsUps() : [];
             const box = $('metaWarn');
             if (!hits.length && !ups.length) { box.hidden = true; box.innerHTML = ''; return true; }
             box.hidden = false;
@@ -4591,7 +4587,7 @@
         async function publish(status) {
             if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
             const draft = status === 'draft';
-            if (!draft && !renderMetaWarning()) {
+            if (!draft && !renderMetaWarning(true)) {
                 toast('Can’t publish yet. See the list above.');
                 $('metaWarn').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
@@ -4634,9 +4630,11 @@
 
         /* ── New / load / list ────────────────────────────────────────── */
         function resetForm() {
-            state = { id: null, hotels: [] };
+            state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', hotels: [] };
             setFields({});
             applyDefaults();
+            $('metaWarn').hidden = true; $('metaWarn').innerHTML = '';
+            setMode(state.mode);
             renderHotels();
             $('pubBar').classList.remove('is-open');
             $('statusText').textContent = 'New proposal';
@@ -4699,7 +4697,7 @@
                 fDates: P.dates || '',
                 fValid: P.validUntil || '',
                 fCloseTitle: unEm(P.closeTitle || DEFAULTS.closeTitle),
-                fCloseLede: P.closeLede || DEFAULTS.closeLede,
+                fCloseLede: window.WBW_RULES.fixed.closeLede,
                 fSigName: P.signatureName || DEFAULTS.sigName,
                 fSigRole: P.signatureRole || DEFAULTS.sigRole
             });
@@ -6160,9 +6158,10 @@
         if (draft && (draft.hotels || []).length) {
             state.id = draft.id || null;
             state.hotels = draft.hotels;
-            setFields(Object.assign({}, fieldValues(), draft.fields));
+            setFields(Object.assign({}, fieldValues(), draft.fields, { fCloseLede: window.WBW_RULES.fixed.closeLede }));
+            setMode(draft.mode || 'quote');
             if (state.id) $('statusText').textContent = 'Editing: ' + state.id;
-            else $('statusText').textContent = 'Draft restored';
+            else $('statusText').textContent = 'Unpublished draft restored. Use New proposal to start fresh';
         }
         renderHotels();
     })();
