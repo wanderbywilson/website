@@ -149,12 +149,12 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
   rateLines: [{label:'Resort',value:'$X / night'}, ...], // optional, instead of rateFrom
   heroImage: 'property-images/slug/00-hero.jpg',
   brandBadge: 'logos/bellini-club.png', brandBadgeAlt: '...', // optional
-  description: "HTML string (original prose, &rsquo; &mdash; ok)",
+  description: "HTML string, VERBATIM from the hotel site / Virtuoso / SmartFlyer (HOTEL-PAGE-SPEC)",
   perks: ['...', ...],
   gallery: ['property-images/slug/01.jpg', ...],  // optional; hidden if absent
   idealFor: "...",   // optional ("Best for")
   agentTip: "...",   // optional (advisor tip)
-  bookingUrl: '#'    // '#' or absent → routes to inquiry; else Virtuoso/Belmond URL → new tab
+  bookingUrl: ''     // empty → Book button links to /book, our self-booking page (never '#', per HOTEL-PAGE-SPEC); else Virtuoso/Belmond URL → new tab
 }
 ```
 - **Currency rule:** USD/EUR/GBP shown native. Any OTHER currency → convert to USD + add `rateInfo` note. **Use literal `€`/`£` chars in data.js** (rates are set via `textContent`, which does NOT decode `&euro;`).
@@ -199,8 +199,8 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 ## 10. Brand voice / copy rules
 - Never "Wander" alone — always "Wander by Wilson."
-- Original copy only; **don't reproduce large chunks** of copyrighted text. Short quotes (<15 words, in quotes) at most.
-- Wilson wordsmiths copy himself — **flag any new copy I write as placeholder**.
+- Blog and site copy is our own; **don't reproduce large chunks** of copyrighted text there. EXCEPTION: hotel descriptions (hotel pages, lookbooks, quotes) are VERBATIM from the hotel's site / Virtuoso / SmartFlyer by Wilson's compliance rule (HOTEL-PAGE-SPEC wins).
+- Wilson wordsmiths copy herself — **flag any new copy I write as placeholder**.
 - Script taglines are **lowercase** ("same rate. better outcome.", "elevated itineraries. effortless travel.").
 
 ## 11. Client proposal workflow (separate from the website)
@@ -208,17 +208,17 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 ## 12. Proposal Studio (2026-07-29) — team-built client proposal pages
 
-**What it is:** `/studio` (owner passcode stored server-side as the `STUDIO_PASSCODE` Vercel env var — never write it in this file: the repo is PUBLIC) lets Wilson + team build `/proposals/{id}` hotel-proposal pages without touching code or Claude. Pick hotels from the PROPERTIES library (photos/desc/gallery/booking link auto-pull), fill room/rate/dates, watch a live preview, hit Publish → instant client link (no deploy; stored in the **wndr-proposals** private Vercel Blob store, `store_a0Hhz6oudk0wWLQT`).
+**What it is:** `/studio` (owner login: see §14, a stored hash now replaces the old `STUDIO_PASSCODE` Vercel env var — never write it in this file: the repo is PUBLIC) lets Wilson + team build `/proposals/{id}` hotel-proposal pages without touching code or Claude. Pick hotels from the PROPERTIES library (photos/desc/gallery/booking link auto-pull), fill room/rate/dates, watch a live preview, hit Publish → instant client link (no deploy; stored in the **wndr-proposals** private Vercel Blob store, `store_a0Hhz6oudk0wWLQT`).
 
 **Files:** `studio.html` (builder), `proposal.html` (renders static PROPOSALS first, then falls back to `GET /api/proposals?id=`), `api/proposals.js` (auth/list/load/save/delete, passcode-gated), `api/proposal-viewed.js` (first-open Brevo email to wilson@), `api/_blob.js` (raw Blob REST helper — repo has NO package.json; do not add npm deps).
 
-**Features:** Prepared-for hero line, rates-valid-until note, per-hotel "Book this rate" toggle, per-hotel ✈ flight note (added 2026-07-29 — Wilson sometimes includes flight quotes), custom (non-library) hotels, Save-as-PDF (print CSS), draft autosave (localStorage), edit-after-publish (same link), "Your proposals" list with ✓ Opened flag. First real proposal: `apfel-caribbean-uf47` (Rock House imagery lives in `proposals/apfel-caribbean-images/`).
+**Features:** Prepared-for hero line, rates-valid-until note (retired 2026-10-02, see §15), per-hotel "Book this rate" toggle, per-hotel ✈ flight note (added 2026-07-29 — Wilson sometimes includes flight quotes), custom (non-library) hotels, Save-as-PDF (print CSS), draft autosave (localStorage), edit-after-publish (same link), "Your proposals" list with ✓ Opened flag. First real proposal: `apfel-caribbean-uf47` (Rock House imagery lives in `proposals/apfel-caribbean-images/`).
 
 **Privacy model:** `X-Robots-Tag: noindex, nofollow` headers (vercel.json) on `/proposals/*`, `/proposal.html`, `/studio`, `/studio.html`, `/api/*` + meta noindex. robots.txt `Disallow: /proposals/` was deliberately REMOVED — blocking crawl would hide the noindex from Google (URL-only indexing risk). Never add proposals to the sitemap. Slugs get a random 4-char suffix (not enumerable). Blob store is private (403 without token).
 
 **Beacon logic:** first open of a Studio proposal emails Wilson via Brevo. Suppressed for: browsers that have opened /studio (`localStorage wndr-team=1`), `?preview=1` links, and repeat views in the same session. Views tracked in `views/{id}.json` blobs.
 
-**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=91` / `proposals-data.js?v=92` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
+**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=93` / `proposals-data.js?v=94` / `rules.js?v=1` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
 
 ### §12 addendum (2026-07-29, round 2) — compliance + quote screenshots
 - **CONTENT COMPLIANCE (Wilson, non-negotiable):** proposal descriptions/room copy must be VERBATIM from the hotel's site, its Virtuoso page, or our website library — never written or embellished (liability if a client books on an inaccurate claim). Hotel names = official names, plain text. Wilson's personal notes go in her email, not the page. Template auto-renders a photos-are-representative disclaimer.
@@ -227,9 +227,9 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 - Proposal pages now pin the site header visible (`is-scrolled` applied permanently).
 
 ### §12 addendum (2026-07-29, round 3) — lookbook layout, click-to-edit, AI writer
-- **Lookbook layout** (Safari Portal-style, Wilson's request): each hotel is a split section — full-bleed photo sticky on the LEFT (100vh, "No. 0N" + name overlaid on a scrim), content scrolling on the RIGHT; the photo hands off to the next option as you scroll. Right panel shows a **3-photo click-through carousel** (gallery capped at 3 — "don't overwhelm"). Mobile (<980px) stacks. Print unsticks.
+- **Lookbook layout** (Safari Portal-style, Wilson's request): each hotel is a split section — full-bleed photo sticky on the LEFT (100vh, "No. 0N" + name overlaid on a scrim), content scrolling on the RIGHT; the photo hands off to the next option as you scroll. Right panel shows a **click-through carousel (every gallery photo; the old 3-photo cap is gone)** (gallery capped at 3 — "don't overwhelm"). Mobile (<980px) stacks. Print unsticks.
 - **Click-to-edit preview:** in `?draft=1` mode the template marks fields `contenteditable` + `data-edit="path"`; blur → postMessage `wndr-edit {path,value}` → studio `applyEdit()` syncs state/form + autosaves WITHOUT re-pushing the iframe (no caret loss). Editable: title, prepared-for, lede, dates, valid-until, close title/lede, per-hotel room/rate/rateNote/flight/desc/roomDesc/deposit/cancellation.
-- **AI writing assistant:** sticky bar at the bottom of the Studio form → `api/studio-ai.js` (claude-opus-5, raw fetch). WbW voice, TRIP-LEVEL COPY ONLY — system prompt refuses hotel-description writing (compliance). Insert buttons: title/intro/closing. Needs the same `ANTHROPIC_API_KEY` as parse-quote.
+- **AI writing assistant (NOT PRESENT as of 2026-10-02: there is no `api/studio-ai.js` and no such bar in studio.html; this entry is historical):** sticky bar at the bottom of the Studio form → `api/studio-ai.js` (claude-opus-5, raw fetch). WbW voice, TRIP-LEVEL COPY ONLY — system prompt refuses hotel-description writing (compliance). Insert buttons: title/intro/closing. Needs the same `ANTHROPIC_API_KEY` as parse-quote.
 - ⚠️ **2026-07-29: Wilson's Mac hit 100% disk (< 500MB free)** during this session — flagged to her; avoid image-heavy work until cleared.
 
 ## 13. Book With Perks (2026-08-19) — the DIY hotel booking portal
@@ -451,3 +451,42 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 **SEO fields:** optional `seoTitle` + `metaDescription` per post (Studio shows Google-length counters: 60 / 155). post.html and every post/*.html prefer them over title/dek for `<title>`, meta description, og/twitter tags; the H1 stays the headline.
 
 **Security note:** the original owner passcode was written in this file and the repo is PUBLIC. Never write a passcode into any file in this repo. The daily publish job must not keep a passcode in git either.
+
+## 15. Proposal Studio rules overhaul (2026-10-02) — one rules file, library first
+
+**Why:** the Kalikow proposal took three rebuilds (terms not matching the rate PDFs, room photos not matching the quoted room, duplicates, blank PDF), and an audit found the Studio prompts, the code, the specs and Wilson's rules contradicting each other in ~30 places.
+
+**One source of truth: `rules.js`** (repo root, loads as `window.WBW_RULES` in the browser and via `require('../rules.js')` in `api/parse-quote.js`). It holds the fixed client-facing lines, the patterns the publish check flags, and every rule block. The lookbook, quote and screenshot-reader prompts are BUILT from it at copy time (`lookbookPrompt()`, `quotePrompt()`, `CLAUDE_PROMPT`); the blog/social/itinerary/email prompts pull `publicPricing`, `publicCompliance` and `socialCounts` from it. Never paste a rule into a prompt by hand. The Studio's **See the rules** button shows the file read-only for the team. Hotel content still follows HOTEL-PAGE-SPEC.md, which `rules.js` mirrors.
+
+**Wilson's decisions encoded:**
+- Fixed closing line for every lookbook and quote: "Let me know which option you'd like, and I'll send you a secure link for your card details to book it for your dates."
+- Quote intro default (evergreen): "Here are rates for the options we love for your trip, each with our preferred-partner perks where they apply."
+- "Lock in" is fine as a call to action; banned only when it implies something is already booked or held.
+- No em dashes in anything we write on proposal/lookbook pages (verbatim hotel copy excepted). Date ranges take an en dash.
+- Never mention a traveller's health, mobility or personal details. ("Be authoritative, never 'the hotel let us know'" was Wilson's feedback on Riana's client EMAIL, not a proposal rule; it lives in Claude's email guidance, not rules.js.)
+- Room photos: no "your room" section. Quotes use the property gallery plus "Photos show the property. Your room category may differ." Hotel pages, lookbooks and quotes share ONE gallery (hotel-page photo mix changed to 2–3 room shots).
+- Rates in quotes: stay total from the rate document only. Deposit/cancellation/perks only from that hotel's document; perks follow the program the rate is booked through.
+- "Rates valid until" line removed (not replaced). Every quote prints the subject-to-change line from `rules.js` automatically.
+- "Also considered" is internal only: never on the client page, and stripped from the public API.
+- Public posts: prices only when the person making the post asks for one. Client notes are searched in Asana (Tern is not replacing it).
+
+**Workflow (library first):** the lookbook prompt lists every library hotel by slug; Claude returns only `{"slug": …}` for those and researches new hotels to the hotel-page standard (including `idealFor`, `agentTip`, `rateFrom`), which auto-queue as hotel-page drafts. The quote prompt first checks Gmail for a lookbook already sent; if there is one, the team converts it in the Studio and drops each rate screenshot on its card (no research).
+
+**Code changes:** `api/proposals.js` public GET strips advisor-only fields (advisorNote, bookingPartners, amenitiesNote, whyRecommended, socialHook, considered hotels) — they were publicly readable before. New `uploadImage` action + `api/proposal-image.js` (uploads stored privately in the wndr-proposals Blob store under `proposal-images/`, served through the endpoint) + `blobPutBinary`/`blobGetRaw` in `_blob.js`. Photo manager on every hotel card (remove, reorder, cover, add link, upload; dedupes on full URL); library hotels' photo edits are per-proposal (`photosEdited`). Importer keeps flights, matches by slug, filters the advisor welcome note everywhere (`checks.welcomeNote`), falls back to library perks. A pasted rate document replaces ALL commercial fields on that card (empty clears). Names with any capital letter are no longer recased. No library "From" rate ever prints on a proposal. Lookbook→quote conversion resets intro and closing. Publish check now also flags hold language and em dashes in our own fields, scans every client field, and lists heads-ups (missing deposit/cancellation, library-sourced perks). Lookbook PDFs print a 3-photo strip.
+
+**Still open:** blank PDF reported by Riana does NOT reproduce in headless Chrome (all pages render); test in Safari. Library descriptions that are our own copy (Caruso, Casa Angelina; Borgo Santandrea's is third-party text) still need replacing with verbatim hotel copy, and the welcome-note perks are still in data.js for Caruso, Mandarin Oriental Lago di Como, Rosewood Little Dix Bay, Southern Ocean Lodge and Casa di Langa (filtered at render, not removed). Not yet fixed elsewhere: DEPLOY/§3/§9 still describe Formspree; services.html and inquire-hotel.html promise "48 hours" while /book says "one business day".
+
+### §15 addendum (2026-10-02, round 2) — second audit fixes
+- **Prompt hotel list now includes hotel-page drafts awaiting review** (in-review/draft/ready, not yet in data.js), loaded at copy time; Claude returns `{"draftSlug": …}` and the Studio fills the hotel from the draft (`fillFromDrafts()`), so a hotel is never researched twice. The library list is built live from data.js, so newly published pages appear automatically.
+- **Perks on quotes: none until confirmed** (Wilson). Library hotels on a quote get no website perks; a rate document with no perks leaves them empty; the "Before you send" list flags it. Lookbooks still show the hotel page's perks. New hotels in a quote send `pagePerks` (standard package, goes to the hotel-page draft) separately from `perks` (the rate program's package, proposal only).
+- **Closing line enforced:** publish is blocked unless `closeLede` is exactly `rules.js` `fixed.closeLede`; proposal.html falls back to it. Old "Just hit reply to confirm." fallback removed.
+- **Flights:** flight prompt includes `blocks.flights`; fares read "starting from $X / person"; every proposal flight prints `fixed.flightNote` (requoted at ticketing).
+- **Publish check** reads `rules.js` `checks.notes` and `checks.emDash` too; em-dash scan covers flight details, perks heading and room heading.
+- **Social:** "Show the quoted rate" is OFF by default and forced off when a post is built from a proposal; perk overclaims ("every booking includes…") replaced with "wherever they apply".
+- **Logistics voice:** no "we arrange it" / concierge wording; "How to get there" is plain facts.
+- **Source order (Wilson):** photos = hotel site → Virtuoso → SmartFlyer; perks = Virtuoso → SmartFlyer → brand program. "Best for" lines on hotel pages may keep their em dash pattern.
+- **Docs aligned to HOTEL-PAGE-SPEC:** new-hotel-page.md (empty bookingUrl never '#', entry rate never from a quote, hero + 5, verbatim descriptions, source order, 1600px, drafts route, no /quote-scan); §7 template and §10 copy rule above corrected.
+- **Not changed (Wilson: leave existing pages):** welcome-note perks still in data.js for 7 hotels (Caruso, Mandarin Oriental Lago di Como, Rosewood Little Dix Bay, Southern Ocean Lodge, Cap Juluca, Belmond Hiram Bingham, Casa di Langa); filtered on proposals only. property.html's "Exclusives apply automatically" note (true for Virtuoso-portal bookings) left as is.
+- **Scheduled tasks** `publish-approved-blog-posts` and `research-queued-hotel-drafts` carry a Studio passcode inside their SKILL.md; it is likely the retired shared code (no recorded runs since Sept). Wilson to add an "Automation" team login on the Team card and paste its code into those two tasks herself.
+- **Booking link fallback (Wilson, 2026-10-02):** a hotel page with no Virtuoso link now sends its Book button to `/book` (self-booking page) instead of the inquiry form; property.html changed and all 47 `hotels/*.html` regenerated. Four Seasons Cabo del Sol description replaced with verbatim press-room copy (removed the false "first resort in Los Cabos" claim).
+

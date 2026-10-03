@@ -42,6 +42,34 @@ async function blobGetJSON(pathname) {
     return res.json();
 }
 
+// Write binary (e.g. an uploaded photo) to a fixed pathname.
+async function blobPutBinary(pathname, buf, contentType) {
+    const res = await fetch(`${API_HOST}/${pathname}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token()}`,
+            'x-api-version': '7',
+            'x-add-random-suffix': '0',
+            'x-allow-overwrite': '1',
+            'x-content-type': contentType || 'application/octet-stream',
+            'x-vercel-blob-access': 'private'
+        },
+        body: buf
+    });
+    if (!res.ok) throw new Error(`Blob PUT ${pathname} failed: ${res.status} ${await res.text()}`);
+    return res.json();
+}
+
+// Read raw bytes + content type; null when missing.
+async function blobGetRaw(pathname) {
+    const res = await fetch(`${STORE_HOST}/${pathname}`, {
+        headers: { 'Authorization': `Bearer ${token()}` }
+    });
+    if (res.status === 404 || res.status === 403) return null;
+    if (!res.ok) throw new Error(`Blob GET ${pathname} failed: ${res.status}`);
+    return { buf: Buffer.from(await res.arrayBuffer()), type: res.headers.get('content-type') || 'application/octet-stream' };
+}
+
 async function blobList(prefix) {
     const res = await fetch(`${API_HOST}/?prefix=${encodeURIComponent(prefix)}&limit=1000`, {
         headers: { 'Authorization': `Bearer ${token()}`, 'x-api-version': '7' }
@@ -65,4 +93,4 @@ async function blobDelete(pathnames) {
     if (!res.ok) throw new Error(`Blob DELETE failed: ${res.status}`);
 }
 
-module.exports = { blobPutJSON, blobGetJSON, blobList, blobDelete };
+module.exports = { blobPutJSON, blobGetJSON, blobList, blobDelete, blobPutBinary, blobGetRaw };

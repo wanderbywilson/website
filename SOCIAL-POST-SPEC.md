@@ -64,7 +64,7 @@ Rules specific to this source:
 
 - **Find the fact.** Marketing emails bury one real item in adjectives. If there
   is no genuine news, don't post — not every email deserves one.
-- **Never repeat** rates or "from $X" pricing · limited-time offers, promo codes
+- **Never repeat** rates or "from $X" pricing (unless the person making the post asks for a price; `rules.js` `publicPricing`) · limited-time offers, promo codes
   or booking deadlines (they expire, the post doesn't) · commission or agent-
   incentive language, which is trade-only and must never be public · superlatives
   the hotel doesn't claim itself.
@@ -102,8 +102,9 @@ Rules specific to this source:
 
 - The client's name, their party's names, their travel dates, or what they paid.
   A client story is anonymous — the trip is the story.
-- Rates: fine on a hotel feature, avoid on a client-story post (it implies a
-  specific person's quote). The composer's "show rates" toggle controls this.
+- Rates: only when the person making the post specifically asks for a price (Wilson,
+  2026-10-02; `rules.js` block `publicPricing`), using exactly the figure they give.
+  Never on a client-story post. The composer's "show rates" toggle controls this.
 - Any copy we invented about a property — the compliance rule that governs hotel
   pages and proposals governs social too.
 

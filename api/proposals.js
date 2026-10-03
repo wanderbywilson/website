@@ -15,7 +15,7 @@
 // store; a light index at proposals/_index.json powers the Studio list without
 // N reads. View records live at views/{id}.json (see proposal-viewed.js).
 
-const { blobPutJSON, blobGetJSON, blobList, blobDelete } = require('./_blob');
+const { blobPutJSON, blobGetJSON, blobList, blobDelete, blobPutBinary } = require('./_blob');
 const { whoIs, can, loadMembers, saveMembers } = require('./_auth');
 
 const INDEX_PATH = 'proposals/_index.json';
@@ -47,6 +47,25 @@ function randomSuffix() {
     return out;
 }
 
+// The public GET is what a client's browser downloads, so anything advisor-only
+// comes off here: notes, booking routes, amenity comparisons, the social line,
+// and the hotels we set aside ("also considered" is internal only). The Studio
+// loads the full record through the passcode-gated 'load' action instead.
+const ADVISOR_ONLY = ['advisorNote', 'bookingPartners', 'amenitiesNote', 'whyRecommended',
+    'socialHook', 'considered', 'consideredWhy'];
+function publicView(p) {
+    if (!p || !Array.isArray(p.hotels)) return p;
+    return Object.assign({}, p, {
+        hotels: p.hotels
+            .filter(h => !(h && h.considered))
+            .map(h => {
+                const out = Object.assign({}, h);
+                ADVISOR_ONLY.forEach(k => { delete out[k]; });
+                return out;
+            })
+    });
+}
+
 module.exports = async (req, res) => {
     noRobots(res);
 
@@ -56,7 +75,7 @@ module.exports = async (req, res) => {
             if (!id) return res.status(400).json({ error: 'Missing or invalid id' });
             const doc = await blobGetJSON(`proposals/${id}.json`);
             if (!doc) return res.status(404).json({ error: 'Not found' });
-            return res.status(200).json({ id, proposal: doc.proposal });
+            return res.status(200).json({ id, proposal: publicView(doc.proposal) });
         }
 
         if (req.method !== 'POST') {
@@ -119,6 +138,19 @@ module.exports = async (req, res) => {
             const doc = await blobGetJSON(`proposals/${id}.json`);
             if (!doc) return res.status(404).json({ error: 'Not found' });
             return res.status(200).json({ ok: true, id, proposal: doc.proposal });
+        }
+
+        // Photo upload from the Studio's photo manager. The browser downscales
+        // first (≤2000px JPEG), so the body stays well under Vercel's limit.
+        // Stored privately; served to client pages by /api/proposal-image.
+        if (action === 'uploadImage') {
+            const data = typeof body.data === 'string' ? body.data : '';
+            if (!data) return res.status(400).json({ error: 'No image data' });
+            const buf = Buffer.from(data, 'base64');
+            if (!buf.length || buf.length > 4 * 1024 * 1024) return res.status(400).json({ error: 'Image too large' });
+            const key = `${Date.now().toString(36)}-${randomSuffix()}${randomSuffix()}-${slugify(body.filename || 'photo').slice(0, 40) || 'photo'}.jpg`;
+            await blobPutBinary(`proposal-images/${key}`, buf, 'image/jpeg');
+            return res.status(200).json({ url: `/api/proposal-image?k=${encodeURIComponent(key)}` });
         }
 
         if (action === 'save') {

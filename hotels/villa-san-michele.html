@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="propertyTitle">Villa San Michele, A Belmond Hotel — Fiesole, Florence, Italy | Wander by Wilson</title>
-    <meta name="description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose…">
+    <meta name="description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose fa&ccedil;ade…">
     <link rel="canonical" href="https://www.wanderbywilson.com/hotels/villa-san-michele">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Villa San Michele, A Belmond Hotel — Fiesole, Florence, Italy | Wander by Wilson">
-    <meta property="og:description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose…">
+    <meta property="og:description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose fa&ccedil;ade…">
     <meta property="og:image" content="https://www.wanderbywilson.com/property-images/villa-san-michele/00-hero.jpg">
     <meta property="og:url" content="https://www.wanderbywilson.com/hotels/villa-san-michele">
     <meta property="og:site_name" content="Wander by Wilson">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Villa San Michele, A Belmond Hotel — Fiesole, Florence, Italy | Wander by Wilson">
-    <meta name="twitter:description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose…">
+    <meta name="twitter:description" content="On a wooded hillside in Fiesole, high above the rooftops and domes of Florence, Villa San Michele occupies a former 15th-century monastery whose fa&ccedil;ade…">
     <meta name="twitter:image" content="https://www.wanderbywilson.com/property-images/villa-san-michele/00-hero.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -179,7 +179,7 @@
         </div>
     </section>
 
-    <script src="/data.js?v=92"></script>
+    <script src="/data.js?v=93"></script>
     <script>
         /* ------------------------------------------------------------------
            Property page bootstrap. Data lives in data.js (ATLAS_POINTS + PROPERTIES).
@@ -344,25 +344,17 @@
                     note.innerHTML = '*Upgrades are always subject to availability and not guaranteed unless otherwise stated.';
                     ul.parentNode.insertBefore(note, ul.nextSibling);
                 }
-                // Book CTA — link to Virtuoso when we have a URL, otherwise
-                // route to the hotel-inquiry form with the slug pre-filled so
-                // we never strand a user on a "#" or 404. Per Wilson: any
-                // property missing or with a broken Virtuoso link goes to the
-                // hotel inquiry form (same fallback the hero CTA uses).
+                // Book CTA — link to Virtuoso when we have a URL. Otherwise
+                // (Wilson, 2026-10-02) route to our self-booking page, /book,
+                // so the button still books with perks rather than dead-ending
+                // on a "#". Same tab: /book is on our own site.
                 const bookCta = document.getElementById('propertyBookCta');
                 if (detail.bookingUrl && detail.bookingUrl !== '#') {
                     bookCta.href = detail.bookingUrl;
                 } else {
-                    bookCta.href = '/inquire-hotel?hotel=' + encodeURIComponent(slug);
+                    bookCta.href = '/book';
                     bookCta.removeAttribute('target');
                     bookCta.removeAttribute('rel');
-                    // Swap label so it's clear this is the inquiry path, not direct booking
-                    const ctaLabel = bookCta.querySelector('.cta-primary-label');
-                    if (ctaLabel) ctaLabel.textContent = 'Inquire about this property';
-                    // Hide the "completed on preferred portal" note since we're
-                    // not going to a booking portal — we're going to a form
-                    const perksNote = document.querySelector('.property-perks-note');
-                    if (perksNote) perksNote.hidden = true;
                 }
 
                 // Brand badge — preferred-partner program affiliation.

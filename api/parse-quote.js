@@ -7,12 +7,17 @@
 // come from the actual quote / hotel materials).
 //
 // Body: { passcode, image: <base64>, mediaType: "image/png" | "image/jpeg" }
-// Returns: { ok, fields: { room, rate, rateNote, deposit, cancellation, dates } }
+// Returns: { ok, fields } with the same fields as the Studio's copyable
+// screenshot prompt (room, roomDesc, rate, rateNote, perks, deposit,
+// cancellation, terms, rateTable, rateTableNote, dates, flight, flightDetails,
+// amenitiesNote, advisorNote). The rules come from /rules.js, the same file
+// the Studio's prompts are built from.
 //
 // Requires ANTHROPIC_API_KEY on the Vercel project. No SDK — this repo has no
 // package.json, so we speak raw HTTP to the Messages API.
 
 const { whoIs, can } = require('./_auth');
+const RULES = require('../rules.js');
 
 const SCHEMA = {
     type: 'object',
@@ -24,13 +29,18 @@ const SCHEMA = {
         rate: { type: 'string', description: 'STRICT: total + stay length, max 30 characters, e.g. "$4,340.09 · 3-night total" — nothing else, no breakdowns, no currency conversions. Empty string if not shown.' },
         rateNote: { type: 'string', description: 'ONE line, max ~20 words: taxes/fees status · rate plan if named · property-currency total if shown, e.g. "Includes taxes & fees · €3,815.00 payable in the hotel’s currency". NEVER amenities. Empty string if not shown.' },
         perks: { type: 'array', items: { type: 'string' }, description: 'Included amenities as short elegant bullets, e.g. "Upgrade on arrival (subject to availability)", "Daily breakfast for up to two guests per bedroom", "$100 USD hotel credit toward wine tours, tastings & spa". NEVER include a personalized note/amenity from the agent or advisor (it is a surprise). Empty array if none.' },
-        deposit: { type: 'string', description: 'ONE sentence, plain English, exact terms. Banned: GDS codes, card-brand code lists ("CA, VI, AX, MC"), "Guar types". e.g. "Guarantee required — a credit card holds the reservation; nothing is charged at booking." Empty string if not shown.' },
+        deposit: { type: 'string', description: 'ONE sentence, plain English, exact terms. Banned: GDS codes, card-brand code lists ("CA, VI, AX, MC"), "Guar types". e.g. "A credit card is required to guarantee the booking; nothing is charged until April 23, 2027." Never "hold" language. Empty string if not shown.' },
         cancellation: { type: 'string', description: '1–2 sentences, plain English, exact deadline + penalty, decoding dates (14SEP26 → September 14, 2026) and times (1800 → 6:00 PM). Banned: raw GDS text like "CXL"/"HTL TIME". e.g. "Free cancellation until 6:00 PM hotel time on September 14, 2026; after that the full stay, including taxes and fees, is charged." Empty string if not shown.' },
-        dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11 – 15, 2026". Empty string if not shown.' },
-        flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · from $795 pp round-trip". Empty string for hotel quotes.' },
-        flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary in this exact multiline format (blank line between sections; NEVER include emissions/CO2 info):\n"Outbound · Wed, Nov 11\nAmerican · DFW 5:00 AM – AXA 2:57 PM\n7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)\n\nReturn · Sun, Nov 15\nAmerican · AXA 3:37 PM – DFW 9:50 PM\n8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)\n\nFares\nMain Cabin $1,526 pp · Main Plus $1,768 pp"\nInclude the exact layover duration and airport when shown. All values verbatim from the screenshot. Empty string for hotel quotes.' }
+        terms: { type: 'array', items: { type: 'string' }, description: 'Other supplier terms the client should see, one plain-English line each (payment schedule, taxes or fees payable locally, minimum stay). Never commission or anything trade-only. Empty array if none.' },
+        rateTable: { type: 'array', items: { type: 'object', properties: { room: { type: 'string' }, price: { type: 'string' } }, required: ['room', 'price'], additionalProperties: false }, description: 'ONLY for a group rate sheet pricing several categories: every category in the order shown, with "room" and "rate" left empty. Empty array otherwise.' },
+        rateTableNote: { type: 'string', description: 'Only with a rateTable: one line on what the prices cover. Empty string otherwise.' },
+        amenitiesNote: { type: 'string', description: 'Advisor-only: which program the perks come from (e.g. Virtuoso, Belmond Bellini Club). Empty string if not shown.' },
+        advisorNote: { type: 'string', description: 'Advisor-only: anything missing from the screenshot or unclear. Empty string if nothing.' },
+        dates: { type: 'string', description: 'Stay dates as shown, e.g. "November 11–15, 2026". Empty string if not shown.' },
+        flight: { type: 'string', description: 'ONLY for flight screenshots (e.g. Google Flights): a one-line summary, e.g. "DFW ⇄ Providenciales · American · 1 stop (MIA) · ≈6–7 hrs · starting from $795 / person round-trip". Empty string for hotel quotes.' },
+        flightDetails: { type: 'string', description: 'ONLY for flight screenshots: the full itinerary in this exact multiline format (blank line between sections; NEVER include emissions/CO2 info):\n"Outbound · Wed, Nov 11\nAmerican · DFW 5:00 AM – AXA 2:57 PM\n7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)\n\nReturn · Sun, Nov 15\nAmerican · AXA 3:37 PM – DFW 9:50 PM\n8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)\n\nFares\nMain Cabin $1,526 / person · Main Plus $1,768 / person"\nInclude the exact layover duration and airport when shown. All values verbatim from the screenshot. Empty string for hotel quotes.' }
     },
-    required: ['name', 'location', 'room', 'roomDesc', 'rate', 'rateNote', 'perks', 'deposit', 'cancellation', 'dates', 'flight', 'flightDetails'],
+    required: ['name', 'location', 'room', 'roomDesc', 'rate', 'rateNote', 'perks', 'deposit', 'cancellation', 'terms', 'rateTable', 'rateTableNote', 'amenitiesNote', 'advisorNote', 'dates', 'flight', 'flightDetails'],
     additionalProperties: false
 };
 
@@ -77,7 +87,12 @@ module.exports = async (req, res) => {
                     role: 'user',
                     content: [
                         { type: 'image', source: { type: 'base64', media_type: mediaType, data: image } },
-                        { type: 'text', text: 'This is a screenshot for a luxury travel advisor — either a HOTEL rate quote (often GDS/Virtuoso system output) or a FLIGHT itinerary/pricing screenshot (e.g. Google Flights). Two rules: (1) every FACT — number, date, name, term, inclusion — must come from the screenshot exactly; never invent, estimate, or embellish. (2) The FORMATTING must be client-ready: decode GDS/system shorthand into clear, elegant English; change notation, never facts. Amenities go in the perks array, not the rate note. For hotel quotes leave the flight fields empty; for flight screenshots fill flight + flightDetails and leave hotel fields and perks empty. Empty string/array for anything not visible.' }
+                        { type: 'text', text: [
+                            'This is a screenshot for a luxury travel advisor: either a HOTEL rate quote (often GDS/Virtuoso system output) or a FLIGHT itinerary/pricing screenshot (e.g. Google Flights).',
+                            'Every FACT (number, date, name, term, inclusion) must come from the screenshot exactly; never invent, estimate or embellish. The FORMATTING must be client-ready: decode GDS/system shorthand into clear English; change notation, never facts.',
+                            RULES.blocks.quoteFacts, RULES.blocks.flights, RULES.blocks.clientFields, RULES.blocks.voice, RULES.blocks.holdLanguage,
+                            'For hotel quotes leave the flight fields empty; for flight screenshots fill flight + flightDetails and leave hotel fields and perks empty. Empty string/array for anything not visible.'
+                        ].join('\n\n') }
                     ]
                 }]
             })

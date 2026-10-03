@@ -1199,7 +1199,7 @@ const PROPERTIES = {
         location: 'Cabo San Lucas, Mexico',
         rateFrom: '$800 / night',
         heroImage: '/property-images/four-seasons-resort-cabo-del-sol/00-hero.jpg',
-        description: "Four Seasons&rsquo; first resort in Los Cabos, opened in 2024 on a rare swimmable stretch of the Sea of Cortez at Cabo Del Sol. Contemporary and low-slung, it steps down through desert gardens to the water &mdash; multiple pools, a destination spa, and restaurants spanning Mexican coastal cooking to wood-fired everything. Championship golf sits on the doorstep, the beach is calm enough to actually swim (rare for Cabo), and the service is classic Four Seasons polish against one of Baja&rsquo;s most dramatic shorelines.",
+        description: "Four Seasons Resort Cabo Del Sol is on the stunning southern coast of Mexico&rsquo;s Baja peninsula. Guests have the opportunity to experience Cabo&rsquo;s Golden Corridor from the private community of Cabo Del Sol, where Mexico chic meets a cool Mediterranean vibe. The modern hacienda-style village features 96 guest rooms and suites, plus 61 residences, villas and estates &ndash; all with sparkling views of the Sea of Cortez. Guests enjoy a variety of activities on-property and off including world-class golf at the Cabo Del Sol golf course, a full-service luxury Spa, swimming and water activities from the swimmable beach where whales visit each winter and spring, and world-class dining from global pioneer of contemporary Latin cuisine Richard Sandoval.",
         perks: [
             'Guaranteed upgrade at time of booking, subject to availability',
             'Daily full breakfast for two per bedroom, served in a restaurant or through in-room dining',

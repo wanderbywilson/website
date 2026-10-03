@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>A Private Proposal — Wander by Wilson</title>
+    <title>A Private Proposal · Wander by Wilson</title>
     <meta name="description" content="A private hotel proposal from Wander by Wilson.">
 
     <!-- Open Graph (in case the link is shared) — filled per-proposal by JS -->
-    <meta property="og:title"        content="A Private Proposal — Wander by Wilson">
+    <meta property="og:title"        content="A Private Proposal · Wander by Wilson">
     <meta property="og:description"  content="A private hotel proposal from Wander by Wilson.">
     <meta property="og:image"        content="https://www.wanderbywilson.com/welcome-guide-images/og-card.jpg">
     <meta property="og:type"         content="website">
@@ -387,6 +387,7 @@
         .prop-hotel-flightwrap.is-open .prop-flight-caret { transform: rotate(180deg); }
         .prop-hotel-flightwrap { margin: 0 0 24px; }
         .prop-hotel-flightwrap .prop-hotel-flight { margin-bottom: 0; }
+        .prop-flight-note { font-size: 11px; font-style: italic; opacity: .7; margin: -8px 0 18px; }
         .prop-flight-details {
             border: 1px solid rgba(199, 174, 138, 0.32);
             border-top: none;
@@ -602,6 +603,7 @@
         }
 
         /* Photo-accuracy disclaimer (auto-rendered above the closing section) */
+        .prop-change-note + .prop-photo-note { padding-top: 0; }
         .prop-photo-note {
             font-family: var(--font-serif);
             font-style: italic;
@@ -855,6 +857,17 @@
 
             /* Closing gets its own tidy final page */
             .prop-photo-note { break-before: page; padding-top: 60px; }
+            .prop-change-note + .prop-photo-note { break-before: auto; padding-top: 6px; }
+            /* A lookbook is about the photography, so its PDF keeps a strip of
+               three photos (the carousel can't click on paper). */
+            body.is-lookbook .prop-carousel { display: grid !important; grid-template-columns: repeat(3, 1fr);
+                gap: 6px; aspect-ratio: auto; border: none; background: none; margin: 0 0 10px;
+                grid-column: 1 / -1; }
+            body.is-lookbook .prop-carousel img { position: static; opacity: 1 !important; height: 1.5in;
+                width: 100%; object-fit: cover; }
+            body.is-lookbook .prop-carousel img:nth-of-type(n+4),
+            body.is-lookbook .prop-carousel-btn, body.is-lookbook .prop-carousel-dots,
+            body.is-lookbook .prop-carousel-count { display: none !important; }
             .prop-perks { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-before: page; }
             .prop-close { padding: 30px 0 0; }
         }
@@ -881,8 +894,9 @@
 
     <main id="proposalRoot"></main>
 
-    <script src="/data.js?v=92"></script>
-    <script src="/proposals-data.js?v=92"></script>
+    <script src="/data.js?v=93"></script>
+    <script src="/rules.js?v=1"></script>
+    <script src="/proposals-data.js?v=93"></script>
     <script>
         /* ------------------------------------------------------------------
            Proposal bootstrap. Static proposals live in proposals-data.js
@@ -920,7 +934,7 @@
                 el.setAttribute(attr, val);
             };
             function applyMeta(P) {
-                const title   = P.metaTitle || (decode(strip(P.title)).replace(/\.$/, '') + ' — Wander by Wilson');
+                const title   = P.metaTitle || (decode(strip(P.title)).replace(/\.$/, '') + ' · Wander by Wilson');
                 const desc    = P.metaDescription || (P.lede ? strip(decode(P.lede)).slice(0, 160) : 'A private hotel proposal from Wander by Wilson.');
                 const firstHero = P.hotels && P.hotels[0] ? (function (h) {
                     const base = h.slug ? lib(h.slug) : null;
@@ -936,6 +950,16 @@
             }
 
             // ── Resolve a hotel entry against the library (inline overrides win) ──
+            const WELCOME_NOTE = new RegExp(((window.WBW_RULES || {}).checks || {}).welcomeNote || 'welcome[^,.;]{0,40}(note|letter)', 'i');
+            // Gallery without the hero and without repeats.
+            function dedupeShots(hero, list) {
+                const seen = new Set([String(hero || '').toLowerCase()]);
+                return (list || []).filter(u => {
+                    const k = String(u || '').toLowerCase();
+                    if (!k || seen.has(k)) return false;
+                    seen.add(k); return true;
+                });
+            }
             function resolveHotel(h) {
                 const base = h.slug ? lib(h.slug) : null;
                 const libBooking = base && base.bookingUrl && base.bookingUrl !== '#' ? base.bookingUrl : '';
@@ -945,7 +969,9 @@
                     heroImage: h.heroImage || (base && base.heroImage)   || '',
                     desc:      h.desc      || (base && base.description) || '',
                     room:      h.room      || '',
-                    rate:      h.rate      || (base && base.rateFrom ? 'From ' + base.rateFrom : ''),
+                    // Never the library's "From" rate: a proposal only prints a rate
+                    // that came from a real quote for these dates.
+                    rate:      h.rate      || '',
                     rateNote:  h.rateNote  || '',
                     flight:    h.flight    || '',
                     flightDetails: h.flightDetails || '',
@@ -956,8 +982,9 @@
                     gettingThere: h.gettingThere || '',
                     considered: !!h.considered,
                     consideredWhy: h.consideredWhy || '',
-                    perksList: h.perksList || [],
-                    perksLabel: h.perksLabel || 'Preferred-partner amenities &mdash; included',
+                    // The advisor's welcome note is a surprise: never printed.
+                    perksList: (h.perksList || []).filter(p => !WELCOME_NOTE.test(strip(String(p)))),
+                    perksLabel: h.perksLabel || 'Your preferred-partner amenities',
                     // Rates by room category — for group quotes where every couple
                     // picks their own category off one negotiated rate sheet.
                     rateTable: h.rateTable || [],
@@ -965,7 +992,8 @@
                     rateTableNote: h.rateTableNote || '',
                     terms: h.terms || [],
                     termsLabel: h.termsLabel || 'Good to know',
-                    gallery:   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || [],
+                    gallery:   dedupeShots(h.heroImage || (base && base.heroImage) || '',
+                                   (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || []),
                     // undefined → inherit the library link; '' (set by the Studio) → no button
                     bookingUrl: h.bookingUrl !== undefined ? h.bookingUrl : libBooking
                 };
@@ -1076,6 +1104,7 @@
                                 <div class="prop-flight-details" hidden>${flightDetailsHTML(r.flightDetails)}</div>
                                </div>`
                             : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
+                        ${!lookbook && r.flight && ((window.WBW_RULES || {}).fixed || {}).flightNote ? `<p class="prop-flight-note">${window.WBW_RULES.fixed.flightNote}</p>` : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
                         ${carousel}
                         ${rateTable}
@@ -1117,7 +1146,6 @@
                         <h1 class="prop-hero-title"${E('title')}>${P.title || ''}</h1>
                         ${P.lede ? `<p class="prop-hero-lede"${E('lede')}>${P.lede}</p>` : ''}
                         ${P.dates ? `<p class="prop-hero-dates"${E('dates')}>${P.dates}</p>` : ''}
-                        ${P.validUntil ? `<p class="prop-hero-valid">Rates valid until <span${E('validUntil')}>${P.validUntil}</span> &mdash; subject to availability thereafter.</p>` : ''}
                     </div>
                 </section>`;
             }
@@ -1126,8 +1154,8 @@
                 return `
                 <section class="prop-close">
                     <div class="prop-container">
-                        <h2 class="prop-close-title"${E('closeTitle')}>${P.closeTitle || 'Just hit reply<br><em>to confirm.</em>'}</h2>
-                        ${P.closeLede ? `<p class="prop-close-lede"${E('closeLede')}>${P.closeLede}</p>` : ''}
+                        <h2 class="prop-close-title"${E('closeTitle')}>${P.closeTitle || (((window.WBW_RULES || {}).fixed || {}).closeTitleQuote || '').replace(/\*([^*]+)\*/g, '<em>$1</em>')}</h2>
+                        ${(() => { const cl = P.closeLede || ((window.WBW_RULES || {}).fixed || {}).closeLede || ''; return cl ? `<p class="prop-close-lede"${E('closeLede')}>${cl}</p>` : ''; })()}
                         <div class="prop-close-signature">
                             <p class="prop-close-signature-name">${P.signatureName || 'Wilson'}</p>
                             <p class="prop-close-signature-role">${P.signatureRole || 'Founder &middot; Wander by Wilson'}</p>
@@ -1199,22 +1227,28 @@
                             <div class="prop-container">
                                 <p class="prop-hero-kicker">Wander by Wilson</p>
                                 <h1 class="prop-hero-title">Still <em>in the works.</em></h1>
-                                <p class="prop-hero-lede">This proposal isn&rsquo;t finished yet &mdash; we&rsquo;re still pulling the options together.
+                                <p class="prop-hero-lede">This proposal isn&rsquo;t finished yet; we&rsquo;re still pulling the options together.
                                 You&rsquo;ll have the link as soon as it&rsquo;s ready.</p>
                             </div>
                         </section>`;
                     return;
                 }
-                const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || 'Photography is provided by each property. Actual rooms may differ from the images shown.'}</p>`;
                 const mode = P.mode === 'lookbook' ? 'lookbook' : 'quote';
+                document.body.classList.toggle('is-lookbook', mode === 'lookbook');
+                // Fixed client-facing lines come from rules.js (one source of truth).
+                const FX = (window.WBW_RULES && window.WBW_RULES.fixed) || {};
+                const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || (mode === 'quote' ? FX.photoNoteQuote : FX.photoNoteLookbook) || ''}</p>`;
+                // Every quote carries the subject-to-change line, whoever built it.
+                const changeNote = mode === 'quote' && FX.subjectToChange
+                    ? `<p class="prop-photo-note prop-change-note">${FX.subjectToChange}</p>` : '';
                 const all = P.hotels || [];
+                // "Also considered" is internal only (Wilson, 2026-10-02): never on the page.
                 const shown = all.filter(h => !h.considered);
-                const setAside = all.filter(h => h.considered);
                 document.getElementById('proposalRoot').innerHTML =
                     heroSection(P) +
                     shown.map((h, i) => hotelSection(h, i, mode)).join('') +
                     perksSection(P.perks) +
-                    consideredSection(setAside) +
+                    changeNote +
                     photoNote +
                     closeSection(P);
                 initCarousels();

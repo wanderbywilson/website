@@ -1,6 +1,9 @@
 # Hotel page spec — the single source of truth
 
-Both paths that create hotel pages MUST follow this file:
+Both paths that create hotel pages MUST follow this file. Since 2026-10-02 the
+Proposal Studio's lookbook and quote prompts follow it too (via `rules.js`, block
+`hotelContent` + `photos`), so a hotel researched for a proposal becomes its website
+page with a quick review, and a hotel already on the site is never re-researched:
 
 1. **Claude Code** — the `new-hotel-page` skill (`.claude/commands/new-hotel-page.md`)
 2. **The Studio** — the `hotel-draft-builder` workflow, whose drafts land in
@@ -38,7 +41,7 @@ and even there, every *fact* must be sourced.
 | `agentTip` | **ADVISOR TIP — one concrete insider move**, 66–349 characters (median ~193): a named suite worth the splurge, a specific dish or table, a named experience, a timing move. Source: SmartFlyer write-up (primary), Virtuoso "Hotel Tip" sidebar (fallback), else the hotel's own site for verifiable specifics. |
 | `perks` | The actual preferred-partner amenities documented for **this** hotel (Virtuoso / SmartFlyer / brand program). Keep the precise fine print — "subject to availability", "$100 USD equivalent F&B credit, once per stay", "not combinable…". **Never** the advisor's *personalized welcome note* (surprise rule). Never assume a generic package. Empty array if unverified. |
 | `heroImage` + `gallery` | Hero + 5, per the photo rules below. |
-| `bookingUrl` | Wilson's Virtuoso advisor link — pull it yourself (see the skill's "Booking link" section). Empty string if the hotel isn't bookable through Virtuoso; the page then falls back to the inquiry form. Never `#`. |
+| `bookingUrl` | Wilson's Virtuoso advisor link — pull it yourself (see the skill's "Booking link" section). Empty string if the hotel isn't bookable through Virtuoso; the page's Book button then links to our self-booking page, `/book` (Wilson, 2026-10-02). Never `#`. |
 | Optional | `rateNote`, `rateInfo`, `rateLines`, `brandBadge` + `brandBadgeAlt`. |
 
 ## Never ship a placeholder
@@ -55,17 +58,26 @@ are for the reviewer and never render publicly.
 
 ## Photo rules (Wilson, validated)
 
-Galleries tell the story of the **place**, not an inventory of rooms.
+One gallery per hotel, shared by its website page, lookbooks and quotes (Wilson,
+2026-10-02). Galleries tell the story of the **place**; room shots show what staying
+there looks like, never a specific quoted room.
 
 - **Hero:** the property's signature postcard shot. Daylight or golden hour.
-- **Mix (hero + 5):** sense-of-place landscape/lifestyle · a signature experience ·
-  dining *setting* only if it earns its place · ONE shot of an actual room (bed/living,
-  ideally with its view) · pool/waterfront/architecture.
+- **Mix (hero + 5):** TWO OR THREE room shots (bed and living space, ideally with the
+  view from inside; different categories where possible) · a sense-of-place landscape ·
+  the pool/waterfront · a signature space or experience. (Was ONE room shot until
+  2026-10-02; changed so the same gallery works in a lookbook.)
+- **Quotes never show a photo as "your room".** They use this gallery plus the note
+  "Photos show the property. Your room category may differ." (Wilson, 2026-10-02:
+  room-category photos are left out for liability.)
 - **Never:** plated-food shots · night/after-dark shots · bathroom-only room shots ·
   **people as the subject** — no couples, portraits, models or lifestyle shots where a person is what the photo is about (small figures at human scale in a wide view are fine) · dark or flat interiors · renders when photos exist ·
-  near-duplicates · generic spa treatment rooms.
-- **Sources:** the hotel's own site/official media (WordPress sites often expose
-  `/wp-json/wp/v2/media`), SmartFlyer, Virtuoso. Optimize with Pillow, ≥1600px.
+  near-duplicates · logos or promo text burned in · generic spa treatment rooms.
+- **Sources, in this order (Wilson, 2026-10-02):** the hotel's own site/official media
+  (WordPress sites often expose `/wp-json/wp/v2/media`), then Virtuoso, then SmartFlyer.
+  Optimize with Pillow, ≥1600px.
+- **Perks source order:** Virtuoso amenities, then SmartFlyer Exclusives, then the brand's
+  preferred-partner program.
 
 ## Where drafts go
 
