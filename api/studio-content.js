@@ -64,7 +64,7 @@ function metaFromDoc(id, doc) {
         name: doc.name || '',
         location: doc.location || '',
         region: doc.region || '',
-        heroImage: doc.heroImage || '',
+        heroImage: doc.heroImage || (doc.entry && doc.entry.heroImage) || '',
         thumb: doc.thumb || '',
         author: doc.author || '',
         category: doc.category || '',
@@ -105,16 +105,23 @@ module.exports = async (req, res) => {
             // Self-heal: Blob reads lag writes by up to ~60s, so back-to-back saves
             // can drop each other's index entries. Any draft whose document exists
             // but is missing from the index is added back here (2026-10-03).
+            // The index file can read back stale for minutes, so for these small
+            // lists every entry is checked against its own document (2026-10-03).
             if (kind === 'hoteldraft' || kind === 'destination') {
                 const blobs = await blobList(`content/${kind}/`);
-                const missing = blobs
+                const ids = blobs
                     .map(b => (b.pathname.match(new RegExp(`^content/${kind}/([^/]+)\\.json$`)) || [])[1])
-                    .filter(id => id && !id.startsWith('_') && !index[id]);
+                    .filter(id => id && !id.startsWith('_'));
+                const docs = await Promise.all(ids.map(id => blobGetJSON(path(id)).catch(() => null)));
                 let healed = 0;
-                for (const id of missing) {
-                    const doc = await blobGetJSON(path(id)).catch(() => null);
-                    if (doc) { index[id] = metaFromDoc(id, doc); healed++; }
-                }
+                ids.forEach((id, i) => {
+                    const doc = docs[i]; if (!doc) return;
+                    const cur = index[id];
+                    if (!cur || (doc.updatedAt || '') > (cur.updatedAt || '') || (doc.status && doc.status !== cur.status)) {
+                        index[id] = Object.assign({}, cur || {}, metaFromDoc(id, doc));
+                        healed++;
+                    }
+                });
                 if (healed) await blobPutJSON(INDEX, index);
             }
             const items = Object.entries(index)
