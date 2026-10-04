@@ -613,6 +613,12 @@
         .d-slot .ph-tools { left: 3px; justify-content: flex-end; flex-wrap: wrap; }
         .d-slot .ph-tools button { width: auto; min-width: 22px; height: 22px; padding: 0 5px; }
         .d-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--studio-line-soft); }
+        .d-claude-add { margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(42,99,168,0.3); background: rgba(42,99,168,0.04); }
+        .d-claude-title { font-size: 12px; font-weight: 600; color: #2a63a8; margin: 0 0 6px; }
+        .d-claude-add .cb-mini { margin: 0 0 10px; }
+        .d-mappill { flex: none; align-self: center; font: 600 10px var(--font-sans); letter-spacing: .1em; text-transform: uppercase; padding: 6px 9px; border: 1px solid rgba(150,101,10,.45); color: #96650a; background: rgba(150,101,10,.07); cursor: pointer; white-space: nowrap; }
+        .d-mappill.is-off { border-color: var(--st-line-2); color: var(--st-dim-2); background: #fff; text-decoration: line-through; }
+        .d-mappill.is-none { cursor: default; border-style: dashed; border-color: var(--st-line-2); color: var(--st-dim-2); background: none; }
         .d-row:first-child { border-top: none; }
         .d-row .f-area, .d-row .f-input { flex: 1; margin: 0; }
         .d-row .f-area { min-height: 92px; }
@@ -1294,6 +1300,16 @@
                                 <button class="btn btn-ghost" type="button" data-dadd="stay">+ Other hotel</button>
                             </div>
                             <p class="f-hint">Hotels on our website use their own page&rsquo;s photo automatically.</p>
+                            <!-- Add hotels with Claude, without redoing the guide (Wilson, 2026-10-03) -->
+                            <div class="d-claude-add">
+                                <p class="d-claude-title">Add hotels with Claude</p>
+                                <ol class="cb-mini">
+                                    <li><button class="btn btn-ghost btn-small" id="dStayPrompt" type="button">Copy the hotel prompt</button></li>
+                                    <li>Paste it into Claude and type the hotel(s), e.g. <em>add Hotel Alfonso XIII and Corral del Rey</em>.</li>
+                                    <li>Paste Claude&rsquo;s reply below. Only the new hotels are added; the rest of the guide is untouched.</li>
+                                </ol>
+                                <textarea class="f-area" id="dStayPaste" style="min-height:70px" placeholder="Paste Claude&rsquo;s reply. It starts with { and ends with }."></textarea>
+                            </div>
                         </div>
                     </details>
                     <details class="dsec" data-dsec="notes">
@@ -1858,7 +1874,7 @@
 
     <script src="/data.js?v=93"></script>
     <script src="/rules.js?v=1"></script>
-    <script src="/destinations-seed.js?v=3"></script>
+    <script src="/destinations-seed.js?v=4"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
          so probe downwards until one loads instead of hard-coding it. -->
@@ -5033,6 +5049,7 @@
             const ms = (e.climate || {}).months || [];
             return {
                 lat: e.lat != null ? e.lat : null, lng: e.lng != null ? e.lng : null, places: cleanPlaces(e.places),
+                mapOff: (e.mapOff || []).map(String),
                 heroImage: e.heroImage || '',
                 gallery: (e.gallery || []).slice(),
                 todo: (e.highlights || []).map((t, k) => ({ text: t, image: (e.highlightImages || [])[k] || '' })),
@@ -5076,6 +5093,7 @@
             // Not edited here, so carried over from the loaded guide (map positions).
             if (dEd.lat != null) { e.lat = dEd.lat; e.lng = dEd.lng; }
             if (dEd.places && Object.keys(dEd.places).length) e.places = dEd.places;
+            if (dEd.mapOff && dEd.mapOff.length) e.mapOff = dEd.mapOff.slice();
             return e;
         }
         function fillDestForm(e, sourceNotes) {
@@ -5125,11 +5143,53 @@
             if (d) return { onSite: true, name: it.name || d.name, image: d.heroImage || '', src: 'Waiting for review: uses its draft page’s photo' };
             return { onSite: false };
         }
+        /* Hotels we love: add hotels with Claude without redoing the guide. */
+        function stayPrompt() {
+            const nm = $('dName').value.trim() || 'this destination', rg = $('dRegion').value.trim();
+            const have = dEd.stays.map(it => (dStayInfo(it).name || it.name || it.slug || '')).filter(Boolean);
+            const photoLines = String(window.WBW_RULES.blocks.photos || '').split('\n').filter(l => /Sources, in this order|Hero \(Wilson/.test(l)).join('\n');
+            return [
+                'Add hotels to the "Hotels we love" section of our ' + nm + (rg ? ' (' + rg + ')' : '') + ' destination guide, a luxury travel advisor\u2019s page for clients.',
+                'After this prompt I will name the hotel(s) to add. If I have not named any, ask me which.',
+                '',
+                have.length ? 'Already in the section (do not repeat): ' + have.join('; ') + '.' : '',
+                '',
+                'Hotels already on our website. For these give the "slug", the "name" and a "note", and NO photo (their own page\u2019s photo is used):',
+                libraryListForPrompt(),
+                draftHotels.length ? 'Hotels waiting for review (same: slug, name, note, no photo):\n' + draftListForPrompt() : '',
+                '',
+                'For any OTHER hotel, research it and give:',
+                '  \u2022 "name": the official name exactly as the hotel writes it.',
+                '  \u2022 "note": where it is, then one short checked fact, at most 90 characters, e.g. "Puerta de Jerez, built for the 1929 Ibero-American Exposition."',
+                '  \u2022 "image": ONE direct image URL (ending .jpg/.jpeg/.webp/.png) of its hero photo. Open it and check it loads as an image.',
+                photoLines,
+                '',
+                window.WBW_RULES.blocks.luxuryAndBookable,
+                'No prices, no em dashes, no client names. Never invent a fact.',
+                '',
+                'Reply with ONLY this JSON block:',
+                '{ "stays": [ { "name": "", "slug": "our slug, or empty", "note": "", "image": "only for hotels not on our website" } ] }'
+            ].filter(x => x !== '').join('\n');
+        }
+        /* Map toggle on each train/car line (Wilson, 2026-10-03): a place with a
+           map position can be taken off the map; it stays in the key below it. */
+        function dPlaceOf(line) {
+            const m = String(line || '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
+            return m ? m[2].trim() : '';
+        }
+        function dMapPill(line) {
+            if (dEd.lat == null || !dEd.places || !Object.keys(dEd.places).length) return '';
+            const nm = dPlaceOf(line);
+            const has = nm && Object.keys(dEd.places).some(k => k.toLowerCase() === nm.toLowerCase() || k.toLowerCase() === ('the ' + nm).toLowerCase());
+            if (!has) return '<span class="d-mappill is-none" title="No map position for this place, so it shows in the key only">Key only</span>';
+            const off = (dEd.mapOff || []).some(x => x.toLowerCase() === nm.toLowerCase());
+            return `<button type="button" class="d-mappill${off ? ' is-off' : ''}" data-dmap="${esc(nm)}" title="${off ? 'Not on the map (still listed in the key). Click to put it back.' : 'Shown on the map. Click to take it off (it stays in the key).'}">${off ? 'Off map' : 'On map'}</button>`;
+        }
         function renderDestEd() {
             document.querySelectorAll('#destEditor .d-photos [data-slot]').forEach(el => { el.outerHTML = `<div data-slot="${el.dataset.slot}">${dSlot(el.dataset.slot)}</div>`; });
             $('dTodoRows').innerHTML = dEd.todo.map((t, k) => `<div class="d-row">${dSlot('todo:' + k, true)}<textarea class="f-area" data-dl="todo" data-k="${k}" maxlength="140" placeholder="One sentence, 100 characters at most, e.g. Spend a day on a private boat to Capri.">${esc(t.text)}</textarea>${dTools('todo', k, dEd.todo.length)}</div>`).join('') || '<p class="f-hint" style="margin:0">None yet.</p>';
             [['train', 'dTrainRows', '2 hours 30 minutes to Madrid.'], ['car', 'dCarRows', 'About 1 hour to Toledo.'], ['boat', 'dBoatRows', 'Private boat transfers link…']].forEach(([l, id, ph]) => {
-                $(id).innerHTML = dEd[l].map((t, k) => `<div class="d-row"><input class="f-input" data-dl="${l}" data-k="${k}" value="${esc(t)}" placeholder="${esc(ph)}">${dTools(l, k, dEd[l].length)}</div>`).join('');
+                $(id).innerHTML = dEd[l].map((t, k) => `<div class="d-row"><input class="f-input" data-dl="${l}" data-k="${k}" value="${esc(t)}" placeholder="${esc(ph)}">${l === 'boat' ? '' : dMapPill(t)}${dTools(l, k, dEd[l].length)}</div>`).join('');
             });
             $('dTemps').innerHTML = dEd.months.map((m, k) => `<div class="d-temp"><span>${m.m}</span><input inputmode="numeric" data-tm="${k}" data-tk="hi" value="${esc(m.hi)}" aria-label="${m.m} high"><input inputmode="numeric" data-tm="${k}" data-tk="lo" value="${esc(m.lo)}" aria-label="${m.m} low"></div>`).join('');
             $('dStayRows').innerHTML = dEd.stays.map((it, k) => {
@@ -5601,6 +5661,13 @@
                 else if (act === 'swap') { const u = dSlotGet(key); dSlotSet(key, dEd.heroImage); dEd.heroImage = u; }
                 dRedraw(); return;
             }
+            if (t.dataset.dmap) {
+                const nm = t.dataset.dmap, low = nm.toLowerCase();
+                const off = (dEd.mapOff || []).filter(x => x.toLowerCase() !== low);
+                if (off.length === (dEd.mapOff || []).length) off.push(nm);
+                dEd.mapOff = off;
+                renderDestEd(); destFormChanged(); return;
+            }
             if (t.dataset.dadd) {
                 const l = t.dataset.dadd;
                 if (l === 'todo') dEd.todo.push({ text: '', image: '' });
@@ -5617,6 +5684,34 @@
                 else { const j = k + (+t.dataset.dmv); if (j < 0 || j >= arr.length) return; [arr[k], arr[j]] = [arr[j], arr[k]]; }
                 dRedraw();
             }
+        });
+        $('dStayPrompt').addEventListener('click', async () => {
+            try { await loadDraftHotels(); } catch (err) { /* the prompt still works without drafts */ }
+            const text = stayPrompt();
+            try { await navigator.clipboard.writeText(text); toast('Hotel prompt copied. Paste it into Claude and name the hotel(s).'); }
+            catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+        $('dStayPaste').addEventListener('input', (ev) => {
+            const raw = ev.target.value, a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let reply; try { reply = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            const items = Array.isArray(reply.stays) ? reply.stays : Array.isArray(reply) ? reply : [];
+            const seen = new Set(dEd.stays.map(it => it.slug || normName(it.name || '')));
+            // Names already in the section, so "Hotel Alfonso XIII" matches "Hotel Alfonso XIII, a Luxury Collection Hotel".
+            const names = dEd.stays.map(it => normName(dStayInfo(it).name || it.name || '')).filter(Boolean);
+            const dup = (n) => !!n && names.some(x => x.includes(n) || n.includes(x));
+            let added = 0;
+            items.forEach(it => {
+                const slug = String(it.slug || '').trim(), known = slug && (lib[slug] || draftHotels.some(d => d.slug === slug));
+                const o = known ? { slug, name: String(it.name || ''), note: String(it.note || '') }
+                    : { name: String(it.name || '').trim(), note: String(it.note || '').trim(), image: String(it.image || '').trim() };
+                const key = known ? slug : normName(o.name);
+                if (!key || seen.has(key) || dup(normName(o.name))) return;
+                seen.add(key); names.push(normName(o.name)); dEd.stays.push(o); added++;
+            });
+            ev.target.value = '';
+            renderDestEd(); destFormChanged();
+            toast(added ? 'Added ' + added + ' hotel' + (added === 1 ? '' : 's') + ' to Hotels we love. Check the photos and notes.' : 'Those hotels are already in the section.');
         });
         $('dFile').addEventListener('change', async (ev) => {
             const f = ev.target.files && ev.target.files[0], key = ev.target.dataset.key; if (!f || !key) return;

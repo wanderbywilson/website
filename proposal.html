@@ -1538,11 +1538,12 @@
                 const gtBody = gt
                     ? block('By plane', d.byPlane ? [d.byPlane] : []) +
                       `<div class="gt-map" data-gt='${JSON.stringify(gt).replace(/'/g, '&#39;')}'></div>` +
-                      ['train', 'car', 'boat'].map(mode => {
-                          const rows = gt.places.filter(x => x.mode === mode);
+                      ['train', 'car'].map(mode => {
+                          const rows = gt.rows.filter(x => x.mode === mode);
                           return rows.length ? `<p class="prop-dest-train-head gt-head">${MODE_LABEL[mode]}<span class="gt-swatch gt-sw-${mode}"></span></p>` +
-                              `<ul class="prop-dest-trains gt-rows">${rows.map(x => `<li>${x.name}${x.detail ? `<span class="gt-d">${x.detail}</span>` : ''}<span class="gt-t">${x.time}</span></li>`).join('')}</ul>` : '';
-                      }).join('')
+                              `<ul class="prop-dest-trains gt-rows">${rows.map(x => x.raw ? `<li>${x.raw}</li>` : `<li>${x.name}${x.detail ? `<span class="gt-d">${x.detail}</span>` : ''}<span class="gt-t">${x.time}</span></li>`).join('')}</ul>` : '';
+                      }).join('') +
+                      block('By boat', list('byFerry'))
                     : lines;
                 const getting = showGetting && (d.gettingThere || gtBody)
                     ? `<div class="prop-hotel-getting"><strong>How to get there</strong>${d.gettingThere ? `<span>${d.gettingThere}</span>` : ''}${gtBody}</div>` : '';
@@ -1751,18 +1752,26 @@
                By boat line reads "2 hours 30 minutes to Madrid." or "... to Lagos
                (Algarve, Portugal)."; the guide's "places" holds each place's map
                position, keyed by the name as written. Two or more places draw a map. */
+            function parseTravel(line) {
+                const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
+                return m ? { name: m[2].trim(), detail: (m[3] || '').trim(), time: shortLeg(m[1]) } : null;
+            }
+            // Only onward places by train or car are mapped; boat lines stay text
+            // (Wilson, 2026-10-03). "mapOff" lists places taken off the map in the
+            // editor: they stay in the key. Two or more mapped places draw a map.
             function gettingMapData(d) {
                 if (d.lat == null || d.lng == null || !d.places) return null;
                 const pos = {}; Object.keys(d.places).forEach(k => { pos[k.toLowerCase()] = d.places[k]; });
-                const places = [];
-                [['byTrain', 'train'], ['byCar', 'car'], ['byFerry', 'boat']].forEach(([k, mode]) => (d[k] || []).forEach(line => {
-                    const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
-                    if (!m) return;
-                    const name = m[2].trim(), at = pos[name.toLowerCase()] || pos[('the ' + name).toLowerCase()];
-                    if (!at) return;
-                    places.push({ name, detail: (m[3] || '').trim(), lat: +at[0], lng: +at[1], mode, time: shortLeg(m[1]) });
+                const off = (d.mapOff || []).map(x => String(x).toLowerCase());
+                const places = [], rows = [];
+                [['byTrain', 'train'], ['byCar', 'car']].forEach(([k, mode]) => (d[k] || []).forEach(line => {
+                    const t = parseTravel(line);
+                    if (!t) { rows.push({ mode, raw: line }); return; }
+                    rows.push(Object.assign({ mode }, t));
+                    const at = pos[t.name.toLowerCase()] || pos[('the ' + t.name).toLowerCase()];
+                    if (at && !off.includes(t.name.toLowerCase())) places.push(Object.assign({ mode, lat: +at[0], lng: +at[1] }, t));
                 }));
-                return places.length >= 2 ? { center: { name: decode(strip(d.name || '')), lat: +d.lat, lng: +d.lng }, places } : null;
+                return places.length >= 2 ? { center: { name: decode(strip(d.name || '')), lat: +d.lat, lng: +d.lng }, places, rows } : null;
             }
             // Labels of nearby places can overlap: nudge later ones down (or up) until clear.
             function unclash(box) {
