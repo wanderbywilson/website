@@ -1754,7 +1754,8 @@
                position, keyed by the name as written. Two or more places draw a map. */
             function parseTravel(line) {
                 const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
-                return m ? { name: m[2].trim(), detail: (m[3] || '').trim(), time: shortLeg(m[1]) } : null;
+                // The key shows the time only: distances in brackets and "from Avignon TGV" are dropped.
+                return m ? { name: m[2].trim(), detail: (m[3] || '').trim(), time: shortLeg(m[1].replace(/\s*\([^)]*\)/g, '').replace(/\s+from\s+.*$/i, '')) } : null;
             }
             // Only onward places by train or car are mapped; boat lines stay text
             // (Wilson, 2026-10-03). "mapOff" lists places taken off the map in the
