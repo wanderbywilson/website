@@ -191,7 +191,12 @@ module.exports = async (req, res) => {
                 title: (proposal.title || '').replace(/<[^>]+>/g, ''),
                 preparedFor: proposal.preparedFor || '',
                 dates: (proposal.dates || '').replace(/<[^>]+>/g, ''),
+                // For grouping the Studio list: client → trip (place · dates) → versions.
+                mode: proposal.mode === 'lookbook' ? 'lookbook' : 'quote',
+                destination: (Array.isArray(proposal.destinations) ? proposal.destinations : [])
+                    .map(d => d && !d.off && d.name ? String(d.name) : '').filter(Boolean).join(' & '),
                 hotelCount: proposal.hotels.length,
+                createdAt: (existing && existing.createdAt) || now,
                 updatedAt: now
             };
             await blobPutJSON(INDEX_PATH, index);

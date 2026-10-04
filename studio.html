@@ -482,6 +482,42 @@
         .mode-switch button span { display: block; font-size: 11px; line-height: 1.45; color: var(--st-dim-2); }
         .mode-switch button.is-on { border-color: #2a63a8; background: rgba(42,99,168,0.07); }
         .mode-switch button.is-on strong { color: #2a63a8; }
+        /* Build with Claude, as three numbered steps (2026-10-03) */
+        .cb { padding: 20px 20px 16px; }
+        .cb-steps { list-style: none; margin: 0; padding: 0; }
+        .cb-step { display: grid; grid-template-columns: 30px 1fr; gap: 14px; position: relative; padding-bottom: 20px; }
+        .cb-step:not(:last-child)::before { content: ''; position: absolute; left: 14px; top: 32px; bottom: 4px; width: 1px; background: rgba(42,99,168,0.25); }
+        .cb-num { width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 1px solid #2a63a8; color: #2a63a8;
+            font: 600 13px/28px var(--font-sans); text-align: center; }
+        .cb-step.is-done .cb-num { background: #2a63a8; color: #fff; font-size: 0; }
+        .cb-step.is-done .cb-num::after { content: '\2713'; font-size: 14px; }
+        .cb-body { min-width: 0; padding-top: 4px; }
+        .cb-title { font-family: var(--font-serif); font-size: 18px; color: var(--st-text); margin: 0 0 10px; line-height: 1.2; }
+        .cb-text { font-size: 13px; line-height: 1.55; color: var(--st-dim); margin: 0 0 8px; }
+        .cb-say { display: inline-block; font-size: 13px; color: var(--st-text); background: #fff; border: 1px dashed rgba(42,99,168,0.5);
+            padding: 6px 10px; margin: 0 0 10px; font-family: ui-monospace, Menlo, monospace; }
+        .cb-hint { font-size: 11.5px; line-height: 1.5; color: var(--st-dim-2); margin: 10px 0 0; }
+        .cb .mode-switch { margin-bottom: 0; }
+        .cb #pbCopyPrompt { margin-top: 2px; }
+        .cb #pbPaste { min-height: 110px; }
+        .cb-next { background: #fff; border: 1px solid rgba(42,99,168,0.35); padding: 12px 14px; margin: 0 0 16px 44px; }
+        .cb-next p { font-size: 13px; line-height: 1.5; color: var(--st-dim); margin: 0 0 10px; }
+        .cb-extras-label { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--st-dim-2); font-weight: 600;
+            margin: 6px 0 8px; padding-top: 14px; border-top: 1px solid rgba(42,99,168,0.18); }
+        .cb-extra { background: #fff; border: 1px solid var(--st-line-2); margin-bottom: 8px; }
+        .cb-extra > summary { list-style: none; cursor: pointer; padding: 11px 14px; display: flex; align-items: center; justify-content: space-between; }
+        .cb-extra > summary::-webkit-details-marker { display: none; }
+        .cb-extra > summary::after { content: '+'; color: #2a63a8; font-size: 18px; line-height: 1; }
+        .cb-extra[open] > summary::after { content: '\2212'; }
+        .cb-extra > summary strong { display: block; font-size: 13px; color: var(--st-text); font-weight: 600; }
+        .cb-extra > summary em { display: block; font-style: normal; font-size: 11.5px; color: var(--st-dim-2); margin-top: 2px; }
+        .cb-extra > :not(summary) { margin-left: 14px; margin-right: 14px; }
+        .cb-extra > :last-child { margin-bottom: 14px; }
+        .cb-mini { margin: 0 14px 10px; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--st-dim); }
+        .cb-mini li { margin-bottom: 6px; }
+        .cb-extra textarea { min-height: 90px; }
+        .cb-rules { display: block; margin: 12px 0 0; font-size: 12px; color: var(--st-dim-2); text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; }
+        .cb.is-lookbook .cb-quote-only { display: none; }
         .quote-only-hidden { display: none !important; }
         #metaWarn mark { background: rgba(150,101,10,0.22); color: inherit; padding: 0 2px; font-weight: 600; }
         #metaWarn li { margin-bottom: 8px; }
@@ -655,6 +691,41 @@
         .plist-viewed.no { color: rgba(30,53,82,0.4); }
         .plist-actions { margin-left: auto; display: flex; gap: 6px; flex: none; }
         .plist-main { min-width: 0; }
+        /* Grouped list (2026-10-03): client → trip (place · dates) → versions */
+        .plist-tools { display: flex; gap: 10px; align-items: center; margin: 0 0 14px; flex-wrap: wrap; }
+        .plist-tools .f-input { flex: 1 1 260px; min-width: 0; margin: 0; }
+        .plist-filter { display: flex; border: 1px solid var(--st-line-2); }
+        .plist-filter button { background: #fff; border: 0; padding: 9px 14px; font: 600 10.5px var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: var(--st-dim); cursor: pointer; }
+        .plist-filter button + button { border-left: 1px solid var(--st-line-2); }
+        .plist-filter button.is-on { background: var(--ink, #1e3552); color: #fff; }
+        .pc { border: 1px solid var(--st-line-2); background: #fff; margin-bottom: 14px; }
+        .pc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 14px 18px 10px; border-bottom: 1px solid var(--st-line); }
+        .pc-name { font-family: var(--font-serif); font-size: 21px; margin: 0; color: var(--st-text); }
+        .pc-sum { font-size: 11.5px; color: var(--st-dim-2); white-space: nowrap; }
+        .pt { padding: 10px 18px 6px; }
+        .pt + .pt { border-top: 1px solid var(--st-line); }
+        .pt-title { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; color: var(--gold, #96650a); margin: 2px 0 6px; }
+        .pt-title span { color: var(--st-dim-2); font-weight: 500; }
+        .pv { display: grid; grid-template-columns: 34px 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; }
+        .pv + .pv { border-top: 1px dashed var(--st-line); }
+        .pv-n { font: 600 11px var(--font-sans); color: var(--st-dim-2); letter-spacing: .06em; }
+        .pv-main { min-width: 0; }
+        .pv-line { font-size: 13.5px; color: var(--st-text); margin: 0; }
+        .pv-line .pv-kind { font-weight: 600; }
+        .pv-sub { font-size: 11.5px; color: var(--st-dim-2); margin: 2px 0 0; }
+        .pv-status { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; padding: 4px 8px; white-space: nowrap; }
+        .pv-status.opened { color: #2c7a4b; background: rgba(44,122,75,0.08); }
+        .pv-status.live { color: #2a63a8; background: rgba(42,99,168,0.08); }
+        .pv-status.draft { color: var(--st-dim-2); background: rgba(30,53,82,0.05); }
+        .pv-actions { display: flex; gap: 6px; align-items: center; }
+        .pv-more { background: none; border: 0; color: var(--st-dim-2); font-size: 11px; text-decoration: underline; cursor: pointer; padding: 0 4px; }
+        .pv-more:hover { color: #a33; }
+        .pv.is-old { opacity: .72; }
+        .pt-older { background: none; border: 0; padding: 4px 0 8px 46px; font-size: 11.5px; color: #2a63a8; cursor: pointer; text-decoration: underline; }
+        @media (max-width: 760px) {
+            .pv { grid-template-columns: 28px 1fr; }
+            .pv-status, .pv-actions { grid-column: 2; justify-self: start; }
+        }
 
         /* Publish success bar */
         .pub-bar {
@@ -1423,46 +1494,80 @@
                 <!-- Build it with Claude — the main way in -->
                 <details class="dsec psec" data-psec="claude" id="pSecClaude" open>
                 <summary>Build it with Claude <span class="dsec-meta" id="pMetaClaude">start here</span></summary>
-                <section class="claude-build" style="margin:0 18px 16px">
-                    <p class="claude-build-sub">Copy the prompt into your own Claude and type <strong>&ldquo;build a lookbook for [client name]&rdquo;</strong> (or &ldquo;build a quote for&rdquo;, with the rate screenshots attached). That&rsquo;s all. It goes and reads their inquiry, your intake-call recap, the Asana task and any call notes, then comes back with 4&ndash;6 properties. Hotels already on our website (or waiting for review) come straight from their pages; only new ones are researched. Paste the reply here and the whole proposal builds itself.</p>
-                    <div class="mode-switch" id="modeSwitch">
-                        <button type="button" data-mode="lookbook">
-                            <strong>Lookbook</strong>
-                            <span>Ideas to react to &mdash; hotels, photos and how to get there. No rooms or pricing.</span>
-                        </button>
-                        <button type="button" data-mode="quote" class="is-on">
-                            <strong>Quote</strong>
-                            <span>The real thing &mdash; room category, rate, deposit and cancellation.</span>
-                        </button>
+                <section class="claude-build cb" style="margin:0 18px 16px">
+                    <ol class="cb-steps">
+                        <li class="cb-step" id="cbStep1">
+                            <span class="cb-num">1</span>
+                            <div class="cb-body">
+                                <p class="cb-title">Choose what you&rsquo;re making</p>
+                                <div class="mode-switch" id="modeSwitch">
+                                    <button type="button" data-mode="lookbook">
+                                        <strong>Lookbook</strong>
+                                        <span>Hotel ideas to react to. Photos and guides, no prices.</span>
+                                    </button>
+                                    <button type="button" data-mode="quote" class="is-on">
+                                        <strong>Quote</strong>
+                                        <span>Rooms, rates, deposit and cancellation.</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="cb-step" id="cbStep2">
+                            <span class="cb-num">2</span>
+                            <div class="cb-body">
+                                <p class="cb-title">Copy the prompt into Claude</p>
+                                <p class="cb-text">Open a new Claude chat, paste the prompt, then type:</p>
+                                <p class="cb-say" id="cbSay">build a quote for [client name]</p>
+                                <p class="cb-text cb-quote-only">Attach the rate screenshots to the same message.</p>
+                                <button class="btn" id="pbCopyPrompt" type="button">Copy the quote prompt</button>
+                                <p class="cb-hint">Claude reads the inquiry, call recap, Asana task and notes, then picks 4&ndash;6 hotels. Hotels already on our website come from their pages.</p>
+                            </div>
+                        </li>
+                        <li class="cb-step" id="cbStep3">
+                            <span class="cb-num">3</span>
+                            <div class="cb-body">
+                                <p class="cb-title">Paste Claude&rsquo;s reply here</p>
+                                <textarea class="f-area" id="pbPaste" placeholder="Paste the whole reply. It starts with { and ends with }."></textarea>
+                                <p class="claude-build-note" id="pbResult" hidden></p>
+                                <p class="cb-hint">Everything below fills in. Check it over, then save or publish at the bottom.</p>
+                            </div>
+                        </li>
+                    </ol>
+
+                    <!-- Lookbook done and the client has picked favourites -->
+                    <div class="cb-next" id="cbConvert" hidden>
+                        <p><strong>Client picked their favourites?</strong> Turn this lookbook into a quote for just those hotels.</p>
+                        <button class="btn btn-ghost btn-small" id="btnConvert" type="button">Convert to a quote</button>
                     </div>
-                    <div class="claude-build-row">
-                        <button class="btn" id="pbCopyPrompt" type="button">1 &middot; Copy the quote prompt</button>
-                        <button class="btn btn-ghost" id="btnRules" type="button" title="Every rule the prompts and checks use, from rules.js">See the rules</button>
-                    </div>
-                    <textarea class="f-area" id="pbPaste" style="min-height:130px" placeholder="2 · Paste Claude's reply here — it starts with { and ends with } — and the trip, the hotels and the close all fill in."></textarea>
-                    <p class="claude-build-note" id="pbResult" hidden></p>
-                    <button class="btn btn-ghost btn-small" id="btnConvert" type="button" hidden style="margin-top:12px">Convert to a quote &mdash; pick what they liked</button>
+
+                    <p class="cb-extras-label">Optional extras</p>
+
+                    <!-- Flights: one prompt, however many screenshots -->
+                    <details class="cb-extra">
+                        <summary><span><strong>Add flights</strong><em>From Google Flights screenshots</em></span></summary>
+                        <ol class="cb-mini">
+                            <li>Add the hotels first (steps 1&ndash;3).</li>
+                            <li><button class="btn btn-ghost btn-small" id="flCopyPrompt" type="button">Copy the flight prompt</button></li>
+                            <li>Paste it into Claude with your flight screenshots.</li>
+                            <li>Paste Claude&rsquo;s reply below. Each flight lands on the right hotel.</li>
+                        </ol>
+                        <textarea class="f-area" id="flPaste" placeholder="Paste the flight reply. It starts with { and ends with }."></textarea>
+                        <p class="claude-build-note" id="flResult" hidden></p>
+                    </details>
 
                     <!-- Already quoted it in TravelWits? Skip the retyping. -->
-                    <div class="tw-import">
-                        <p class="tw-import-lead"><strong>Already have a TravelWits quote?</strong> Paste the compare link and the rooms, rates and cancellation terms come straight in &mdash; then let Claude write around them.</p>
+                    <details class="cb-extra cb-quote-only">
+                        <summary><span><strong>Import a TravelWits quote</strong><em>Rooms, rates and cancellation come straight in</em></span></summary>
+                        <p class="cb-text">Paste the compare link, then build the rest with Claude as usual.</p>
                         <div class="tw-import-row">
                             <input class="f-input" id="twLink" type="url" spellcheck="false"
                                    placeholder="https://smartflyer.travelwits.com/…/compare?id=…">
-                            <button class="btn btn-ghost" id="twImport" type="button">Import quote</button>
+                            <button class="btn btn-ghost" id="twImport" type="button">Import</button>
                         </div>
                         <p class="claude-build-note" id="twResult" hidden></p>
-                    </div>
+                    </details>
 
-                    <!-- Flights: one prompt, however many screenshots -->
-                    <div class="tw-import">
-                        <p class="tw-import-lead"><strong>Add the flights.</strong> Copy the prompt, drop your flight screenshots into Claude with it, and paste the reply back. The prompt carries the hotels you already have, so Claude works out which route belongs to which property &mdash; and a flight into an island lands on every hotel on that island.</p>
-                        <div class="claude-build-row">
-                            <button class="btn btn-ghost" id="flCopyPrompt" type="button">Copy the flight prompt</button>
-                        </div>
-                        <textarea class="f-area" id="flPaste" style="min-height:110px" placeholder="Paste Claude's flight reply here — it starts with { and ends with } — and each hotel gets its expandable flight details."></textarea>
-                        <p class="claude-build-note" id="flResult" hidden></p>
-                    </div>
+                    <button class="linklike cb-rules" id="btnRules" type="button" title="Every rule the prompts and checks use, from rules.js">See the rules Claude follows</button>
                 </section>
                 </details>
 
@@ -1606,6 +1711,14 @@
             <div class="modal-head">
                 <h2 class="modal-title">Your <em>proposals.</em></h2>
                 <button class="btn btn-ghost btn-small" data-close="listModal" type="button">Close</button>
+            </div>
+            <div class="plist-tools">
+                <input class="f-input" id="plistSearch" type="search" placeholder="Search by client, place or date" autocomplete="off">
+                <div class="plist-filter" id="plistFilter">
+                    <button type="button" data-f="all" class="is-on">All</button>
+                    <button type="button" data-f="live">Live</button>
+                    <button type="button" data-f="draft">Drafts</button>
+                </div>
             </div>
             <div class="plist" id="plist"><p class="sec-sub">Loading…</p></div>
         </div>
@@ -4441,8 +4554,10 @@
             const lb = state.mode === 'lookbook';
             document.querySelectorAll('#modeSwitch [data-mode]').forEach(b =>
                 b.classList.toggle('is-on', b.dataset.mode === state.mode));
-            $('pbCopyPrompt').textContent = lb ? '1 · Copy the lookbook prompt' : '1 · Copy the quote prompt';
-            $('btnConvert').hidden = !lb || !state.hotels.length;
+            $('pbCopyPrompt').textContent = lb ? 'Copy the lookbook prompt' : 'Copy the quote prompt';
+            $('cbSay').textContent = (lb ? 'build a lookbook for ' : 'build a quote for ') + '[client name]';
+            document.querySelector('.cb').classList.toggle('is-lookbook', lb);
+            $('cbConvert').hidden = !lb || !state.hotels.length;
             $('btnPublish').textContent = 'Publish';
             $('btnPublishBottom').textContent = lb ? 'Publish lookbook' : 'Publish proposal';
             // Guides go in lookbooks and quotes; the shortlist switch is lookbook-only.
@@ -4465,6 +4580,7 @@
             await loadDraftHotels();
             if (state.mode === 'lookbook') await loadDestIndex();
             const text = state.mode === 'lookbook' ? lookbookPrompt() : quotePrompt();
+            $('cbStep2').classList.add('is-done');
             try { await navigator.clipboard.writeText(text); toast((state.mode === 'lookbook' ? 'Lookbook' : 'Quote') + ' prompt copied — paste it into your Claude and name the client.'); }
             catch (err) { window.prompt('Copy this prompt:', text); }
         });
@@ -5605,6 +5721,8 @@
             }
             const box = $('pbResult');
             box.hidden = false;
+            $('cbStep3').classList.add('is-done'); $('cbStep2').classList.add('is-done');
+            $('cbConvert').hidden = state.mode !== 'lookbook' || !state.hotels.length;
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
                 (fromLibrary.length ? fromLibrary.length + ' came from our own pages (' + esc(fromLibrary.join(', ')) + ') with approved photos and amenities. ' : '') +
                 (custom.length ? custom.length + (custom.length === 1 ? ' isn\u2019t' : ' aren\u2019t') + ' on our site yet (' + esc(custom.join(', ')) + ') — using Claude\u2019s sourced copy, and queued as ' + (custom.length === 1 ? 'a hotel-page draft' : 'hotel-page drafts') + '.' : '') +
@@ -5940,6 +6058,74 @@
             pushPreview();
         }
 
+        /* Your proposals, organised the way we work: client → trip (place · dates)
+           → numbered versions, newest first. Older saves fold away. */
+        let plistData = [], plistFilter = 'all';
+        const plistOpen = new Set();
+        const pClientKey = (p) => (p.preparedFor || 'No client name').toLowerCase().replace(/^for\s+/, '').replace(/\band\b/g, '&').replace(/\bthe\s+/g, '').replace(/[^a-z0-9&]+/g, ' ').trim();
+        const pPlace = (p) => (p.destination || stripHtml(p.title || '')).replace(/\*/g, '').replace(/[.\s]+$/, '').replace(/,?\s+then\s+/i, ' & ').trim() || 'Untitled trip';
+        const pShort = (d) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        const pWhen = (d) => new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        function plistStatus(p) {
+            if (p.status === 'draft') return '<span class="pv-status draft">Draft</span>';
+            if (p.viewed) return '<span class="pv-status opened" title="Last viewed ' + esc(p.lastViewedAt ? pWhen(p.lastViewedAt) : '') + '">\u2713 Opened' + (p.views > 1 ? ' \u00b7 ' + p.views : '') + '</span>';
+            return '<span class="pv-status live">Sent \u00b7 not opened</span>';
+        }
+        function renderPlist() {
+            const q = ($('plistSearch').value || '').toLowerCase().trim();
+            const rows = plistData.filter(p => (plistFilter === 'all' || (plistFilter === 'draft' ? p.status === 'draft' : p.status !== 'draft'))
+                && (!q || [p.preparedFor, p.title, p.destination, p.dates].join(' ').toLowerCase().includes(q)));
+            if (!rows.length) { $('plist').innerHTML = '<p class="sec-sub">' + (plistData.length ? 'Nothing matches.' : 'Nothing saved yet. Your proposals will appear here.') + '</p>'; return; }
+            const clients = new Map();
+            rows.forEach(p => {
+                const ck = pClientKey(p);
+                if (!clients.has(ck)) clients.set(ck, { name: (p.preparedFor || 'No client name').replace(/^for\s+/i, ''), trips: new Map(), latest: '' });
+                const c = clients.get(ck);
+                const tk = pPlace(p).toLowerCase() + '|' + (p.dates || '').toLowerCase();
+                if (!c.trips.has(tk)) c.trips.set(tk, { place: pPlace(p), dates: p.dates || '', items: [] });
+                c.trips.get(tk).items.push(p);
+                if ((p.updatedAt || '') > c.latest) c.latest = p.updatedAt || '';
+            });
+            const out = [...clients.entries()].sort((a, b) => b[1].latest.localeCompare(a[1].latest)).map(([ck, c]) => {
+                const trips = [...c.trips.values()].sort((a, b) => Math.max(...b.items.map(x => +new Date(x.updatedAt))) - Math.max(...a.items.map(x => +new Date(x.updatedAt))));
+                const n = trips.reduce((t, x) => t + x.items.length, 0);
+                return '<div class="pc"><div class="pc-head"><p class="pc-name">' + esc(c.name) + '</p><span class="pc-sum">' +
+                    trips.length + ' trip' + (trips.length === 1 ? '' : 's') + ' \u00b7 ' + n + ' version' + (n === 1 ? '' : 's') + ' \u00b7 updated ' + pShort(c.latest) + '</span></div>' +
+                    trips.map((t, ti) => {
+                        // Version numbers follow the order they were first saved.
+                        const byAge = t.items.slice().sort((a, b) => (a.createdAt || a.updatedAt || '').localeCompare(b.createdAt || b.updatedAt || ''));
+                        byAge.forEach((p, i) => { p.__v = i + 1; });
+                        const newest = t.items.slice().sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+                        const key = ck + '#' + ti, open = plistOpen.has(key) || q;
+                        // Collapsed: the newest save, plus the newest live one (what the client has) if that's older.
+                        const liveTop = newest.find(p => p.status !== 'draft');
+                        const shown = open ? newest : newest.filter((p, i) => i === 0 || p === liveTop);
+                        return '<div class="pt"><p class="pt-title">' + esc(t.place) + (t.dates ? ' <span>\u00b7 ' + esc(t.dates) + '</span>' : '') + '</p>' +
+                            shown.map((p, i) => '<div class="pv' + (i && p !== liveTop ? ' is-old' : '') + '">' +
+                                '<span class="pv-n">V' + p.__v + '</span>' +
+                                '<div class="pv-main"><p class="pv-line"><span class="pv-kind">' + (p.mode === 'lookbook' ? 'Lookbook' : p.mode === 'quote' ? 'Quote' : 'Proposal') + '</span> \u00b7 ' + p.hotelCount + ' hotel' + (p.hotelCount === 1 ? '' : 's') + '</p>' +
+                                '<p class="pv-sub">' + esc(stripHtml(p.title || '').replace(/\*/g, '')) + ' \u00b7 saved ' + pShort(p.updatedAt) + (p.lastViewedAt ? ' \u00b7 last opened ' + esc(pWhen(p.lastViewedAt)) : '') + '</p></div>' +
+                                plistStatus(p) +
+                                '<div class="pv-actions">' +
+                                    '<button class="btn btn-small" data-edit="' + p.id + '" type="button">Edit</button>' +
+                                    '<a class="btn btn-ghost btn-small" href="' + esc(p.url) + '?preview=1" target="_blank" rel="noopener">View</a>' +
+                                    (p.status === 'draft' ? '' : '<button class="btn btn-ghost btn-small" data-copy="' + esc(p.url) + '" type="button">Copy link</button>') +
+                                    '<button class="pv-more" data-del="' + p.id + '" type="button" title="Delete this version">Delete</button>' +
+                                '</div></div>').join('') +
+                            ((newest.length > shown.length || open) && newest.length > 1 && !q ? '<button class="pt-older" data-older="' + esc(key) + '" type="button">' + (open ? 'Hide older versions' : 'Show ' + (newest.length - shown.length) + ' older version' + (newest.length - shown.length > 1 ? 's' : '')) + '</button>' : '') +
+                            '</div>';
+                    }).join('') + '</div>';
+            });
+            $('plist').innerHTML = out.join('');
+        }
+        $('plistSearch').addEventListener('input', renderPlist);
+        $('plistFilter').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-f]'); if (!b) return;
+            plistFilter = b.dataset.f;
+            document.querySelectorAll('#plistFilter [data-f]').forEach(x => x.classList.toggle('is-on', x === b));
+            renderPlist();
+        });
+
         async function openList() {
             $('listModal').classList.add('is-open');
             $('plist').innerHTML = '<p class="sec-sub">Loading…</p>';
@@ -5949,22 +6135,8 @@
                     $('plist').innerHTML = '<p class="sec-sub">Nothing published yet — your proposals will appear here.</p>';
                     return;
                 }
-                $('plist').innerHTML = data.proposals.map(p => `
-                    <div class="plist-row">
-                        <div class="plist-main">
-                            <p class="plist-title">${esc(p.title || p.id)}</p>
-                            <p class="plist-meta">${esc(p.preparedFor ? 'For ' + p.preparedFor + ' · ' : '')}${p.hotelCount} hotel${p.hotelCount === 1 ? '' : 's'} · updated ${new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                        </div>
-                        <span class="plist-viewed ${p.viewed ? 'yes' : 'no'}" ${p.firstViewedAt ? `title="First opened ${new Date(p.firstViewedAt).toLocaleString()}"` : ''}>${p.viewed
-                            ? ('✓ Opened' + (p.views > 1 ? ' · ' + p.views + ' views' : '') + (p.lastViewedAt ? '<br>last viewed ' + new Date(p.lastViewedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''))
-                            : (p.status === 'draft' ? 'Draft — not live' : 'Not yet opened')}</span>
-                        <div class="plist-actions">
-                            <a class="btn btn-ghost btn-small" href="${esc(p.url)}?preview=1" target="_blank" rel="noopener">View</a>
-                            <button class="btn btn-ghost btn-small" data-edit="${p.id}" type="button">Edit</button>
-                            <button class="btn btn-ghost btn-small" data-copy="${esc(p.url)}" type="button">Copy link</button>
-                            <button class="btn btn-ghost btn-small" data-del="${p.id}" type="button">Delete</button>
-                        </div>
-                    </div>`).join('');
+                plistData = data.proposals;
+                renderPlist();
             } catch (err) {
                 if (err.message !== 'unauthorized') $('plist').innerHTML = '<p class="sec-sub">Couldn’t load the list — ' + esc(err.message) + '</p>';
             }
@@ -5973,6 +6145,10 @@
         $('plist').addEventListener('click', async (e) => {
             const btn = e.target.closest('button');
             if (!btn) return;
+            if (btn.dataset.older) {
+                plistOpen.has(btn.dataset.older) ? plistOpen.delete(btn.dataset.older) : plistOpen.add(btn.dataset.older);
+                renderPlist(); return;
+            }
             if (btn.dataset.copy) {
                 try { await navigator.clipboard.writeText(btn.dataset.copy); toast('Link copied.'); } catch (err) { toast(btn.dataset.copy); }
             } else if (btn.dataset.edit) {
@@ -5982,7 +6158,7 @@
                     $('listModal').classList.remove('is-open');
                 } catch (err) { if (err.message !== 'unauthorized') toast('Couldn’t load: ' + err.message); }
             } else if (btn.dataset.del) {
-                if (!confirm('Delete this proposal? The client link will stop working.')) return;
+                if (!confirm('Delete this version? If it was sent, the client link will stop working.')) return;
                 try {
                     await api({ action: 'delete', id: btn.dataset.del });
                     if (state.id === btn.dataset.del) resetForm();
