@@ -5,6 +5,7 @@
 //     social     — saved Instagram carousels ({fields, thumb, proposalId})
 //     hoteldraft — hotel-page drafts awaiting Wilson's review
 //                  ({name, location, heroImage, images, notes, entryJs, status})
+//     destination — destination guides for lookbooks ({entry, status}); "ready" = approved
 //     blog       — posts drafted in the Studio ({title, dek, heroImage,
 //                  bodyHtml, tags, author, status})
 //
@@ -31,7 +32,7 @@
 const { blobPutJSON, blobGetJSON, blobDelete, blobList } = require('./_blob');
 const { whoIs, can } = require('./_auth');
 
-const KINDS = ['social', 'hoteldraft', 'blog'];
+const KINDS = ['social', 'hoteldraft', 'blog', 'destination'];
 const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
 // Fields a live post has that the Studio editor doesn't show (they came over
 // from blog-data): kept on save so the next publish doesn't drop them.
@@ -74,7 +75,7 @@ module.exports = async (req, res) => {
         const kind = body.kind;
         if (!KINDS.includes(kind)) return res.status(400).json({ error: 'Unknown kind' });
         // Team members only reach the Studio areas Wilson gave them on the Team card.
-        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social' };
+        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social', destination: 'proposals' };
         if (!can(user, AREA_OF[kind])) return res.status(403).json({ error: 'You don’t have access to this part of the Studio' });
         const INDEX = `content/${kind}/_index.json`;
         const path = (id) => `content/${kind}/${id}.json`;
@@ -102,7 +103,7 @@ module.exports = async (req, res) => {
             let id = cleanId(body.id);
             if (!id) {
                 const base = slugify(doc.slug || doc.name || doc.title) || kind;
-                id = kind === 'hoteldraft' ? base : `${base}-${randomSuffix()}`;
+                id = (kind === 'hoteldraft' || kind === 'destination') ? base : `${base}-${randomSuffix()}`;
             }
             const now = new Date().toISOString();
             const existing = await blobGetJSON(path(id));
@@ -180,7 +181,7 @@ module.exports = async (req, res) => {
                 let id = cleanId(it.id);
                 if (!id) {
                     const base = slugify(doc.slug || doc.name || doc.title) || kind;
-                    id = kind === 'hoteldraft' ? base : `${base}-${randomSuffix()}`;
+                    id = (kind === 'hoteldraft' || kind === 'destination') ? base : `${base}-${randomSuffix()}`;
                 }
                 const existing = await blobGetJSON(path(id));
                 doc.createdAt = (existing && existing.createdAt) || now;

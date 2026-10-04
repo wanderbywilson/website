@@ -26,8 +26,14 @@
             background: #fff;
             min-height: 100vh;
         }
-        .prop-hero { background: var(--paper-cream, #f7f1e6); }
-        .prop-hotel--cream { background: var(--paper-cream, #f7f1e6); }
+        /* The brand bar is solid ivory on proposal pages, so it reads the same
+           over a cream title block or a full-bleed destination photo. */
+        .prop-page .site-header.is-scrolled {
+            background: var(--ivory); backdrop-filter: none; -webkit-backdrop-filter: none;
+            border-bottom: 1px solid rgba(195, 162, 106, 0.45);
+        }
+        .prop-hero { background: var(--ivory); }
+        .prop-hotel--cream { background: var(--ivory); }
         .prop-container {
             max-width: 1180px;
             margin: 0 auto;
@@ -38,7 +44,7 @@
         .prop-hero {
             padding: 96px 0 56px;
             text-align: center;
-            border-bottom: 1px solid rgba(199, 174, 138, 0.32);
+            border-bottom: 1px solid rgba(195, 162, 106, 0.32);
         }
         .prop-hero-kicker {
             font-family: var(--font-sans);
@@ -73,7 +79,7 @@
             margin-top: 22px;
             padding: 10px 22px;
             background: #fff;
-            border: 1px solid rgba(199, 174, 138, 0.48);
+            border: 1px solid rgba(195, 162, 106, 0.48);
             font-family: var(--font-sans);
             font-size: 12px;
             font-weight: 500;
@@ -100,7 +106,7 @@
             content: "";
             width: 44px;
             height: 1px;
-            background: rgba(199, 174, 138, 0.6);
+            background: rgba(195, 162, 106, 0.6);
         }
         .prop-hero-valid {
             font-family: var(--font-serif);
@@ -122,7 +128,7 @@
             gap: 8px;
             padding: 11px 20px;
             background: #fff;
-            border: 1px solid rgba(199, 174, 138, 0.55);
+            border: 1px solid rgba(195, 162, 106, 0.55);
             color: var(--ink);
             font-family: var(--font-sans);
             font-size: 11px;
@@ -133,7 +139,7 @@
             box-shadow: 0 6px 18px rgba(30, 53, 82, 0.08);
             transition: background .25s ease, color .25s ease;
         }
-        .prop-pdf-btn:hover { background: var(--ink); color: #f7f1e6; }
+        .prop-pdf-btn:hover { background: var(--ink); color: var(--ivory); }
 
         /* "Also considered" — a quiet record of what was looked at */
         .prop-considered { padding: 56px 0 8px; background: #fff; }
@@ -164,8 +170,8 @@
 
         /* How to get there — lookbook only */
         .prop-hotel-getting {
-            border-top: 1px solid rgba(199, 174, 138, 0.35);
-            padding-top: 16px; margin: 0 0 22px;
+            border-top: 1px solid rgba(195, 162, 106, 0.35);
+            padding-top: 28px; margin: 28px 0 0;
             font-family: var(--font-sans); font-size: 14px; line-height: 1.65;
             color: rgba(30, 53, 82, 0.78);
         }
@@ -174,12 +180,112 @@
             text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
         }
 
+        /* Average temperatures — lookbook only. Twelve months at a glance, so a
+           client can sanity-check the window they had in mind and, just as
+           usefully, spot a better one. The travelling month is highlighted. */
+        .prop-hotel-climate {
+            margin: 28px 0 0; padding-top: 28px;
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
+        }
+        .prop-hotel-climate strong {
+            display: block; font-family: var(--font-sans); font-size: 11px;
+            font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 12px;
+        }
+        .prop-climate-strip { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }
+        .prop-climate-month {
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            padding: 8px 2px; text-align: center;
+            background: rgba(195, 162, 106, 0.09);
+            font-family: var(--font-sans);
+        }
+        .prop-climate-month.is-on { background: var(--gold); }
+        .pcm-m {
+            font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap;
+            color: rgba(30, 53, 82, 0.55);
+        }
+        .pcm-hi { font-size: 13px; color: rgba(30, 53, 82, 0.9); }
+        .pcm-lo { font-size: 11px; color: rgba(30, 53, 82, 0.5); }
+        .prop-climate-month.is-on .pcm-m  { color: rgba(255, 251, 240, 0.85); }
+        .prop-climate-month.is-on .pcm-hi { color: #fffbf0; }
+        .prop-climate-month.is-on .pcm-lo { color: rgba(255, 251, 240, 0.78); }
+        .prop-climate-note {
+            margin: 10px 0 0; font-family: var(--font-sans); font-size: 11px;
+            line-height: 1.55; color: rgba(30, 53, 82, 0.5);
+        }
+        /* Twelve columns stop being readable well before the mobile stack. */
+        @media (max-width: 760px) {
+            .prop-climate-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+        }
+
+        /* Where to stay — a horizontal rail of bookable properties in the city.
+           Deliberately a scroller rather than a grid: it signals "a sample, not
+           a shortlist", and keeps a destination page from turning into a quote. */
+        .prop-hotel-stays {
+            margin: 28px 0 0; padding-top: 28px;
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
+        }
+        .prop-hotel-stays > strong, .prop-stays-head > strong {
+            display: block; font-family: var(--font-sans); font-size: 11px;
+            font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 12px;
+        }
+        .prop-stays-rail {
+            display: grid; grid-auto-flow: column; grid-auto-columns: 190px;
+            gap: 14px; overflow-x: auto; overscroll-behavior-x: contain;
+            scroll-snap-type: x proximity; padding-bottom: 10px;
+            scrollbar-width: thin; scrollbar-color: rgba(195,162,106,.55) transparent;
+        }
+        .prop-stays-rail::-webkit-scrollbar { height: 4px; }
+        .prop-stays-rail::-webkit-scrollbar-thumb { background: rgba(195,162,106,.55); }
+        .prop-stay { scroll-snap-align: start; text-decoration: none; display: block; color: inherit; }
+        .prop-stay.is-text { align-self: start; border-top: 2px solid var(--gold); padding-top: 12px; }
+        .prop-stays-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+        .prop-stays-head > strong { margin-bottom: 0 !important; }
+        .prop-stays-arrows { display: flex; gap: 8px; }
+        .prop-stays-btn {
+            width: 40px; height: 40px; border-radius: 0; cursor: pointer;
+            border: 1px solid rgba(30, 53, 82, 0.45); background: transparent; color: var(--gold);
+            font-family: var(--font-sans); font-size: 15px; line-height: 1;
+            transition: background .45s var(--ease-soft), border-color .45s var(--ease-soft), color .45s var(--ease-soft), opacity .2s ease;
+        }
+        .prop-stays-btn:hover { background: rgba(30, 53, 82, 0.04); border-color: var(--ink); color: var(--ink); }
+        .prop-stays-btn:disabled { opacity: .3; cursor: default; }
+        .prop-stays-arrows[hidden] { display: none; }
+        .prop-stay-shot {
+            aspect-ratio: 3 / 2; overflow: hidden; background: var(--bone-warm, #efe7d6);
+            border: 1px solid rgba(195, 162, 106, 0.32); margin-bottom: 9px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .prop-stay-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* No photo yet: a deliberate monogram rather than a broken frame. */
+        .prop-stay-shot.is-empty span {
+            font-family: var(--font-serif); font-size: 34px; font-weight: 300;
+            color: rgba(195, 162, 106, 0.75); line-height: 1;
+        }
+        .prop-stay-name {
+            margin: 0 0 3px; font-family: var(--font-serif); font-weight: 400;
+            font-size: 15px; line-height: 1.3; color: rgba(30, 53, 82, 0.92);
+            /* Two lines' worth, so a wrapped name doesn't push its neighbourhood
+               out of line with the cards either side of it. */
+            min-height: 2.6em;
+        }
+        a.prop-stay:hover .prop-stay-name { color: var(--gold); }
+        .prop-stay-note {
+            margin: 0; font-family: var(--font-sans); font-size: 10.5px;
+            letter-spacing: 0.04em; line-height: 1.45; color: rgba(30, 53, 82, 0.5);
+        }
+        .prop-stays-note {
+            margin: 12px 0 0; font-family: var(--font-sans); font-size: 11px;
+            line-height: 1.55; color: rgba(30, 53, 82, 0.5);
+        }
+
         /* HOTEL SECTIONS — split "lookbook" layout: full-bleed photo pinned
            on the left, content scrolling on the right. As one option scrolls
            away, the next option's photo takes over. */
         .prop-hotel {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             border-bottom: none;
             padding: 0;
         }
@@ -208,7 +314,7 @@
             justify-self: center;
             width: 100%;
         }
-        .prop-hotel + .prop-hotel .prop-hotel-body { border-top: 1px solid rgba(199, 174, 138, 0.0); }
+        .prop-hotel + .prop-hotel .prop-hotel-body { border-top: 1px solid rgba(195, 162, 106, 0.0); }
 
         /* 3-photo click-through carousel in the content panel */
         .prop-carousel {
@@ -216,7 +322,7 @@
             aspect-ratio: 3 / 2;
             overflow: hidden;
             background: var(--bone-warm, #efe7d6);
-            border: 1px solid rgba(199, 174, 138, 0.32);
+            border: 1px solid rgba(195, 162, 106, 0.32);
             margin: 0 0 26px;
         }
         .prop-carousel img {
@@ -269,7 +375,7 @@
             background: rgba(247, 241, 230, 0.55);
             transition: background .2s ease, transform .2s ease;
         }
-        .prop-carousel-dots span.is-active { background: #f7f1e6; transform: scale(1.25); }
+        .prop-carousel-dots span.is-active { background: var(--ivory); transform: scale(1.25); }
         .prop-carousel-count {
             position: absolute;
             top: 12px;
@@ -279,7 +385,7 @@
             font-size: 11px;
             font-weight: 500;
             letter-spacing: 0.08em;
-            color: #f7f1e6;
+            color: var(--ivory);
             background: rgba(20, 33, 51, 0.55);
             padding: 4px 10px;
             border-radius: 999px;
@@ -348,7 +454,7 @@
             letter-spacing: 0.02em;
             color: rgba(30, 53, 82, 0.7);
             background: #fff;
-            border: 1px solid rgba(199, 174, 138, 0.32);
+            border: 1px solid rgba(195, 162, 106, 0.32);
             padding: 8px 14px;
             margin: 0 0 24px;
         }
@@ -389,7 +495,7 @@
         .prop-hotel-flightwrap .prop-hotel-flight { margin-bottom: 0; }
         .prop-flight-note { font-size: 11px; font-style: italic; opacity: .7; margin: -8px 0 18px; }
         .prop-flight-details {
-            border: 1px solid rgba(199, 174, 138, 0.32);
+            border: 1px solid rgba(195, 162, 106, 0.32);
             border-top: none;
             background: rgba(255, 255, 255, 0.75);
             padding: 6px 18px 16px;
@@ -425,7 +531,7 @@
             color: rgba(30, 53, 82, 0.75);
             margin: 0;
             padding-top: 22px;
-            border-top: 1px solid rgba(199, 174, 138, 0.36);
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
         }
         .prop-hotel-room-desc strong {
             font-family: var(--font-sans);
@@ -440,9 +546,9 @@
 
         /* Per-hotel preferred-partner amenities (renders when perksList set) */
         .prop-hotel-perks {
-            margin: 22px 0 0;
-            padding-top: 22px;
-            border-top: 1px solid rgba(199, 174, 138, 0.36);
+            margin: 28px 0 0;
+            padding-top: 28px;
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
         }
         .prop-hotel-perks strong {
             font-family: var(--font-sans);
@@ -484,7 +590,7 @@
             margin: 22px 0 0;
             padding: 16px 18px;
             background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(199, 174, 138, 0.28);
+            border: 1px solid rgba(195, 162, 106, 0.28);
             display: grid;
             gap: 10px;
         }
@@ -512,7 +618,7 @@
         .prop-hotel-rates {
             margin: 22px 0 0;
             padding-top: 22px;
-            border-top: 1px solid rgba(199, 174, 138, 0.36);
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
         }
         .prop-hotel-rates > strong {
             font-family: var(--font-sans);
@@ -534,7 +640,7 @@
             align-items: baseline;
             gap: 10px;
             padding: 7px 0;
-            border-bottom: 1px solid rgba(199, 174, 138, 0.22);
+            border-bottom: 1px solid rgba(195, 162, 106, 0.22);
         }
         .prop-hotel-rates li:last-child { border-bottom: none; }
         .prop-rate-room {
@@ -566,7 +672,7 @@
         .prop-hotel-terms {
             margin: 22px 0 0;
             padding-top: 22px;
-            border-top: 1px solid rgba(199, 174, 138, 0.36);
+            border-top: 1px solid rgba(195, 162, 106, 0.36);
         }
         .prop-hotel-terms > strong {
             font-family: var(--font-sans);
@@ -599,7 +705,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            color: rgba(199, 174, 138, 0.9);
+            color: rgba(195, 162, 106, 0.9);
         }
 
         /* Photo-accuracy disclaimer (auto-rendered above the closing section) */
@@ -625,7 +731,7 @@
             margin-top: 28px;
             padding: 13px 28px;
             background: var(--ink);
-            color: #f7f1e6;
+            color: var(--ivory);
             font-family: var(--font-sans);
             font-size: 12px;
             font-weight: 500;
@@ -639,8 +745,151 @@
         .prop-hotel-cta svg { transition: transform .25s ease; }
         .prop-hotel-cta:hover svg { transform: translateX(3px); }
 
+        /* Destination guide (Safari Portal-style): the place name set large over
+           its photo, an overview header and a photo pair on the right. */
+        .prop-dest .prop-hotel-visual-inner::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(180deg, rgba(22,40,61,.55) 0%, rgba(22,40,61,.15) 45%, rgba(22,40,61,0) 65%, rgba(22,40,61,.45) 100%);
+        }
+        .prop-dest-overlay {
+            position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column;
+            padding: 110px 52px 40px; color: #fff; pointer-events: none;
+        }
+        .prop-dest-kicker {
+            display: flex; align-items: center; gap: 14px; margin: 0 0 18px;
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.3em; text-transform: uppercase; color: var(--ivory);
+        }
+        .prop-dest-kicker span { width: 56px; height: 1px; background: var(--gold); display: inline-block; flex: none; }
+        .prop-dest-title {
+            font-family: var(--font-serif); font-weight: 400;
+            font-size: clamp(44px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.015em;
+            margin: 0; max-width: 11ch; text-wrap: balance; color: #fff;
+            text-shadow: 0 2px 24px rgba(0,0,0,.18);
+        }
+        .prop-dest-pin {
+            margin: auto 0 0; display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.24em; text-transform: uppercase; color: var(--ivory);
+        }
+        .prop-dest-label {
+            display: flex; align-items: center; gap: 14px; margin: 0 0 18px;
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.4em; text-transform: uppercase; color: rgba(30, 53, 82, 0.82);
+        }
+        .prop-dest-label span { width: 56px; height: 1px; background: var(--gold); flex: none; }
+        /* Guide section headers match the hotel pages' kicker (Wilson, 2026-10-03):
+           navy Inter caps. No rule in front: the dividers between sections are enough. */
+        .prop-dest .prop-hotel-getting > strong, .prop-dest .prop-hotel-perks > strong,
+        .prop-dest .prop-hotel-climate > strong, .prop-dest .prop-stays-head > strong {
+            display: flex; align-items: center; gap: 20px;
+            font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+            letter-spacing: 0.4em; text-transform: uppercase; color: rgba(30, 53, 82, 0.82);
+        }
+
+        /* 2. One body voice in a guide: travel lines and the tip in Fraunces. */
+        .prop-dest .prop-hotel-getting > span, .prop-dest .prop-dest-plane, .prop-dest .prop-dest-trains {
+            font-family: var(--font-serif); font-weight: 300; font-size: 16px; line-height: 1.6; color: var(--ink);
+        }
+        /* 6. Hand-off from a guide to the hotels we'd book there. */
+        .prop-handoff { background: var(--ivory); border-top: 1px solid rgba(195, 162, 106, 0.45); border-bottom: 1px solid rgba(195, 162, 106, 0.45); padding: 44px 24px; text-align: center; }
+        .prop-handoff-kicker { margin: 0 0 10px; display: inline-flex; align-items: center; gap: 14px; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+        .prop-handoff-kicker span { width: 40px; height: 1px; background: var(--gold); }
+        .prop-handoff-title { margin: 0; font-family: var(--font-serif); font-weight: 300; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.15; color: var(--ink); }
+        .prop-handoff-title em { color: var(--gold); }
+        /* The brand bar always shows (Wilson, 2026-10-03), single guides included. */
+        .prop-dest-train-head { margin: 18px 0 4px; padding-left: 18px; font-family: var(--font-sans); font-size: 10.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+        .prop-hotel-getting > strong + .prop-dest-train-head { margin-top: 16px; }
+        /* By-labels and their copy share one 18px indent under the header (Wilson, 2026-10-03). */
+        .prop-dest-plane { margin: 0; padding-left: 18px; }
+        /* One bullet shape across a guide: the gold star from Things to do. */
+        .prop-dest-trains { list-style: none; margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+        .prop-dest-trains li { position: relative; padding-left: 24px; }
+        /* Things to do bullets share the same 18px indent as the travel lines. */
+        .prop-dest .prop-dest-highlights ul { padding-left: 18px; }
+        /* Route map band: under the title block when the trip has two or more stops.
+           The map shows places (numbered); the strip underneath carries the travel times. */
+        .prop-route { background: var(--ivory); padding: 12px 0 52px; border-bottom: 1px solid rgba(195, 162, 106, 0.32); }
+        .prop-route-kicker { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 0 6px; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(30, 53, 82, 0.82); }
+        .prop-route-kicker::before, .prop-route-kicker::after { content: ''; width: 40px; height: 1px; background: var(--gold); }
+        .prop-route-map { max-width: 960px; margin: 0 auto; aspect-ratio: 1100 / 500; }
+        .prop-route-map svg { width: 100%; height: auto; display: block; }
+        .rt-sea { fill: #EEF0EC; }
+        .rt-land { fill: #FCFAF6; stroke: rgba(30, 53, 82, 0.3); stroke-width: 0.7; }
+        .rt-border { fill: none; stroke: rgba(30, 53, 82, 0.14); stroke-width: 0.6; stroke-dasharray: 3 3; }
+        .rt-country { font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.5em; fill: rgba(30, 53, 82, 0.28); }
+        .rt-leg { fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-dasharray: 1 6; stroke-linecap: round; }
+        .rt-pin-ring { fill: rgba(195, 162, 106, 0.16); }
+        .rt-pin { fill: var(--gold); stroke: #FCFAF6; stroke-width: 2; }
+        .rt-pin-num { font-family: var(--font-serif); font-size: 13px; fill: #FCFAF6; }
+        .rt-name { font-family: var(--font-serif); font-size: 24px; font-weight: 400; fill: var(--ink); paint-order: stroke; stroke: #FCFAF6; stroke-width: 6px; stroke-linejoin: round; }
+        .rt-pin-minor { fill: #FCFAF6; stroke: rgba(30, 53, 82, 0.55); stroke-width: 1.5; }
+        .rt-name-minor { font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; fill: rgba(30, 53, 82, 0.6); paint-order: stroke; stroke: #FCFAF6; stroke-width: 5px; stroke-linejoin: round; }
+        .rt-strip { list-style: none; margin: 14px auto 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 0; max-width: 1000px; }
+        .rt-strip li { display: inline-flex; align-items: center; }
+        .rt-strip li + li::before { content: ''; width: 24px; margin: 0 12px; border-top: 1px dotted var(--gold); }
+        .rt-stop { font-family: var(--font-serif); font-size: 20px; color: var(--ink); }
+        .rt-legitem { gap: 8px; font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.08em; color: rgba(30, 53, 82, 0.75); }
+        .rt-icon svg { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; display: block; }
+        @media (max-width: 640px) { .rt-stop { font-size: 17px; } .rt-strip li + li::before { width: 14px; margin: 0 7px; } .rt-name { font-size: 30px; } }
+        @media print { .prop-route { padding: 6px 0 14px; } .prop-route-map { max-width: 80%; } }
+        /* Folding guide sections: the summary is the section header (navy caps,
+           gold +/−); the inner block's own header and top rule are hidden. */
+        .prop-fold { border-top: 1px solid rgba(195, 162, 106, 0.36); margin-top: 28px; overflow-anchor: none; }
+        /* Where guide sections fold (lookbooks and quotes), the photo stays put at
+           the top of the guide, so opening a section never moves it. */
+        .prop-dest.is-folding .prop-hotel-visual-inner { position: relative; }
+        /* Opening a section must never nudge the page (browser scroll anchoring). */
+        html:has(.prop-dest.is-folding), .prop-page { overflow-anchor: none; }
+        .prop-fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 18px 0; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(30, 53, 82, 0.82); }
+        .prop-fold > summary::-webkit-details-marker { display: none; }
+        .prop-fold > summary::after { content: '+'; font-size: 18px; letter-spacing: 0; color: var(--gold); font-weight: 300; }
+        .prop-fold[open] > summary::after { content: '\2212'; }
+        .prop-fold + .prop-fold { margin-top: 0; }
+        .prop-fold:last-of-type { border-bottom: 1px solid rgba(195, 162, 106, 0.36); }
+        .prop-fold-body { padding: 0 0 22px; }
+        .prop-fold-body > * { border-top: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+        .prop-fold-body > .prop-hotel-getting > strong:first-child,
+        .prop-fold-body > .prop-hotel-perks > strong:first-child,
+        .prop-fold-body > .prop-hotel-climate > strong:first-child,
+        .prop-fold-body .prop-stays-head > strong,
+        .prop-fold-body .agent-tip-eyebrow { display: none !important; }
+        .prop-fold-body > .prop-dest-tip { padding: 22px 26px !important; }
+        .prop-fold { position: relative; }
+        .prop-fold-body .prop-stays-head { position: absolute; top: 9px; right: 34px; margin: 0 !important; z-index: 1; }
+        /* The whole header row toggles the section; only the arrows themselves take clicks. */
+
+        .prop-fold > summary { user-select: none; -webkit-tap-highlight-color: transparent; }
+        .prop-fold-body > .prop-hotel-getting > strong:first-child + .prop-dest-train-head { margin-top: 0; }
+        @media print { .prop-fold > summary::after { display: none; } }
+        /* Our tip: the hotel pages' advisor-tip box (ivory, gold rule, italic),
+           so it stands out from the running text. On a cream section it turns white. */
+        .prop-dest .prop-dest-tip { margin: 28px 0 0; }
+        .prop-hotel--cream .prop-dest-tip { background: #fff; }
+        /* Same type as the rest of the guide: upright Fraunces body, navy caps label. */
+        .prop-dest .prop-dest-tip .agent-tip-eyebrow { font-size: 11px; letter-spacing: 0.4em; color: rgba(30, 53, 82, 0.82); margin-bottom: 10px; }
+        .prop-dest .prop-dest-tip .agent-tip-quote { font-style: normal; font-weight: 300; font-size: 16px; line-height: 1.6; color: var(--ink); letter-spacing: 0; }
+        /* Things to do as photo cards: three in view, arrows for the rest. */
+        .prop-todo .prop-stays-head { margin-bottom: 14px; }
+        .prop-todo-rail { grid-auto-columns: calc((100% - 28px) / 3); }
+        .prop-todo-shot { aspect-ratio: 1 / 1; overflow: hidden; background: var(--bone-warm, #efe7d6); margin-bottom: 10px; }
+        .prop-todo-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .prop-todo-cap { margin: 0; font-family: var(--font-serif); font-weight: 300; font-size: 14px; line-height: 1.5; color: rgba(30, 53, 82, 0.85); }
+        @media (max-width: 640px) { .prop-todo-rail { grid-auto-columns: 72%; } }
+        .prop-dest-trains li::before { content: "\2726"; position: absolute; left: 0; top: 2px; color: var(--gold); font-size: 12px; line-height: inherit; }
+        .prop-dest-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 22px; }
+        .prop-dest-pair.is-single { grid-template-columns: 1fr; }
+        .prop-dest-pair img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+        .prop-dest-pair.is-single img { aspect-ratio: 3 / 2; }
+        /* Equal rhythm in a guide: 28px above every divider line, 28px below it. */
+        .prop-dest .prop-hotel-desc { margin-bottom: 0; }
+        .prop-dest .prop-hotel-desc + .prop-carousel { margin-top: 22px; }
+        .prop-dest .prop-carousel { margin-bottom: 0; }
+
         @media (max-width: 980px) {
-            .prop-hotel { grid-template-columns: 1fr; }
+            .prop-dest-overlay { padding: 84px 24px 22px; }
+            .prop-dest-kicker { font-size: 10px; }
+            .prop-hotel { grid-template-columns: minmax(0, 1fr); }
             .prop-hotel-visual-inner {
                 position: relative;
                 height: 58vh;
@@ -657,7 +906,7 @@
         /* Draft mode — click-to-edit affordances (Studio live preview only) */
         body.is-draft [data-edit] { cursor: text; }
         body.is-draft [data-edit]:hover {
-            outline: 1.5px dashed rgba(199, 174, 138, 0.85);
+            outline: 1.5px dashed rgba(195, 162, 106, 0.85);
             outline-offset: 3px;
         }
         body.is-draft [data-edit]:focus {
@@ -693,7 +942,7 @@
             font-weight: 400;
             font-size: clamp(32px, 4vw, 44px);
             line-height: 1.1;
-            color: #f7f1e6;
+            color: var(--ivory);
             margin: 0;
             letter-spacing: -0.012em;
         }
@@ -808,13 +1057,16 @@
             .prop-hotel-perks { grid-column: 1; grid-row: 5; }
             .prop-hotel-fineprint { grid-column: 2; grid-row: 5; }
             .prop-hotel-terms { grid-column: 1 / -1; grid-row: 6; }
+            .prop-hotel-climate { grid-column: 1 / -1; grid-row: 7; }
+            .prop-hotel-stays { grid-column: 1 / -1; grid-row: 8; }
 
             /* A full rate sheet is more than one page's worth. Let those hotels
                flow onto a second page rather than clipping — but keep each block
                whole, so no table row or clause is cut in half. */
             .prop-hotel:has(.prop-hotel-rates) { break-inside: auto; }
             .prop-hotel-rates, .prop-hotel-perks, .prop-hotel-fineprint,
-            .prop-hotel-terms, .prop-hotel-room-desc { break-inside: avoid; }
+            .prop-hotel-terms, .prop-hotel-room-desc,
+            .prop-hotel-climate, .prop-hotel-stays { break-inside: avoid; }
 
             /* Compact type */
             .prop-hotel-num { margin-bottom: 6px; }
@@ -837,6 +1089,22 @@
             .prop-hotel-perks ul { gap: 3px; }
             .prop-hotel-perks li { font-size: 9.5px; line-height: 1.4; padding-left: 16px; }
             .prop-hotel-perks li::before { font-size: 9px; }
+            .prop-hotel-climate { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-climate strong { font-size: 8px; margin-bottom: 6px; }
+            .prop-climate-month { padding: 4px 1px; gap: 1px; }
+            .pcm-m { font-size: 6px; } .pcm-hi { font-size: 8.5px; } .pcm-lo { font-size: 7px; }
+            .prop-climate-note { font-size: 7px; margin-top: 5px; }
+            /* A scroller cannot scroll on paper — unroll it. */
+            .prop-hotel-stays { margin-top: 10px; padding-top: 10px; }
+            .prop-hotel-stays > strong, .prop-stays-head > strong { font-size: 8px; margin-bottom: 6px; }
+            .prop-stays-rail {
+                grid-auto-flow: row; grid-template-columns: repeat(4, 1fr);
+                grid-auto-columns: auto; overflow: visible; gap: 8px; padding-bottom: 0;
+            }
+            .prop-stay-shot { margin-bottom: 5px; }
+            .prop-stay-name { font-size: 9px; min-height: 0; }
+            .prop-stay-note { font-size: 7px; }
+            .prop-stays-note { font-size: 7px; margin-top: 6px; }
             .prop-hotel-fineprint { margin-top: 10px; padding: 8px 12px; gap: 6px; }
             .prop-hotel-fineprint p { font-size: 9px; line-height: 1.45; }
             .prop-hotel-fineprint strong { font-size: 7.5px; margin-bottom: 1px; }
@@ -858,6 +1126,20 @@
             /* Closing gets its own tidy final page */
             .prop-photo-note { break-before: page; padding-top: 60px; }
             .prop-change-note + .prop-photo-note { break-before: auto; padding-top: 6px; }
+            .prop-dest .prop-hotel-perks { grid-column: 1 / -1; }
+            .prop-stays-arrows { display: none !important; }
+            .prop-dest-tip { margin-top: 10px; padding: 8px 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prop-dest-tip .agent-tip-eyebrow { font-size: 7px; margin-bottom: 4px; }
+            .prop-dest-tip .agent-tip-quote { font-size: 9.5px; }
+            .prop-dest .prop-hotel-visual-inner { position: relative; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prop-dest-overlay { padding: 16px 18px; }
+            .prop-dest-kicker { font-size: 8px; margin-bottom: 6px; }
+            .prop-dest-title { font-size: 26px; }
+            .prop-dest-pin { font-size: 8px; }
+            .prop-handoff { padding: 18px; }
+            .prop-dest-label { grid-column: 1 / -1; }
+            .prop-dest-pair { grid-column: 1 / -1; }
+            .prop-dest-pair img { aspect-ratio: 3 / 2; }
             /* A lookbook is about the photography, so its PDF keeps a strip of
                three photos (the carousel can't click on paper). */
             body.is-lookbook .prop-carousel { display: grid !important; grid-template-columns: repeat(3, 1fr);
@@ -896,7 +1178,7 @@
 
     <script src="/data.js?v=93"></script>
     <script src="/rules.js?v=1"></script>
-    <script src="/proposals-data.js?v=93"></script>
+    <script src="/proposals-data.js?v=94"></script>
     <script>
         /* ------------------------------------------------------------------
            Proposal bootstrap. Static proposals live in proposals-data.js
@@ -980,11 +1262,14 @@
                     deposit:   h.deposit   || '',
                     cancellation: h.cancellation || '',
                     gettingThere: h.gettingThere || '',
+                    climate:   h.climate   || null,
+                    stays:     h.stays     || null,
                     considered: !!h.considered,
                     consideredWhy: h.consideredWhy || '',
                     // The advisor's welcome note is a surprise: never printed.
                     perksList: (h.perksList || []).filter(p => !WELCOME_NOTE.test(strip(String(p)))),
-                    perksLabel: h.perksLabel || 'Your preferred-partner amenities',
+                    // Same name as the hotel pages (Wilson, 2026-10-03); older proposals saved the old default.
+                    perksLabel: (!h.perksLabel || /^your preferred[- ]partner amenities$/i.test(h.perksLabel.trim())) ? 'Wander by Wilson Exclusives' : h.perksLabel,
                     // Rates by room category — for group quotes where every couple
                     // picks their own category off one negotiated rate sheet.
                     rateTable: h.rateTable || [],
@@ -1030,12 +1315,234 @@
                 }).join('');
             }
 
+            // Where-to-stay rails: arrows scroll one card at a time and hide when
+            // everything already fits.
+            function initStayRails() {
+                document.querySelectorAll('.prop-hotel-stays, .prop-todo').forEach(box => {
+                    const rail = box.querySelector('.prop-stays-rail');
+                    const arrows = box.querySelector('.prop-stays-arrows');
+                    if (!rail || !arrows) return;
+                    const [prev, next] = arrows.querySelectorAll('.prop-stays-btn');
+                    const update = () => {
+                        const more = rail.scrollWidth > rail.clientWidth + 4;
+                        arrows.hidden = !more;
+                        prev.disabled = rail.scrollLeft <= 2;
+                        next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
+                    };
+                    arrows.querySelectorAll('.prop-stays-btn').forEach(b => b.addEventListener('click', () => {
+                        const card = rail.querySelector('.prop-stay');
+                        const step = card ? card.getBoundingClientRect().width + 14 : rail.clientWidth * 0.8;
+                        rail.scrollBy({ left: step * (+b.dataset.dir), behavior: 'smooth' });
+                    }));
+                    rail.addEventListener('scroll', update, { passive: true });
+                    window.addEventListener('resize', update);
+                    update();
+                    rail.querySelectorAll('img').forEach(img => img.addEventListener('load', update));
+                });
+            }
+
             // ── Section builders ──────────────────────────────────────────
+            // Twelve-month temperature strip: average high/low per month. It
+            // shows what the weather does all year, so a client can judge any
+            // window themselves (no "best time to go" claim, Wilson 2026-10-03).
+            function climateHTML(c, guide) {
+                if (!(c && c.months && c.months.length)) return '';
+                // Destination guides: no note under the strip (Wilson, 2026-10-03);
+                // the unit goes in the heading, the station stays in sourceNotes.
+                const label = guide ? 'Average temperatures (&deg;F)' : (c.label || 'Average temperatures');
+                return `<div class="prop-hotel-climate">
+                        <strong>${label}</strong>
+                        <div class="prop-climate-strip">${c.months.map(m =>
+                            `<div class="prop-climate-month${(c.highlight || []).indexOf(m.m) > -1 ? ' is-on' : ''}">` +
+                            `<span class="pcm-m">${m.m}</span>` +
+                            `<span class="pcm-hi">${m.hi}&deg;</span>` +
+                            `<span class="pcm-lo">${m.lo}&deg;</span></div>`).join('')}</div>
+                        ${(!guide && c.note) ? `<p class="prop-climate-note">${c.note}</p>` : ''}
+                       </div>`;
+            }
+            // Where to stay: a rail of properties we can book there. Library
+            // hotels (slug) link to their page and use its photo.
+            // Match a "where to stay" hotel to its page on our site by name, so a
+            // hotel that gets a page later picks up its photo and link by itself.
+            const normHotel = (x) => decode(strip(String(x || ''))).toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9 ]/g, ' ')
+                .replace(/\b(the|a|an|hotel|resort|resorts|and|residences|collection|luxury|by|auberge)\b/g, ' ')
+                .replace(/\s+/g, ' ').trim();
+            function libSlugByName(name) {
+                if (typeof PROPERTIES === 'undefined') return '';
+                const n = normHotel(name);
+                if (!n) return '';
+                return Object.keys(PROPERTIES).find(k => normHotel(PROPERTIES[k].name) === n) || '';
+            }
+            function staysHTML(st) {
+                if (!(st && st.items && st.items.length)) return '';
+                return `<div class="prop-hotel-stays">
+                        <div class="prop-stays-head"><strong>${st.label || 'Where to stay'}</strong>
+                            <span class="prop-stays-arrows">
+                                <button class="prop-stays-btn" data-dir="-1" type="button" aria-label="Previous hotels">&#8592;</button>
+                                <button class="prop-stays-btn" data-dir="1" type="button" aria-label="More hotels">&#8594;</button>
+                            </span></div>
+                        <div class="prop-stays-rail">${st.items.map(it => {
+                            const slug = (it.slug && lib(it.slug)) ? it.slug : libSlugByName(it.name);
+                            const base = slug ? lib(slug) : null;
+                            const name = it.name || (base && base.name) || '';
+                            const img = it.image || (base && base.heroImage) || '';
+                            const url = it.url || (base ? '/hotels/' + slug : '');
+                            const nm = decode(strip(name));
+                            const shot = img
+                                ? `<div class="prop-stay-shot"><img src="${img}" alt="${nm}"></div>` : '';
+                            const inner = `${shot}<p class="prop-stay-name">${name}</p>` +
+                                          (it.note ? `<p class="prop-stay-note">${it.note}</p>` : '');
+                            const cls = 'prop-stay' + (img ? '' : ' is-text');
+                            return url
+                                ? `<a class="${cls}" href="${url}" target="_blank" rel="noopener">${inner}</a>`
+                                : `<div class="${cls}">${inner}</div>`;
+                        }).join('')}</div>
+                        ${st.note ? `<p class="prop-stays-note">${st.note}</p>` : ''}
+                       </div>`;
+            }
+            // A destination guide: the place itself, before (or instead of) hotels.
+            // A guide's cover is an iconic landmark (heroImage). If none is set,
+            // use the guide's first photo, then a featured hotel's as a last resort.
+            function destCover(d) {
+                if (d.heroImage) return d.heroImage;
+                if ((d.gallery || [])[0]) return d.gallery[0];
+                for (const it of ((d.stays || {}).items || [])) {
+                    const slug = (it.slug && lib(it.slug)) ? it.slug : libSlugByName(it.name);
+                    const img = it.image || (slug && lib(slug) ? lib(slug).heroImage : '');
+                    if (img) return img;
+                }
+                return '';
+            }
+            /* Guide sections fold under the overview (Wilson, 2026-10-03): folded by
+               default when the page also shows hotels (a lookbook or quote), open when
+               the guide stands on its own (a single guide, or a guides-only lookbook). */
+            /* Sections slide open and closed instead of snapping, so the pinned guide
+               photo beside them glides with the page rather than jumping. */
+            // The photo fills the whole guide while its sections are closed; it is
+            // sized once (closed), so opening a section never moves or re-crops it.
+            function sizeFoldPhotos() {
+                document.querySelectorAll('.prop-dest.is-folding').forEach(sec => {
+                    if (sec.querySelector('.prop-fold[open]')) return;
+                    const inner = sec.querySelector('.prop-hotel-visual-inner'); if (!inner) return;
+                    inner.style.height = '';
+                    const body = sec.querySelector('.prop-hotel-body');
+                    if (window.innerWidth > 980 && body) inner.style.height = Math.max(window.innerHeight, body.offsetHeight) + 'px';
+                });
+            }
+            function initFolds() {
+                sizeFoldPhotos();
+                if (!window.__foldResize) { window.__foldResize = true; window.addEventListener('resize', () => { clearTimeout(window.__frT); window.__frT = setTimeout(sizeFoldPhotos, 150); }); }
+                const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                document.querySelectorAll('.prop-fold').forEach(f => {
+                    if (f.__fold) return; f.__fold = true;
+                    const sum = f.querySelector('summary'), body = f.querySelector('.prop-fold-body');
+                    sum.addEventListener('click', (e) => {
+                        if (reduce || !body.animate) return;      // plain toggle
+                        e.preventDefault();
+                        if (f.__anim) f.__anim.cancel();
+                        const opening = !f.open;
+                        if (opening) f.open = true;
+                        const h = body.scrollHeight;
+                        const a = body.animate(opening ? [{ height: '0px', opacity: 0 }, { height: h + 'px', opacity: 1 }]
+                                                       : [{ height: h + 'px', opacity: 1 }, { height: '0px', opacity: 0 }],
+                            { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
+                        body.style.overflow = 'hidden'; f.__anim = a;
+                        a.onfinish = () => { body.style.overflow = ''; f.__anim = null; if (!opening) f.open = false; window.dispatchEvent(new Event('resize')); };
+                        a.oncancel = () => { body.style.overflow = ''; };
+                    });
+                });
+            }
+            function fold(label, html) {
+                if (!html) return '';
+                return `<details class="prop-fold"${window.__guidesOpen ? ' open' : ''}><summary>${label}</summary><div class="prop-fold-body">${html}</div></details>`;
+            }
+            function destinationSection(d, di, kicker) {
+                const name = d.name || '';
+                const cover = destCover(d);
+                const alt = decode(strip(name));
+                const shots = (d.gallery || []).filter(u => u && u !== d.heroImage && u !== destCover(d));
+                const pair = shots.slice(0, 2), rest = shots.slice(2);
+                const photoPair = pair.length
+                    ? `<div class="prop-dest-pair${pair.length === 1 ? ' is-single' : ''}">${pair.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 1}" loading="lazy">`).join('')}</div>` : '';
+                const carousel = rest.length
+                    ? `<div class="prop-carousel">
+                        ${rest.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 3}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
+                        <button class="prop-carousel-btn prev" type="button" aria-label="Previous photo">&#8592;</button>
+                        <button class="prop-carousel-btn next" type="button" aria-label="Next photo">&#8594;</button>
+                        <div class="prop-carousel-dots">${rest.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
+                        ${rest.length > 1 ? `<span class="prop-carousel-count">1 / ${rest.length}</span>` : ''}
+                       </div>` : '';
+                const hl = (d.highlights || []).filter(Boolean);
+                // Things to do: a scrolling row of photo cards when the guide has a
+                // photo per item (highlightImages, same order as highlights), else a list.
+                const hlImgs = d.highlightImages || [];
+                const hlPhotos = hl.length && hl.every((_, k) => hlImgs[k]);
+                const highlights = !hl.length ? '' : hlPhotos
+                    ? `<div class="prop-hotel-perks prop-dest-highlights prop-todo">
+                        <div class="prop-stays-head"><strong>${d.highlightsLabel || 'Things to do'}</strong>
+                            <span class="prop-stays-arrows">
+                                <button class="prop-stays-btn" data-dir="-1" type="button" aria-label="Previous">&#8592;</button>
+                                <button class="prop-stays-btn" data-dir="1" type="button" aria-label="More">&#8594;</button>
+                            </span></div>
+                        <div class="prop-stays-rail prop-todo-rail">${hl.map((x, k) => `<div class="prop-stay prop-todo-card"><div class="prop-todo-shot"><img src="${hlImgs[k]}" alt="" loading="lazy"></div><p class="prop-todo-cap">${x}</p></div>`).join('')}</div>
+                       </div>`
+                    : `<div class="prop-hotel-perks prop-dest-highlights"><strong>${d.highlightsLabel || 'Things to do'}</strong><ul>${hl.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+                // How to get there: By plane, then By train / By car / By ferry lines.
+                const list = (k) => (d[k] || []).filter(Boolean);
+                // One item reads as a plain line; two or more get bullets.
+                const block = (label, items) => !items.length ? '' :
+                    `<p class="prop-dest-train-head">${label}</p>` + (items.length === 1
+                        ? `<p class="prop-dest-plane">${items[0]}</p>`
+                        : `<ul class="prop-dest-trains">${items.map(t => `<li>${t}</li>`).join('')}</ul>`);
+                const lines = [
+                    block('By plane', d.byPlane ? [d.byPlane] : []),
+                    block('By train', list('byTrain')),
+                    block('By car', list('byCar')),
+                    block('By boat', list('byFerry'))
+                ].join('');
+                // With a route map on the page, a guide's How to get there is off by
+                // default; the Studio can switch it back on per guide (d.getting).
+                const showGetting = d.getting === 'show' || (d.getting !== 'hide' && !window.__routeOn);
+                const getting = showGetting && (d.gettingThere || lines)
+                    ? `<div class="prop-hotel-getting"><strong>How to get there</strong>${d.gettingThere ? `<span>${d.gettingThere}</span>` : ''}${lines}</div>` : '';
+                const tip = d.tip
+                    ? `<aside class="property-agent-tip prop-dest-tip"><p class="agent-tip-eyebrow">Our tip</p><blockquote class="agent-tip-quote">${d.tip}</blockquote></aside>` : '';
+                const pin = '<svg width="12" height="15" viewBox="0 0 12 15" fill="none" aria-hidden="true"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14Z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="5.8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>';
+                return `
+                <section class="prop-hotel prop-dest${di % 2 ? ' prop-hotel--cream' : ''}${window.__guidesOpen ? '' : ' is-folding'}" data-dslug="${d.slug || ''}">
+                    <div class="prop-hotel-visual">
+                        <div class="prop-hotel-visual-inner">
+                            ${cover ? `<img src="${cover}" alt="${alt}">` : ''}
+                            <div class="prop-dest-overlay">
+                                <p class="prop-dest-kicker"><span></span>${kicker || 'The destination'}</p>
+                                <h2 class="prop-dest-title">${name}</h2>
+                                ${d.region ? `<p class="prop-dest-pin">${pin}${d.region}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prop-hotel-body">
+                        <p class="prop-dest-label">Destination overview</p>
+                        ${photoPair}
+                        ${d.overview ? `<p class="prop-hotel-desc">${d.overview}</p>` : ''}
+                        ${carousel}
+                        ${fold(d.highlightsLabel || 'Things to do', highlights)}
+                        ${fold('Our tip', tip)}
+                        ${fold('How to get there', getting)}
+                        ${fold('Average temperatures (\u00b0F)', climateHTML(d.climate, true))}
+                        ${d.hideStays ? '' : fold('Hotels we love', staysHTML(d.stays && Object.assign({}, d.stays, {
+                            // Guides call the rail "Hotels we love" (Wilson, 2026-10-03);
+                            // older saved guides still carry the old default label.
+                            label: (!d.stays.label || d.stays.label === 'Where to stay') ? 'Hotels we love' : d.stays.label })))}
+                    </div>
+                </section>`;
+            }
             function hotelSection(h, i, mode) {
                 const r = resolveHotel(h);
                 const lookbook = mode === 'lookbook';
                 const altName = decode(strip(r.name));
-                const num = 'No. ' + String(i + 1).padStart(2, '0');
+                const num = 'Option ' + (i + 1);   // "Option 1", so it reads as a choice (Wilson, 2026-10-03)
                 const shots = r.gallery || [];
                 const carousel = shots.length
                     ? `<div class="prop-carousel">
@@ -1079,11 +1586,15 @@
                       r.perksList.map(li => `<li>${li}</li>`).join('') +
                       '</ul></div>'
                     : '';
+                // Temperature strip + where-to-stay rail: lookbook only (shared
+                // with destination guides, see climateHTML / staysHTML).
+                const climate = lookbook ? climateHTML(r.climate) : '';
+                const stays = lookbook ? staysHTML(r.stays) : '';
                 const cta = r.bookingUrl
                     ? `<a class="prop-hotel-cta" href="${r.bookingUrl}" target="_blank" rel="noopener noreferrer">Book this rate ${arrow}</a>`
                     : '';
                 return `
-                <section class="prop-hotel${i % 2 ? ' prop-hotel--cream' : ''}">
+                <section class="prop-hotel${i % 2 ? ' prop-hotel--cream' : ''}" data-hi="${h.__hi == null ? -1 : h.__hi}">
                     <div class="prop-hotel-visual">
                         <div class="prop-hotel-visual-inner">
                             <img src="${r.heroImage}" alt="${altName} — ${decode(strip(r.location))}">
@@ -1111,6 +1622,8 @@
                         ${lookbook ? '' : roomDesc}
                         ${gettingThere}
                         ${hotelPerks}
+                        ${climate}
+                        ${stays}
                         ${finePrint}
                         ${terms}
                         ${lookbook ? '' : cta}
@@ -1137,6 +1650,115 @@
                 </section>`;
             }
 
+            /* Route map: the guides' places pinned on a simple brand-coloured map, in
+               trip order, joined by dotted legs labelled with how you travel between
+               them. Shown when a proposal has two or more mapped stops. Optional
+               P.route = { from: {name, lat, lng}, to: {name, lat, lng},
+               legs: ["4 hours 20 minutes by train", ...] } (one label per leg, in order). */
+            function routeStops(P, dests) {
+                const R = P.route || {}, stops = [], notes = R.notes || {};
+                if (R.from && R.from.lat != null) stops.push({ name: R.from.name, lat: +R.from.lat, lng: +R.from.lng, minor: true });
+                dests.forEach(d => { if (d.lat != null && d.lng != null) stops.push({ name: decode(strip(d.name || '')), lat: +d.lat, lng: +d.lng, note: notes[d.slug] || '' }); });
+                if (R.to && R.to.lat != null) stops.push({ name: R.to.name, lat: +R.to.lat, lng: +R.to.lng, minor: true });
+                let n = 0; stops.forEach(s => { if (!s.minor) s.num = ++n; });
+                return stops;
+            }
+            // Map leg labels are short (Wilson, 2026-10-03): "~4hr 20min by train".
+            // Any rail service (TGV, AVE, Eurostar) is just "train".
+            function shortLeg(t) {
+                return String(t || '').trim()
+                    .replace(/^(about|around|approximately|roughly)\s+/i, '~')
+                    .replace(/(\d+)\s*(hours?|hrs?)\b/gi, '$1hr').replace(/(\d+)\s*(minutes?|mins?)\b/gi, '$1min')
+                    .replace(/\b(TGV|AVE|Eurostar|Frecciarossa|Italo|Ouigo|InOui|high[- ]speed train|rail)\b/gi, 'train')
+                    .replace(/\btrain train\b/gi, 'train').replace(/\.$/, '');
+            }
+            function routeOn(P, dests) {
+                const st = routeStops(P, dests);
+                return !(P.route && P.route.off) && st.length >= 2 && st.some(s => !s.minor);
+            }
+            const ICON = {
+                train: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4"/><circle cx="9.5" cy="14" r=".6"/><circle cx="14.5" cy="14" r=".6"/></svg>',
+                plane: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 14l20-6-7 12-3-5-5 3 1-5z"/></svg>',
+                car: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16v-4l2-5h12l2 5v4zM4 12h16"/><circle cx="8" cy="16.5" r="1.6"/><circle cx="16" cy="16.5" r="1.6"/></svg>',
+                boat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15h18l-3 4H6zM12 3v12M12 4l6 9h-6"/></svg>'
+            };
+            function legMode(t) {
+                t = String(t || '').toLowerCase();
+                return /fly|flight|plane|air/.test(t) ? 'plane' : /boat|ferry|sail|yacht/.test(t) ? 'boat' : /car|drive|road/.test(t) ? 'car' : /train|rail/.test(t) ? 'train' : '';
+            }
+            function routeSection(P, dests) {
+                if (!routeOn(P, dests)) return '';
+                const stops = routeStops(P, dests), legs = ((P.route || {}).legs || []).map(shortLeg);
+                // The itinerary strip carries the words; the map carries the places.
+                // One line, one font and colour: Barcelona · ~4hr 20min by train · Provence ...
+                let strip = '';
+                stops.forEach((s, k) => {
+                    strip += `<li class="rt-stop">${s.name}</li>`;
+                    if (k < stops.length - 1 && legs[k]) {
+                        const m = legMode(legs[k]);
+                        strip += `<li class="rt-legitem">${m ? `<span class="rt-icon">${ICON[m]}</span>` : ''}<span>${legs[k]}</span></li>`;
+                    }
+                });
+                return `<section class="prop-route"><div class="prop-container">
+                    <p class="prop-route-kicker">Your route</p>
+                    <div class="prop-route-map" id="propRouteMap" data-route='${JSON.stringify({ stops }).replace(/'/g, '&#39;')}'></div>
+                    <ol class="rt-strip">${strip}</ol>
+                </div></section>`;
+            }
+            function loadScript(src) {
+                return new Promise((ok, no) => { if (document.querySelector('script[src="' + src + '"]')) return ok(); const t = document.createElement('script'); t.src = src; t.onload = ok; t.onerror = no; document.head.appendChild(t); });
+            }
+            let worldShapes = null;
+            async function drawRoute() {
+                const box = document.getElementById('propRouteMap'); if (!box) return;
+                let data; try { data = JSON.parse(box.dataset.route); } catch (e) { return; }
+                try {
+                    await loadScript('https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js');
+                    await loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js');
+                    if (!worldShapes) worldShapes = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(r => r.json());
+                } catch (e) { box.remove(); return; }
+                const W = 1100, H = 500, d3 = window.d3, tj = window.topojson;
+                const countries = tj.feature(worldShapes, worldShapes.objects.countries);
+                const coast = tj.merge(worldShapes, worldShapes.objects.countries.geometries);
+                const borders = tj.mesh(worldShapes, worldShapes.objects.countries, (a, b) => a !== b);
+                const lats = data.stops.map(s => s.lat), lngs = data.stops.map(s => s.lng);
+                const span = Math.max(Math.max(...lats) - Math.min(...lats), (Math.max(...lngs) - Math.min(...lngs)) * 0.75, 3);
+                const pad = span * 0.28;
+                const frame = { type: 'MultiPoint', coordinates: [[Math.min(...lngs) - pad * 1.15, Math.min(...lats) - pad], [Math.max(...lngs) + pad * 1.15, Math.max(...lats) + pad]] };
+                const proj = d3.geoMercator().fitExtent([[60, 40], [W - 60, H - 40]], frame);
+                const path = d3.geoPath(proj);
+                const pts = data.stops.map(s => proj([s.lng, s.lat]));
+                // Country names, faint and spaced, for orientation only.
+                let names = '';
+                if (false) countries.features.forEach(f => {
+                    const nm = (f.properties || {}).name; if (!nm) return;
+                    const a = path.area(f); if (a < 9000) return;
+                    const c = path.centroid(f); if (!(c[0] > 40 && c[0] < W - 40 && c[1] > 30 && c[1] < H - 30)) return;
+                    if (pts.some(p => Math.hypot(p[0] - c[0], p[1] - c[1]) < 70)) return;
+                    names += `<text class="rt-country" x="${c[0]}" y="${c[1]}" text-anchor="middle">${nm.toUpperCase()}</text>`;
+                });
+                let legs = '';
+                for (let k = 0; k < pts.length - 1; k++) {
+                    const [x1, y1] = pts[k], [x2, y2] = pts[k + 1];
+                    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
+                    legs += `<path class="rt-leg" d="M${x1},${y1} Q${mx - dy * 0.16},${my + dx * 0.16} ${x2},${y2}"/>`;
+                }
+                let marks = '';
+                data.stops.forEach((s, k) => {
+                    const [x, y] = pts[k];
+                    // Name on the side away from the neighbouring stops.
+                    const others = pts.filter((_, j) => j !== k), avgX = others.length ? others.reduce((t, p) => t + p[0], 0) / others.length : x - 1;
+                    const right = x >= avgX ? x < W - 230 : x < 230;
+                    const tx = x + (right ? 1 : -1) * 20, anchor = right ? 'start' : 'end';
+                    marks += `<circle class="rt-pin-ring" cx="${x}" cy="${y}" r="11"/><circle class="rt-pin" cx="${x}" cy="${y}" r="5.5"/><text class="rt-name" x="${tx}" y="${y + 7}" text-anchor="${anchor}">${s.name}</text>`;
+                });
+                box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of the route: ${data.stops.map(s => s.name).join(', ')}">
+                    <defs><radialGradient id="rtFade" cx="50%" cy="50%" r="62%"><stop offset="70%" stop-color="#fff"/><stop offset="100%" stop-color="#000"/></radialGradient>
+                    <mask id="rtMask"><rect width="${W}" height="${H}" fill="url(#rtFade)"/></mask></defs>
+                    <g mask="url(#rtMask)"><rect width="${W}" height="${H}" class="rt-sea"/>
+                    <path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/>${names}</g>
+                    ${legs}${marks}</svg>`;
+            }
             function heroSection(P) {
                 return `
                 <section class="prop-hero">
@@ -1242,22 +1864,66 @@
                 const changeNote = mode === 'quote' && FX.subjectToChange
                     ? `<p class="prop-photo-note prop-change-note">${FX.subjectToChange}</p>` : '';
                 const all = P.hotels || [];
+                // Position in the proposal, so the Studio can open the right card.
+                all.forEach((h, k) => { h.__hi = k; });
                 // "Also considered" is internal only (Wilson, 2026-10-02): never on the page.
                 const shown = all.filter(h => !h.considered);
+                // Destination guides (lookbooks): each guide, then its hotels when the
+                // advisor includes the shortlist; hotels with no destination follow.
+                // Guides can sit in quotes too; a quote always shows its hotels.
+                // A guide ticked off in the Studio stays in the proposal but not on the page.
+                const dests = (P.destinations || []).filter(d => !d.off);
+                window.__routeOn = !P.standaloneGuide && routeOn(P, dests);
+                const showHotels = mode === 'quote' || P.showHotels !== false;
+                window.__guidesOpen = !!P.standaloneGuide || !showHotels || !shown.length;
+                let body = '', hotelCount = 0;
+                if (dests.length) {
+                    let n = 0;
+                    const keyOf = (d) => d.slug || d.name;
+                    const no = (i) => 'No. ' + String(i + 1).padStart(2, '0');
+                    dests.forEach((d, di) => {
+                        const kicker = dests.length < 2 ? 'The destination'
+                            : (showHotels ? 'Destination ' + no(di) : 'Option ' + (di + 1));
+                        body += destinationSection(d, di, kicker);
+                        const mine = showHotels ? shown.filter(h => h.destination && h.destination === keyOf(d)) : [];
+                        if (mine.length) body += `<div class="prop-handoff"><p class="prop-handoff-kicker"><span></span>${d.name || ''}<span></span></p><h3 class="prop-handoff-title">Where to <em>stay.</em></h3></div>`;
+                        mine.forEach(h => { body += hotelSection(h, n++, mode); });
+                    });
+                    const keys = dests.map(keyOf);
+                    if (showHotels) shown.filter(h => !h.destination || keys.indexOf(h.destination) === -1)
+                        .forEach(h => { body += hotelSection(h, n++, mode); });
+                    hotelCount = n;
+                } else {
+                    body = shown.map((h, i) => hotelSection(h, i, mode)).join('');
+                    hotelCount = shown.length;
+                }
+                // The photo disclaimer is about hotel rooms: guides-only pages skip it.
+                const hasHotels = hotelCount > 0;
+                // A guide shown on its own (the Studio's destination preview) has its
+                // name on the photo already, so no proposal header or closing.
+                const solo = !!P.standaloneGuide;
+                // A guide on its own is just the guide: no site bar over its photo.
+                document.body.classList.toggle('is-solo-guide', solo);
                 document.getElementById('proposalRoot').innerHTML =
-                    heroSection(P) +
-                    shown.map((h, i) => hotelSection(h, i, mode)).join('') +
-                    perksSection(P.perks) +
-                    changeNote +
-                    photoNote +
-                    closeSection(P);
+                    (solo ? '' : heroSection(P) + routeSection(P, dests)) +
+                    body +
+                    (solo ? '' : perksSection(P.perks) + changeNote + (hasHotels ? photoNote : '') +
+                        // Guides with no hotels close on "where would you like to go?"
+                        closeSection((dests.length && !hasHotels && FX.closeTitleGuides)
+                            ? Object.assign({}, P, { closeTitle: FX.closeTitleGuides.replace(/\*([^*]+)\*/g, '<em>$1</em>'), closeLede: FX.closeLedeGuides })
+                            : P));
                 initCarousels();
+                initStayRails();
+                drawRoute();
+                initFolds();
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
                     btn.className = 'prop-pdf-btn';
                     btn.type = 'button';
                     btn.innerHTML = 'Save as PDF';
                     btn.addEventListener('click', () => window.print());
+                    window.addEventListener('beforeprint', () => document.querySelectorAll('.prop-fold:not([open])').forEach(f => { f.dataset.wasClosed = '1'; f.open = true; }));
+                    window.addEventListener('afterprint', () => document.querySelectorAll('.prop-fold[data-was-closed]').forEach(f => { f.open = false; delete f.dataset.wasClosed; }));
                     document.body.appendChild(btn);
                 }
             }

@@ -1,4 +1,7 @@
-# Hotel page spec — the single source of truth
+# Hotel page spec (the working guide; rules.js is the master)
+
+> **`rules.js` is the master copy of every rule** (blocks `hotelContent`, `photos`, `luxuryAndBookable`, `voice`). The Studio builds its prompts from it. If this file and `rules.js` ever disagree, `rules.js` wins; when a rule changes, update `rules.js` first, then this file.
+
 
 Both paths that create hotel pages MUST follow this file. Since 2026-10-02 the
 Proposal Studio's lookbook and quote prompts follow it too (via `rules.js`, block
@@ -37,8 +40,8 @@ and even there, every *fact* must be sourced.
 | `location` | `Town, Region, Country`. Append ` · Brand` only when the affiliation is part of its official identity (e.g. `· Relais & Châteaux`). |
 | `rateFrom` | **Entry-level** nightly rate — cheapest room category, low/shoulder season. Never derive it from a suite quote (that bug shipped €1,270 for Il Borro when the real floor was ~€450). Be conservative: never understate. USD/EUR/GBP native (literal € / £); any other currency → convert to USD and add `rateInfo`. Empty string if no defensible figure. |
 | `description` | **VERBATIM** from the hotel's own site or its Virtuoso/SmartFlyer listing. ONE coherent passage — do NOT stitch paragraphs from several pages together (that produced the repetitive FORESTIS copy where "Dolomites UNESCO World Heritage Site" appeared four times). 400–900 characters. Real HTML entities (`&mdash;`, `&rsquo;`), never double-escaped. Empty if you cannot verify it. |
-| `idealFor` | **BEST FOR — ONE sentence, hard cap 280 characters.** Pattern: `[Traveler types] who [want X] &mdash; [the trade-off this place wins]`. All 47 live entries are single sentences, 114–279 chars, median ~200. Our voice, sourced facts. **Banned:** a second sentence · colon-then-feature-list · "It also scales well for…" · "Two things worth setting expectations on…" · anything about closures, small beaches, or what the property lacks. |
-| `agentTip` | **ADVISOR TIP — one concrete insider move**, 66–349 characters (median ~193): a named suite worth the splurge, a specific dish or table, a named experience, a timing move. Source: SmartFlyer write-up (primary), Virtuoso "Hotel Tip" sidebar (fallback), else the hotel's own site for verifiable specifics. |
+| `idealFor` | **BEST FOR — ONE sentence, hard cap 160 characters for new pages** (Wilson, 2026-10-03; the live pages keep their older, longer lines). Pattern: `[Traveler types] who [want X] &mdash; [the trade-off this place wins]`. All 47 live entries are single sentences, 114–279 chars, median ~200. Our voice, sourced facts. **Banned:** a second sentence · colon-then-feature-list · "It also scales well for…" · "Two things worth setting expectations on…" · anything about closures, small beaches, or what the property lacks. |
+| `agentTip` | **ADVISOR TIP — one concrete insider move**, 66–220 characters for new pages (Wilson, 2026-10-03; was 66–349): a named suite worth the splurge, a specific dish or table, a named experience, a timing move. Source: SmartFlyer write-up (primary), Virtuoso "Hotel Tip" sidebar (fallback), else the hotel's own site for verifiable specifics. |
 | `perks` | The actual preferred-partner amenities documented for **this** hotel (Virtuoso / SmartFlyer / brand program). Keep the precise fine print — "subject to availability", "$100 USD equivalent F&B credit, once per stay", "not combinable…". **Never** the advisor's *personalized welcome note* (surprise rule). Never assume a generic package. Empty array if unverified. |
 | `heroImage` + `gallery` | Hero + 5, per the photo rules below. |
 | `bookingUrl` | Wilson's Virtuoso advisor link — pull it yourself (see the skill's "Booking link" section). Empty string if the hotel isn't bookable through Virtuoso; the page's Book button then links to our self-booking page, `/book` (Wilson, 2026-10-02). Never `#`. |
@@ -62,7 +65,11 @@ One gallery per hotel, shared by its website page, lookbooks and quotes (Wilson,
 2026-10-02). Galleries tell the story of the **place**; room shots show what staying
 there looks like, never a specific quoted room.
 
-- **Hero:** the property's signature postcard shot. Daylight or golden hour.
+- **Hero (Wilson, 2026-10-03):** the one image that shows why this hotel is special, usually
+  the building in its setting or its signature view (villas in the vines, a façade beneath a
+  famous landmark, the pool facing the sea). Daylight, golden hour or blue hour. Not an
+  interior, a pool deck or a restaurant unless that is the most famous thing about the hotel.
+  If the hotel's own photos have no such shot, flag it rather than settling for a weaker one.
 - **Mix (hero + 5):** TWO OR THREE room shots (bed and living space, ideally with the
   view from inside; different categories where possible) · a sense-of-place landscape ·
   the pool/waterfront · a signature space or experience. (Was ONE room shot until

@@ -250,6 +250,7 @@
         .view { display: none; }
         .studio[data-view="home"] #viewHome,
         .studio[data-view="hotels"] #viewHotels,
+        .studio[data-view="destinations"] #viewDestinations,
         .studio[data-view="social"] #viewSocial,
         .studio[data-view="bloglist"] #viewBlogList,
         .studio[data-view="blog"] #viewBlog,
@@ -502,6 +503,97 @@
         .ph-empty { font-size: 12px; opacity: .6; margin: 0; }
         .linkish { background: none; border: none; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
         .hotel-card.is-considered { opacity: .6; }
+        .hotel-card-top[data-hfold] { cursor: pointer; margin-bottom: 0; }
+        .adv-toggle { float: right; font-size: 12px; letter-spacing: 0; text-transform: none; }
+        .adv-read { display: grid; gap: 10px; font-size: 13px; line-height: 1.55; color: var(--ink, #1e3552); }
+        .adv-line { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: start; }
+        .adv-k { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(30,53,82,.55); padding-top: 3px; }
+        .adv-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .adv-chip { background: #fff; border: 1px solid var(--studio-line); border-radius: 999px; padding: 2px 10px; font-size: 12px; cursor: default; }
+        .adv-list { margin: 0; padding-left: 16px; display: grid; gap: 4px; }
+        .adv-list strong { font-weight: 600; }
+        .adv-grow { min-height: 0; resize: vertical; overflow: hidden; }
+        .adv-perks { display: grid; gap: 8px; }
+        .adv-perk-row { background: #fff; border: 1px solid var(--studio-line-soft); border-radius: 8px; padding: 9px 11px; }
+        .adv-perk-row.is-page { border-color: var(--gold, #c3a26a); background: #fdf9f1; }
+        .adv-perk-head { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+        .adv-perk-head em { font-style: normal; font-weight: 500; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #a07b3c; margin-left: 6px; }
+        .adv-perk-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .adv-perk-tags span { font-size: 12px; background: #f3f0ea; border-radius: 4px; padding: 2px 8px; }
+        .adv-perk-tags i { font-size: 12px; color: rgba(30,53,82,.55); }
+        .adv-more > summary { cursor: pointer; font-size: 12px; color: rgba(30,53,82,.6); margin-top: 6px; }
+        .adv-src { font-size: 11px; color: rgba(30,53,82,.6); word-break: break-word; }
+        .route-box { border-top: 1px solid var(--studio-line-soft); margin-top: 14px; padding-top: 14px; }
+        .route-on { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; margin-bottom: 10px; cursor: pointer; }
+        .dest-card { border: 1px solid var(--studio-line-soft); border-radius: 8px; padding: 12px 14px; margin: 0 0 10px; background: #fff; }
+        .dest-card-top { display: flex; align-items: center; gap: 10px; }
+        .dest-card-name { flex: 1; min-width: 0; font-family: var(--font-serif, 'Fraunces', serif); font-size: 17px; color: var(--ink, #1e3552); }
+        .dest-card-tools { display: flex; gap: 6px; flex: none; }
+        .dest-card-tools .icon-btn { width: 30px; height: 30px; }
+        .dest-card-sub { margin: 4px 0 8px 26px; font-size: 12px; color: rgba(30,53,82,.6); }
+        .dest-card-sub strong { color: #a5541b; font-weight: 600; }
+        .dest-card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin-left: 26px; font-size: 13px; }
+        .dest-card-actions label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+        .dest-card.is-off .dest-card-name, .dest-card.is-off .dest-card-actions { opacity: .45; }
+        .dest-show input { width: 16px; height: 16px; cursor: pointer; margin: 0; }
+        .pick { position: relative; }
+        .pick-list { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30; background: #fff; border: 1px solid var(--studio-line); border-radius: 8px; box-shadow: 0 10px 28px rgba(22,40,61,.14); padding: 4px; max-height: 340px; overflow-y: auto; }
+        .pick-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; background: none; border: 0; border-radius: 6px; padding: 8px 10px; cursor: pointer; font: 14px var(--font-sans, Inter, sans-serif); color: var(--ink, #1e3552); }
+        .pick-item small { color: rgba(30,53,82,.55); font-size: 12px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .pick-item em { font-style: normal; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #a5541b; }
+        .pick-item.is-on, .pick-item:hover { background: #f7f2eb; }
+        .pick-more { margin: 0; padding: 8px 10px; font-size: 12px; color: rgba(30,53,82,.55); }
+        .hotel-card.is-open .hotel-card-top { margin-bottom: 12px; }
+        .hotel-card-status { margin: 3px 0 0; font-size: 11px; letter-spacing: .02em; color: rgba(30,53,82,.6); }
+        .hotel-card-status b { font-weight: 600; color: #a5541b; }
+        .hotel-card-fold { display: inline-flex; width: 26px; justify-content: center; font-size: 16px; color: var(--gold, #c3a26a); }
+        .psec > .dsec-body { margin: 0; }
+        .psec .sec { margin: 0; }
+        .psec .sec > .sec-sub:first-child { margin-top: 0; }
+        .hotel-card.is-flash { box-shadow: 0 0 0 2px var(--gold, #c3a26a); }
+        /* Destination guide editor: sections in page order, real fields. */
+        .dsec { border: 1px solid var(--studio-line); border-radius: 8px; background: #fff; margin: 0 0 12px; }
+        .dsec > summary { list-style: none; cursor: pointer; padding: 14px 18px; font-family: var(--font-serif, 'Fraunces', serif); font-size: 18px; color: var(--ink, #1e3552); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+        .dsec > summary::-webkit-details-marker { display: none; }
+        .dsec > summary::after { content: '+'; font-family: var(--font-sans, Inter, sans-serif); font-size: 16px; color: var(--gold, #c3a26a); margin-left: 8px; }
+        .dsec[open] > summary::after { content: '\2212'; }
+        /* The section name never wraps; the summary beside it shrinks to one line. */
+        .dsec > summary > :first-child, .dsec > summary { white-space: nowrap; }
+        .dsec-meta { margin-left: auto; min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; font-family: var(--font-sans, Inter, sans-serif); font-size: 11px; letter-spacing: .04em; color: rgba(30,53,82,.55); }
+        .dsec-meta.is-warn { color: #a5541b; }
+        .dsec-body { padding: 0 18px 16px; }
+        .dsec.is-flash { box-shadow: 0 0 0 2px var(--gold, #c3a26a); transition: box-shadow .3s ease; }
+        .d-warn { border: 1px solid rgba(165,84,27,.35); background: #fbf3ea; color: #7a3d12; border-radius: 8px; padding: 10px 14px; margin: 0 0 12px; font-size: 13px; line-height: 1.5; }
+        .d-warn ul { margin: 4px 0 0; padding-left: 18px; }
+        .d-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 4px 0 6px; }
+        .d-sub { margin: 0 0 6px !important; }
+        .d-slot { position: relative; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: #f3eee6; border: 1px dashed var(--studio-line); }
+        .d-slot.is-filled { border-style: solid; }
+        .d-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .d-slot.is-sq { aspect-ratio: 1 / 1; }
+        .d-slot-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .d-slot-empty button, .d-slot .ph-tools button { font: 11px var(--font-sans, Inter, sans-serif); }
+        .d-slot-empty button { border: 1px solid var(--studio-line); background: #fff; border-radius: 4px; padding: 5px 10px; cursor: pointer; color: var(--ink, #1e3552); }
+        .d-slot .ph-tools { left: 3px; justify-content: flex-end; flex-wrap: wrap; }
+        .d-slot .ph-tools button { width: auto; min-width: 22px; height: 22px; padding: 0 5px; }
+        .d-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--studio-line-soft); }
+        .d-row:first-child { border-top: none; }
+        .d-row .f-area, .d-row .f-input { flex: 1; margin: 0; }
+        .d-row .f-area { min-height: 92px; }
+        .d-row-tools { display: flex; flex-direction: column; gap: 4px; }
+        .d-row .d-slot { width: 92px; flex: none; }
+        .d-add { margin: 8px 0 4px; }
+        .d-temps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+        .d-temp { background: #f7f2eb; border-radius: 6px; padding: 6px; text-align: center; }
+        .d-temp span { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(30,53,82,.6); margin-bottom: 4px; }
+        .d-temp input { width: 100%; box-sizing: border-box; text-align: center; border: 1px solid var(--studio-line-soft); border-radius: 4px; padding: 4px 2px; font: 14px var(--font-sans, Inter, sans-serif); background: #fff; }
+        .d-temp input + input { margin-top: 4px; font-size: 12px; color: rgba(30,53,82,.65); }
+        .d-stay { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--studio-line-soft); }
+        .d-stay:first-child { border-top: none; }
+        .d-stay-main { flex: 1; display: grid; gap: 6px; }
+        .d-stay-name { font-family: var(--font-serif, 'Fraunces', serif); font-size: 16px; color: var(--ink, #1e3552); }
+        .d-stay-src { font-size: 11px; color: rgba(30,53,82,.55); }
+        @media (max-width: 1200px) { .d-temps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
         .hotel-card.is-considered .hotel-card-name::after { content: ' — also considered (internal, not on the page)'; font-size: 11px; color: var(--st-dim-2); }
 
         .manual-divider {
@@ -842,6 +934,7 @@
             <div class="side-label area-proposals">Clients</div>
             <button class="side-item area-proposals" data-nav="proposals" type="button"><span class="side-icon">✉</span>Proposals</button>
             <button class="side-item side-sub area-proposals" data-nav="newproposal" type="button">+ New proposal</button>
+            <button class="side-item area-proposals" data-nav="destinations" type="button"><span class="side-icon">◎</span>Destinations<span class="side-count" id="sideCountDest"></span></button>
 
             <div class="side-label" id="sideWebsiteLabel">Website</div>
             <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
@@ -1000,17 +1093,18 @@
                         <textarea class="f-area" id="hdDesc" style="min-height:120px"></textarea>
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="hdPerks">Preferred-partner amenities — one per line</label>
+                        <label class="f-label" for="hdPerks">Wander by Wilson Exclusives — one per line</label>
                         <textarea class="f-area" id="hdPerks" style="min-height:100px"></textarea>
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="hdIdealFor">Best for <span style="text-transform:none">(one sentence — who it suits and what they’d trade for it)</span></label>
+                        <label class="f-label" for="hdIdealFor">Best for</label>
                         <textarea class="f-area" id="hdIdealFor" placeholder="Couples and honeymooners who want the Capri-and-South-of-France side of Turks and Caicos rather than a big resort on Grace Bay."></textarea>
                         <p class="f-hint" id="hdIdealCount"></p>
                     </div>
                     <div class="f-row">
                         <label class="f-label" for="hdAgentTip">Advisor tip <span style="text-transform:none">(optional)</span></label>
                         <textarea class="f-area" id="hdAgentTip"></textarea>
+                        <p class="f-hint" id="hdTipCount"></p>
                     </div>
                     <div class="f-row">
                         <label class="f-label" for="hdHero">Hero image URL</label>
@@ -1037,6 +1131,118 @@
                 <div class="studio-preview blog-preview">
                     <span class="studio-preview-tag">Live preview — exactly how the page will look</span>
                     <iframe id="hotelFrame" src="/hotel-preview.html?draft=1" title="Hotel page preview"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Destination library ───────────────────────────────────── -->
+        <div class="view" id="viewDestinations">
+            <div class="dash" id="destListWrap">
+                <div class="dash-head">
+                    <h1 class="dash-title">Destination <em>guides.</em></h1>
+                    <p class="dash-sub">One guide per place, written once and reused in every lookbook. Claude researches new destinations and they land here as drafts; open one, check it, and mark it <strong>Approved</strong>. Suggested drafts come from our blog guides and aren&rsquo;t saved until you open and save them.</p>
+                    <div class="add-row" style="margin-top:12px">
+                        <button class="btn" id="destNew" type="button">+ New destination</button>
+                    </div>
+                </div>
+                <div id="destList"><p class="dash-empty">Loading…</p></div>
+            </div>
+            <div class="blog-split" id="destEditor" hidden>
+                <div class="blog-form">
+                    <div class="dash-head" style="margin-bottom:18px">
+                        <h1 class="dash-title" id="dTitle">Destination <em>guide.</em></h1>
+                        <p class="dash-sub" id="dStatusLine"></p>
+                    </div>
+                    <div class="d-warn" id="dWarn" hidden></div>
+                    <details class="dsec" data-dsec="claude">
+                        <summary>Let Claude draft it <span class="dsec-meta">for a new destination</span></summary>
+                        <div class="dsec-body">
+                            <p class="f-hint" style="margin-top:0">Copy the prompt into your Claude, type the destination, and paste the reply below. Everything fills in for you to check.</p>
+                            <div class="claude-build-row"><button class="btn" id="dCopyPrompt" type="button">1 &middot; Copy the destination prompt</button></div>
+                            <textarea class="f-area" id="dPaste" style="min-height:80px;margin-top:10px" placeholder="2 · Paste Claude's reply here. It starts with { and ends with }"></textarea>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="overview" open>
+                        <summary>Cover and overview <span class="dsec-meta" id="dMetaOverview"></span></summary>
+                        <div class="dsec-body">
+                            <div class="f-grid2">
+                                <div class="f-row"><label class="f-label" for="dName">Destination</label><input class="f-input" id="dName" placeholder="Amalfi Coast"></div>
+                                <div class="f-row"><label class="f-label" for="dRegion">Region line</label><input class="f-input" id="dRegion" placeholder="Campania, Italy"></div>
+                            </div>
+                            <div class="d-photos">
+                                <div><label class="f-label">Cover</label><p class="f-hint d-sub">An iconic landmark</p><div class="d-slot" data-slot="hero"></div></div>
+                                <div><label class="f-label">Overview photo 1</label><p class="f-hint d-sub">A wide landscape</p><div class="d-slot" data-slot="g0"></div></div>
+                                <div><label class="f-label">Overview photo 2</label><p class="f-hint d-sub">A luxury experience</p><div class="d-slot" data-slot="g1"></div></div>
+                            </div>
+                            <p class="f-hint">Use &#8644; to swap a photo with the cover.</p>
+                            <div class="f-row"><label class="f-label" for="dOverview">Overview</label><textarea class="f-area" id="dOverview" style="min-height:150px"></textarea><p class="f-hint" id="dOverviewCount"></p></div>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="todo">
+                        <summary>Things to do <span class="dsec-meta" id="dMetaTodo"></span></summary>
+                        <div class="dsec-body">
+                            <div class="f-row"><label class="f-label" for="dHlLabel">Heading</label><input class="f-input" id="dHlLabel" placeholder="Things to do"></div>
+                            <div id="dTodoRows"></div>
+                            <button class="btn btn-ghost d-add" type="button" data-dadd="todo">+ Add a thing to do</button>
+                            <p class="f-hint">With a photo on every one, they show as scrolling photo cards.</p>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="tip">
+                        <summary>Our tip <span class="dsec-meta" id="dMetaTip"></span></summary>
+                        <div class="dsec-body">
+                            <div class="f-row"><textarea class="f-area" id="dTip" style="min-height:70px" placeholder="One concrete, sourced insider move."></textarea></div>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="getting">
+                        <summary>How to get there <span class="dsec-meta" id="dMetaGetting"></span></summary>
+                        <div class="dsec-body">
+                            <div class="f-row"><label class="f-label" for="dPlane">By plane</label><textarea class="f-area" id="dPlane" style="min-height:60px" placeholder="Fly into MAD (Adolfo Suárez Madrid–Barajas), about 30 minutes to the centre by car."></textarea></div>
+                            <textarea id="dGetting" hidden></textarea>
+                            <label class="f-label">By train</label><div id="dTrainRows"></div>
+                            <button class="btn btn-ghost d-add" type="button" data-dadd="train">+ Add a train</button>
+                            <label class="f-label" style="margin-top:16px;display:block">By car</label><div id="dCarRows"></div>
+                            <button class="btn btn-ghost d-add" type="button" data-dadd="car">+ Add a drive</button>
+                            <label class="f-label" style="margin-top:16px;display:block">By boat</label><div id="dBoatRows"></div>
+                            <button class="btn btn-ghost d-add" type="button" data-dadd="boat">+ Add a boat line</button>
+                        </div>
+                    </details>
+                                        <details class="dsec" data-dsec="climate">
+                        <summary>Average temperatures <span class="dsec-meta" id="dMetaClimate"></span></summary>
+                        <div class="dsec-body">
+                            <div class="d-temps" id="dTemps"></div>
+                            <input type="hidden" id="dClimateNote">
+                            <p class="f-hint">High on top, low below, in &deg;F.</p>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="stays">
+                        <summary>Hotels we love <span class="dsec-meta" id="dMetaStays"></span></summary>
+                        <div class="dsec-body">
+                            <div id="dStayRows"></div>
+                            <div class="add-row" style="align-items:center;gap:8px">
+                                <div class="pick" style="flex:1;max-width:380px"><input class="f-input" id="dStayAdd" autocomplete="off" placeholder="+ Add a hotel from our website: search by name or place"><div class="pick-list" hidden></div></div>
+                                <button class="btn btn-ghost" type="button" data-dadd="stay">+ Other hotel</button>
+                            </div>
+                            <p class="f-hint">Hotels on our website use their own page&rsquo;s photo automatically.</p>
+                        </div>
+                    </details>
+                    <details class="dsec" data-dsec="notes">
+                        <summary>Sources and advisor notes <span class="dsec-meta">never shown to clients</span></summary>
+                        <div class="dsec-body">
+                            <div class="f-row"><textarea class="f-area" id="dSource" style="min-height:120px"></textarea></div>
+                        </div>
+                    </details>
+                    <input type="file" accept="image/*" id="dFile" hidden>
+                    <div class="blog-actions">
+                        <button class="btn" id="dSave" type="button">Save draft</button>
+                        <button class="btn btn-ghost" id="dApprove" type="button">Approve</button>
+                        <button class="btn btn-ghost" id="dBack" type="button">All destinations</button>
+                        <button class="btn btn-ghost danger" id="dDelete" type="button">Delete</button>
+                    </div>
+                    <p class="social-note">Approved guides can be added to any lookbook. Editing an approved guide changes future lookbooks only; lookbooks already published keep the version they were built with.</p>
+                </div>
+                <div class="studio-preview blog-preview">
+                    <span class="studio-preview-tag">Live preview — how it appears in a lookbook</span>
+                    <iframe id="destFrame" src="/proposal.html?draft=1" title="Destination preview"></iframe>
                 </div>
             </div>
         </div>
@@ -1215,9 +1421,9 @@
                 </div>
 
                 <!-- Build it with Claude — the main way in -->
-                <section class="claude-build">
-                    <p class="claude-build-kicker">Start here</p>
-                    <h2 class="claude-build-head">Build a proposal <em>with Claude.</em></h2>
+                <details class="dsec psec" data-psec="claude" id="pSecClaude" open>
+                <summary>Build it with Claude <span class="dsec-meta" id="pMetaClaude">start here</span></summary>
+                <section class="claude-build" style="margin:0 18px 16px">
                     <p class="claude-build-sub">Copy the prompt into your own Claude and type <strong>&ldquo;build a lookbook for [client name]&rdquo;</strong> (or &ldquo;build a quote for&rdquo;, with the rate screenshots attached). That&rsquo;s all. It goes and reads their inquiry, your intake-call recap, the Asana task and any call notes, then comes back with 4&ndash;6 properties. Hotels already on our website (or waiting for review) come straight from their pages; only new ones are researched. Paste the reply here and the whole proposal builds itself.</p>
                     <div class="mode-switch" id="modeSwitch">
                         <button type="button" data-mode="lookbook">
@@ -1258,14 +1464,14 @@
                         <p class="claude-build-note" id="flResult" hidden></p>
                     </div>
                 </section>
+                </details>
 
                 <div class="social-qa has-issues" id="metaWarn" hidden style="margin:0 0 22px"></div>
 
-                <p class="manual-divider"><span>or build it by hand &mdash; and edit anything Claude wrote</span></p>
-
                 <!-- Trip -->
-                <section class="sec">
-                    <h2 class="sec-head">The <em>trip.</em></h2>
+                <details class="dsec psec" data-psec="trip" open>
+                <summary>The trip <span class="dsec-meta" id="pMetaTrip"></span></summary>
+                <section class="sec dsec-body">
                     <p class="sec-sub">Wrap a word in *asterisks* to set it in italic gold, e.g. Your Italian *summer.*</p>
                     <div class="f-row">
                         <label class="f-label" for="fPrepared">Prepared for</label>
@@ -1293,29 +1499,55 @@
                         </div>
                     </div>
                 </section>
-                <hr class="sec-rule">
+                </details>
+
+                <!-- Destination guides (lookbooks and quotes) -->
+                <details class="dsec psec" data-psec="dest" id="destSec">
+                <summary>Destination guides <span class="dsec-meta" id="pMetaDest"></span></summary>
+                <section class="sec dsec-body">
+                    <p class="sec-sub">Untick <em>Hotels we love</em> on a guide when the client has already chosen a hotel.</p>
+                    <div id="destPicked"></div>
+                    <div class="add-row" style="align-items:center">
+                        <div class="pick" style="flex:1;max-width:380px"><input class="f-input" id="destAddSel" autocomplete="off" placeholder="+ Add a guide: search by place, region or country"><div class="pick-list" hidden></div></div>
+                        <label id="fShowHotelsWrap" style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="fShowHotels" checked> Include the hotel shortlist</label>
+                    </div>
+                    <div class="route-box" id="routeBox" hidden>
+                        <label class="route-on"><input type="checkbox" id="rOn"> Show a route map</label>
+                        <div id="routeFields">
+                        <div class="f-grid2">
+                            <div class="f-row"><label class="f-label" for="rFrom">Arriving from <span style="text-transform:none">(optional)</span></label><select class="f-input" id="rFrom"></select></div>
+                            <div class="f-row"><label class="f-label" for="rTo">Leaving from <span style="text-transform:none">(optional)</span></label><select class="f-input" id="rTo"></select></div>
+                        </div>
+                        <div id="rNotes" hidden></div>
+                        <div id="rLegs"></div>
+                        </div>
+                    </div>
+                </section>
+                </details>
+                <hr id="destRule" hidden>
 
                 <!-- Hotels -->
-                <section class="sec">
-                    <h2 class="sec-head">The <em>hotels.</em></h2>
-                    <p class="sec-sub">Add from the website library: photos and descriptions come along automatically. On a quote, the room, rate, policies and perks come only from each hotel&rsquo;s rate document (drop a screenshot of it on the card). <strong>Never write or embellish hotel copy:</strong> descriptions must come from the hotel&rsquo;s own site, its Virtuoso page or its SmartFlyer listing, exactly as written.</p>
+                <details class="dsec psec" data-psec="hotels" open>
+                <summary>The hotels <span class="dsec-meta" id="pMetaHotels"></span></summary>
+                <section class="sec dsec-body">
                     <div id="hotelList"></div>
                     <div class="add-row">
                         <button class="btn btn-ghost" id="btnAddLibrary" type="button">+ Add from library</button>
                         <button class="btn btn-ghost" id="btnAddCustom" type="button">+ Custom hotel</button>
                     </div>
                 </section>
-                <hr class="sec-rule">
+                </details>
 
                 <!-- Closing -->
-                <section class="sec">
-                    <h2 class="sec-head">The <em>close.</em></h2>
+                <details class="dsec psec" data-psec="close">
+                <summary>The close <span class="dsec-meta" id="pMetaClose"></span></summary>
+                <section class="sec dsec-body">
                     <div class="f-row">
                         <label class="f-label" for="fCloseTitle">Closing headline</label>
                         <input class="f-input" id="fCloseTitle">
                     </div>
                     <div class="f-row">
-                        <label class="f-label" for="fCloseLede">Closing line <span style="text-transform:none">(fixed for every lookbook and quote; set in rules.js)</span></label>
+                        <label class="f-label" for="fCloseLede">Closing line <span style="text-transform:none">(fixed)</span></label>
                         <textarea class="f-area" id="fCloseLede" readonly style="opacity:.75"></textarea>
                     </div>
                     <div class="f-grid2">
@@ -1329,6 +1561,7 @@
                         </div>
                     </div>
                 </section>
+                </details>
 
                 <div style="display:flex; gap:10px">
                     <button class="btn btn-ghost" id="btnSaveDraftBottom" type="button" style="flex:1; justify-content:center">Save as draft</button>
@@ -1338,7 +1571,7 @@
             </div>
 
             <div class="studio-preview" id="previewPane">
-                <span class="studio-preview-tag">Live preview &mdash; click any text to edit it</span>
+                <span class="studio-preview-tag">Live preview &mdash; click any text to edit it; its fields open on the left</span>
                 <iframe id="previewFrame" src="/proposal.html?draft=1" title="Proposal preview"></iframe>
             </div>
         </div>
@@ -1512,6 +1745,7 @@
 
     <script src="/data.js?v=93"></script>
     <script src="/rules.js?v=1"></script>
+    <script src="/destinations-seed.js?v=2"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
          so probe downwards until one loads instead of hard-coding it. -->
@@ -1551,10 +1785,10 @@
         let me = { role: 'owner', name: 'Wilson', areas: ALL_AREAS };   // set by the gate's auth call
         const isOwner = () => me.role === 'owner';
         const canUse = (area) => isOwner() || me.areas.includes(area);
-        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance' };
+        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance', destinations: 'proposals' };
         // Which sidebar item lights up, and the top-bar title, for each view.
-        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance' };
-        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance' };
+        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance', destinations: 'destinations' };
+        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance', destinations: 'Destinations' };
         let previewReady = false;
 
         /* ── Tiny helpers ─────────────────────────────────────────────── */
@@ -1899,6 +2133,7 @@
             else if (n === 'performance') showView('performance');
             else if (n === 'newblog') openBlogEditor(null);
             else if (n === 'hotels') { showView('hotels'); showHotelDraftList(); }
+            else if (n === 'destinations') { showView('destinations'); showDestList(); }
             else if (n === 'social') showView('social');
             else if (n === 'team') showView('team');
             else if (n === 'signout') {
@@ -2767,7 +3002,7 @@
                         'you should never have to write one of these by hand. Want it sooner? Ask Claude to ' +
                         '&ldquo;draft the hotel page for ' + esc(deEnt(e0.name || doc.name || 'this hotel')) + '&rdquo;.';
                 }
-                hdIdealCheck();
+                hdIdealCheck(); hdTipCheck();
                 hdPlaceholderCheck();
                 hdStatusLine();
                 hdReloadPreview();
@@ -2836,12 +3071,20 @@
             const el = $('hdIdealCount');
             if (!text) { el.textContent = ''; el.style.color = ''; return; }
             const sentences = (text.match(/[.!?](\s|$)/g) || []).length;
-            const tooLong = text.length > 280, tooMany = sentences > 1;
+            const tooLong = text.length > 160, tooMany = sentences > 1;   // 160 for new pages (Wilson, 2026-10-03)
             el.textContent = `${text.length} characters${sentences > 1 ? ` · ${sentences} sentences` : ''}` +
-                (tooLong || tooMany ? ' — too long. Keep it to ONE sentence under 280 characters; move detail and caveats to the notes.' : ' — good length.');
+                (tooLong || tooMany ? ' — too long. One sentence, 160 characters at most.' : ' — good length.');
             el.style.color = (tooLong || tooMany) ? '#96650a' : '';
         }
         $('hdIdealFor').addEventListener('input', hdIdealCheck);
+        function hdTipCheck() {
+            const text = deEnt(stripHtml($('hdAgentTip').value.trim())), el = $('hdTipCount');
+            if (!text) { el.textContent = ''; el.style.color = ''; return; }
+            const bad = text.length > 220;
+            el.textContent = text.length + ' characters' + (bad ? ' \u2014 too long, 220 at most.' : ' \u2014 good length.');
+            el.style.color = bad ? '#96650a' : '';
+        }
+        $('hdAgentTip').addEventListener('input', hdTipCheck);
 
         /* No page field may ship placeholder text — "TODO", "TBD", "before
            publishing". Empty is fine (the page hides it); a placeholder is not. */
@@ -2964,7 +3207,7 @@
             '2. ' + window.WBW_RULES.blocks.publicPricing + ' Never name or identify a client; a trip story is told anonymously.',
             window.WBW_RULES.blocks.publicCompliance,
             '3. Never mention "a personalized welcome note from your advisor" — that amenity is meant to be a surprise.',
-            '4. Preferred-partner amenities may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out, "included at no additional cost".',
+            '4. Wander by Wilson Exclusives (our preferred-partner amenities) may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out, "included at no additional cost".',
             '',
             'If the user pastes existing copy (e.g. a draft from our writer), PRESERVE their words — your job is then to structure it, source the photos, and fill in the JSON. Do not rewrite their sentences.',
             '',
@@ -3254,9 +3497,44 @@
             // Never rendered on the client page.
             if ((h.bookingPartners || '').trim()) out.bookingPartners = h.bookingPartners.trim();
             if ((h.amenitiesNote || '').trim()) out.amenitiesNote = h.amenitiesNote.trim();
+            const pp = parsePartnerPerks(h.partnerPerksText);
+            if (pp.length) out.partnerPerks = pp;
             if ((h.advisorNote || '').trim()) out.advisorNote = h.advisorNote.trim();
             if ((h.gettingThere || '').trim()) out.gettingThere = sentenceCap(h.gettingThere.trim());
+            // Twelve-month temperature strip. Typed as "Jan 50 37" per line so the
+            // box stays paste-able from any climate table; degree signs are tolerated.
+            const climateMonths = (h.climateText || '').split('\n')
+                .map(function (ln) { return ln.trim(); }).filter(Boolean)
+                .map(function (ln) {
+                    const parts = ln.replace(/(\d)\s*\u00b0?\s*[CF]\b/gi, '$1').replace(/\u00b0/g, ' ').split(/[\s,|]+/).filter(Boolean);
+                    return parts.length >= 3 ? { m: parts[0], hi: parts[1], lo: parts[2] } : null;
+                }).filter(Boolean);
+            if (climateMonths.length) {
+                out.climate = { months: climateMonths };
+                if ((h.climateLabel || '').trim()) out.climate.label = h.climateLabel.trim();
+                if ((h.climateNote  || '').trim()) out.climate.note  = h.climateNote.trim();
+                const hl = (h.climateHighlight || '').split(/[\s,]+/).filter(Boolean);
+                if (hl.length) out.climate.highlight = hl;
+            }
+            // Where to stay: one property per line, pipe separated, so the box
+            // stays readable and the photo/link columns can be filled in later.
+            const stayItems = (h.staysText || '').split('\n')
+                .map(function (ln) { return ln.trim(); }).filter(Boolean)
+                .map(function (ln) {
+                    const c = ln.split('|').map(function (x) { return x.trim(); });
+                    const it = { name: c[0] };
+                    if (c[1]) it.note = c[1];
+                    if (c[2]) it.image = c[2];
+                    if (c[3]) it.url = c[3];
+                    return it.name ? it : null;
+                }).filter(Boolean);
+            if (stayItems.length) {
+                out.stays = { items: stayItems };
+                if ((h.staysLabel || '').trim()) out.stays.label = h.staysLabel.trim();
+                if ((h.staysNote  || '').trim()) out.stays.note  = h.staysNote.trim();
+            }
             if (h.considered) { out.considered = true; if ((h.consideredWhy || '').trim()) out.consideredWhy = h.consideredWhy.trim(); }
+            if ((h.destination || '').trim()) out.destination = h.destination.trim();
             if ((h.room || '').trim()) out.room = titleWords(h.room.trim());
             if ((h.rate || '').trim()) out.rate = mdEm(h.rate);
             if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
@@ -3314,6 +3592,11 @@
                 validUntil: '',
                 mode: state.mode === 'lookbook' ? 'lookbook' : 'quote',
                 hotels: state.hotels.map(serializeHotel),
+                // Destination guides (lookbooks): a snapshot of each library entry,
+                // so a published lookbook keeps the version it was built with.
+                destinations: state.destinations || [],
+                showHotels: state.showHotels !== false,
+                route: routeForSave(),
                 // no global perks band — amenities live on each hotel card
                 closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || mdEm(state.mode === 'lookbook' ? window.WBW_RULES.fixed.closeTitleLookbook : window.WBW_RULES.fixed.closeTitleQuote),
                 closeLede: window.WBW_RULES.fixed.closeLede, // fixed copy, never reworded
@@ -3327,7 +3610,7 @@
         const frame = $('previewFrame');
         function saveDraft() {
             try {
-                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, hotels: state.hotels, fields: fieldValues() }));
+                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, hotels: state.hotels, destinations: state.destinations || [], showHotels: state.showHotels !== false, route: state.route || null, fields: fieldValues() }));
             } catch (e) {}
         }
         const stripTags = (s) => { const t = document.createElement('div'); t.innerHTML = s || ''; return t.textContent.trim(); };
@@ -3351,16 +3634,60 @@
         window.addEventListener('message', (e) => {
             if (e.origin !== window.location.origin) return;
             if (!e.data) return;
-            if (e.data.type === 'wndr-draft-ready') { previewReady = true; pushPreview(); }
+            if (e.data.type === 'wndr-draft-ready') {
+                if ($('destFrame') && e.source === $('destFrame').contentWindow) { pushDestPreview(); return; }
+                previewReady = true; pushPreview();
+            }
             if (e.data.type === 'wndr-edit' && typeof e.data.path === 'string') applyEdit(e.data.path, e.data.value || '');
         });
         function pushPreview() {
             if (!previewReady) return;
             frame.contentWindow.postMessage({ type: 'wndr-draft', proposal: serialize() }, window.location.origin);
+            hookPreviewClicks(); updatePMeta();
+        }
+        // One-line summaries on each folded section of the proposal editor.
+        function updatePMeta() {
+            const set = (id, t) => { const el = $(id); if (el) el.textContent = t; };
+            set('pMetaTrip', [stripHtml($('fPrepared').value), $('fDates').value].filter(Boolean).join(' \u00b7 ') || 'not filled in yet');
+            const dn = (state.destinations || []).length;
+            set('pMetaDest', dn ? dn + ' guide' + (dn === 1 ? '' : 's') : 'none');
+            const shown = state.hotels.filter(h => !h.considered).length, cons = state.hotels.length - shown;
+            set('pMetaHotels', shown + ' hotel' + (shown === 1 ? '' : 's') + (cons ? ' \u00b7 ' + cons + ' not selected' : ''));
+            set('pMetaClose', stripHtml($('fCloseTitle').value).replace(/\*/g, '') || '');
+            set('pMetaClaude', state.hotels.length ? 'paste a new reply to rebuild' : 'start here');
+        }
+        /* Clicking the preview (which stays editable in place) also opens the
+           matching fields on the left: a hotel's card, a guide, the title block or the close. */
+        function hookPreviewClicks() {
+            let doc; try { doc = frame.contentDocument; } catch (err) { return; }
+            if (!doc || !doc.body || doc.__pHooked) return; doc.__pHooked = true;
+            doc.addEventListener('click', (ev) => {
+                const t = ev.target; if (!t || !t.closest) return;
+                const openSec = (k) => { const el = document.querySelector('.psec[data-psec="' + k + '"]'); if (el) { el.open = true; return el; } };
+                const hs = t.closest('[data-hi]');
+                if (hs && +hs.dataset.hi >= 0) {
+                    const h = state.hotels[+hs.dataset.hi]; if (!h) return;
+                    openSec('hotels');
+                    if (!hOpen.has(h)) { hOpen.add(h); renderHotels(); }
+                    const card = document.querySelector('[data-card="' + hs.dataset.hi + '"]');
+                    if (card) { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); card.classList.add('is-flash'); setTimeout(() => card.classList.remove('is-flash'), 1200); }
+                    return;
+                }
+                const sec = t.closest('[data-dslug]') ? 'dest' : t.closest('.prop-hero') ? 'trip' : t.closest('.prop-close') ? 'close' : '';
+                const el = sec && openSec(sec);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         }
         let debounceT = null;
+        /* "Edit for this trip": a proposal's copy of a guide opens in the guide
+           editor in a new tab. That tab never saves the proposal itself; it
+           sends each edit back here through localStorage, and this tab applies it. */
+        var TRIP_KEY = 'wndr-trip-guide:', TRIP_EDIT = 'wndr-trip-guide-edit:';
+        var tripMode = (() => { try { const g = new URLSearchParams(location.search).get('tripGuide'); return g ? { slug: g } : null; } catch (e) { return null; } })();
         function onChange() {
+            if (tripMode) return;   // the trip-guide tab must never overwrite the proposal draft
             try { renderMetaWarning(); } catch (e) {}
+            try { updatePMeta(); } catch (e) {}
             clearTimeout(debounceT);
             debounceT = setTimeout(() => { pushPreview(); saveDraft(); }, 250);
         }
@@ -3482,38 +3809,171 @@
                 toast(added.length + ' photo' + (added.length === 1 ? '' : 's') + ' uploaded.');
             }
         }
+        /* Hotel cards fold behind their header; which ones are open is kept per
+           hotel (not saved). A card with one hotel, or a newly added one, opens. */
+        const hOpen = new WeakSet();
+        /* Photo checks: size and shape are read from the image itself (cached per
+           URL), so a too-small photo or a thin panorama strip is flagged before it
+           reaches a client. Card shape: at least 1200px wide, no wider than 2:1. */
+        const photoMeta = new Map();
+        function photoInfo(url, done) {
+            if (!url) return null;
+            const m = photoMeta.get(url);
+            if (m && m.w !== undefined) return m;
+            if (!m) {
+                const rec = { cbs: [] }; photoMeta.set(url, rec);
+                const img = new Image();
+                img.onload = () => { rec.w = img.naturalWidth; rec.h = img.naturalHeight; rec.cbs.forEach(f => f()); rec.cbs = []; };
+                img.onerror = () => { rec.w = 0; rec.h = 0; rec.broken = true; rec.cbs.forEach(f => f()); rec.cbs = []; };
+                img.src = url;
+            }
+            if (done) photoMeta.get(url).cbs.push(done);
+            return null;
+        }
+        function photoProblems(urls, done) {
+            let small = 0, strip = 0, broken = 0;
+            const seen = new Set(); let dup = 0;
+            urls.filter(Boolean).forEach(u => {
+                if (seen.has(u)) dup++; seen.add(u);
+                const m = photoInfo(u, done); if (!m) return;
+                if (m.broken) broken++;
+                else { if (m.w < 1200) small++; if (m.h && m.w / m.h > 2) strip++; }
+            });
+            const out = [];
+            if (broken) out.push(broken + ' photo' + (broken > 1 ? 's' : '') + ' won\u2019t load');
+            if (small) out.push(small + ' photo' + (small > 1 ? 's' : '') + ' under 1200px');
+            if (strip) out.push(strip + ' panorama strip' + (strip > 1 ? 's' : ''));
+            if (dup) out.push(dup + ' repeated photo' + (dup > 1 ? 's' : ''));
+            return out;
+        }
+        let photoRerender = null;
+        const photoLater = () => { clearTimeout(photoRerender); photoRerender = setTimeout(() => { try { renderHotels(); } catch (e) {} }, 400); };
+        /* Advisor notes read as a quick summary: partners as chips, the perks
+           source as one line, caveats as short bullets with any "Label:" in bold. */
+        const advEdit = new WeakSet();
+        function advPartners(t) {
+            t = String(t || '').trim(); if (!t) return [];
+            // Split on · ; or commas that sit outside brackets.
+            const out = []; let depth = 0, cur = '';
+            for (const ch of t) {
+                if (ch === '(') depth++; if (ch === ')') depth = Math.max(0, depth - 1);
+                if (!depth && (ch === '\u00b7' || ch === ';' || ch === ',' || ch === '|')) { if (cur.trim()) out.push(cur.trim()); cur = ''; continue; }
+                cur += ch;
+            }
+            if (cur.trim()) out.push(cur.trim());
+            return out.map(p => { const m = p.match(/^([^(]+?)\s*\((.*)\)\s*$/); return m ? { name: m[1].trim(), more: m[2].trim() } : { name: p, more: '' }; });
+        }
+        function advBullets(t) {
+            t = String(t || '').trim(); if (!t) return [];
+            const parts = t.split(/\n+|(?<=[.;])\s+(?=[A-Z][A-Za-z &/-]{1,28}:)|(?<=\.)\s+(?=[A-Z])/).map(x => x.trim()).filter(Boolean);
+            return parts.map(x => { const m = x.match(/^([A-Z][A-Za-z &/'-]{1,28}):\s*(.+)$/); return m ? `<strong>${esc(m[1])}:</strong> ${esc(m[2])}` : esc(x); });
+        }
+        // First five points in view; the rest, and any source links, fold away.
+        function advList(bs) {
+            const isSrc = b => /^(<strong>)?(Sources?|Photos re-picked|Hero)\b/i.test(b) || /https?:\/\//.test(b);
+            const main = bs.filter(b => !isSrc(b)), src = bs.filter(isSrc);
+            const head = main.slice(0, 6), more = main.slice(6);
+            return `<ul class="adv-list">${head.map(b => `<li>${b}</li>`).join('')}</ul>` +
+                (more.length ? `<details class="adv-more"><summary>Show ${more.length} more</summary><ul class="adv-list">${more.map(b => `<li>${b}</li>`).join('')}</ul></details>` : '') +
+                (src.length ? `<details class="adv-more"><summary>Sources and photo notes</summary><ul class="adv-list adv-src">${src.map(b => `<li>${b}</li>`).join('')}</ul></details>` : '');
+        }
+        /* Perks by partner, edited as one line each: "Virtuoso*: Upgrade · Breakfast for 2"
+           (the * marks the partner whose perks print on the client's page). */
+        function parsePartnerPerks(t) {
+            return String(t || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+                const m = l.match(/^([^:]+):\s*(.*)$/); if (!m) return null;
+                const onPage = /\*\s*$/.test(m[1]);
+                return { partner: m[1].replace(/\*\s*$/, '').trim(), perks: m[2].split(/\s*\u00b7\s*|\s*;\s*/).map(x => x.trim()).filter(Boolean), onPage };
+            }).filter(Boolean);
+        }
+        function partnerPerksToText(a) {
+            return (Array.isArray(a) ? a : []).map(p => String(p.partner || '') + (p.onPage ? '*' : '') + ': ' + (p.perks || []).map(String).join(' \u00b7 ')).join('\n');
+        }
+        function advisorRead(h) {
+            const ps = advPartners(h.bookingPartners), bs = advBullets(h.advisorNote), pp = parsePartnerPerks(h.partnerPerksText);
+            const perksRows = pp.length
+                ? `<div class="adv-perks">${pp.map(p => `<div class="adv-perk-row${p.onPage ? ' is-page' : ''}"><div class="adv-perk-head">${esc(p.partner)}${p.onPage ? ' <em>on the page</em>' : ''}</div><div class="adv-perk-tags">${p.perks.length ? p.perks.map(x => `<span>${esc(x)}</span>`).join('') : '<i>No set perks</i>'}</div></div>`).join('')}</div>`
+                : (ps.length ? `<div class="adv-line"><span class="adv-k">Book through</span><span class="adv-chips">${ps.map(p => `<span class="adv-chip"${p.more ? ` title="${esc(p.more)}"` : ''}>${esc(p.name)}</span>`).join('')}</span></div>` : '');
+            return `<div class="adv-read">
+                ${perksRows}
+                ${(h.amenitiesNote && !pp.length) ? `<div class="adv-line"><span class="adv-k">Perks</span><span class="adv-v">${esc(h.amenitiesNote)}</span></div>` : ''}
+                ${bs.length ? `<div class="adv-line"><span class="adv-k">To check</span><div>${advList(bs)}</div></div>` : ''}
+            </div>`;
+        }
+        function hotelStatus(h) {
+            const bits = [], lb = state.mode === 'lookbook';
+            if (h.considered) return ['Not selected (internal)'];
+            const n = photosOf(h).length;
+            bits.push(n + ' photo' + (n === 1 ? '' : 's'));
+            if (!lb) {
+                bits.push((h.room || h.rate || h.rateTableText) ? 'Rate \u2713' : '<b>No rate yet</b>');
+                bits.push((h.deposit && h.cancellation) ? 'Terms \u2713' : '<b>Terms missing</b>');
+                if (h.flight || h.flightDetails) bits.push('Flights \u2713');
+                if (h.usePerks) bits.push('Perks');
+            }
+            const d = h.destination && (state.destinations || []).find(x => x.slug === h.destination);
+            if (d) bits.push('Under ' + esc(stripHtml(d.name || d.slug)));
+            photoProblems(photosOf(h), photoLater).forEach(p => bits.push('<b>' + p + '</b>'));
+            return bits;
+        }
+        const growAdv = () => document.querySelectorAll('#hotelList .adv-grow').forEach(t => { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; });
+        document.addEventListener('input', (e) => { if (e.target.classList && e.target.classList.contains('adv-grow')) { e.target.style.height = 'auto'; e.target.style.height = (e.target.scrollHeight + 2) + 'px'; } });
         function renderHotels() {
+            setTimeout(growAdv, 0);
             const wrap = $('hotelList');
+            if (state.hotels.length === 1) hOpen.add(state.hotels[0]);
             wrap.innerHTML = state.hotels.map((h, i) => {
                 const m = hotelMeta(h);
                 const bookingDefault = !h.custom && lib[h.slug] && lib[h.slug].bookingUrl && lib[h.slug].bookingUrl !== '#' ? lib[h.slug].bookingUrl : '';
                 const customFields = h.custom ? `
-                    <div class="f-row"><label class="f-label">Hotel name — official name, exactly as the hotel writes it</label>
+                    <div class="f-row"><label class="f-label">Hotel name</label>
                         <input class="f-input" data-i="${i}" data-k="name" value="${esc(h.name)}" placeholder="Rock House"></div>
                     <div class="f-row"><label class="f-label">Location line</label>
                         <input class="f-input" data-i="${i}" data-k="location" value="${esc(h.location)}" placeholder="Positano, Italy · Brand"></div>
-                    <div class="f-row"><label class="f-label">Description — paste verbatim from the hotel&rsquo;s website or its Virtuoso page</label>
-                        <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="Paste the property overview exactly as the hotel or Virtuoso writes it — never write your own.">${esc(h.desc)}</textarea></div>` : '';
+                    <div class="f-row"><label class="f-label">Description</label>
+                        <textarea class="f-area" data-i="${i}" data-k="desc" placeholder="The hotel&rsquo;s own overview">${esc(h.desc)}</textarea></div>` : '';
                 const lb = state.mode === 'lookbook';
                 return `
-                <div class="hotel-card${h.considered ? ' is-considered' : ''}" data-card="${i}">
-                    <div class="hotel-card-top">
+                <div class="hotel-card${h.considered ? ' is-considered' : ''}${hOpen.has(h) ? ' is-open' : ''}" data-card="${i}">
+                    <div class="hotel-card-top" data-hfold="${i}" title="Show or hide this hotel's fields">
                         ${m.img ? `<img class="hotel-card-thumb" src="${esc(m.img)}" alt="">` : '<div class="hotel-card-thumb"></div>'}
-                        <div>
-                            <p class="hotel-card-name">${esc(m.name)}</p>
+                        <div style="flex:1;min-width:0">
+                            <p class="hotel-card-name">${esc(m.name) || 'New hotel'}</p>
                             <p class="hotel-card-loc">${esc(m.loc)}</p>
+                            <p class="hotel-card-status">${hotelStatus(h).join(' \u00b7 ')}</p>
                         </div>
                         <div class="hotel-card-actions">
                             <button class="icon-btn" data-move="-1" data-i="${i}" title="Move up" type="button">↑</button>
                             <button class="icon-btn" data-move="1" data-i="${i}" title="Move down" type="button">↓</button>
                             <button class="icon-btn danger" data-remove="${i}" title="Remove" type="button">✕</button>
+                            <span class="hotel-card-fold" aria-hidden="true">${hOpen.has(h) ? '\u2212' : '+'}</span>
                         </div>
                     </div>
+                    <div class="hotel-card-body"${hOpen.has(h) ? '' : ' hidden'}>
                     ${customFields}
+                    ${((state.destinations || []).length) ? `<div class="f-row"><label class="f-label">Shows under destination</label>
+                        <select class="f-input" data-i="${i}" data-k="destination"><option value="">(none)</option>${state.destinations.map(d =>
+                            `<option value="${esc(d.slug)}"${h.destination === d.slug ? ' selected' : ''}>${esc(stripHtml(d.name || d.slug))}</option>`).join('')}</select></div>` : ''}
                     ${photoManager(h, i)}
                     ${lb ? `
-                    <div class="f-row"><label class="f-label">How to get there <span style="text-transform:none">(shows on a lookbook in place of flights)</span></label>
-                        <textarea class="f-area" data-i="${i}" data-k="gettingThere" placeholder="Fly into Providenciales; the resort is a 25-minute drive from the airport and transfers are arranged for you.">${esc(h.gettingThere || '')}</textarea></div>` : ''}
+                    <div class="f-row"><label class="f-label">How to get there</label>
+                        <textarea class="f-area" data-i="${i}" data-k="gettingThere" placeholder="Fly into Marseille Provence Airport (MRS), about 45 minutes by car.">${esc(h.gettingThere || '')}</textarea></div>
+                    ${(h.climateText || h.staysText) ? `<details class="manual-fields">
+                    <summary>Older lookbook extras (temperatures and nearby hotels; destination guides replace these)</summary>
+                    <div class="f-row"><label class="f-label">Average temperatures <span style="text-transform:none">(one month per line &mdash; month, high, low)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="climateText" style="min-height:150px" placeholder="Jan 50 37&#10;Feb 54 39&#10;Mar 61 43&#10;&hellip;">${esc(h.climateText || '')}</textarea></div>
+                    <div class="f-row"><label class="f-label">Heading above the strip</label>
+                        <input class="f-input" data-i="${i}" data-k="climateLabel" value="${esc(h.climateLabel || '')}" placeholder="Average temperatures"></div>
+                    <div class="f-row"><label class="f-label">Highlight which months <span style="text-transform:none">(comma separated, matching the labels above)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="climateHighlight" value="${esc(h.climateHighlight || '')}" placeholder="Mar, Apr"></div>
+                    <div class="f-row"><label class="f-label">Note under the strip</label>
+                        <input class="f-input" data-i="${i}" data-k="climateNote" value="${esc(h.climateNote || '')}" placeholder="Average daily high and low, &deg;F."></div>
+                    <div class="f-row"><label class="f-label">Where to stay <span style="text-transform:none">(one property per line &mdash; name | note | photo URL | link; the last two can be left empty)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="staysText" style="min-height:120px" placeholder="Four Seasons Hotel Madrid | Centro &middot; Virtuoso&#10;Mandarin Oriental Ritz, Madrid | Retiro &middot; Virtuoso">${esc(h.staysText || '')}</textarea></div>
+                    <div class="f-row"><label class="f-label">Heading above them</label>
+                        <input class="f-input" data-i="${i}" data-k="staysLabel" value="${esc(h.staysLabel || '')}" placeholder="Where to stay"></div>
+                    <div class="f-row"><label class="f-label">Note under them</label>
+                        <input class="f-input" data-i="${i}" data-k="staysNote" value="${esc(h.staysNote || '')}" placeholder="A sample of what we can book here, with preferred-partner amenities attached."></div></details>` : ''}` : ''}
                     <div class="f-row check-row">
                         <input type="checkbox" id="cons${i}" data-i="${i}" data-k="considered" ${h.considered ? 'checked' : ''}>
                         <label for="cons${i}">Considered but not selected (kept here for your records; it does not appear on the client’s page)</label>
@@ -3531,13 +3991,17 @@
                         </div>
                     </div>
                     <div class="advisor-note">
-                        <p class="advisor-note-head">Booking &amp; amenities &mdash; only you see this</p>
+                        <p class="advisor-note-head">Ways to book &mdash; only you see this
+                            ${(h.bookingPartners || h.amenitiesNote || h.advisorNote || h.partnerPerksText) ? `<button type="button" class="linkish adv-toggle" data-advedit="${i}">${advEdit.has(h) ? 'Done' : 'Edit'}</button>` : ''}</p>
+                        ${(!advEdit.has(h) && (h.bookingPartners || h.amenitiesNote || h.advisorNote || h.partnerPerksText)) ? advisorRead(h) : `
                         <div class="f-row"><label class="f-label">Where we can book it</label>
-                            <input class="f-input" data-i="${i}" data-k="bookingPartners" value="${esc(h.bookingPartners || '')}" placeholder="Virtuoso · Wanderluxe · Tablet · Belmond"></div>
-                        <div class="f-row"><label class="f-label">Amenity programs <span style="text-transform:none">(perks above default to Virtuoso)</span></label>
-                            <input class="f-input" data-i="${i}" data-k="amenitiesNote" value="${esc(h.amenitiesNote || '')}" placeholder="Also in Mr &amp; Mrs Smith — different package"></div>
+                            <textarea class="f-area adv-grow" rows="1" data-i="${i}" data-k="bookingPartners" placeholder="Virtuoso · Mr &amp; Mrs Smith · Tablet">${esc(h.bookingPartners || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label">Perks by partner <span style="text-transform:none">(one line each: Partner: perk · perk; add * after the partner whose perks show on the page)</span></label>
+                            <textarea class="f-area adv-grow" rows="2" data-i="${i}" data-k="partnerPerksText" placeholder="Virtuoso*: Upgrade · Breakfast for 2 · $100 credit&#10;Mr &amp; Mrs Smith: Bottle of wine · Vineyard tour">${esc(h.partnerPerksText || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label">Amenity programs</label>
+                            <textarea class="f-area adv-grow" rows="1" data-i="${i}" data-k="amenitiesNote" placeholder="Perks above are Virtuoso's; Mr &amp; Mrs Smith has a different package">${esc(h.amenitiesNote || '')}</textarea></div>
                         <div class="f-row"><label class="f-label">Caveats &amp; what to check</label>
-                            <textarea class="f-area" data-i="${i}" data-k="advisorNote" placeholder="Rate is researched, not quoted. Couldn't source verbatim copy — pull it from the hotel site before publishing.">${esc(h.advisorNote || '')}</textarea></div>
+                            <textarea class="f-area adv-grow" data-i="${i}" data-k="advisorNote" placeholder="Open: … Gym: … Check: …">${esc(h.advisorNote || '')}</textarea></div>`}
                     </div>
                     <details class="manual-fields"${lb ? ' hidden' : ''}${(h.room || h.rate || h.deposit || h.flight || h.rateTableText) ? ' open' : ''}>
                     <summary>Enter or edit the quote fields manually</summary>
@@ -3551,7 +4015,7 @@
                         <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="Includes daily breakfast, taxes and fees"></div>
                     <div class="f-row"><label class="f-label">Flight note <span style="text-transform:none">(optional — shows with a ✈ under the rate)</span></label>
                         <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · starting from $795 / person round-trip"></div>
-                    <div class="f-row"><label class="f-label">Flight details <span style="text-transform:none">(optional — client can expand the ✈ chip to read these; drop a Google Flights screenshot to fill. Lines starting with &ldquo;Outbound&rdquo;, &ldquo;Return&rdquo; or &ldquo;Fares&rdquo; become section headers)</span></label>
+                    <div class="f-row"><label class="f-label">Flight details <span style="text-transform:none">(optional; drop a Google Flights screenshot to fill)</span></label>
                         <textarea class="f-area" data-i="${i}" data-k="flightDetails" style="min-height:130px" placeholder="Outbound · Wed, Nov 11&#10;American · DFW 5:00 AM – AXA 2:57 PM&#10;7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)&#10;&#10;Return · Sun, Nov 15&#10;American · AXA 3:37 PM – DFW 9:50 PM&#10;8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)&#10;&#10;Fares&#10;Main Cabin $1,526 pp · Main Plus $1,768 pp">${esc(h.flightDetails)}</textarea></div>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Deposit</label>
@@ -3568,12 +4032,12 @@
                     </details>
                     <div class="f-row check-row">
                         <input type="checkbox" id="perks${i}" data-i="${i}" data-k="usePerks" ${h.usePerks ? 'checked' : ''}>
-                        <label for="perks${i}">Include preferred-partner amenities on this hotel</label>
+                        <label for="perks${i}">Include Wander by Wilson Exclusives on this hotel</label>
                     </div>
-                    ${h.usePerks ? `<div class="f-row perks-box"><label class="f-label">Amenities — one per line (edit to match the quote)</label>
+                    ${h.usePerks ? `<div class="f-row perks-box"><label class="f-label">Wander by Wilson Exclusives — one per line</label>
                         <textarea class="f-area" data-i="${i}" data-k="perksText" style="min-height:118px">${esc(h.perksText)}</textarea>
                         <label class="f-label" style="margin-top:10px">Heading above them</label>
-                        <input class="f-input" data-i="${i}" data-k="perksLabel" value="${esc(h.perksLabel)}" placeholder="Your preferred-partner amenities"></div>` : ''}
+                        <input class="f-input" data-i="${i}" data-k="perksLabel" value="${esc(h.perksLabel)}" placeholder="Wander by Wilson Exclusives"></div>` : ''}
                     <details>
                         <summary>Room description ${h.custom ? '&amp; booking' : '· custom copy · booking'}</summary>
                         <div class="f-row"><label class="f-label">About the room (optional)</label>
@@ -3590,9 +4054,19 @@
                         <div class="f-row"><label class="f-label">Booking link</label>
                             <input class="f-input" data-i="${i}" data-k="bookingUrl" value="${esc(h.bookingUrl)}" placeholder="${esc(bookingDefault) || 'https://… (Virtuoso / TravelWits)'}"></div>
                     </details>
+                    </div>
                 </div>`;
             }).join('') || '<p class="sec-sub" style="margin:0 0 14px">No hotels yet — add your first from the library below.</p>';
         }
+        $('hotelList').addEventListener('click', (e) => {
+            const ae = e.target.closest('[data-advedit]');
+            if (ae) { const h = state.hotels[+ae.dataset.advedit]; if (!h) return; if (advEdit.has(h)) advEdit.delete(h); else advEdit.add(h); renderHotels(); return; }
+            const top = e.target.closest('[data-hfold]');
+            if (!top || e.target.closest('button, a, input, select')) return;
+            const h = state.hotels[+top.dataset.hfold]; if (!h) return;
+            if (hOpen.has(h)) hOpen.delete(h); else hOpen.add(h);
+            renderHotels();
+        });
         $('hotelList').addEventListener('change', (e) => {
             const f = e.target.closest('[data-phfile]');
             if (f && f.files && f.files.length) uploadPhotos(+f.dataset.phfile, Array.from(f.files));
@@ -3715,7 +4189,7 @@
                 const { items } = await contentApi({ action: 'list', kind: 'hoteldraft' });
                 draftHotels = (items || [])
                     .filter(d => ['in-review', 'draft', 'ready'].includes(d.status) && !lib[d.id])
-                    .map(d => ({ slug: d.id, name: d.name || d.id, location: d.location || '' }));
+                    .map(d => ({ slug: d.id, name: d.name || d.id, location: d.location || '', heroImage: d.heroImage || '' }));
             } catch (err) { draftHotels = []; }
             return draftHotels;
         }
@@ -3736,15 +4210,16 @@
             '      "gallery": ["5 more direct image URLs, per PHOTOS"],',
             '      "perks": ["each documented amenity as a short bullet, with its fine print"],',
             '      "gettingThere": "ONE or two sentences a client can act on: nearest airport, roughly how long, how the transfer works (car, boat, island flight).",',
-            '      "idealFor": "BEST FOR, one sentence, max 280 characters (for the hotel page)",',
-            '      "agentTip": "one concrete insider move, sourced (for the hotel page)",',
+            '      "idealFor": "BEST FOR, one sentence, max 160 characters (for the hotel page)",',
+            '      "agentTip": "one concrete insider move, sourced, 66\u2013220 characters (for the hotel page)",',
             '      "rateFrom": "entry-level nightly rate, e.g. €850 / night (for the hotel page; never prints on a proposal)",'
         ];
         const ADVISOR_FIELDS = [
             '      "whyRecommended": "advisor-only: 1–2 sentences on why this fits",',
             '      "bookingPartners": ["advisor-only: every confirmed way we can book it"],',
-            '      "amenitiesNote": "advisor-only: which program the perks come from, and any different package elsewhere",',
-            '      "advisorNote": "advisor-only: anything unverified and what Wilson should check",',
+            '      "partnerPerks": "advisor-only: one entry per confirmed booking route with its OWN perks as short items (max 5 words each), and onPage true for the route whose perks are in \"perks\", e.g. [{\"partner\": \"Virtuoso\", \"perks\": [\"Upgrade\", \"Breakfast for 2\", \"$100 F&B credit\", \"Early in / late out\"], \"onPage\": true}, {\"partner\": \"Mr & Mrs Smith\", \"perks\": [\"Bottle of wine\", \"Vineyard tour\"]}]",',
+            '      "amenitiesNote": "advisor-only: ONE short line, only if something about the perks needs explaining",',
+            '      "advisorNote": "advisor-only: AT MOST 5 short labelled points, one line each (Season, Availability, Gym, Dining, Check), only what Wilson must act on before sending or booking; no research narrative or sources. Season = whether the hotel is open for the dates or closes for part of the year; Availability = whether live rooms were checked. e.g. Season: open Nov 7\u201311 (closes Jan 3 to Mar 5). Availability: not checked yet. Gym: none.",',
             '      "socialHook": "advisor-only: ONE line, max ~120 characters, on what makes the property singular"'
         ];
         function hotelSourcingBlock() {
@@ -3762,6 +4237,26 @@
                 R.blocks.photos
             ].join('\n');
         }
+        function destinationSourcingBlock() {
+            const list = destIndex.map(d => '  ' + d.id + ' \u2014 ' + (d.name || d.id) + (d.region ? ' (' + d.region + ')' : '')).join('\n');
+            return [
+                'DESTINATION GUIDES. A lookbook can open each place on the trip with a short destination guide, followed by its hotels. Add one guide per destination the trip covers (one for a single place, several for a multi-stop trip). If I say the lookbook is destination guides only (no hotels yet), return "showHotels": false and an empty "hotels" array.',
+                list ? 'Destinations we already have guides for. Do NOT research these again: return ONLY {"slug": "\u2026"}:\n' + list : 'We have no destination guides yet.',
+                'ANY OTHER DESTINATION: write the guide in full, to this standard. It is saved as a draft for Wilson to approve and reuse:',
+                R.blocks.destinationContent,
+                'Give every hotel a "destination" matching the slug of the guide it belongs under.'
+            ].join('\n');
+        }
+        // Quotes can carry destination guides too (Wilson, 2026-10-03), but only
+        // ones already in the library: a quote never writes a new guide.
+        function quoteGuideBlock() {
+            const list = destIndex.map(d => '  ' + d.id + ' \u2014 ' + (d.name || d.id) + (d.region ? ' (' + d.region + ')' : '')).join('\n');
+            return list ? [
+                'DESTINATION GUIDES IN A QUOTE. If the lookbook from STEP 0 opened with destination guides, or the trip covers a place on this list, return those places in "destinations" as {"slug": "\u2026"} only (never write a new guide inside a quote), and give each hotel the "destination" slug it sits under:',
+                list,
+                'ROUTE MAP. For a multi-stop trip, also return "route": "from" is the slug of a place on this list the client arrives from (omit if none); "legs" is one short label per leg in trip order, e.g. "~2hr 40min by train" (any rail is just train).'
+            ].join('\n') : '';
+        }
         function lookbookPrompt() {
             const B = R.blocks, F = R.fixed;
             return [
@@ -3778,6 +4273,8 @@
                 '',
                 hotelSourcingBlock(),
                 '',
+                destinationSourcingBlock(),
+                '',
                 B.clientFields,
                 '',
                 B.voice,
@@ -3788,6 +4285,12 @@
                 '',
                 '{',
                 '  "mode": "lookbook",',
+                '  "showHotels": true,',
+                '  "route": { "from": "OPTIONAL: slug of a guide on our list for where the client arrives from (e.g. barcelona), or omit", "legs": ["one short label per leg in trip order, e.g. ~4hr 20min by train (any rail is just train; ~xhr xmin; by train, by car, by boat or flight)"] },',
+                '  "destinations": [',
+                '    { "slug": "ONLY for a destination on our list above; then omit the other fields" },',
+                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
+                '  ],',
                 '  "preparedFor": "how to address them, matching how they sign their emails, e.g. Amy & Jon",',
                 '  "title": "the headline, e.g. Somewhere in the *Caribbean.* (wrap ONE word in *asterisks* for italic gold)",',
                 '  "lede": "one or two warm sentences: a first look, to find out what they respond to. Say plainly that rates come next.",',
@@ -3797,6 +4300,7 @@
                 '  "hotels": [',
                 '    {',
                 '      "slug": "ONLY for a hotel on our list above; then omit the new-hotel fields",',
+                '      "destination": "the slug of the destination guide this hotel sits under (empty if none)",',
                 NEW_HOTEL_FIELDS.join('\n'),
                 ADVISOR_FIELDS.join('\n'),
                 '    }',
@@ -3835,6 +4339,8 @@
                 '',
                 B.holdLanguage,
                 '',
+                quoteGuideBlock(),
+                '',
                 'STEP 3. Reply with your two-line summary, then ONLY this JSON block. For a NEW hotel, "pagePerks" is its standard package for its hotel page; "perks" is the package of the program THIS rate is booked through.',
                 '',
                 '{',
@@ -3845,9 +4351,12 @@
                 '  "dates": "e.g. May 23–31, 2027 · 8 nights",',
                 '  "closeTitle": "' + F.closeTitleQuote + '",',
                 '  "closeLede": "' + F.closeLede + '",',
+                '  "destinations": [{ "slug": "ONLY slugs from the guide list above; omit if none" }],',
+                '  "route": { "from": "optional slug", "legs": ["~2hr 40min by train"] },',
                 '  "hotels": [',
                 '    {',
                 '      "slug": "ONLY for a hotel on our list above; then omit the new-hotel fields",',
+                '      "destination": "the slug of the destination guide this hotel sits under (empty if none)",',
                 NEW_HOTEL_FIELDS.join('\n').replace('"perks": ["each documented amenity', '"pagePerks": ["each documented amenity'),
                 '      "room": "the category exactly as the rate document names it",',
                 '      "roomDesc": "ONE sentence describing THIS category, from the hotel’s own description of it",',
@@ -3936,6 +4445,10 @@
             $('btnConvert').hidden = !lb || !state.hotels.length;
             $('btnPublish').textContent = 'Publish';
             $('btnPublishBottom').textContent = lb ? 'Publish lookbook' : 'Publish proposal';
+            // Guides go in lookbooks and quotes; the shortlist switch is lookbook-only.
+            $('destSec').hidden = false;
+            $('fShowHotelsWrap').hidden = !lb;
+            renderDestPanel(); loadDestIndex().then(renderDestPanel);
             // Swap the default closing headline with the mode, unless it was edited.
             const F = window.WBW_RULES.fixed, ct = $('fCloseTitle');
             if (!ct.value.trim() || ct.value === F.closeTitleQuote || ct.value === F.closeTitleLookbook)
@@ -3950,6 +4463,7 @@
         });
         $('pbCopyPrompt').addEventListener('click', async () => {
             await loadDraftHotels();
+            if (state.mode === 'lookbook') await loadDestIndex();
             const text = state.mode === 'lookbook' ? lookbookPrompt() : quotePrompt();
             try { await navigator.clipboard.writeText(text); toast((state.mode === 'lookbook' ? 'Lookbook' : 'Quote') + ' prompt copied — paste it into your Claude and name the client.'); }
             catch (err) { window.prompt('Copy this prompt:', text); }
@@ -3971,6 +4485,7 @@
                 'Attached are screenshots of flight options (Google Flights or similar). Turn them into flight blocks for a luxury travel proposal.',
                 '',
                 window.WBW_RULES.blocks.flights,
+                'Every line you write is client-facing: no em dashes (use commas, periods or a middle dot), and never say a seat or fare is held.',
                 '',
                 rows.length
                     ? ['THE PROPOSAL ALREADY HAS THESE HOTELS. Work out which route serves which one and say so in the JSON:',
@@ -4137,7 +4652,7 @@
                         rateNote: h.rateNote, deposit: h.deposit, cancellation: h.cancellation,
                         roomDesc: '', flight: '', flightDetails: '',
                         rateTableText: '', rateTableNote: '', termsText: '',
-                        socialHook: '', gettingThere: '', considered: false, consideredWhy: '',
+                        socialHook: '', gettingThere: '', climateText: '', climateLabel: '', climateNote: '', climateHighlight: '', staysText: '', staysLabel: '', staysNote: '', considered: false, consideredWhy: '',
                         bookingPartners: [h.ratePlan ? h.ratePlan.replace(/ rate.*$/i, '') : '', h.brand]
                             .filter(Boolean).join(' · '),
                         amenitiesNote: '', advisorNote: '',
@@ -4264,10 +4779,21 @@
                     socialHook: String(h.socialHook || ''),
                     bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
                     amenitiesNote: String(h.amenitiesNote || ''),
+                    partnerPerksText: partnerPerksToText(h.partnerPerks),
                     advisorNote: String(h.advisorNote || ''),
                     gettingThere: String(h.gettingThere || ''),
+                    climateText: (((h.climate || {}).months) || []).map(function (m) { return m.m + ' ' + m.hi + ' ' + m.lo; }).join('\n'),
+                    climateLabel: String((h.climate || {}).label || ''),
+                    climateNote: String((h.climate || {}).note || ''),
+                    climateHighlight: (((h.climate || {}).highlight) || []).join(', '),
+                    staysText: (((h.stays || {}).items) || []).map(function (it) {
+                        return [it.name || '', it.note || '', it.image || '', it.url || ''].join(' | ').replace(/(\s*\|)+\s*$/, '');
+                    }).join('\n'),
+                    staysLabel: String((h.stays || {}).label || ''),
+                    staysNote: String((h.stays || {}).note || ''),
                     considered: !!h.considered,
                     consideredWhy: String(h.consideredWhy || ''),
+                    destination: String(h.destination || ''),
                     flight: String(h.flight || ''), flightDetails: String(h.flightDetails || ''),
                     usePerks: !!perks.length,
                     perksText: perks.join('\n'),
@@ -4313,6 +4839,687 @@
             onChange();
             return { fromLibrary, custom, customSource, notes, partners };
         }
+
+        /* ── Destination guides ─────────────────────────────────────────
+           A library of places (Studio content kind "destination"; "ready" =
+           approved by Wilson), seeded with suggested drafts from our blog
+           guides (destinations-seed.js). A lookbook embeds a snapshot of each
+           guide it uses. Advisor-only "sourceNotes" never go into a proposal. */
+        const DEST_SEEDS = window.DESTINATION_SEEDS || [];
+        let destIndex = [];
+        let destDocId = null, destDoc = null;
+        const DEST_CHIP = {
+            ready: '<span class="chip chip-ready">Approved</span>',
+            suggested: '<span class="chip chip-idea">Suggested draft</span>'
+        };
+        function seedEntry(sd) {
+            const e = Object.assign({}, sd); delete e.sourceNotes; return e;
+        }
+        async function loadDestIndex() {
+            let items = [];
+            try { items = (await contentApi({ action: 'list', kind: 'destination' })).items || []; } catch (err) { items = []; }
+            const have = new Set(items.map(i => i.id));
+            destIndex = items.map(i => Object.assign({}, i))
+                .concat(DEST_SEEDS.filter(d => !have.has(d.slug))
+                    .map(d => ({ id: d.slug, name: d.name, region: d.region, status: 'suggested', seed: true })))
+                .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+            const waiting = items.filter(i => i.status !== 'ready').length;
+            if ($('sideCountDest')) $('sideCountDest').textContent = waiting || '';
+            return destIndex;
+        }
+        /* Where-to-stay photos, without re-research: a hotel on our site needs no
+           photo stored (the page uses its hotel page); a hotel waiting for review
+           lends its draft's photo. Only hotels we have nothing on keep their own. */
+        async function resolveStays(entry) {
+            const items = (entry && entry.stays && entry.stays.items) || [];
+            if (!items.length) return entry;
+            if (!draftHotels.length) await loadDraftHotels();
+            const libEntries = libEntriesForMatching();
+            items.forEach(it => {
+                const hit = (it.slug && lib[it.slug]) ? { k: it.slug } : matchLibHotel(it.name || '', libEntries, new Set());
+                if (hit) { it.slug = hit.k; delete it.image; return; }
+                const n = normName(it.name || '');
+                const d = draftHotels.find(x => x.slug === it.slug || normName(x.name) === n);
+                if (d && d.heroImage && !it.image) it.image = d.heroImage;
+            });
+            return entry;
+        }
+        async function getDestEntry(slug) {
+            try {
+                const { doc } = await contentApi({ action: 'load', kind: 'destination', id: slug });
+                if (doc && doc.entry) return resolveStays(Object.assign({ slug }, doc.entry));
+            } catch (err) { /* fall back to a seed */ }
+            const sd = DEST_SEEDS.find(d => d.slug === slug);
+            return sd ? resolveStays(seedEntry(sd)) : null;
+        }
+        async function showDestList() {
+            $('destEditor').hidden = true; $('destListWrap').hidden = false;
+            const list = $('destList');
+            list.innerHTML = '<p class="dash-empty">Loading…</p>';
+            await loadDestIndex();
+            list.innerHTML = destIndex.length ? destIndex.map(d => `
+                <button class="dash-row" data-opendest="${esc(d.id)}" type="button">
+                    <div class="dash-row-main">
+                        <div class="dash-row-title">${esc(d.name || d.id)}</div>
+                        <div class="dash-row-sub">${esc(d.region || '')}${d.updatedAt ? ' · updated ' + fmtWhen(d.updatedAt) : ''}</div>
+                    </div>
+                    ${DEST_CHIP[d.status] || STATUS_CHIP[d.status] || STATUS_CHIP['in-review']}
+                </button>`).join('') : '<p class="dash-empty">No destinations yet.</p>';
+        }
+        const linesOf = (v) => String(v || '').split('\n').map(x => x.trim()).filter(Boolean);
+        /* Destination editor state. Simple text fields live in inputs; the
+           structured parts (photos, lists, temperatures, hotels) live here and
+           are rendered into the form. The saved guide format is unchanged. */
+        const D_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let dEd = null;
+        function edFromEntry(e) {
+            e = e || {};
+            const ms = (e.climate || {}).months || [];
+            return {
+                heroImage: e.heroImage || '',
+                gallery: (e.gallery || []).slice(),
+                todo: (e.highlights || []).map((t, k) => ({ text: t, image: (e.highlightImages || [])[k] || '' })),
+                train: (e.byTrain || []).slice(), car: (e.byCar || []).slice(), boat: (e.byFerry || []).slice(),
+                months: D_MONTHS.map(m => {
+                    const f = ms.find(x => String(x.m).slice(0, 3).toLowerCase() === m.toLowerCase());
+                    return { m, hi: f ? String(f.hi) : '', lo: f ? String(f.lo) : '' };
+                }),
+                stays: ((e.stays || {}).items || []).map(it => Object.assign({}, it))
+            };
+        }
+        const dNum = (v) => (/^-?\d+(\.\d+)?$/.test(String(v).trim()) ? +v : String(v).trim());
+        function destEntryFromForm() {
+            if (!dEd) dEd = edFromEntry({});
+            const todo = dEd.todo.filter(t => t.text.trim());
+            const months = dEd.months.filter(m => String(m.hi).trim() !== '' && String(m.lo).trim() !== '')
+                .map(m => ({ m: m.m, hi: dNum(m.hi), lo: dNum(m.lo) }));
+            const stays = dEd.stays.map(it => {
+                const o = {}; ['name', 'slug', 'note', 'image', 'url'].forEach(k => { if (it[k] && String(it[k]).trim()) o[k] = String(it[k]).trim(); });
+                return o;
+            }).filter(o => o.name || o.slug);
+            const name = $('dName').value.trim();
+            const e = {
+                slug: destDocId || normName(name).replace(/\s+/g, '-').slice(0, 60),
+                name, region: $('dRegion').value.trim(),
+                heroImage: dEd.heroImage.trim(),
+                gallery: dEd.gallery.map(u => String(u || '').trim()).filter(Boolean),
+                overview: $('dOverview').value.trim(),
+                highlightsLabel: $('dHlLabel').value.trim() || 'Things to do',
+                highlights: todo.map(t => t.text.trim()),
+                gettingThere: $('dGetting').value.trim(),
+                byPlane: $('dPlane').value.trim(),
+                byTrain: dEd.train.map(x => x.trim()).filter(Boolean),
+                byCar: dEd.car.map(x => x.trim()).filter(Boolean),
+                byFerry: dEd.boat.map(x => x.trim()).filter(Boolean),
+                tip: $('dTip').value.trim(),
+                climate: months.length ? { label: 'Average temperatures', note: $('dClimateNote').value.trim() || 'Average daily high and low in °F.', months } : null,
+                stays: stays.length ? { label: 'Hotels we love', items: stays } : null
+            };
+            if (todo.some(t => t.image)) e.highlightImages = todo.map(t => t.image || '');
+            return e;
+        }
+        function fillDestForm(e, sourceNotes) {
+            e = e || {};
+            $('dName').value = e.name || ''; $('dRegion').value = e.region || '';
+            $('dOverview').value = e.overview || ''; $('dHlLabel').value = e.highlightsLabel || '';
+            $('dGetting').value = e.gettingThere || ''; $('dTip').value = e.tip || '';
+            $('dPlane').value = e.byPlane || '';
+            $('dClimateNote').value = (e.climate || {}).note || '';
+            $('dSource').value = sourceNotes || '';
+            dEd = edFromEntry(e);
+            renderDestEd();
+            destFormChanged();
+        }
+        // ── Rendering ──
+        const D_SLOT_TIP = { hero: 'cover', g0: 'overview photo 1', g1: 'overview photo 2' };
+        function dSlotGet(key) {
+            const [k, n] = key.split(':');
+            if (k === 'hero') return dEd.heroImage;
+            if (k === 'g0' || k === 'g1') return dEd.gallery[+k[1]] || '';
+            if (k === 'todo') return (dEd.todo[+n] || {}).image || '';
+            if (k === 'stay') return (dEd.stays[+n] || {}).image || '';
+            return '';
+        }
+        function dSlotSet(key, url) {
+            const [k, n] = key.split(':');
+            if (k === 'hero') dEd.heroImage = url;
+            else if (k === 'g0' || k === 'g1') { const i = +k[1]; while (dEd.gallery.length < i) dEd.gallery.push(''); dEd.gallery[i] = url; }
+            else if (k === 'todo' && dEd.todo[+n]) dEd.todo[+n].image = url;
+            else if (k === 'stay' && dEd.stays[+n]) dEd.stays[+n].image = url;
+        }
+        function dSlot(key, sq) {
+            const u = dSlotGet(key);
+            const swap = (key === 'g0' || key === 'g1') && u ? `<button type="button" data-dact="swap" data-key="${key}" title="Swap with the cover">&#8644;</button>` : '';
+            return u
+                ? `<div class="d-slot is-filled${sq ? ' is-sq' : ''}"><img src="${esc(u)}" alt="" loading="lazy"><div class="ph-tools">${swap}<button type="button" data-dact="link" data-key="${key}" title="Replace with a link">Link</button><button type="button" data-dact="upload" data-key="${key}" title="Replace with an upload">Upload</button><button type="button" data-dact="remove" data-key="${key}" title="Remove">&#10005;</button></div></div>`
+                : `<div class="d-slot${sq ? ' is-sq' : ''}"><div class="d-slot-empty"><button type="button" data-dact="link" data-key="${key}">Paste link</button><button type="button" data-dact="upload" data-key="${key}">Upload</button></div></div>`;
+        }
+        const dTools = (list, k, n) => `<div class="d-row-tools">
+                ${k > 0 ? `<button class="icon-btn" type="button" data-dmv="-1" data-dl="${list}" data-k="${k}" title="Move up">&uarr;</button>` : ''}
+                ${k < n - 1 ? `<button class="icon-btn" type="button" data-dmv="1" data-dl="${list}" data-k="${k}" title="Move down">&darr;</button>` : ''}
+                <button class="icon-btn danger" type="button" data-drm="${list}" data-k="${k}" title="Remove">&#10005;</button></div>`;
+        function dStayInfo(it) {
+            const L = it.slug && lib[it.slug];
+            if (L) return { onSite: true, name: stripHtml(L.name), image: L.heroImage || '', src: 'On our website: uses its own page’s photo' };
+            const d = draftHotels.find(x => (it.slug && x.slug === it.slug) || normName(x.name) === normName(it.name || ''));
+            if (d) return { onSite: true, name: it.name || d.name, image: d.heroImage || '', src: 'Waiting for review: uses its draft page’s photo' };
+            return { onSite: false };
+        }
+        function renderDestEd() {
+            document.querySelectorAll('#destEditor .d-photos [data-slot]').forEach(el => { el.outerHTML = `<div data-slot="${el.dataset.slot}">${dSlot(el.dataset.slot)}</div>`; });
+            $('dTodoRows').innerHTML = dEd.todo.map((t, k) => `<div class="d-row">${dSlot('todo:' + k, true)}<textarea class="f-area" data-dl="todo" data-k="${k}" maxlength="140" placeholder="One sentence, 100 characters at most, e.g. Spend a day on a private boat to Capri.">${esc(t.text)}</textarea>${dTools('todo', k, dEd.todo.length)}</div>`).join('') || '<p class="f-hint" style="margin:0">None yet.</p>';
+            [['train', 'dTrainRows', '2 hours 30 minutes to Madrid.'], ['car', 'dCarRows', 'About 1 hour to Toledo.'], ['boat', 'dBoatRows', 'Private boat transfers link…']].forEach(([l, id, ph]) => {
+                $(id).innerHTML = dEd[l].map((t, k) => `<div class="d-row"><input class="f-input" data-dl="${l}" data-k="${k}" value="${esc(t)}" placeholder="${esc(ph)}">${dTools(l, k, dEd[l].length)}</div>`).join('');
+            });
+            $('dTemps').innerHTML = dEd.months.map((m, k) => `<div class="d-temp"><span>${m.m}</span><input inputmode="numeric" data-tm="${k}" data-tk="hi" value="${esc(m.hi)}" aria-label="${m.m} high"><input inputmode="numeric" data-tm="${k}" data-tk="lo" value="${esc(m.lo)}" aria-label="${m.m} low"></div>`).join('');
+            $('dStayRows').innerHTML = dEd.stays.map((it, k) => {
+                const info = dStayInfo(it);
+                const left = info.onSite
+                    ? `<div class="d-slot is-filled is-sq" style="width:92px;flex:none">${info.image ? `<img src="${esc(info.image)}" alt="" loading="lazy">` : ''}</div>`
+                    : `<div style="width:92px;flex:none">${dSlot('stay:' + k, true)}</div>`;
+                const nameField = info.onSite
+                    ? `<div class="d-stay-name">${esc(info.name)}</div><div class="d-stay-src">${esc(info.src)}</div>`
+                    : `<input class="f-input" data-sk="${k}" data-sf="name" value="${esc(it.name || '')}" placeholder="Official hotel name">`;
+                return `<div class="d-stay">${left}<div class="d-stay-main">${nameField}<input class="f-input" data-sk="${k}" data-sf="note" value="${esc(it.note || '')}" placeholder="Short note: location and one checked fact"></div>${dTools('stays', k, dEd.stays.length)}</div>`;
+            }).join('') || '<p class="f-hint" style="margin:0">No hotels yet.</p>';
+
+        }
+        // ── Checks: the rules, as quiet warnings while you edit ──
+        const D_BAD_PHOTO = /(ivisitanguilla|visit[a-z]*\.(com|org|es|it|gr|fr)|tourism|turismo|spain\.info|esmadrid|italia\.it|andalucia\.org|visitasevilla|simpleviewinc|aspen-chamber|wikimedia|wikipedia|instagram|cdninstagram|pinimg|pinterest)/i;
+        let dPhotoT = null;
+        const dSoonPhotos = () => { clearTimeout(dPhotoT); dPhotoT = setTimeout(() => { if (!$('destEditor').hidden) destFormChanged(); }, 400); };
+        function destChecks(e) {
+            const out = [], add = (sec, msg) => out.push({ sec, msg });
+            const texts = [['overview', e.overview], ['todo', e.highlights.join(' ')], ['getting', [e.byPlane].concat(e.byTrain, e.byCar, e.byFerry).join(' ')], ['tip', e.tip],
+                ['stays', ((e.stays || {}).items || []).map(i => i.note || '').join(' ')]];
+            texts.forEach(([sec, t]) => {
+                t = String(t || '');
+                if (/—/.test(t)) add(sec, 'Em dash: use a comma or full stop instead.');
+                if (/\b\d+\s*(hr|hrs|min|mins)\b/i.test(t)) add(sec, 'Write times out in full ("2 hours 30 minutes"), not hr/min.');
+                if (/best (time|weeks?|months?|season)/i.test(t)) add(sec, 'No "best time to go" advice: the temperature strip lets the client judge.');
+                if (/\$\s?\d|€\s?\d|£\s?\d/.test(t)) add(sec, 'No prices in a guide.');
+            });
+            if (/metro|subway|by bus|by train to/i.test(e.byPlane)) add('getting', 'By plane: no metro, airport train or bus. Clients arrive by private transfer.');
+            if (e.byPlane && !/^Fly into [A-Z]{3}\b/.test(e.byPlane)) add('getting', 'By plane should start "Fly into" and the airport code.');
+            const n = e.overview.length;
+            if (n && (n < 500 || n > 900)) add('overview', 'Overview is ' + n + ' characters; aim for 500 to 900.');
+            ((e.stays || {}).items || []).forEach(it => {
+                const nm = it.name || (lib[it.slug] && stripHtml(lib[it.slug].name)) || '';
+                if (nm && e.overview.toLowerCase().includes(nm.toLowerCase().split(',')[0])) add('overview', 'The overview names ' + nm + '. Hotels belong in Hotels we love.');
+            });
+            if (!e.heroImage) add('overview', 'No cover photo yet.');
+            if (e.gallery.length < 2) add('overview', 'Add both overview photos (a landscape and a luxury experience).');
+            [['overview', [e.heroImage].concat(e.gallery)], ['todo', e.highlightImages || []], ['stays', ((e.stays || {}).items || []).map(i => i.image || '')]].forEach(([sec, us]) =>
+                us.forEach(u => { if (u && D_BAD_PHOTO.test(u)) add(sec, 'A photo comes from a tourism board or social site: ' + u.replace(/^https?:\/\//, '').slice(0, 50) + '…'); }));
+            photoProblems([e.heroImage].concat(e.gallery), dSoonPhotos).forEach(p => add('overview', 'Photos: ' + p + '.'));
+            photoProblems(e.highlightImages || [], dSoonPhotos).forEach(p => add('todo', 'Photos: ' + p + '.'));
+            const allG = [e.heroImage].concat(e.gallery, e.highlightImages || []).filter(Boolean);
+            if (new Set(allG).size < allG.length) add('overview', 'The same photo is used twice in this guide.');
+            if (e.highlights.length && (e.highlights.length < 4 || e.highlights.length > 6)) add('todo', e.highlights.length + ' things to do; aim for 4 to 6.');
+            if (e.tip.length > 180) add('tip', 'Our tip is ' + e.tip.length + ' characters; 180 at most.');
+            e.highlights.forEach((h, k) => { if (h.length > 100) add('todo', 'Thing to do ' + (k + 1) + ' is ' + h.length + ' characters; captions are 100 at most.'); });
+            const imgs = (e.highlightImages || []).filter(Boolean).length;
+            if (imgs && imgs < e.highlights.length) add('todo', 'Photo cards show only when every thing to do has a photo (' + imgs + ' of ' + e.highlights.length + ').');
+            const st = ((e.stays || {}).items || []).length;
+            if (st && (st < 2 || st > 5)) add('stays', st + ' hotels; aim for 2 to 5.');
+            const mc = ((e.climate || {}).months || []).length;
+            if (mc && mc < 12) add('climate', 'Temperatures for ' + mc + ' of 12 months.');
+            return out;
+        }
+        function destFormChanged() {
+            const e = destEntryFromForm();
+            const checks = destChecks(e);
+            const bySec = {}; checks.forEach(c => { (bySec[c.sec] = bySec[c.sec] || []).push(c.msg); });
+            const meta = (id, txt, sec) => { const el = $(id); if (!el) return; el.textContent = bySec[sec] ? bySec[sec].length + ' to check' : txt; el.classList.toggle('is-warn', !!bySec[sec]); };
+            const n = e.overview.length;
+            $('dOverviewCount').textContent = n ? n + ' characters' : '';
+            meta('dMetaOverview', [e.heroImage ? 'cover' : '', e.gallery.length ? e.gallery.length + ' photos' : '', n ? n + ' characters' : ''].filter(Boolean).join(' · '), 'overview');
+            const ti = (e.highlightImages || []).filter(Boolean).length;
+            meta('dMetaTodo', e.highlights.length ? e.highlights.length + ' items' + (ti ? ' · ' + ti + ' photos' : '') : 'empty', 'todo');
+            meta('dMetaGetting', [e.byPlane ? 'plane' : '', e.byTrain.length ? e.byTrain.length + ' train' + (e.byTrain.length > 1 ? 's' : '') : '', e.byCar.length ? e.byCar.length + ' drive' + (e.byCar.length > 1 ? 's' : '') : '', e.byFerry.length ? 'boat' : ''].filter(Boolean).join(' · ') || 'empty', 'getting');
+            meta('dMetaTip', e.tip ? 'added' : 'empty', 'tip');
+            meta('dMetaClimate', ((e.climate || {}).months || []).length + ' of 12 months', 'climate');
+            meta('dMetaStays', e.stays ? e.stays.items.length + ' hotels' : 'none', 'stays');
+            const w = $('dWarn');
+            w.hidden = !checks.length;
+            if (tripMode && destDocId) { try { localStorage.setItem(TRIP_EDIT + destDocId, JSON.stringify({ entry: e, at: Date.now() })); } catch (err) {} }
+            w.innerHTML = checks.length ? '<strong>' + checks.length + ' thing' + (checks.length === 1 ? '' : 's') + ' to check against the rules</strong><ul>' + checks.map(c => `<li><button type="button" class="linkish" data-dopen="${c.sec}">${esc(c.msg)}</button></li>`).join('') + '</ul>' : '';
+            pushDestPreview();
+        }
+        function dOpenSec(sec) {
+            const el = document.querySelector('#destEditor [data-dsec="' + sec + '"]'); if (!el) return;
+            el.open = true; el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            el.classList.add('is-flash'); setTimeout(() => el.classList.remove('is-flash'), 1200);
+        }
+        // Click a part of the preview to open its fields.
+        function hookDestPreviewClicks() {
+            const f = $('destFrame'); let doc; try { doc = f.contentDocument; } catch (err) { return; }
+            if (!doc || doc.__dHooked) return; doc.__dHooked = true;
+            const st = doc.createElement('style');
+            st.textContent = '.prop-dest .prop-hotel-visual,.prop-dest-pair,.prop-hotel-desc,.prop-dest-highlights,.prop-hotel-getting,.prop-hotel-climate,.prop-hotel-stays{cursor:pointer}';
+            doc.head.appendChild(st);
+            doc.addEventListener('click', (ev) => {
+                const t = ev.target, c = (sel) => t.closest && t.closest(sel);
+                const sec = c('.prop-dest-highlights') ? 'todo' : c('.prop-dest-tip') ? 'tip' : c('.prop-hotel-getting') ? 'getting'
+                    : c('.prop-hotel-climate') ? 'climate' : c('.prop-hotel-stays') ? 'stays'
+                    : c('.prop-hotel-visual, .prop-dest-pair, .prop-hotel-desc, .prop-dest-label') ? 'overview' : '';
+                if (!sec) return;
+                if (c('.prop-stays-btn')) return;   // the rail's own arrows
+                ev.preventDefault(); dOpenSec(sec);
+            }, true);
+        }
+        function pushDestPreview() {
+            const f = $('destFrame');
+            if (!f || !f.contentWindow || $('destEditor').hidden) return;
+            hookDestPreviewClicks();
+            const e = destEntryFromForm();
+            f.contentWindow.postMessage({ type: 'wndr-draft', proposal: {
+                mode: 'lookbook', kicker: 'Destination guide', title: e.name || 'New destination', lede: '', dates: '',
+                hotels: [], destinations: [e], showHotels: false, standaloneGuide: true,
+                closeTitle: '', closeLede: '', signatureName: 'Wilson', signatureRole: 'Founder · Wander by Wilson'
+            } }, window.location.origin);
+        }
+        async function openDest(id) {
+            destDocId = id || null; destDoc = null;
+            let entry = {}, notes = '', status = 'draft';
+            if (id) {
+                try {
+                    const { doc } = await contentApi({ action: 'load', kind: 'destination', id });
+                    if (doc) { destDoc = doc; entry = doc.entry || {}; notes = doc.sourceNotes || ''; status = doc.status || 'in-review'; }
+                } catch (err) { /* may be a seed */ }
+                if (!destDoc) {
+                    const sd = DEST_SEEDS.find(d => d.slug === id);
+                    if (sd) { entry = seedEntry(sd); notes = sd.sourceNotes || ''; status = 'suggested'; }
+                }
+            }
+            $('destListWrap').hidden = true; $('destEditor').hidden = false;
+            $('dTitle').innerHTML = esc(entry.name || 'New destination') + ' <em>guide.</em>';
+            $('dStatusLine').textContent = status === 'ready' ? 'Approved: available to every lookbook.'
+                : status === 'suggested' ? 'Suggested draft from our blog guide. Check it, then Save or Approve.'
+                : 'Draft: check it, then Approve.';
+            $('dDelete').hidden = !destDoc;
+            if (!draftHotels.length) { try { await loadDraftHotels(); } catch (err) { /* list still works without drafts */ } }
+            // Start with the overview open and the rest folded, in page order.
+            document.querySelectorAll('#destEditor .dsec').forEach(el => { el.open = el.dataset.dsec === 'overview'; });
+            fillDestForm(entry, notes);
+            window.scrollTo(0, 0);
+        }
+        async function saveDest(status) {
+            const e = await resolveStays(destEntryFromForm());
+            if (!e.name) { toast('The destination needs a name.'); return; }
+            const id = destDocId || e.slug;
+            const doc = Object.assign({}, destDoc || {}, { slug: id, name: e.name, region: e.region, entry: Object.assign({}, e, { slug: id }),
+                sourceNotes: $('dSource').value.trim(), status: status || (destDoc && destDoc.status === 'ready' ? 'ready' : 'in-review') });
+            try {
+                const r = await contentApi({ action: 'save', kind: 'destination', id, doc,
+                    meta: { name: e.name, region: e.region, status: doc.status, heroImage: e.heroImage } });
+                destDocId = r.id || id; destDoc = doc;
+                $('dDelete').hidden = false;
+                $('dStatusLine').textContent = doc.status === 'ready' ? 'Approved: available to every lookbook.' : 'Draft saved. Approve it when it\u2019s ready.';
+                toast(doc.status === 'ready' ? 'Approved.' : 'Saved.');
+                loadDestIndex();
+            } catch (err) { toast('Couldn\u2019t save: ' + err.message); }
+        }
+        function destinationPrompt() {
+            return [
+                'You are helping Wander by Wilson, a luxury travel advisory (wanderbywilson.com), write a DESTINATION GUIDE for its client lookbooks. It is written once, reviewed by Wilson, and reused for every client going there.',
+                '',
+                R.blocks.destinationContent,
+                '',
+                'Hotels already on our website. For these, give the "slug" in "stays" and NO photo (we use the hotel page\u2019s):',
+                libraryListForPrompt(),
+                draftHotels.length ? 'Hotels waiting for review (also give their "slug" and NO photo):\n' + draftListForPrompt() : '',
+                'For any OTHER hotel in "stays", give one "image": a direct URL of its signature photo from the hotel\u2019s own site, Virtuoso or SmartFlyer.',
+                '',
+                'Reply with ONLY this JSON block:',
+                '{',
+                '  "slug": "lowercase-hyphenated name", "name": "Amalfi Coast", "region": "Campania, Italy",',
+                '  "heroImage": "direct image URL", "gallery": ["2 more direct image URLs"],',
+                '  "overview": "500\u2013900 characters", "highlightsLabel": "Things to do", "highlights": ["4\u20136 full sentences"], "highlightImages": ["one photo URL per highlight, same order"],',
+                '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",',
+                '  "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "57", "lo": "45"}]},',
+                '  "stays": {"items": [{"name": "official hotel name", "slug": "our library or review-queue slug, else empty", "note": "town, one short line", "image": "only for hotels we don\u2019t have"}]},',
+                '  "sourceNotes": "advisor-only: sources for facts, the climate source, photo sources, anything unverified"',
+                '}',
+                '',
+                '\u2014\u2014\u2014',
+                'Now write the destination guide for [DESTINATION]'
+            ].join('\n');
+        }
+        // Normalise a destination object from a Claude reply into a library entry.
+        function destFromReply(d) {
+            const slug = String(d.slug || normName(String(d.name || '')).replace(/\s+/g, '-')).slice(0, 60);
+            const months = (((d.climate || {}).months) || []).map(m => ({ m: String(m.m || ''), hi: String(m.hi || ''), lo: String(m.lo || '') })).filter(m => m.m);
+            const items = (((d.stays || {}).items) || []).map(it => {
+                const o = { name: String(it.name || ''), note: String(it.note || ''), slug: String(it.slug || '') };
+                if (it.image) o.image = String(it.image);
+                return o;
+            }).filter(it => it.name || it.slug);
+            return {
+                slug, name: String(d.name || slug), region: String(d.region || ''),
+                heroImage: String(d.heroImage || ''), gallery: (d.gallery || []).map(String).filter(Boolean),
+                overview: String(d.overview || ''), highlightsLabel: String(d.highlightsLabel || 'Things to do'),
+                highlights: (d.highlights || []).map(String).filter(Boolean),
+                highlightImages: (d.highlightImages || []).map(String),
+                gettingThere: String(d.gettingThere || ''), tip: String(d.tip || ''),
+                byPlane: String(d.byPlane || ''),
+                byTrain: (d.byTrain || []).map(String).filter(Boolean),
+                byCar: (d.byCar || []).map(String).filter(Boolean),
+                byFerry: (d.byFerry || []).map(String).filter(Boolean),
+                climate: months.length ? { label: 'Average temperatures', note: String((d.climate || {}).note || 'Average daily high and low in \u00b0F.'), months } : null,
+                stays: items.length ? { label: 'Hotels we love', items } : null
+            };
+        }
+        /* Lookbook import: library destinations come in from the library (no
+           research); new ones are saved as drafts for Wilson's review. */
+        async function importDestinations(p) {
+            const out = [];
+            let queued = 0;
+            await loadDestIndex();
+            for (const d of (p.destinations || [])) {
+                const slug = String(d.slug || '');
+                const known = slug && destIndex.find(x => x.id === slug);
+                if (known && !d.overview) {
+                    const e = await getDestEntry(slug);
+                    if (e) out.push(e);
+                    continue;
+                }
+                const e = await resolveStays(destFromReply(d));
+                out.push(e);
+                try {
+                    await contentApi({ action: 'save', kind: 'destination', id: e.slug, doc: {
+                        slug: e.slug, name: e.name, region: e.region, entry: e, status: 'in-review',
+                        sourceNotes: String(d.sourceNotes || '') + '\n\nStarted automatically from the lookbook "' + stripHtml($('fTitle').value) + '".'
+                    }, meta: { name: e.name, region: e.region, status: 'in-review', heroImage: e.heroImage } });
+                    queued++;
+                } catch (err) { /* keep going */ }
+            }
+            state.destinations = out;
+            state.showHotels = p.showHotels !== false && (p.hotels || []).length > 0;
+            renderDestPanel(); renderHotels(); syncCloseFields(); onChange();
+            if (queued) toast(queued + ' new destination guide' + (queued === 1 ? '' : 's') + ' saved as a draft for review.');
+        }
+        /* Route map: arriving/leaving points come from the guide library (any
+           guide with a map position), plus one label per leg between stops. */
+        function routePlaces() {
+            return DEST_SEEDS.filter(d => d.lat != null).map(d => ({ slug: d.slug, name: d.name, lat: d.lat, lng: d.lng }));
+        }
+        function routeIncluded() {
+            const R = state.route || {};
+            if (R.off) return false;
+            const n = (R.from ? 1 : 0) + (R.to ? 1 : 0) + (state.destinations || []).filter(d => !d.off && d.lat != null).length;
+            return n >= 2;
+        }
+        function routeForSave() {
+            const R = state.route || {};
+            const out = {}; if (R.from) out.from = R.from; if (R.to) out.to = R.to; if (R.off) out.off = true;
+            if ((R.legs || []).some(Boolean)) out.legs = R.legs;
+            if (R.notes && Object.values(R.notes).some(Boolean)) out.notes = R.notes;
+            return Object.keys(out).length ? out : null;
+        }
+        function renderRoute() {
+            const box = $('routeBox'); if (!box) return;
+            const shown = (state.destinations || []).filter(d => !d.off && d.lat != null);
+            box.hidden = !shown.length;
+            if (!shown.length) return;
+            const R = state.route = state.route || {};
+            $('rOn').checked = !R.off; $('routeFields').hidden = !!R.off;
+            const places = routePlaces();
+            const opts = (cur) => '<option value="">None</option>' + places.map(p => `<option value="${esc(p.slug)}"${cur && cur.slug === p.slug ? ' selected' : ''}>${esc(p.name)}</option>`).join('');
+            $('rFrom').innerHTML = opts(R.from); $('rTo').innerHTML = opts(R.to);
+            const names = (R.from ? [R.from.name] : []).concat(shown.map(d => stripHtml(d.name || d.slug)), R.to ? [R.to.name] : []);
+            R.legs = R.legs || []; R.notes = R.notes || {};
+            $('rNotes').innerHTML = '<div class="f-grid2">' + shown.map(d => `<div class="f-row"><label class="f-label">${esc(stripHtml(d.name || d.slug))}: dates or nights</label>
+                <input class="f-input" data-rnote="${esc(d.slug)}" value="${esc(R.notes[d.slug] || '')}" placeholder="e.g. Nov 7\u201311 or 4 nights"></div>`).join('') + '</div>';
+            $('rLegs').innerHTML = names.length < 2 ? '<p class="f-hint" style="margin:0">Add a second stop to draw a route.</p>'
+                : names.slice(0, -1).map((n, k) => `<div class="f-row"><label class="f-label">${esc(n)} \u2192 ${esc(names[k + 1])}</label>
+                    <input class="f-input" data-rleg="${k}" value="${esc(R.legs[k] || '')}" placeholder="e.g. ~2hr 40min by train"></div>`).join('');
+        }
+        function renderDestPanel() {
+            setTimeout(renderRoute, 0);
+            const picked = state.destinations || [];
+            $('destPicked').innerHTML = picked.length ? picked.map((d, i) => `
+                <div class="dest-card${d.off ? ' is-off' : ''}">
+                    <div class="dest-card-top">
+                        <label class="dest-show" title="Untick to leave this guide off the page; tick to bring it back"><input type="checkbox" data-destshow="${i}"${d.off ? '' : ' checked'}></label>
+                        <div class="dest-card-name">${esc(stripHtml(d.name || d.slug))}</div>
+                        <div class="dest-card-tools">
+                            ${i > 0 ? `<button class="icon-btn" data-destmove="-1" data-i="${i}" type="button" title="Move up">\u2191</button>` : ''}
+                            ${i < picked.length - 1 ? `<button class="icon-btn" data-destmove="1" data-i="${i}" type="button" title="Move down">\u2193</button>` : ''}
+                            <button class="icon-btn danger" data-destremove="${i}" type="button" title="Remove from this proposal (untick instead to keep it handy)">\u2715</button>
+                        </div>
+                    </div>
+                    <p class="dest-card-sub">${esc(d.region || '')}${d.off ? ' \u00b7 not shown on the page' : ''}${d.tripEdits ? ' \u00b7 <strong>edited for this trip</strong>' : ''}</p>
+                    <div class="dest-card-actions">
+                        <button class="linkish" data-destedit="${i}" type="button" title="Opens this proposal's copy in a new tab; the library guide stays as it is">Edit for this trip</button>
+                        ${d.tripEdits ? `<button type="button" class="linkish" data-destreset="${i}">Use the library version</button>` : ''}
+                        <label title="Off by default when the proposal has a route map"><input type="checkbox" data-destget="${i}"${(d.getting === 'show' || (d.getting !== 'hide' && !routeIncluded())) ? ' checked' : ''}> How to get there</label>
+                        <label title="Untick when the client has already chosen a hotel"><input type="checkbox" data-deststays="${i}"${d.hideStays ? '' : ' checked'}> Hotels we love</label>
+                    </div>
+                </div>`).join('') : '<p class="f-hint" style="margin:0 0 8px">No destination guides in this proposal yet.</p>';
+            const have = new Set(picked.map(d => d.slug));
+            $('fShowHotels').checked = state.showHotels !== false;
+        }
+        /* Search pickers: type to filter a long library (guides, hotels), arrow
+           keys or click to add. Matches every word against name and place,
+           ignoring accents, so "sevil", "andalu" or "spain" all find Seville. */
+        const pickNorm = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const pickTxt = (t) => { const x = document.createElement('textarea'); x.innerHTML = String(t || ''); return x.value; };
+        function searchPicker(input, getItems, onPick) {
+            const box = input.parentNode.querySelector('.pick-list');
+            let items = [], at = 0;
+            const draw = () => {
+                const words = pickNorm(input.value).split(/\s+/).filter(Boolean);
+                const all = getItems();
+                items = all.filter(it => { const hay = pickNorm(pickTxt(it.label + ' ' + (it.sub || '') + ' ' + (it.keys || ''))); return words.every(w => hay.includes(w)); }).slice(0, 8);
+                at = Math.min(at, Math.max(0, items.length - 1));
+                box.innerHTML = items.length
+                    ? items.map((it, k) => `<button type="button" class="pick-item${k === at ? ' is-on' : ''}" data-pk="${k}"><span>${esc(pickTxt(it.label))}</span>${it.sub ? `<small>${esc(pickTxt(it.sub))}</small>` : ''}${it.chip ? `<em>${esc(it.chip)}</em>` : ''}</button>`).join('')
+                        + (all.length > items.length && !words.length ? `<p class="pick-more">Type to search all ${all.length}</p>` : '')
+                    : `<p class="pick-more">${all.length ? 'No match. Try a region or country.' : 'Nothing left to add.'}</p>`;
+                box.hidden = false;
+            };
+            const choose = (k) => { const it = items[k]; if (!it) return; input.value = ''; box.hidden = true; onPick(it.id); };
+            input.addEventListener('focus', draw);
+            input.addEventListener('input', () => { at = 0; draw(); });
+            input.addEventListener('keydown', (e) => {
+                if (box.hidden) return;
+                if (e.key === 'ArrowDown') { at = Math.min(at + 1, items.length - 1); draw(); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { at = Math.max(at - 1, 0); draw(); e.preventDefault(); }
+                else if (e.key === 'Enter') { choose(at); e.preventDefault(); }
+                else if (e.key === 'Escape') { box.hidden = true; input.blur(); }
+            });
+            box.addEventListener('mousedown', (e) => { const b = e.target.closest('[data-pk]'); if (b) { e.preventDefault(); choose(+b.dataset.pk); } });
+            input.addEventListener('blur', () => setTimeout(() => { box.hidden = true; }, 120));
+        }
+        searchPicker($('destAddSel'), () => {
+            const have = new Set((state.destinations || []).map(d => d.slug));
+            return destIndex.filter(d => !have.has(d.id)).map(d => ({ id: d.id, label: d.name || d.id, sub: d.region || '', chip: d.status === 'ready' ? '' : 'Draft' }));
+        }, (slug) => addGuide(slug));
+        async function addGuide(slug) {
+            if (!slug) return;
+            const entry = await getDestEntry(slug);
+            if (!entry) { toast('Couldn\u2019t load that destination.'); return; }
+            state.destinations = (state.destinations || []).concat([entry]);
+            renderDestPanel(); renderHotels(); syncCloseFields(); onChange();
+        }
+        /* An unpublished draft keeps its guides current: each one is reloaded
+           from the library when the draft opens, so a re-picked photo or an
+           edit shows up without re-adding the guide. Published lookbooks keep
+           the copy they went out with. */
+        async function refreshGuides() {
+            const list = state.destinations || [];
+            if (!list.length) return;
+            const fresh = await Promise.all(list.map(d => d.slug ? getDestEntry(d.slug).catch(() => null) : null));
+            // Keep this proposal's own choices (e.g. Hotels we love switched off).
+            state.destinations = list.map((d, i) => (d.tripEdits || !fresh[i]) ? d
+                : Object.assign(fresh[i], d.hideStays ? { hideStays: true } : {}, d.off ? { off: true } : {}));
+            renderDestPanel();
+            renderHotels(); onChange();
+        }
+        $('fShowHotels').addEventListener('change', (e) => { state.showHotels = e.target.checked; syncCloseFields(); onChange(); });
+        $('rOn').addEventListener('change', (e) => {
+            state.route = state.route || {};
+            if (e.target.checked) delete state.route.off; else state.route.off = true;
+            renderDestPanel(); onChange();
+        });
+        ['rFrom', 'rTo'].forEach(id => $(id).addEventListener('change', (e) => {
+            const p = routePlaces().find(x => x.slug === e.target.value);
+            state.route = state.route || {}; state.route[id === 'rFrom' ? 'from' : 'to'] = p || null;
+            renderDestPanel(); onChange();
+        }));
+        $('rNotes').addEventListener('input', (e) => {
+            const t = e.target.closest('[data-rnote]'); if (!t) return;
+            state.route = state.route || {}; (state.route.notes = state.route.notes || {})[t.dataset.rnote] = t.value.trim();
+        });
+        $('rLegs').addEventListener('input', (e) => {
+            const t = e.target.closest('[data-rleg]'); if (!t) return;
+            state.route = state.route || {}; (state.route.legs = state.route.legs || [])[+t.dataset.rleg] = t.value.trim();
+        });
+        /* Guides-only lookbooks (no hotels shown) close on their own fixed lines;
+           the form shows whichever close the page will print. */
+        function syncCloseFields() {
+            const F = window.WBW_RULES.fixed;
+            const guidesOnly = state.mode === 'lookbook' && (state.destinations || []).filter(d => !d.off).length &&
+                (state.showHotels === false || !state.hotels.filter(h => !h.considered).length);
+            const ct = $('fCloseTitle');
+            const defaults = [F.closeTitleQuote, F.closeTitleLookbook, F.closeTitleGuides];
+            if (!ct.value.trim() || defaults.includes(ct.value))
+                ct.value = guidesOnly ? F.closeTitleGuides : (state.mode === 'lookbook' ? F.closeTitleLookbook : F.closeTitleQuote);
+            $('fCloseLede').value = guidesOnly ? F.closeLedeGuides : F.closeLede;
+        }
+        $('destPicked').addEventListener('change', (e) => {
+            const sh = e.target.closest('[data-destshow]');
+            if (sh) {
+                const d = (state.destinations || [])[+sh.dataset.destshow]; if (!d) return;
+                if (sh.checked) delete d.off; else d.off = true;
+                e.stopPropagation(); renderDestPanel(); renderHotels(); syncCloseFields(); onChange(); return;
+            }
+            const gt = e.target.closest('[data-destget]');
+            if (gt) {
+                const d = (state.destinations || [])[+gt.dataset.destget]; if (!d) return;
+                d.getting = gt.checked ? 'show' : 'hide';
+                e.stopPropagation(); onChange(); return;
+            }
+            const cb = e.target.closest('[data-deststays]'); if (!cb) return;
+            const d = (state.destinations || [])[+cb.dataset.deststays]; if (!d) return;
+            if (cb.checked) delete d.hideStays; else d.hideStays = true;
+            e.stopPropagation(); onChange();
+        });
+        $('destPicked').addEventListener('click', async (e) => {
+            const ed = e.target.closest('[data-destedit]'), rs = e.target.closest('[data-destreset]');
+            if (ed) {
+                const d = (state.destinations || [])[+ed.dataset.destedit]; if (!d) return;
+                try { localStorage.setItem(TRIP_KEY + d.slug, JSON.stringify({ entry: d, who: stripHtml($('fPrepared').value) })); } catch (err) {}
+                window.open(location.pathname + '?tripGuide=' + encodeURIComponent(d.slug), '_blank');
+                return;
+            }
+            if (rs) {
+                const i = +rs.dataset.destreset, d = (state.destinations || [])[i]; if (!d) return;
+                if (!confirm('Go back to the library version of ' + stripHtml(d.name || d.slug) + '? This trip\u2019s edits are discarded.')) return;
+                const fresh = await getDestEntry(d.slug); if (!fresh) { toast('Couldn\u2019t load the library guide.'); return; }
+                state.destinations[i] = Object.assign(fresh, d.hideStays ? { hideStays: true } : {}, d.off ? { off: true } : {});
+                renderDestPanel(); renderHotels(); onChange(); return;
+            }
+            const mv = e.target.closest('[data-destmove]'), rm = e.target.closest('[data-destremove]');
+            const list = state.destinations || [];
+            if (mv) { const i = +mv.dataset.i, j = i + (+mv.dataset.destmove); if (j < 0 || j >= list.length) return; [list[i], list[j]] = [list[j], list[i]]; }
+            else if (rm) list.splice(+rm.dataset.destremove, 1);
+            else return;
+            renderDestPanel(); renderHotels(); syncCloseFields(); onChange();
+        });
+        // Destination library screen
+        $('destList').addEventListener('click', (e) => { const b = e.target.closest('[data-opendest]'); if (b) openDest(b.dataset.opendest); });
+        $('destNew').addEventListener('click', () => openDest(null));
+        $('dBack').addEventListener('click', () => { if (tripMode) { window.close(); return; } showDestList(); });
+        $('dSave').addEventListener('click', () => saveDest());
+        $('dApprove').addEventListener('click', () => saveDest('ready'));
+        $('dDelete').addEventListener('click', async () => {
+            if (!destDocId || !destDoc) return;
+            if (!confirm('Delete this destination guide? Lookbooks already published keep their copy.')) return;
+            try { await contentApi({ action: 'delete', kind: 'destination', id: destDocId }); toast('Deleted.'); showDestList(); }
+            catch (err) { toast('Couldn\u2019t delete: ' + err.message); }
+        });
+        // Editor events (one delegated set for the whole form).
+        const dSoon = () => { clearTimeout(destFormChanged._t); destFormChanged._t = setTimeout(destFormChanged, 300); };
+        const dRedraw = () => { renderDestEd(); destFormChanged(); };
+        $('destEditor').addEventListener('input', (ev) => {
+            const t = ev.target;
+            if (t.dataset.dl) { const arr = t.dataset.dl === 'todo' ? null : dEd[t.dataset.dl]; if (arr) arr[+t.dataset.k] = t.value; else dEd.todo[+t.dataset.k].text = t.value; }
+            else if (t.dataset.tm) dEd.months[+t.dataset.tm][t.dataset.tk] = t.value.replace(/[^\d.-]/g, '');
+            else if (t.dataset.sk) dEd.stays[+t.dataset.sk][t.dataset.sf] = t.value;
+            else if (t.id === 'dPaste' || t.id === 'dFile') return;
+            dSoon();
+        });
+        $('destEditor').addEventListener('click', async (ev) => {
+            const t = ev.target.closest('button'); if (!t || !$('destEditor').contains(t)) return;
+            if (t.dataset.dopen) { dOpenSec(t.dataset.dopen); return; }
+            if (t.dataset.dact) {
+                const key = t.dataset.key, act = t.dataset.dact;
+                if (act === 'link') {
+                    const u = (window.prompt('Paste a direct image link for the ' + (D_SLOT_TIP[key] || 'photo') + ':', dSlotGet(key) || '') || '').trim();
+                    if (!u) return;
+                    if (!/^https?:\/\//.test(u)) { toast('That doesn’t look like an image link.'); return; }
+                    dSlotSet(key, u);
+                } else if (act === 'upload') { const f = $('dFile'); f.dataset.key = key; f.value = ''; f.click(); return; }
+                else if (act === 'remove') dSlotSet(key, '');
+                else if (act === 'swap') { const u = dSlotGet(key); dSlotSet(key, dEd.heroImage); dEd.heroImage = u; }
+                dRedraw(); return;
+            }
+            if (t.dataset.dadd) {
+                const l = t.dataset.dadd;
+                if (l === 'todo') dEd.todo.push({ text: '', image: '' });
+                else if (l === 'stay') dEd.stays.push({ name: '', note: '' });
+                else dEd[l].push('');
+                renderDestEd();
+                const rows = document.querySelectorAll(l === 'stay' ? '#dStayRows [data-sf="name"]' : '#destEditor [data-dl="' + l + '"]');
+                if (rows.length) rows[rows.length - 1].focus();
+                destFormChanged(); return;
+            }
+            if (t.dataset.dmv || t.dataset.drm) {
+                const l = t.dataset.dl || t.dataset.drm, arr = dEd[l], k = +t.dataset.k;
+                if (t.dataset.drm) arr.splice(k, 1);
+                else { const j = k + (+t.dataset.dmv); if (j < 0 || j >= arr.length) return; [arr[k], arr[j]] = [arr[j], arr[k]]; }
+                dRedraw();
+            }
+        });
+        $('dFile').addEventListener('change', async (ev) => {
+            const f = ev.target.files && ev.target.files[0], key = ev.target.dataset.key; if (!f || !key) return;
+            toast('Uploading…');
+            try {
+                const data = await shrinkImage(f);
+                const r = await api({ action: 'uploadImage', filename: f.name, data });
+                if (r && r.url) { dSlotSet(key, r.url); dRedraw(); toast('Photo uploaded.'); }
+            } catch (err) { toast('Couldn’t upload ' + f.name + '.'); }
+        });
+        searchPicker($('dStayAdd'), () => {
+            const have = new Set(dEd ? dEd.stays.map(it => it.slug).filter(Boolean) : []);
+            return Object.keys(lib).filter(sl => !have.has(sl)).map(sl => ({ id: sl, label: stripHtml(lib[sl].name), sub: stripHtml(lib[sl].location || '') }))
+                .sort((x, y) => x.label.localeCompare(y.label))
+                .concat(draftHotels.filter(d => d.slug && !have.has(d.slug)).map(d => ({ id: d.slug, label: d.name, sub: d.location || '', chip: 'In review' })));
+        }, (sl) => addStayHotel(sl));
+        function addStayHotel(sl) {
+            if (!sl) return;
+            const L = lib[sl], d = draftHotels.find(x => x.slug === sl);
+            dEd.stays.push({ slug: sl, name: L ? stripHtml(L.name) : (d ? d.name : sl), note: '' });
+            dRedraw();
+        }
+        $('dCopyPrompt').addEventListener('click', async () => {
+            await loadDraftHotels();
+            const text = destinationPrompt();
+            try { await navigator.clipboard.writeText(text); toast('Destination prompt copied. Paste it into your Claude and name the place.'); }
+            catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+        $('dPaste').addEventListener('input', (e) => {
+            const raw = e.target.value, a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return;
+            let d; try { d = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
+            const entry = destFromReply(d);
+            if (!destDocId) destDocId = entry.slug;
+            fillDestForm(entry, String(d.sourceNotes || ''));
+            $('dTitle').innerHTML = esc(entry.name) + ' <em>guide.</em>';
+            toast('Filled in from Claude\u2019s reply. Check it, then Save or Approve.');
+        });
 
         /* Hotels returned as {draftSlug}: researched already and waiting for
            review, so their content comes from the draft, not a new search. */
@@ -4384,10 +5591,18 @@
             if (a === -1 || b <= a) return;
             let p;
             try { p = JSON.parse(raw.slice(a, b + 1)); } catch (err) { return; }
-            if (!p || !Array.isArray(p.hotels) || !p.hotels.length) { toast('That JSON has no "hotels" — check the reply.'); return; }
+            const hasDest = p && Array.isArray(p.destinations) && p.destinations.length;
+            if (!p || !Array.isArray(p.hotels) || (!p.hotels.length && !hasDest)) { toast('That JSON has no "hotels" or "destinations". Check the reply.'); return; }
             if (!draftHotels.length) await loadDraftHotels();
             const { fromLibrary, custom, customSource, notes, partners } = buildProposalFromClaude(p);
             await fillFromDrafts();
+            if (hasDest || p.mode === 'lookbook') await importDestinations(p);
+            // Route map from Claude's reply: arrival point (a library guide) and leg labels.
+            if (p.route && typeof p.route === 'object') {
+                const places = routePlaces(), pick = (x) => x ? places.find(q => q.slug === String(x.slug || x)) || null : null;
+                state.route = { from: pick(p.route.from), to: pick(p.route.to), legs: (p.route.legs || []).map(String) };
+                renderDestPanel(); onChange();
+            }
             const box = $('pbResult');
             box.hidden = false;
             box.innerHTML = '<strong>Built ' + (fromLibrary.length + custom.length) + ' hotels.</strong> ' +
@@ -4452,14 +5667,16 @@
             const slug = card.dataset.slug;
             const rateFrom = lib[slug] && lib[slug].rateFrom ? 'From *' + stripHtml(lib[slug].rateFrom) + '*' : '';
             const libPerks = libPerksFor(slug);
-            state.hotels.push({ slug, room: '', rate: '', rateNote: '', flight: '', roomDesc: '', desc: '', gettingThere: '', considered: false, usePerks: !!libPerks, perksText: libPerks, useBooking: false, bookingUrl: '' });
+            state.hotels.push({ slug, room: '', rate: '', rateNote: '', flight: '', roomDesc: '', desc: '', gettingThere: '', climateText: '', climateLabel: '', climateNote: '', climateHighlight: '', staysText: '', staysLabel: '', staysNote: '', considered: false, usePerks: !!libPerks, perksText: libPerks, useBooking: false, bookingUrl: '' });
+            hOpen.add(state.hotels[state.hotels.length - 1]);
             renderHotels(); onChange();
             renderLibrary($('libSearch').value);
         });
         $('libSearch').addEventListener('input', () => renderLibrary($('libSearch').value));
         $('btnAddLibrary').addEventListener('click', () => { renderLibrary(''); $('libSearch').value = ''; $('libModal').classList.add('is-open'); });
         $('btnAddCustom').addEventListener('click', () => {
-            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', flight: '', roomDesc: '', gettingThere: '', considered: false, usePerks: false, perksText: '', useBooking: false, bookingUrl: '' });
+            state.hotels.push({ custom: true, name: '', location: '', heroImage: '', desc: '', galleryText: '', room: '', rate: '', rateNote: '', flight: '', roomDesc: '', gettingThere: '', climateText: '', climateLabel: '', climateNote: '', climateHighlight: '', staysText: '', staysLabel: '', staysNote: '', considered: false, usePerks: false, perksText: '', useBooking: false, bookingUrl: '' });
+            hOpen.add(state.hotels[state.hotels.length - 1]);
             renderHotels(); onChange();
         });
 
@@ -4630,7 +5847,7 @@
 
         /* ── New / load / list ────────────────────────────────────────── */
         function resetForm() {
-            state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', hotels: [] };
+            state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', hotels: [], destinations: [], showHotels: true };
             setFields({});
             applyDefaults();
             $('metaWarn').hidden = true; $('metaWarn').innerHTML = '';
@@ -4666,10 +5883,21 @@
                         socialHook: h.socialHook || '',
                         bookingPartners: h.bookingPartners || '',
                         amenitiesNote: h.amenitiesNote || '',
+                        partnerPerksText: partnerPerksToText(h.partnerPerks),
                         advisorNote: h.advisorNote || '',
                         gettingThere: h.gettingThere || '',
+                        climateText: (((h.climate || {}).months) || []).map(function (m) { return m.m + ' ' + m.hi + ' ' + m.lo; }).join('\n'),
+                        climateLabel: String((h.climate || {}).label || ''),
+                        climateNote: String((h.climate || {}).note || ''),
+                        climateHighlight: (((h.climate || {}).highlight) || []).join(', '),
+                        staysText: (((h.stays || {}).items) || []).map(function (it) {
+                            return [it.name || '', it.note || '', it.image || '', it.url || ''].join(' | ').replace(/(\s*\|)+\s*$/, '');
+                        }).join('\n'),
+                        staysLabel: String((h.stays || {}).label || ''),
+                        staysNote: String((h.stays || {}).note || ''),
                         considered: !!h.considered,
                         consideredWhy: h.consideredWhy || '',
+                        destination: h.destination || '',
                         room: h.room || '',
                         rate: unEm(h.rate || ''),
                         rateNote: h.rateNote || '',
@@ -4701,8 +5929,13 @@
                 fSigName: P.signatureName || DEFAULTS.sigName,
                 fSigRole: P.signatureRole || DEFAULTS.sigRole
             });
+            state.destinations = Array.isArray(P.destinations) ? P.destinations : [];
+            state.showHotels = P.showHotels !== false;
+            state.route = P.route || null;
+            setMode(state.mode);
             renderHotels();
             $('statusText').textContent = 'Editing: ' + id;
+            $('pSecClaude').open = false;
             $('pubBar').classList.remove('is-open');
             pushPreview();
         }
@@ -5059,7 +6292,7 @@
                 .filter(s => !/(pric|rate|tax|fee|per night|per person|subject to change|confirm)/i.test(s))
                 .join('\n');
             $('sCtaTitle').value = 'Which one would you pick?';
-            $('sCtaSub').value = 'Tell us the occasion and we’ll curate a shortlist tailored to you, with preferred-partner amenities wherever they apply.';
+            $('sCtaSub').value = 'Tell us the occasion and we’ll curate a shortlist tailored to you, with Wander by Wilson Exclusives wherever they apply.';
             const wrap = $('sHotelLines');
             wrap.innerHTML = '<p class="f-hint" style="margin:0 0 10px">Hotel lines: what makes the property unique + a signature room or feature (never a client\u2019s quoted room or price). e.g. “Mediterranean soul in the Caribbean — and the Oceanfront One Bedroom has its own private pool over the sea.”</p>' + hotels.map((h, i) => `
                 <div class="f-row">
@@ -5359,7 +6592,7 @@
                 'The shortlist:',
                 ...hotels.map((h, i) => `0${i + 1} ${plain(h.name)} — ${plain(h.location)}`),
                 '',
-                'Preferred-partner amenities such as upgrades, resort credits and daily breakfast are included wherever they apply, at no additional cost.',
+                'Wander by Wilson Exclusives such as upgrades, resort credits and daily breakfast are included wherever they apply, at no additional cost.',
                 '',
                 'Which one would you pick? 👇',
                 '',
@@ -5475,7 +6708,7 @@
             window.WBW_RULES.blocks.publicPricing,
             '2. NEVER name a client or use identifying details about one.',
             '3. NEVER mention "a personalized welcome note from your advisor" — that amenity is meant to be a surprise.',
-            '4. Preferred-partner amenities may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out — "included at no additional cost".',
+            '4. Wander by Wilson Exclusives (our preferred-partner amenities) may be described generically: upgrades, resort credits, daily breakfast, early check-in/late check-out — "included at no additional cost".',
             '',
             'The user will tell you the topic below this prompt. Reply with ONLY this JSON block:',
             '',
@@ -5488,7 +6721,7 @@
             '  ],',
             '  "ctaTitle": "closing slide headline, e.g. Which one would you pick?",',
             '  "ctaSub": "closing line — invite them to reach out. Use curation language (we curate / tailored to you), never \\u201cwe design the shortlist\\u201d.",',
-            '  "caption": "the Instagram caption: hook, then the list, then a line on preferred-partner amenities (described generically, never promised on every booking), then a question, then 5\u20138 hashtags on the last line."',
+            '  "caption": "the Instagram caption: hook, then the list, then a line on Wander by Wilson Exclusives (described generically, never promised on every booking), then a question, then 5\u20138 hashtags on the last line."',
             '}',
             '',
             window.WBW_RULES.blocks.socialCounts,
@@ -5499,7 +6732,7 @@
             'PHOTOS — do this work, do not skip it. A carousel without photos is unusable.',
             'For EVERY slide, browse to the hotel\'s (or destination\'s) OWN official website and return a direct image URL in "imageUrl" — a link ending .jpg/.jpeg/.webp/.png that loads the image by itself. On most hotel sites you can find these in the gallery or press/media page; many run WordPress and expose /wp-json/wp/v2/media, which lists full-size image URLs. Verify the URL actually resolves to an image before returning it.',
             'Source order: 1) the hotel\'s own website or official media library — always preferred; 2) the hotel\'s Virtuoso listing; 3) an official tourism board for a destination (not a hotel) slide. NEVER use Instagram, Pinterest, TripAdvisor, stock-photo sites, Google Images thumbnails, or a photographer\'s portfolio — we only publish photography the property itself distributes.',
-            'Choose the shot the way we choose photos for our hotel pages: the property\'s signature postcard view, a sense-of-place scene, or the actual room being described. Daylight or golden hour ONLY.',
+            'Choose the shot the way we choose hotel heroes (Wilson, 2026-10-03): the one image that shows why this hotel is special, usually the building in its setting or its signature view; or a sense-of-place scene, or the actual room being described. Daylight, golden hour or blue hour. Not an interior, pool deck or restaurant unless that is what the hotel is famous for.',
             'NEVER: plated-food shots · night/after-dark shots · bathroom-only room shots · NO PEOPLE AS THE SUBJECT \u2014 no couples, portraits, models, wedding or lifestyle shots where a person is what the photo is about. A few small figures at human scale in a wide view are fine; anyone recognisable, posed, or dominating the frame is not · dark or flat interiors · renders when real photos exist · near-duplicates of the same angle.',
             'If — after genuinely looking — you cannot find a compliant official photo for a slide, return "" for that imageUrl and add a line AFTER the JSON naming which slides need a photo and where to look. Never invent or guess a URL.'
         ].join('\n');
@@ -5654,7 +6887,7 @@
                 briefKicker: 'Why we love it',
                 slides,
                 ctaTitle: 'Want this one?',
-                ctaSub: 'Tell us the occasion and we’ll curate a shortlist tailored to you, with preferred-partner amenities wherever they apply.',
+                ctaSub: 'Tell us the occasion and we’ll curate a shortlist tailored to you, with Wander by Wilson Exclusives wherever they apply.',
                 caption: ''
             };
         }
@@ -6151,6 +7384,31 @@
             if (s.classList.contains('show-preview')) pushPreview();
         });
 
+        window.addEventListener('storage', (ev) => {
+            if (tripMode || !ev.key || ev.key.indexOf(TRIP_EDIT) !== 0 || !ev.newValue) return;
+            let p; try { p = JSON.parse(ev.newValue); } catch (err) { return; }
+            const slug = ev.key.slice(TRIP_EDIT.length);
+            const i = (state.destinations || []).findIndex(d => d.slug === slug);
+            if (i < 0 || !p || !p.entry) return;
+            const old = state.destinations[i];
+            state.destinations[i] = Object.assign({}, p.entry, { slug, tripEdits: true }, old.hideStays ? { hideStays: true } : {}, old.off ? { off: true } : {});
+            renderDestPanel(); renderHotels(); onChange();
+        });
+        async function openTripGuide(slug) {
+            let src = null; try { src = JSON.parse(localStorage.getItem(TRIP_KEY + slug) || 'null'); } catch (err) {}
+            if (!src || !src.entry) { toast('Open this from the proposal\u2019s Destination guides.'); return; }
+            showView('destinations');
+            destDocId = slug; destDoc = null;
+            $('destListWrap').hidden = true; $('destEditor').hidden = false;
+            $('dTitle').innerHTML = esc(src.entry.name || slug) + ' <em>for this trip.</em>';
+            $('dStatusLine').textContent = 'Editing ' + (src.who ? src.who + '\u2019s' : 'this proposal\u2019s') + ' copy only. Changes appear in the proposal as you type; the library guide stays as it is.';
+            ['dSave', 'dApprove', 'dDelete'].forEach(id => { $(id).hidden = true; });
+            $('dBack').textContent = 'Done';
+            document.querySelectorAll('#destEditor .dsec').forEach(el => { el.open = el.dataset.dsec === 'getting'; if (el.dataset.dsec === 'notes' || el.dataset.dsec === 'claude') el.hidden = true; });
+            if (!draftHotels.length) { try { await loadDraftHotels(); } catch (err) {} }
+            fillDestForm(src.entry, '');
+        }
+
         /* ── Boot: restore draft or start fresh ───────────────────────── */
         applyDefaults();
         let draft = null;
@@ -6159,11 +7417,22 @@
             state.id = draft.id || null;
             state.hotels = draft.hotels;
             setFields(Object.assign({}, fieldValues(), draft.fields, { fCloseLede: window.WBW_RULES.fixed.closeLede }));
+            state.destinations = draft.destinations || [];
+            state.showHotels = draft.showHotels !== false;
+            state.route = draft.route || null;
             setMode(draft.mode || 'quote');
             if (state.id) $('statusText').textContent = 'Editing: ' + state.id;
             else $('statusText').textContent = 'Unpublished draft restored. Use New proposal to start fresh';
         }
         renderHotels();
+        // A proposal already under way opens on its content, not the Claude box.
+        if (state.hotels.length) $('pSecClaude').open = false;
+        updatePMeta();
+        loadDestIndex().then(() => {
+            if (state.mode === 'lookbook') renderDestPanel();
+            if (tripMode) { openTripGuide(tripMode.slug); return; }
+            if (draft && !draft.id) refreshGuides();
+        });
     })();
     </script>
 </body>

@@ -51,7 +51,7 @@ function randomSuffix() {
 // comes off here: notes, booking routes, amenity comparisons, the social line,
 // and the hotels we set aside ("also considered" is internal only). The Studio
 // loads the full record through the passcode-gated 'load' action instead.
-const ADVISOR_ONLY = ['advisorNote', 'bookingPartners', 'amenitiesNote', 'whyRecommended',
+const ADVISOR_ONLY = ['advisorNote', 'bookingPartners', 'amenitiesNote', 'partnerPerks', 'whyRecommended',
     'socialHook', 'considered', 'consideredWhy'];
 function publicView(p) {
     if (!p || !Array.isArray(p.hotels)) return p;
