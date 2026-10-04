@@ -528,7 +528,25 @@ window.DESTINATION_SEEDS = [
    "https://explorajourneys.com/content/dam/explora/pim/destex/med/es/esbcn/esbcn013/ESBCN013.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg"
   ],
   "lat": 41.387,
-  "lng": 2.169
+  "lng": 2.169,
+  "places": {
+   "Madrid": [
+    40.4168,
+    -3.7038
+   ],
+   "Valencia": [
+    39.4699,
+    -0.3763
+   ],
+   "Girona": [
+    41.9794,
+    2.8214
+   ],
+   "Montserrat": [
+    41.5933,
+    1.8375
+   ]
+  }
  },
  {
   "slug": "los-cabos",
@@ -794,7 +812,29 @@ window.DESTINATION_SEEDS = [
    "https://images.unsplash.com/photo-1643370631350-689797067186?w=2000&q=80&fm=jpg"
   ],
   "lat": 40.417,
-  "lng": -3.704
+  "lng": -3.704,
+  "places": {
+   "Barcelona": [
+    41.3874,
+    2.1686
+   ],
+   "Seville": [
+    37.3891,
+    -5.9845
+   ],
+   "Valencia": [
+    39.4699,
+    -0.3763
+   ],
+   "Toledo": [
+    39.8628,
+    -4.0273
+   ],
+   "Segovia": [
+    40.9429,
+    -4.1088
+   ]
+  }
  },
  {
   "slug": "seville",
@@ -824,9 +864,12 @@ window.DESTINATION_SEEDS = [
   "byCar": [
    "About 1 hour 45 minutes to Ronda.",
    "About 2 hours 45 minutes to Granada.",
-   "About 1 hour 30 minutes to Cádiz."
+   "About 1 hour 30 minutes to Cádiz.",
+   "About 2 hours 30 minutes to Lagos (Algarve, Portugal).",
+   "About 3 hours 15 minutes to the Alentejo (São Lourenço do Barrocal).",
+   "About 2 hours 30 minutes to Marbella."
   ],
-  "tip": "At the Real Alcázar, add the separate ticket for the Cuarto Real Alto to see the royal rooms upstairs; the general ticket covers the ground floor and gardens.",
+  "tip": "Let our team arrange a private visit to the Real Alcázar after it closes to the public, with the palaces and gardens to yourselves.",
   "climate": {
    "label": "Average temperatures",
    "months": [
@@ -919,6 +962,40 @@ window.DESTINATION_SEEDS = [
    "https://setasdesevilla.com/documents/174622316/174625222/Marcelo+del+Pozo+NUESTRAS+EXPERIENCIAS+1.jpg/f60116c7-9de4-b92f-c0ef-6c050eed6ab8?t=1783686548909"
   ],
   "lat": 37.389,
-  "lng": -5.984
+  "lng": -5.984,
+  "places": {
+   "Madrid": [
+    40.4168,
+    -3.7038
+   ],
+   "Córdoba": [
+    37.8882,
+    -4.7794
+   ],
+   "Ronda": [
+    36.7423,
+    -5.1671
+   ],
+   "Granada": [
+    37.1773,
+    -3.5986
+   ],
+   "Cádiz": [
+    36.5271,
+    -6.2886
+   ],
+   "Lagos": [
+    37.1028,
+    -8.673
+   ],
+   "Alentejo": [
+    38.404,
+    -7.417
+   ],
+   "Marbella": [
+    36.5101,
+    -4.8825
+   ]
+  }
  }
 ];

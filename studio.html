@@ -1858,7 +1858,7 @@
 
     <script src="/data.js?v=93"></script>
     <script src="/rules.js?v=1"></script>
-    <script src="/destinations-seed.js?v=2"></script>
+    <script src="/destinations-seed.js?v=3"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
          so probe downwards until one loads instead of hard-coding it. -->
@@ -4402,7 +4402,7 @@
                 '  "route": { "from": "OPTIONAL: slug of a guide on our list for where the client arrives from (e.g. barcelona), or omit", "legs": ["one short label per leg in trip order, e.g. ~4hr 20min by train (any rail is just train; ~xhr xmin; by train, by car, by boat or flight)"] },',
                 '  "destinations": [',
                 '    { "slug": "ONLY for a destination on our list above; then omit the other fields" },',
-                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
+                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "lat": 0, "lng": 0, "places": {"Place as written in the line": [0, 0]}, "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
                 '  ],',
                 '  "preparedFor": "how to address them, matching how they sign their emails, e.g. Amy & Jon",',
                 '  "title": "the headline, e.g. Somewhere in the *Caribbean.* (wrap ONE word in *asterisks* for italic gold)",',
@@ -5032,6 +5032,7 @@
             e = e || {};
             const ms = (e.climate || {}).months || [];
             return {
+                lat: e.lat != null ? e.lat : null, lng: e.lng != null ? e.lng : null, places: cleanPlaces(e.places),
                 heroImage: e.heroImage || '',
                 gallery: (e.gallery || []).slice(),
                 todo: (e.highlights || []).map((t, k) => ({ text: t, image: (e.highlightImages || [])[k] || '' })),
@@ -5072,6 +5073,9 @@
                 stays: stays.length ? { label: 'Hotels we love', items: stays } : null
             };
             if (todo.some(t => t.image)) e.highlightImages = todo.map(t => t.image || '');
+            // Not edited here, so carried over from the loaded guide (map positions).
+            if (dEd.lat != null) { e.lat = dEd.lat; e.lng = dEd.lng; }
+            if (dEd.places && Object.keys(dEd.places).length) e.places = dEd.places;
             return e;
         }
         function fillDestForm(e, sourceNotes) {
@@ -5292,7 +5296,7 @@
                 '  "slug": "lowercase-hyphenated name", "name": "Amalfi Coast", "region": "Campania, Italy",',
                 '  "heroImage": "direct image URL", "gallery": ["2 more direct image URLs"],',
                 '  "overview": "500\u2013900 characters", "highlightsLabel": "Things to do", "highlights": ["4\u20136 full sentences"], "highlightImages": ["one photo URL per highlight, same order"],',
-                '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",',
+                '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",\n  "lat": 40.4168, "lng": -3.7038, "places": {"Toledo": [39.8628, -4.0273], "Madrid": [40.4168, -3.7038]},',
                 '  "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "57", "lo": "45"}]},',
                 '  "stays": {"items": [{"name": "official hotel name", "slug": "our library or review-queue slug, else empty", "note": "town, one short line", "image": "only for hotels we don\u2019t have"}]},',
                 '  "sourceNotes": "advisor-only: sources for facts, the climate source, photo sources, anything unverified"',
@@ -5303,6 +5307,15 @@
             ].join('\n');
         }
         // Normalise a destination object from a Claude reply into a library entry.
+        // Map positions of the places named in How to get there: {"Madrid": [lat, lng]}.
+        function cleanPlaces(p) {
+            const out = {};
+            Object.entries(p && typeof p === 'object' ? p : {}).forEach(([k, v]) => {
+                const a = Array.isArray(v) ? v.map(parseFloat) : [];
+                if (k && a.length === 2 && a.every(isFinite)) out[String(k)] = a;
+            });
+            return out;
+        }
         function destFromReply(d) {
             const slug = String(d.slug || normName(String(d.name || '')).replace(/\s+/g, '-')).slice(0, 60);
             const months = (((d.climate || {}).months) || []).map(m => ({ m: String(m.m || ''), hi: String(m.hi || ''), lo: String(m.lo || '') })).filter(m => m.m);
@@ -5326,7 +5339,8 @@
                 stays: items.length ? { label: 'Hotels we love', items } : null,
                 // Map position for the route map (dropped on import before 2026-10-03).
                 lat: isFinite(parseFloat(d.lat)) ? parseFloat(d.lat) : null,
-                lng: isFinite(parseFloat(d.lng)) ? parseFloat(d.lng) : null
+                lng: isFinite(parseFloat(d.lng)) ? parseFloat(d.lng) : null,
+                places: cleanPlaces(d.places)
             };
         }
         /* Lookbook import: library destinations come in from the library (no

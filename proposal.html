@@ -833,6 +833,31 @@
         .rt-icon svg { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; display: block; }
         @media (max-width: 640px) { .rt-stop { font-size: 17px; } .rt-strip li + li::before { width: 14px; margin: 0 7px; } .rt-name { font-size: 30px; } }
         @media print { .prop-route { padding: 6px 0 14px; } .prop-route-map { max-width: 80%; } }
+        /* How to get there as a map (mockup 2026-10-03): the map carries the places,
+           the key underneath carries the times, grouped by how you travel. */
+        .gt-map { position: relative; aspect-ratio: 760 / 520; margin: 14px 0 6px 18px; }
+        .gt-map svg { width: 100%; height: auto; display: block; }
+        .gt-line { stroke: var(--gold); stroke-width: 1.8; stroke-linecap: round; }
+        .gt-line.gt-train { stroke-dasharray: 1 6; }
+        .gt-line.gt-car { stroke-dasharray: 9 6; stroke-width: 1.4; }
+        .gt-line.gt-boat { stroke-dasharray: 2 4 9 4; }
+        .gt-dot { fill: #FCFAF6; stroke: var(--gold); stroke-width: 2; }
+        .gt-lab { position: absolute; white-space: nowrap; font-family: var(--font-sans); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(30, 53, 82, 0.78);
+            text-shadow: 0 0 3px #FCFAF6, 0 0 3px #FCFAF6, 0 0 6px #FCFAF6; pointer-events: none; }
+        .gt-lab-r { transform: translate(12px, -50%); }
+        .gt-lab-l { transform: translate(calc(-100% - 12px), -50%); }
+        .gt-lab-t { transform: translate(-50%, calc(-100% - 10px)); }
+        .gt-lab-b { transform: translate(-50%, 10px); }
+        .gt-lab-c { font-family: var(--font-serif); font-size: 19px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink); }
+        .gt-lab-c.gt-lab-r { transform: translate(18px, -50%); }
+        .gt-lab-c.gt-lab-l { transform: translate(calc(-100% - 18px), -50%); }
+        .gt-head { display: flex; align-items: center; gap: 12px; }
+        .gt-swatch { display: inline-block; width: 34px; border-top: 2px dotted var(--gold); }
+        .gt-sw-car { border-top: 2px dashed var(--gold); }
+        .gt-rows { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); column-gap: 18px; }
+        .gt-t { margin-left: 10px; color: rgba(30, 53, 82, 0.6); }
+        .gt-d { margin-left: 6px; font-size: 0.82em; color: rgba(30, 53, 82, 0.6); }
+        .gt-d::before { content: '('; } .gt-d::after { content: ')'; }
         /* Folding guide sections: the summary is the section header (navy caps,
            gold +/−); the inner block's own header and top rule are hidden. */
         .prop-fold { border-top: 1px solid rgba(195, 162, 106, 0.36); margin-top: 28px; overflow-anchor: none; }
@@ -1505,8 +1530,22 @@
                 // With a route map on the page, a guide's How to get there is off by
                 // default; the Studio can switch it back on per guide (d.getting).
                 const showGetting = d.getting === 'show' || (d.getting !== 'hide' && !window.__routeOn);
-                const getting = showGetting && (d.gettingThere || lines)
-                    ? `<div class="prop-hotel-getting"><strong>How to get there</strong>${d.gettingThere ? `<span>${d.gettingThere}</span>` : ''}${lines}</div>` : '';
+                // With map positions for the places, How to get there becomes a map:
+                // the guide's own place in the middle, a line out to each place with
+                // its mode and time, and a short key underneath (MOCKUP 2026-10-03).
+                const gt = gettingMapData(d);
+                const MODE_LABEL = { train: 'By train', car: 'By car', boat: 'By boat' };
+                const gtBody = gt
+                    ? block('By plane', d.byPlane ? [d.byPlane] : []) +
+                      `<div class="gt-map" data-gt='${JSON.stringify(gt).replace(/'/g, '&#39;')}'></div>` +
+                      ['train', 'car', 'boat'].map(mode => {
+                          const rows = gt.places.filter(x => x.mode === mode);
+                          return rows.length ? `<p class="prop-dest-train-head gt-head">${MODE_LABEL[mode]}<span class="gt-swatch gt-sw-${mode}"></span></p>` +
+                              `<ul class="prop-dest-trains gt-rows">${rows.map(x => `<li>${x.name}${x.detail ? `<span class="gt-d">${x.detail}</span>` : ''}<span class="gt-t">${x.time}</span></li>`).join('')}</ul>` : '';
+                      }).join('')
+                    : lines;
+                const getting = showGetting && (d.gettingThere || gtBody)
+                    ? `<div class="prop-hotel-getting"><strong>How to get there</strong>${d.gettingThere ? `<span>${d.gettingThere}</span>` : ''}${gtBody}</div>` : '';
                 const tip = d.tip
                     ? `<aside class="property-agent-tip prop-dest-tip"><p class="agent-tip-eyebrow">Our tip</p><blockquote class="agent-tip-quote">${d.tip}</blockquote></aside>` : '';
                 const pin = '<svg width="12" height="15" viewBox="0 0 12 15" fill="none" aria-hidden="true"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14Z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="5.8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>';
@@ -1707,6 +1746,90 @@
             }
             function loadScript(src) {
                 return new Promise((ok, no) => { if (document.querySelector('script[src="' + src + '"]')) return ok(); const t = document.createElement('script'); t.src = src; t.onload = ok; t.onerror = no; document.head.appendChild(t); });
+            }
+            /* How to get there, as a map (Wilson, 2026-10-03). Each By train / By car /
+               By boat line reads "2 hours 30 minutes to Madrid." or "... to Lagos
+               (Algarve, Portugal)."; the guide's "places" holds each place's map
+               position, keyed by the name as written. Two or more places draw a map. */
+            function gettingMapData(d) {
+                if (d.lat == null || d.lng == null || !d.places) return null;
+                const pos = {}; Object.keys(d.places).forEach(k => { pos[k.toLowerCase()] = d.places[k]; });
+                const places = [];
+                [['byTrain', 'train'], ['byCar', 'car'], ['byFerry', 'boat']].forEach(([k, mode]) => (d[k] || []).forEach(line => {
+                    const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
+                    if (!m) return;
+                    const name = m[2].trim(), at = pos[name.toLowerCase()] || pos[('the ' + name).toLowerCase()];
+                    if (!at) return;
+                    places.push({ name, detail: (m[3] || '').trim(), lat: +at[0], lng: +at[1], mode, time: shortLeg(m[1]) });
+                }));
+                return places.length >= 2 ? { center: { name: decode(strip(d.name || '')), lat: +d.lat, lng: +d.lng }, places } : null;
+            }
+            // Labels of nearby places can overlap: nudge later ones down (or up) until clear.
+            function unclash(box) {
+                const labs = [...box.querySelectorAll('.gt-lab')];
+                const c = labs.pop(); labs.unshift(c); // the centre's name never moves
+                for (let pass = 0; pass < 6; pass++) {
+                    let moved = false;
+                    labs.forEach((a, i) => {
+                        if (!i) return;
+                        const ra = a.getBoundingClientRect();
+                        if (!ra.width) return;
+                        labs.slice(0, i).forEach(b => {
+                            const rb = b.getBoundingClientRect();
+                            if (ra.left < rb.right && ra.right > rb.left && ra.top < rb.bottom && ra.bottom > rb.top) {
+                                const down = ra.top + ra.height / 2 >= rb.top + rb.height / 2;
+                                const dy = down ? rb.bottom - ra.top + 2 : -(ra.bottom - rb.top + 2);
+                                a.style.marginTop = ((parseFloat(a.style.marginTop) || 0) + dy) + 'px'; moved = true;
+                            }
+                        });
+                    });
+                    if (!moved) break;
+                }
+            }
+            async function drawGettingMaps() {
+                const boxes = [...document.querySelectorAll('.gt-map')]; if (!boxes.length) return;
+                try {
+                    await loadScript('https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js');
+                    await loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js');
+                    if (!worldShapes) worldShapes = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(r => r.json());
+                } catch (e) { return; }
+                const d3 = window.d3, tj = window.topojson;
+                const coast = tj.merge(worldShapes, worldShapes.objects.countries.geometries);
+                const borders = tj.mesh(worldShapes, worldShapes.objects.countries, (a, b) => a !== b);
+                boxes.forEach((box, bi) => {
+                    let g; try { g = JSON.parse(box.dataset.gt); } catch (e) { return; }
+                    const W = 760, H = 520, all = [g.center].concat(g.places);
+                    const lats = all.map(p => p.lat), lngs = all.map(p => p.lng);
+                    const span = Math.max(Math.max(...lats) - Math.min(...lats), (Math.max(...lngs) - Math.min(...lngs)) * 0.75, 1.5);
+                    const pad = span * 0.22;
+                    const frame = { type: 'MultiPoint', coordinates: [[Math.min(...lngs) - pad * 1.6, Math.min(...lats) - pad], [Math.max(...lngs) + pad * 1.6, Math.max(...lats) + pad]] };
+                    const proj = d3.geoMercator().fitExtent([[90, 50], [W - 90, H - 50]], frame), path = d3.geoPath(proj);
+                    const [cx, cy] = proj([g.center.lng, g.center.lat]);
+                    let lines = '', dots = '', labels = '';
+                    const pct = (x, y) => `left:${(x / W * 100).toFixed(2)}%;top:${(y / H * 100).toFixed(2)}%`;
+                    g.places.forEach(p => {
+                        const [x, y] = proj([p.lng, p.lat]);
+                        lines += `<line class="gt-line gt-${p.mode}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
+                        dots += `<circle class="gt-dot" cx="${x}" cy="${y}" r="6"/>`;
+                        // Name on the far side of the place, away from the centre.
+                        const dx = x - cx, dy = y - cy, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
+                        const pos = Math.abs(ux) >= Math.abs(uy) * 0.8 ? (ux > 0 ? 'r' : 'l') : (uy > 0 ? 'b' : 't');
+                        labels += `<span class="gt-lab gt-lab-${pos}" style="${pct(x, y)}">${p.name}</span>`;
+                    });
+                    const id = 'gtM' + bi;
+                    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map: ${g.center.name} and ${g.places.map(p => p.name).join(', ')}">
+                        <defs><radialGradient id="${id}f" cx="50%" cy="50%" r="62%"><stop offset="72%" stop-color="#fff"/><stop offset="100%" stop-color="#000"/></radialGradient>
+                        <mask id="${id}"><rect width="${W}" height="${H}" fill="url(#${id}f)"/></mask></defs>
+                        <g mask="url(#${id})"><rect width="${W}" height="${H}" class="rt-sea"/><path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/></g>
+                        ${lines}${dots}<circle class="rt-pin-ring" cx="${cx}" cy="${cy}" r="15"/><circle class="rt-pin" cx="${cx}" cy="${cy}" r="7.5"/></svg>
+                        ${labels}<span class="gt-lab gt-lab-c gt-lab-${cx > W / 2 ? 'r' : 'l'}" style="${pct(cx, cy)}">${g.center.name}</span>`;
+                    unclash(box);
+                    // Folded sections have no size yet; widths change the spacing too.
+                    if (window.ResizeObserver && !box.__ro) {
+                        box.__ro = new ResizeObserver(() => { box.querySelectorAll('.gt-lab').forEach(l => { l.style.marginTop = ''; }); unclash(box); });
+                        box.__ro.observe(box);
+                    }
+                });
             }
             let worldShapes = null;
             async function drawRoute() {
@@ -1914,7 +2037,7 @@
                             : P));
                 initCarousels();
                 initStayRails();
-                drawRoute();
+                drawRoute(); drawGettingMaps();
                 initFolds();
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
