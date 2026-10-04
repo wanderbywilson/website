@@ -1275,6 +1275,7 @@
                         <div class="dsec-body">
                             <div class="f-row"><label class="f-label" for="dPlane">By plane</label><textarea class="f-area" id="dPlane" style="min-height:60px" placeholder="Fly into MAD (Adolfo Suárez Madrid–Barajas), about 30 minutes to the centre by car."></textarea></div>
                             <textarea id="dGetting" hidden></textarea>
+                            <div class="f-row" id="dMapLabelRow" hidden><label class="f-label" for="dMapLabel">Map dot label <span style="text-transform:none">(the town the times are from, if the guide is a region, e.g. Avignon for Provence)</span></label><input class="f-input" id="dMapLabel" placeholder="Leave empty to use the guide name"></div>
                             <label class="f-label">By train</label><div id="dTrainRows"></div>
                             <button class="btn btn-ghost d-add" type="button" data-dadd="train">+ Add a train</button>
                             <label class="f-label" style="margin-top:16px;display:block">By car</label><div id="dCarRows"></div>
@@ -4418,7 +4419,7 @@
                 '  "route": { "from": "OPTIONAL: slug of a guide on our list for where the client arrives from (e.g. barcelona), or omit", "legs": ["one short label per leg in trip order, e.g. ~4hr 20min by train (any rail is just train; ~xhr xmin; by train, by car, by boat or flight)"] },',
                 '  "destinations": [',
                 '    { "slug": "ONLY for a destination on our list above; then omit the other fields" },',
-                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "lat": 0, "lng": 0, "places": {"Place as written in the line": [0, 0]}, "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
+                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "lat": 0, "lng": 0, "mapLabel": "only if the guide is a region: the town lat/lng is for", "places": {"Place as written in the line": [0, 0]}, "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
                 '  ],',
                 '  "preparedFor": "how to address them, matching how they sign their emails, e.g. Amy & Jon",',
                 '  "title": "the headline, e.g. Somewhere in the *Caribbean.* (wrap ONE word in *asterisks* for italic gold)",',
@@ -5094,6 +5095,7 @@
             if (dEd.lat != null) { e.lat = dEd.lat; e.lng = dEd.lng; }
             if (dEd.places && Object.keys(dEd.places).length) e.places = dEd.places;
             if (dEd.mapOff && dEd.mapOff.length) e.mapOff = dEd.mapOff.slice();
+            if ($('dMapLabel').value.trim()) e.mapLabel = $('dMapLabel').value.trim();
             return e;
         }
         function fillDestForm(e, sourceNotes) {
@@ -5102,6 +5104,7 @@
             $('dOverview').value = e.overview || ''; $('dHlLabel').value = e.highlightsLabel || '';
             $('dGetting').value = e.gettingThere || ''; $('dTip').value = e.tip || '';
             $('dPlane').value = e.byPlane || '';
+            $('dMapLabel').value = e.mapLabel || ''; $('dMapLabelRow').hidden = !(e.places && Object.keys(e.places).length);
             $('dClimateNote').value = (e.climate || {}).note || '';
             $('dSource').value = sourceNotes || '';
             dEd = edFromEntry(e);
@@ -5356,7 +5359,7 @@
                 '  "slug": "lowercase-hyphenated name", "name": "Amalfi Coast", "region": "Campania, Italy",',
                 '  "heroImage": "direct image URL", "gallery": ["2 more direct image URLs"],',
                 '  "overview": "500\u2013900 characters", "highlightsLabel": "Things to do", "highlights": ["4\u20136 full sentences"], "highlightImages": ["one photo URL per highlight, same order"],',
-                '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",\n  "lat": 40.4168, "lng": -3.7038, "places": {"Toledo": [39.8628, -4.0273], "Madrid": [40.4168, -3.7038]},',
+                '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",\n  "lat": 40.4168, "lng": -3.7038, "mapLabel": "", "places": {"Toledo": [39.8628, -4.0273], "Madrid": [40.4168, -3.7038]},',
                 '  "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "57", "lo": "45"}]},',
                 '  "stays": {"items": [{"name": "official hotel name", "slug": "our library or review-queue slug, else empty", "note": "town, one short line", "image": "only for hotels we don\u2019t have"}]},',
                 '  "sourceNotes": "advisor-only: sources for facts, the climate source, photo sources, anything unverified"',
@@ -5400,7 +5403,8 @@
                 // Map position for the route map (dropped on import before 2026-10-03).
                 lat: isFinite(parseFloat(d.lat)) ? parseFloat(d.lat) : null,
                 lng: isFinite(parseFloat(d.lng)) ? parseFloat(d.lng) : null,
-                places: cleanPlaces(d.places)
+                places: cleanPlaces(d.places),
+                mapLabel: String(d.mapLabel || '')
             };
         }
         /* Lookbook import: library destinations come in from the library (no

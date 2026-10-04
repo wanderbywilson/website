@@ -1772,7 +1772,8 @@
                     const at = pos[t.name.toLowerCase()] || pos[('the ' + t.name).toLowerCase()];
                     if (at && !off.includes(t.name.toLowerCase())) places.push(Object.assign({ mode, lat: +at[0], lng: +at[1] }, t));
                 }));
-                return places.length >= 2 ? { center: { name: decode(strip(d.name || '')), lat: +d.lat, lng: +d.lng }, places, rows } : null;
+                // A region guide (Provence) labels its dot with the town it measures from (Avignon).
+                return places.length >= 2 ? { center: { name: decode(strip(d.mapLabel || d.name || '')), lat: +d.lat, lng: +d.lng }, places, rows } : null;
             }
             // Labels of nearby places can overlap: nudge later ones down (or up) until clear.
             function unclash(box) {
