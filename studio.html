@@ -472,6 +472,8 @@
         .claude-build textarea:focus { border-color: #2a63a8; box-shadow: 0 0 0 3px rgba(42,99,168,0.15); }
         .claude-build-note { font-size: 12px; line-height: 1.6; margin: 10px 0 0; color: #2a63a8; }
         .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .mode-switch-3 { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 1100px) { .mode-switch-3 { grid-template-columns: 1fr; } }
         .mode-switch button {
             text-align: left; background: #fff; border: 1px solid var(--st-line-2);
             padding: 10px 12px; cursor: pointer; font-family: var(--font-sans);
@@ -1517,10 +1519,14 @@
                             <span class="cb-num">1</span>
                             <div class="cb-body">
                                 <p class="cb-title">Choose what you&rsquo;re making</p>
-                                <div class="mode-switch" id="modeSwitch">
+                                <div class="mode-switch mode-switch-3" id="modeSwitch">
+                                    <button type="button" data-mode="destinations">
+                                        <strong>Destination lookbook</strong>
+                                        <span>Can&rsquo;t decide where. 2&ndash;4 places, each guide with its own hotel shortlist.</span>
+                                    </button>
                                     <button type="button" data-mode="lookbook">
-                                        <strong>Lookbook</strong>
-                                        <span>Hotel ideas to react to. Photos and guides, no prices.</span>
+                                        <strong>Hotel lookbook</strong>
+                                        <span>Region decided. 4&ndash;6 hotels to react to, no prices.</span>
                                     </button>
                                     <button type="button" data-mode="quote" class="is-on">
                                         <strong>Quote</strong>
@@ -1529,7 +1535,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="cb-step" id="cbStep2">
+                        <li class="cb-step cb-claude" id="cbStep2">
                             <span class="cb-num">2</span>
                             <div class="cb-body">
                                 <p class="cb-title">Copy the prompt into Claude</p>
@@ -1537,10 +1543,10 @@
                                 <p class="cb-say" id="cbSay">build a quote for [client name]</p>
                                 <p class="cb-text cb-quote-only">Attach the rate screenshots to the same message.</p>
                                 <button class="btn" id="pbCopyPrompt" type="button">Copy the quote prompt</button>
-                                <p class="cb-hint">Claude reads the inquiry, call recap, Asana task and notes, then picks 4&ndash;6 hotels. Hotels already on our website come from their pages.</p>
+                                <p class="cb-hint" id="cbHint">Claude reads the inquiry, call recap, Asana task and notes, then picks 4&ndash;6 hotels. Hotels already on our website come from their pages.</p>
                             </div>
                         </li>
-                        <li class="cb-step" id="cbStep3">
+                        <li class="cb-step cb-claude" id="cbStep3">
                             <span class="cb-num">3</span>
                             <div class="cb-body">
                                 <p class="cb-title">Paste Claude&rsquo;s reply here</p>
@@ -3726,6 +3732,7 @@
                 // so a published lookbook keeps the version it was built with.
                 destinations: state.destinations || [],
                 showHotels: state.showHotels !== false,
+                lookbookKind: state.mode === 'lookbook' && state.lbKind === 'destinations' ? 'destinations' : undefined,
                 route: routeForSave(),
                 // no global perks band — amenities live on each hotel card
                 closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || mdEm(state.mode === 'lookbook' ? window.WBW_RULES.fixed.closeTitleLookbook : window.WBW_RULES.fixed.closeTitleQuote),
@@ -3740,7 +3747,7 @@
         const frame = $('previewFrame');
         function saveDraft() {
             try {
-                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, hotels: state.hotels, destinations: state.destinations || [], showHotels: state.showHotels !== false, route: state.route || null, fields: fieldValues() }));
+                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, lbKind: state.lbKind || '', hotels: state.hotels, destinations: state.destinations || [], showHotels: state.showHotels !== false, route: state.route || null, fields: fieldValues() }));
             } catch (e) {}
         }
         const stripTags = (s) => { const t = document.createElement('div'); t.innerHTML = s || ''; return t.textContent.trim(); };
@@ -4388,6 +4395,7 @@
             ].join('\n') : '';
         }
         function lookbookPrompt() {
+            if (state.lbKind === 'destinations') return destLookbookPrompt();
             const B = R.blocks, F = R.fixed;
             return [
                 'You are helping Wander by Wilson, a luxury travel advisory (wanderbywilson.com), build a client LOOKBOOK.',
@@ -4442,6 +4450,60 @@
                 '———',
                 'Now tell me: build a lookbook for [CLIENT NAME]'
             ].join('\n');
+        }
+        /* Destination lookbook (Wilson, 2026-10-03): for clients who haven't chosen
+           where to go. 2–4 places, each a destination guide whose "Hotels we love"
+           is that place's hotel shortlist; no separate hotel list, no route map. */
+        function destLookbookPrompt() {
+            const B = R.blocks, F = R.fixed;
+            return [
+                'You are helping Wander by Wilson, a luxury travel advisory (wanderbywilson.com), build a DESTINATION LOOKBOOK for a client who has NOT decided where to go.',
+                '',
+                'It shows 2 to 4 places that could suit them. Each place is a destination guide, and its "Hotels we love" section (the "stays") is that place’s hotel shortlist, so the client can compare where to go and where they would stay. It is NOT a quote: no room categories, no prices, no deposits, no cancellation terms.',
+                '',
+                'I will give you ONE thing: a client name. Everything else already exists in our systems. Go and find it yourself; do not ask me to fill in a brief.',
+                '',
+                'STEP 1. ' + B.sources,
+                '',
+                'STEP 2. CHOOSE 2 TO 4 DESTINATIONS that genuinely fit what they told us (season and dates, the kind of trip, travel time, who is going), strongest fit first, with real RANGE between them. Include any place the client or Wilson named. Each place is an ALTERNATIVE, not a stop on one trip, so do not return a route.',
+                'For each place, choose 2 to 3 hotels for THIS client as its "stays", strongest fit first. For a destination we already have a guide for, return {"slug": "…", "stays": {"items": [...]}}: the guide is reused as written and only its hotels are set for this client.',
+                B.luxuryAndBookable,
+                '',
+                destinationSourcingBlock(),
+                'Hotels already on our website (in "stays", give the "slug", the "name" and a "note", and NO photo):',
+                libraryListForPrompt(),
+                draftHotels.length ? 'Hotels waiting for review (same: slug, name, note, no photo):\n' + draftListForPrompt() : '',
+                'For any OTHER hotel in "stays", give its official "name", a "note" (where it is, then one short checked fact, at most 90 characters) and one "image": a direct URL of its hero photo, following:',
+                String(B.photos || '').split('\n').filter(l => /Sources, in this order|Hero \(Wilson/.test(l)).join('\n'),
+                '',
+                B.clientFields,
+                '',
+                B.voice,
+                '',
+                'STEP 3. Reply with your two-line summary, then ONLY this JSON block:',
+                '',
+                '{',
+                '  "mode": "lookbook",',
+                '  "lookbookKind": "destinations",',
+                '  "showHotels": false,',
+                '  "destinations": [',
+                '    { "slug": "a destination on our list above", "stays": {"items": [{"name": "", "slug": "", "note": "", "image": ""}]} },',
+                '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "highlightImages": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "lat": 0, "lng": 0, "mapLabel": "only if the guide is a region: the town lat/lng is for", "places": {"Place as written in the line": [0, 0]}, "tip": "", "climate": {"note": "Average daily high and low in °F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": "", "image": ""}]}, "sourceNotes": "advisor-only" }',
+                '  ],',
+                '  "preparedFor": "how to address them, matching how they sign their emails, e.g. Amy & Jon",',
+                '  "title": "the headline, e.g. Somewhere *warm.* (wrap ONE word in *asterisks* for italic gold)",',
+                '  "lede": "one or two warm sentences: a few places that could suit them, and where you might stay in each, to see what they are drawn to. Say plainly that rates come next.",',
+                '  "dates": "e.g. May 2027 · about a week. Keep it loose if the dates are not fixed.",',
+                '  "closeTitle": "' + F.closeTitleGuides + '",',
+                '  "closeLede": "' + F.closeLedeGuides + '",',
+                '  "hotels": []',
+                '}',
+                '',
+                'Copy "closeLede" exactly as written above. After the JSON, list anything you could not verify.',
+                '',
+                '———',
+                'Now tell me: build a destination lookbook for [CLIENT NAME]'
+            ].filter(x => x !== '').join('\n');
         }
         function quotePrompt() {
             const B = R.blocks, F = R.fixed;
@@ -4569,10 +4631,18 @@
         function setMode(mode) {
             state.mode = mode === 'lookbook' ? 'lookbook' : 'quote';
             const lb = state.mode === 'lookbook';
+            const dl = lb && state.lbKind === 'destinations';
+            const card = !lb ? 'quote' : dl ? 'destinations' : 'lookbook';
             document.querySelectorAll('#modeSwitch [data-mode]').forEach(b =>
-                b.classList.toggle('is-on', b.dataset.mode === state.mode));
-            $('pbCopyPrompt').textContent = lb ? 'Copy the lookbook prompt' : 'Copy the quote prompt';
-            $('cbSay').textContent = (lb ? 'build a lookbook for ' : 'build a quote for ') + '[client name]';
+                b.classList.toggle('is-on', b.dataset.mode === card));
+            $('pbCopyPrompt').textContent = !lb ? 'Copy the quote prompt' : dl ? 'Copy the destination lookbook prompt' : 'Copy the hotel lookbook prompt';
+            $('cbSay').textContent = (!lb ? 'build a quote for ' : dl ? 'build a destination lookbook for ' : 'build a lookbook for ') + '[client name]';
+            // Destination lookbook: hotels live in each guide's Hotels we love.
+            const hs = document.querySelector('.psec[data-psec="hotels"]'); if (hs) hs.hidden = dl;
+            $('cbHint').textContent = 'Claude reads the inquiry, call recap, Asana task and notes, then ' + (dl
+                ? 'picks 2\u20134 places that could suit them, each a guide whose Hotels we love is the shortlist. Guides we already have are reused, not rewritten.'
+                : !lb ? 'builds the quote from your rate screenshots. Hotels already on our website come from their pages.'
+                : 'picks 4\u20136 hotels. Hotels already on our website come from their pages.');
             document.querySelector('.cb').classList.toggle('is-lookbook', lb);
             $('cbConvert').hidden = !lb || !state.hotels.length;
             $('btnPublish').textContent = 'Publish';
@@ -4591,7 +4661,22 @@
         }
         document.getElementById('modeSwitch').addEventListener('click', (e) => {
             const b = e.target.closest('[data-mode]');
-            if (b) setMode(b.dataset.mode);
+            if (!b) return;
+            // Destination lookbook (Wilson, 2026-10-03): for clients who haven't chosen
+            // where; 2-4 places, each with its own hotel shortlist; no route map.
+            if (b.dataset.mode === 'destinations') {
+                // Each guide's "Hotels we love" IS the hotel shortlist here, so the
+                // separate hotel list is off (Wilson, 2026-10-03).
+                state.lbKind = 'destinations'; state.showHotels = false; $('fShowHotels').checked = false;
+                state.route = Object.assign({}, state.route || {}, { off: true });
+                (state.destinations || []).forEach(d => { delete d.hideStays; });
+                renderDestPanel(); setMode('lookbook'); return;
+            }
+            if (b.dataset.mode === 'lookbook' && state.lbKind === 'destinations') {
+                state.lbKind = 'hotels'; state.showHotels = true; $('fShowHotels').checked = true;
+                if (state.route) delete state.route.off;
+            }
+            setMode(b.dataset.mode);
         });
         $('pbCopyPrompt').addEventListener('click', async () => {
             await loadDraftHotels();
@@ -5418,7 +5503,11 @@
                 const slug = String(d.slug || '');
                 const known = slug && destIndex.find(x => x.id === slug);
                 if (known && !d.overview) {
-                    const e = await getDestEntry(slug);
+                    let e = await getDestEntry(slug);
+                    // A destination lookbook sets this client's hotels on a library
+                    // guide: kept as this trip's copy, the library guide is untouched.
+                    const st = destFromReply({ name: slug, stays: d.stays }).stays;
+                    if (e && st && st.items.length) e = await resolveStays(Object.assign(e, { stays: st, tripEdits: true }));
                     if (e) out.push(e);
                     continue;
                 }
@@ -5435,6 +5524,10 @@
             }
             state.destinations = out;
             state.showHotels = p.showHotels !== false && (p.hotels || []).length > 0;
+            if (p.lookbookKind === 'destinations') {
+                state.lbKind = 'destinations'; state.route = Object.assign({}, state.route || {}, { off: true });
+                renderDestPanel(); setMode('lookbook');
+            }
             renderDestPanel(); renderHotels(); syncCloseFields(); onChange();
             if (queued) toast(queued + ' new destination guide' + (queued === 1 ? '' : 's') + ' saved as a draft for review.');
         }
@@ -6042,7 +6135,8 @@
         }
 
         async function publish(status) {
-            if (!state.hotels.length) { toast('Add at least one hotel first.'); return; }
+            const guidesOnly = state.mode === 'lookbook' && (state.destinations || []).some(d => !d.off);
+            if (!state.hotels.length && !guidesOnly) { toast(state.mode === 'lookbook' ? 'Add at least one hotel or destination guide first.' : 'Add at least one hotel first.'); return; }
             const draft = status === 'draft';
             if (!draft && !renderMetaWarning(true)) {
                 toast('Can’t publish yet. See the list above.');
@@ -6087,7 +6181,8 @@
 
         /* ── New / load / list ────────────────────────────────────────── */
         function resetForm() {
-            state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', hotels: [], destinations: [], showHotels: true };
+            const keepDest = state.mode === 'lookbook' && state.lbKind === 'destinations';
+            state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', lbKind: keepDest ? 'destinations' : 'hotels', hotels: [], destinations: [], showHotels: !keepDest, route: keepDest ? { off: true } : null };
             setFields({});
             applyDefaults();
             $('metaWarn').hidden = true; $('metaWarn').innerHTML = '';
@@ -6171,6 +6266,7 @@
             });
             state.destinations = Array.isArray(P.destinations) ? P.destinations : [];
             state.showHotels = P.showHotels !== false;
+            state.lbKind = P.lookbookKind === 'destinations' ? 'destinations' : 'hotels';
             state.route = P.route || null;
             setMode(state.mode);
             renderHotels();
@@ -7717,6 +7813,7 @@
             setFields(Object.assign({}, fieldValues(), draft.fields, { fCloseLede: window.WBW_RULES.fixed.closeLede }));
             state.destinations = draft.destinations || [];
             state.showHotels = draft.showHotels !== false;
+            state.lbKind = draft.lbKind === 'destinations' ? 'destinations' : 'hotels';
             state.route = draft.route || null;
             setMode(draft.mode || 'quote');
             if (state.id) $('statusText').textContent = 'Editing: ' + state.id;
