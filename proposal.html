@@ -1703,11 +1703,13 @@
                 let n = 0; stops.forEach(s => { if (!s.minor) s.num = ++n; });
                 return stops;
             }
-            // Map leg labels are short (Wilson, 2026-10-03): "~4hr 20min by train".
-            // Any rail service (TGV, AVE, Eurostar) is just "train".
+            // Map times, one format everywhere (Wilson, 2026-10-03): "45min", "1hr",
+            // "2hr 40min", "30 to 45min"; no "~" and no "about", "just over" or
+            // "under". Any rail service (TGV, AVE, Eurostar) is just "train".
             function shortLeg(t) {
                 return String(t || '').trim()
-                    .replace(/^(about|around|approximately|roughly)\s+/i, '~')
+                    .replace(/~\s*/g, '')
+                    .replace(/\b(about|around|approximately|roughly|just over|just under|a little over|a little under|over|under|nearly|almost)\s+(?=\d)/gi, '')
                     .replace(/(\d+)\s*(hours?|hrs?)\b/gi, '$1hr').replace(/(\d+)\s*(minutes?|mins?)\b/gi, '$1min')
                     .replace(/\b(TGV|AVE|Eurostar|Frecciarossa|Italo|Ouigo|InOui|high[- ]speed train|rail)\b/gi, 'train')
                     .replace(/\btrain train\b/gi, 'train').replace(/\.$/, '');
@@ -1730,7 +1732,7 @@
                 if (!routeOn(P, dests)) return '';
                 const stops = routeStops(P, dests), legs = ((P.route || {}).legs || []).map(shortLeg);
                 // The itinerary strip carries the words; the map carries the places.
-                // One line, one font and colour: Barcelona · ~4hr 20min by train · Provence ...
+                // One line, one font and colour: Barcelona · 4hr 20min by train · Provence ...
                 let strip = '';
                 stops.forEach((s, k) => {
                     strip += `<li class="rt-stop">${s.name}</li>`;

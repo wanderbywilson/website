@@ -4384,7 +4384,7 @@
             return list ? [
                 'DESTINATION GUIDES IN A QUOTE. If the lookbook from STEP 0 opened with destination guides, or the trip covers a place on this list, return those places in "destinations" as {"slug": "\u2026"} only (never write a new guide inside a quote), and give each hotel the "destination" slug it sits under:',
                 list,
-                'ROUTE MAP. For a multi-stop trip, also return "route": "from" is the slug of a place on this list the client arrives from (omit if none); "legs" is one short label per leg in trip order, e.g. "~2hr 40min by train" (any rail is just train).'
+                'ROUTE MAP. For a multi-stop trip, also return "route": "from" is the slug of a place on this list the client arrives from (omit if none); "legs" is one short label per leg in trip order, e.g. "2hr 40min by train" (any rail is just train; no "~" or "about", Wilson 2026-10-03).'
             ].join('\n') : '';
         }
         function lookbookPrompt() {
@@ -4416,7 +4416,7 @@
                 '{',
                 '  "mode": "lookbook",',
                 '  "showHotels": true,',
-                '  "route": { "from": "OPTIONAL: slug of a guide on our list for where the client arrives from (e.g. barcelona), or omit", "legs": ["one short label per leg in trip order, e.g. ~4hr 20min by train (any rail is just train; ~xhr xmin; by train, by car, by boat or flight)"] },',
+                '  "route": { "from": "OPTIONAL: slug of a guide on our list for where the client arrives from (e.g. barcelona), or omit", "legs": ["one short label per leg in trip order, e.g. 4hr 20min by train (any rail is just train; xhr xmin, no "~" or "about"; by train, by car, by boat or flight)"] },',
                 '  "destinations": [',
                 '    { "slug": "ONLY for a destination on our list above; then omit the other fields" },',
                 '    { "slug": "new-destination", "name": "", "region": "", "heroImage": "", "gallery": [], "overview": "", "highlightsLabel": "Things to do", "highlights": [], "byPlane": "", "byTrain": [], "byCar": [], "byFerry": [], "lat": 0, "lng": 0, "mapLabel": "only if the guide is a region: the town lat/lng is for", "places": {"Place as written in the line": [0, 0]}, "tip": "", "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "", "lo": ""}]}, "stays": {"items": [{"name": "", "slug": "", "note": ""}]}, "sourceNotes": "advisor-only" }',
@@ -4482,7 +4482,7 @@
                 '  "closeTitle": "' + F.closeTitleQuote + '",',
                 '  "closeLede": "' + F.closeLede + '",',
                 '  "destinations": [{ "slug": "ONLY slugs from the guide list above; omit if none" }],',
-                '  "route": { "from": "optional slug", "legs": ["~2hr 40min by train"] },',
+                '  "route": { "from": "optional slug", "legs": ["2hr 40min by train"] },',
                 '  "hotels": [',
                 '    {',
                 '      "slug": "ONLY for a hotel on our list above; then omit the new-hotel fields",',
@@ -5472,7 +5472,7 @@
                 <input class="f-input" data-rnote="${esc(d.slug)}" value="${esc(R.notes[d.slug] || '')}" placeholder="e.g. Nov 7\u201311 or 4 nights"></div>`).join('') + '</div>';
             $('rLegs').innerHTML = names.length < 2 ? '<p class="f-hint" style="margin:0">Add a second stop to draw a route.</p>'
                 : names.slice(0, -1).map((n, k) => `<div class="f-row"><label class="f-label">${esc(n)} \u2192 ${esc(names[k + 1])}</label>
-                    <input class="f-input" data-rleg="${k}" value="${esc(R.legs[k] || '')}" placeholder="e.g. ~2hr 40min by train"></div>`).join('');
+                    <input class="f-input" data-rleg="${k}" value="${esc(R.legs[k] || '')}" placeholder="e.g. 2hr 40min by train"></div>`).join('');
         }
         function renderDestPanel() {
             setTimeout(renderRoute, 0);
