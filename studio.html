@@ -5323,13 +5323,17 @@
                 byCar: (d.byCar || []).map(String).filter(Boolean),
                 byFerry: (d.byFerry || []).map(String).filter(Boolean),
                 climate: months.length ? { label: 'Average temperatures', note: String((d.climate || {}).note || 'Average daily high and low in \u00b0F.'), months } : null,
-                stays: items.length ? { label: 'Hotels we love', items } : null
+                stays: items.length ? { label: 'Hotels we love', items } : null,
+                // Map position for the route map (dropped on import before 2026-10-03).
+                lat: isFinite(parseFloat(d.lat)) ? parseFloat(d.lat) : null,
+                lng: isFinite(parseFloat(d.lng)) ? parseFloat(d.lng) : null
             };
         }
         /* Lookbook import: library destinations come in from the library (no
            research); new ones are saved as drafts for Wilson's review. */
         async function importDestinations(p) {
             const out = [];
+            const destItems = [];
             let queued = 0;
             await loadDestIndex();
             for (const d of (p.destinations || [])) {
@@ -5342,13 +5346,14 @@
                 }
                 const e = await resolveStays(destFromReply(d));
                 out.push(e);
-                try {
-                    await contentApi({ action: 'save', kind: 'destination', id: e.slug, doc: {
-                        slug: e.slug, name: e.name, region: e.region, entry: e, status: 'in-review',
-                        sourceNotes: String(d.sourceNotes || '') + '\n\nStarted automatically from the lookbook "' + stripHtml($('fTitle').value) + '".'
-                    }, meta: { name: e.name, region: e.region, status: 'in-review', heroImage: e.heroImage } });
-                    queued++;
-                } catch (err) { /* keep going */ }
+                destItems.push({ id: e.slug, doc: {
+                    slug: e.slug, name: e.name, region: e.region, entry: e, status: 'in-review',
+                    sourceNotes: String(d.sourceNotes || '') + '\n\nStarted automatically from the lookbook "' + stripHtml($('fTitle').value) + '".'
+                }, meta: { name: e.name, region: e.region, status: 'in-review', heroImage: e.heroImage } });
+            }
+            if (destItems.length) {
+                try { const r = await contentApi({ action: 'saveMany', kind: 'destination', items: destItems }); queued = r.saved || 0; }
+                catch (err) { toast('Couldn\u2019t save the new guides for review: ' + err.message); }
             }
             state.destinations = out;
             state.showHotels = p.showHotels !== false && (p.hotels || []).length > 0;
@@ -5660,6 +5665,7 @@
         }
         async function queueDraftsForCustomHotels(hotels, tripLabel) {
             let made = 0;
+            const items = [];
             for (const h of hotels) {
                 const nm = typeof h === 'string' ? h : String(h.name || '');
                 const src = typeof h === 'string' ? {} : h;
@@ -5681,8 +5687,7 @@
                 };
                 // Anything already sourced means this is reviewable, not a blank stub.
                 const rich = !!(entry.description && hero);
-                try {
-                    await contentApi({ action: 'save', kind: 'hoteldraft', id: slug, doc: {
+                items.push({ id: slug, doc: {
                         slug, name: nm, location: entry.location,
                         status: rich ? 'in-review' : 'idea',
                         heroImage: hero, images: [hero].concat(gallery).filter(Boolean),
@@ -5695,8 +5700,12 @@
                                (src.bookingPartners && src.bookingPartners.length
                                   ? '\n\nBookable through: ' + src.bookingPartners.map(String).join(' · ') : '')
                     }, meta: { name: nm, location: entry.location, status: rich ? 'in-review' : 'idea', heroImage: hero } });
-                    made++;
-                } catch (err) { /* keep going */ }
+            }
+            // One request, one index write: separate saves in a row drop each
+            // other's list entries (Blob reads lag writes).
+            if (items.length) {
+                try { const r = await contentApi({ action: 'saveMany', kind: 'hoteldraft', items }); made = r.saved || 0; }
+                catch (err) { toast('Couldn\u2019t queue the hotel-page drafts: ' + err.message); }
             }
             return made;
         }

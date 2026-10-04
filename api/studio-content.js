@@ -57,6 +57,25 @@ function randomSuffix() {
     return out;
 }
 
+// The index entry for a document, rebuilt from the document itself.
+function metaFromDoc(id, doc) {
+    return {
+        title: doc.title || doc.name || id,
+        name: doc.name || '',
+        location: doc.location || '',
+        region: doc.region || '',
+        heroImage: doc.heroImage || '',
+        thumb: doc.thumb || '',
+        author: doc.author || '',
+        category: doc.category || '',
+        proposalId: doc.proposalId || '',
+        liveUrl: doc.liveUrl || '',
+        lastEditedBy: doc.lastEditedBy || '',
+        status: doc.status || 'draft',
+        updatedAt: doc.updatedAt || doc.createdAt || ''
+    };
+}
+
 module.exports = async (req, res) => {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.setHeader('Cache-Control', 'no-store');
@@ -83,6 +102,21 @@ module.exports = async (req, res) => {
 
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX)) || {};
+            // Self-heal: Blob reads lag writes by up to ~60s, so back-to-back saves
+            // can drop each other's index entries. Any draft whose document exists
+            // but is missing from the index is added back here (2026-10-03).
+            if (kind === 'hoteldraft' || kind === 'destination') {
+                const blobs = await blobList(`content/${kind}/`);
+                const missing = blobs
+                    .map(b => (b.pathname.match(new RegExp(`^content/${kind}/([^/]+)\\.json$`)) || [])[1])
+                    .filter(id => id && !id.startsWith('_') && !index[id]);
+                let healed = 0;
+                for (const id of missing) {
+                    const doc = await blobGetJSON(path(id)).catch(() => null);
+                    if (doc) { index[id] = metaFromDoc(id, doc); healed++; }
+                }
+                if (healed) await blobPutJSON(INDEX, index);
+            }
             const items = Object.entries(index)
                 .map(([id, meta]) => ({ id, ...meta }))
                 .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
@@ -201,25 +235,12 @@ module.exports = async (req, res) => {
             const blobs = await blobList(`content/${kind}/`);
             const ids = blobs
                 .map(b => (b.pathname.match(new RegExp(`^content/${kind}/(.+)\\.json$`)) || [])[1])
-                .filter(id => id && id !== '_index');
+                .filter(id => id && !id.startsWith('_'));
             const index = {};
             for (const id of ids) {
                 const doc = await blobGetJSON(path(id));
                 if (!doc) continue;
-                index[id] = {
-                    title: doc.title || doc.name || id,
-                    name: doc.name || '',
-                    location: doc.location || '',
-                    heroImage: doc.heroImage || '',
-                    thumb: doc.thumb || '',
-                    author: doc.author || '',
-                    category: doc.category || '',
-                    proposalId: doc.proposalId || '',
-                    liveUrl: doc.liveUrl || '',
-                    lastEditedBy: doc.lastEditedBy || '',
-                    status: doc.status || 'draft',
-                    updatedAt: doc.updatedAt || doc.createdAt || ''
-                };
+                index[id] = metaFromDoc(id, doc);
             }
             await blobPutJSON(INDEX, index);
             return res.status(200).json({ ok: true, indexed: ids.length });
