@@ -615,6 +615,16 @@
         .d-slot .ph-tools { left: 3px; justify-content: flex-end; flex-wrap: wrap; }
         .d-slot .ph-tools button { width: auto; min-width: 22px; height: 22px; padding: 0 5px; }
         .d-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--studio-line-soft); }
+        .q-sec { margin: 14px 0 4px; padding: 12px 14px 4px; border: 1px solid var(--st-line-2); background: #fff; }
+        .q-sec-head { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--st-text); margin: 0 0 10px; }
+        .q-sec-head span { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--st-dim-2); margin-left: 6px; }
+        .q-sec-pay { border-color: rgba(150,101,10,0.35); background: rgba(150,101,10,0.04); }
+        .q-sec-pay textarea { min-height: 52px; }
+        .q-sub { margin: 4px 0 10px; } .q-sub > summary { cursor: pointer; font-size: 12px; color: var(--st-dim); padding: 4px 0; }
+        .h-terms { margin: 14px 0 6px; padding: 12px 14px 4px; border: 1px solid rgba(150,101,10,0.3); background: rgba(150,101,10,0.04); }
+        .h-terms-head { font-size: 12px; font-weight: 600; color: #96650a; margin: 0 0 8px; }
+        .h-terms-head span { font-weight: 400; color: var(--st-dim-2); margin-left: 6px; }
+        .h-terms textarea { min-height: 52px; }
         .d-claude-add { margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(42,99,168,0.3); background: rgba(42,99,168,0.04); }
         .d-claude-title { font-size: 12px; font-weight: 600; color: #2a63a8; margin: 0 0 6px; }
         .d-claude-add .cb-mini { margin: 0 0 10px; }
@@ -3676,8 +3686,8 @@
             if ((h.rateNote || '').trim()) out.rateNote = sentenceCap(h.rateNote.trim());
             if ((h.flight || '').trim()) out.flight = h.flight.trim();
             if ((h.flightDetails || '').trim()) out.flightDetails = sentenceCapLines(h.flightDetails.trim());
-            if ((h.deposit || '').trim()) out.deposit = sentenceCap(h.deposit.trim());
-            if ((h.cancellation || '').trim()) out.cancellation = sentenceCap(h.cancellation.trim());
+            if ((h.deposit || '').trim()) out.deposit = sentenceCapLines(h.deposit.trim());
+            if ((h.cancellation || '').trim()) out.cancellation = sentenceCapLines(h.cancellation.trim());
             // Rates by room category — "Category | Price" per line. A row without a
             // price is dropped rather than rendered as a blank amount.
             const rateRows = (h.rateTableText || '').split('\n')
@@ -3759,6 +3769,7 @@
                 state.hotels[+m[1]][k] =
                     (k === 'rate') ? unEm(value) :
                     (k === 'desc' || k === 'roomDesc') ? value.trim() :
+                    (k === 'deposit' || k === 'cancellation') ? stripTags(value.replace(/<br\s*\/?>/gi, '\n')).trim() :
                     stripTags(value);
                 renderHotels();
             } else {
@@ -4053,7 +4064,10 @@
             photoProblems(photosOf(h), photoLater).forEach(p => bits.push('<b>' + p + '</b>'));
             return bits;
         }
-        const growAdv = () => document.querySelectorAll('#hotelList .adv-grow').forEach(t => { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; });
+        // Size to the text, but only once the box is on screen: measured inside a
+        // folded card its width is ~0, so every word wraps and the box balloons.
+        const growAdv = () => document.querySelectorAll('#hotelList .adv-grow').forEach(t => { if (t.clientWidth < 80) return; t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; });
+        document.addEventListener('toggle', (e) => { if (e.target.closest && e.target.closest('#hotelList')) growAdv(); }, true);
         document.addEventListener('input', (e) => { if (e.target.classList && e.target.classList.contains('adv-grow')) { e.target.style.height = 'auto'; e.target.style.height = (e.target.scrollHeight + 2) + 'px'; } });
         function renderHotels() {
             setTimeout(growAdv, 0);
@@ -4091,6 +4105,7 @@
                     ${((state.destinations || []).length) ? `<div class="f-row"><label class="f-label">Shows under destination</label>
                         <select class="f-input" data-i="${i}" data-k="destination"><option value="">(none)</option>${state.destinations.map(d =>
                             `<option value="${esc(d.slug)}"${h.destination === d.slug ? ' selected' : ''}>${esc(stripHtml(d.name || d.slug))}</option>`).join('')}</select></div>` : ''}
+                    ${lb ? `
                     ${photoManager(h, i)}
                     ${lb ? `
                     <div class="f-row"><label class="f-label">How to get there</label>
@@ -4140,7 +4155,14 @@
                         <div class="f-row"><label class="f-label">Caveats &amp; what to check</label>
                             <textarea class="f-area adv-grow" data-i="${i}" data-k="advisorNote" placeholder="Open: … Gym: … Check: …">${esc(h.advisorNote || '')}</textarea></div>`}
                     </div>
-                    <details class="manual-fields"${lb ? ' hidden' : ''}${(h.room || h.rate || h.deposit || h.flight || h.rateTableText) ? ' open' : ''}>
+                    <div class="h-terms"${lb ? ' hidden' : ''}>
+                        <p class="h-terms-head">Deposit &amp; cancellation <span>as the client sees them; check against the rate document</span></p>
+                        <div class="f-row"><label class="f-label" for="dep${i}">Deposit</label>
+                            <textarea class="f-area adv-grow" rows="2" id="dep${i}" data-i="${i}" data-k="deposit" placeholder="Copy the deposit terms from the rate document. One line per stage.">${esc(h.deposit || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label" for="can${i}">Cancellation</label>
+                            <textarea class="f-area adv-grow" rows="2" id="can${i}" data-i="${i}" data-k="cancellation" placeholder="Copy the cancellation terms from the rate document. One line per stage, e.g. a free-cancellation deadline, then each penalty.">${esc(h.cancellation || '')}</textarea></div>
+                    </div>
+                    <details class="manual-fields"${lb ? ' hidden' : ''}${(h.room || h.rate || h.flight || h.rateTableText) ? ' open' : ''}>
                     <summary>Enter or edit the quote fields manually</summary>
                     <div class="f-grid2">
                         <div class="f-row"><label class="f-label">Room category</label>
@@ -4154,12 +4176,6 @@
                         <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · starting from $795 / person round-trip"></div>
                     <div class="f-row"><label class="f-label">Flight details <span style="text-transform:none">(optional; drop a Google Flights screenshot to fill)</span></label>
                         <textarea class="f-area" data-i="${i}" data-k="flightDetails" style="min-height:130px" placeholder="Outbound · Wed, Nov 11&#10;American · DFW 5:00 AM – AXA 2:57 PM&#10;7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)&#10;&#10;Return · Sun, Nov 15&#10;American · AXA 3:37 PM – DFW 9:50 PM&#10;8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)&#10;&#10;Fares&#10;Main Cabin $1,526 pp · Main Plus $1,768 pp">${esc(h.flightDetails)}</textarea></div>
-                    <div class="f-grid2">
-                        <div class="f-row"><label class="f-label">Deposit</label>
-                            <input class="f-input" data-i="${i}" data-k="deposit" value="${esc(h.deposit)}" placeholder="50% of the stay charged at booking."></div>
-                        <div class="f-row"><label class="f-label">Cancellation</label>
-                            <input class="f-input" data-i="${i}" data-k="cancellation" value="${esc(h.cancellation)}" placeholder="Cancel 30 days before arrival to avoid penalty."></div>
-                    </div>
                     <div class="f-row"><label class="f-label">Rates by room category <span style="text-transform:none">(optional — one per line, <code>Category | Price</code>. Use this for a group where each couple picks their own room)</span></label>
                         <textarea class="f-area" data-i="${i}" data-k="rateTableText" style="min-height:130px" placeholder="Junior Suite Garden View | $2,898&#10;Junior Suite Swim Out | $3,617&#10;Preferred Club Junior Suite Ocean View | $4,349">${esc(h.rateTableText)}</textarea></div>
                     <div class="f-row"><label class="f-label">Rate table note <span style="text-transform:none">(what the prices cover)</span></label>
@@ -4191,6 +4207,95 @@
                         <div class="f-row"><label class="f-label">Booking link</label>
                             <input class="f-input" data-i="${i}" data-k="bookingUrl" value="${esc(h.bookingUrl)}" placeholder="${esc(bookingDefault) || 'https://… (Virtuoso / TravelWits)'}"></div>
                     </details>
+                    ` : `
+                    <div class="quote-steps">
+                        <p class="quote-steps-head">Add the quote — nothing typed by hand</p>
+                        <div class="claude-row">
+                            <button class="btn btn-small" data-copyprompt="${i}" type="button">1 &middot; Copy the Claude prompt</button>
+                            &nbsp;give it to your Claude along with the quote screenshot(s), then paste the reply below.
+                        </div>
+                        <div class="f-row claude-paste" data-pastefor="${i}">
+                            <textarea class="f-area" data-pastearea="${i}" placeholder='2 · Paste Claude&#39;s reply here — it starts with { and ends with } — and every field fills in automatically.'></textarea>
+                        </div>
+                    </div>
+                    <div class="q-sec"><p class="q-sec-head">Room &amp; rate</p>
+                    <div class="f-grid2">
+                        <div class="f-row"><label class="f-label">Room category</label>
+                            <input class="f-input" data-i="${i}" data-k="room" value="${esc(h.room)}" placeholder="Deluxe Sea View Suite"></div>
+                        <div class="f-row"><label class="f-label">Rate line</label>
+                            <input class="f-input" data-i="${i}" data-k="rate" value="${esc(h.rate)}" placeholder="From *$1,850 / night*"></div>
+                    </div>
+                    <div class="f-row"><label class="f-label">Rate note</label>
+                        <input class="f-input" data-i="${i}" data-k="rateNote" value="${esc(h.rateNote)}" placeholder="Includes daily breakfast, taxes and fees"></div>
+                    <div class="f-row"><label class="f-label">About the room (optional)</label>
+                            <textarea class="f-area" data-i="${i}" data-k="roomDesc" placeholder="A few lines on the room category you quoted.">${esc(h.roomDesc)}</textarea></div>
+                    <div class="f-row"><label class="f-label">Heading above it <span style="text-transform:none">(defaults to &ldquo;About the {room category}&rdquo;)</span></label>
+                            <input class="f-input" data-i="${i}" data-k="roomDescLabel" value="${esc(h.roomDescLabel)}" placeholder="About the Junior Suite"></div>
+                    <details class="q-sub"${h.rateTableText ? ' open' : ''}><summary>Group quote: rates by room category</summary>
+                    <div class="f-row"><label class="f-label">Rates by room category <span style="text-transform:none">(optional — one per line, <code>Category | Price</code>. Use this for a group where each couple picks their own room)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="rateTableText" style="min-height:130px" placeholder="Junior Suite Garden View | $2,898&#10;Junior Suite Swim Out | $3,617&#10;Preferred Club Junior Suite Ocean View | $4,349">${esc(h.rateTableText)}</textarea></div>
+                    <div class="f-row"><label class="f-label">Rate table note <span style="text-transform:none">(what the prices cover)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="rateTableNote" value="${esc(h.rateTableNote)}" placeholder="Per couple, two sharing, 5 nights, land only. All taxes and gratuities included."></div>
+                    </details></div>
+                    <div class="q-sec"><p class="q-sec-head">Flight <span>optional</span></p>
+                    <div class="f-row"><label class="f-label">Flight note <span style="text-transform:none">(optional — shows with a ✈ under the rate)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="flight" value="${esc(h.flight)}" placeholder="DFW → Providenciales · American · 1 stop · starting from $795 / person round-trip"></div>
+                    <div class="f-row"><label class="f-label">Flight details <span style="text-transform:none">(optional; drop a Google Flights screenshot to fill)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="flightDetails" style="min-height:130px" placeholder="Outbound · Wed, Nov 11&#10;American · DFW 5:00 AM – AXA 2:57 PM&#10;7 hr 57 min · 1 stop · 1 hr 56 min layover in Miami (MIA)&#10;&#10;Return · Sun, Nov 15&#10;American · AXA 3:37 PM – DFW 9:50 PM&#10;8 hr 13 min · 1 stop · 1 hr 36 min layover in Miami (MIA)&#10;&#10;Fares&#10;Main Cabin $1,526 pp · Main Plus $1,768 pp">${esc(h.flightDetails)}</textarea></div>
+                    </div>
+                    <div class="q-sec"><p class="q-sec-head">The hotel <span>photos and description, from our website unless changed</span></p>
+                    ${photoManager(h, i)}
+                    ${h.custom ? '' : `<div class="f-row"><label class="f-label">Custom description (optional — otherwise the website's)</label>
+                            <textarea class="f-area" data-i="${i}" data-k="desc">${esc(h.desc)}</textarea></div>`}
+                    </div>
+                    <div class="q-sec"><p class="q-sec-head">Wander by Wilson Exclusives</p>
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="perks${i}" data-i="${i}" data-k="usePerks" ${h.usePerks ? 'checked' : ''}>
+                        <label for="perks${i}">Include Wander by Wilson Exclusives on this hotel</label>
+                    </div>
+                    ${h.usePerks ? `<div class="f-row perks-box"><label class="f-label">Wander by Wilson Exclusives — one per line</label>
+                        <textarea class="f-area" data-i="${i}" data-k="perksText" style="min-height:118px">${esc(h.perksText)}</textarea>
+                        <label class="f-label" style="margin-top:10px">Heading above them</label>
+                        <input class="f-input" data-i="${i}" data-k="perksLabel" value="${esc(h.perksLabel)}" placeholder="Wander by Wilson Exclusives"></div>` : ''}
+                    </div>
+                    <div class="q-sec q-sec-pay"><p class="q-sec-head">Payment terms <span>as the client sees them; check against the rate document</span></p>
+                    <div class="f-row"><label class="f-label" for="dep${i}">Deposit</label>
+                            <textarea class="f-area adv-grow" rows="2" id="dep${i}" data-i="${i}" data-k="deposit" placeholder="Copy the deposit terms from the rate document. One line per stage.">${esc(h.deposit || '')}</textarea></div>
+                    <div class="f-row"><label class="f-label" for="can${i}">Cancellation</label>
+                            <textarea class="f-area adv-grow" rows="2" id="can${i}" data-i="${i}" data-k="cancellation" placeholder="Copy the cancellation terms from the rate document. One line per stage, e.g. a free-cancellation deadline, then each penalty.">${esc(h.cancellation || '')}</textarea></div>
+                    </div>
+                    <div class="q-sec"><p class="q-sec-head">Good to know <span>check-in and check-out, local taxes and fees; one per line</span></p>
+                    <div class="f-row"><label class="f-label">Good to know <span style="text-transform:none">(optional — supplier terms in plain English, one per line)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="termsText" style="min-height:110px" placeholder="Check-in 3:00 PM, check-out 12:00 PM.&#10;A government environmental tax of 82.11 MXN per room per night is paid at the hotel on departure.">${esc(h.termsText)}</textarea></div>
+                    </div>
+                    <div class="q-sec"><p class="q-sec-head">Booking button <span>optional</span></p>
+                    <div class="f-row check-row">
+                            <input type="checkbox" id="book${i}" data-i="${i}" data-k="useBooking" ${h.useBooking ? 'checked' : ''}>
+                            <label for="book${i}">Show a &ldquo;Book this rate&rdquo; button</label>
+                        </div>
+                    <div class="f-row"><label class="f-label">Booking link</label>
+                            <input class="f-input" data-i="${i}" data-k="bookingUrl" value="${esc(h.bookingUrl)}" placeholder="${esc(bookingDefault) || 'https://… (Virtuoso / TravelWits)'}"></div>
+                    </div>
+                    <div class="advisor-note">
+                        <p class="advisor-note-head">Ways to book &mdash; only you see this
+                            ${(h.bookingPartners || h.amenitiesNote || h.advisorNote || h.partnerPerksText) ? `<button type="button" class="linkish adv-toggle" data-advedit="${i}">${advEdit.has(h) ? 'Done' : 'Edit'}</button>` : ''}</p>
+                        ${(!advEdit.has(h) && (h.bookingPartners || h.amenitiesNote || h.advisorNote || h.partnerPerksText)) ? advisorRead(h) : `
+                        <div class="f-row"><label class="f-label">Where we can book it</label>
+                            <textarea class="f-area adv-grow" rows="1" data-i="${i}" data-k="bookingPartners" placeholder="Virtuoso · Mr &amp; Mrs Smith · Tablet">${esc(h.bookingPartners || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label">Perks by partner <span style="text-transform:none">(one line each: Partner: perk · perk; add * after the partner whose perks show on the page)</span></label>
+                            <textarea class="f-area adv-grow" rows="2" data-i="${i}" data-k="partnerPerksText" placeholder="Virtuoso*: Upgrade · Breakfast for 2 · $100 credit&#10;Mr &amp; Mrs Smith: Bottle of wine · Vineyard tour">${esc(h.partnerPerksText || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label">Amenity programs</label>
+                            <textarea class="f-area adv-grow" rows="1" data-i="${i}" data-k="amenitiesNote" placeholder="Perks above are Virtuoso's; Mr &amp; Mrs Smith has a different package">${esc(h.amenitiesNote || '')}</textarea></div>
+                        <div class="f-row"><label class="f-label">Caveats &amp; what to check</label>
+                            <textarea class="f-area adv-grow" data-i="${i}" data-k="advisorNote" placeholder="Open: … Gym: … Check: …">${esc(h.advisorNote || '')}</textarea></div>`}
+                    </div>
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="cons${i}" data-i="${i}" data-k="considered" ${h.considered ? 'checked' : ''}>
+                        <label for="cons${i}">Considered but not selected (kept here for your records; it does not appear on the client’s page)</label>
+                    </div>
+                    ${h.considered ? `<div class="f-row"><label class="f-label">Why it wasn’t the pick <span style="text-transform:none">(internal note, never shown to the client)</span></label>
+                        <input class="f-input" data-i="${i}" data-k="consideredWhy" value="${esc(h.consideredWhy || '')}" placeholder="Beautiful, but a longer transfer than you wanted"></div>` : ''}
+                    `}
                     </div>
                 </div>`;
             }).join('') || '<p class="sec-sub" style="margin:0 0 14px">No hotels yet — add your first from the library below.</p>';
@@ -4298,8 +4403,11 @@
         /* The advisor's personalised welcome note is a surprise: it never shows,
            even if a library entry or a supplier quote lists it. */
         const WELCOME_NOTE = new RegExp(window.WBW_RULES.checks.welcomeNote, 'i');
+        // Library perks are stored as HTML ("Food &amp; Beverage"): decode them so the
+        // editable box shows plain text.
+        const perkTxt = (p) => { const t = document.createElement('textarea'); t.innerHTML = String(p || ''); return t.value.trim(); };
         function cleanPerks(list) {
-            return (list || []).map(p => String(p || '').trim()).filter(p => p && !WELCOME_NOTE.test(p));
+            return (list || []).map(perkTxt).filter(p => p && !WELCOME_NOTE.test(p));
         }
         function libPerksFor(slug) {
             const e = lib[slug];
@@ -4555,8 +4663,8 @@
                 '      "rate": "the stay TOTAL from the document, e.g. €13,024 · 4-night total",',
                 '      "rateNote": "ONE line: what the total includes, as the document states it",',
                 '      "perks": ["the amenities of the program this rate is booked through"],',
-                '      "deposit": "from the document, plain English, or empty",',
-                '      "cancellation": "from the document, plain English, exact deadline and penalty, or empty",',
+                '      "deposit": "the document\u2019s own wording, every condition kept, codes decoded, one line per stage; or empty",',
+                '      "cancellation": "the document\u2019s own wording, every deadline and penalty kept, codes decoded, one line per stage; or empty",',
                 '      "terms": ["other supplier terms, one line each"],',
                 '      "rateTable": [{"room": "category", "price": "total"}],',
                 '      "rateTableNote": "only with a rateTable: what the prices cover",',
@@ -4605,15 +4713,15 @@
                 '  "rateNote": "ONE line: what the total includes, e.g. Includes daily breakfast, taxes and fees",',
                 '  "perks": ["each amenity of the program this rate is booked through, as a short bullet with its fine print"],',
                 '  "amenitiesNote": "advisor-only: which program those perks come from",',
-                '  "deposit": "1 sentence, plain English, e.g. A credit card is required to guarantee the booking; nothing is charged until April 23, 2027.",',
-                '  "cancellation": "1–2 sentences, exact deadline and penalty, e.g. Free cancellation until 6:00 PM hotel time on September 14, 2026; after that the full stay is charged.",',
+                '  "deposit": "the document\u2019s own deposit wording, every condition kept, codes and dates decoded; one line per stage (\\n between lines)",',
+                '  "cancellation": "the document\u2019s own cancellation wording, every deadline and penalty kept, codes and dates decoded; one line per stage (\\n between lines)",',
                 '  "terms": ["other supplier terms the client should see, one line each"],',
                 '  "rateTable": [{"room": "category as written", "price": "total"}],',
                 '  "rateTableNote": "only with a rateTable: what the prices cover",',
                 '  "dates": "stay dates as shown, e.g. May 23–27, 2027",',
                 '  "flight": "flight attachments only: JFK ⇄ Naples · Delta · nonstop · ≈9 hrs · starting from $1,240 / person round-trip",',
                 '  "flightDetails": "flight attachments only, multiline with \\\\n: Outbound · day, date / Airline · DEP–ARR / duration · stops · layover; Return · same; Fares, each / person",',
-                '  "advisorNote": "advisor-only: anything missing from the document or unclear"',
+                '  "advisorNote": "advisor-only: Original terms: <the deposit and cancellation text exactly as the document shows it>, then anything missing or unclear"',
                 '}',
                 '',
                 'Hotel quote: leave the flight fields empty. Flight attachment: leave the hotel fields and perks empty.'

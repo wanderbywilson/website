@@ -1603,8 +1603,8 @@
                     : '';
                 const finePrint = (!lookbook && (r.deposit || r.cancellation))
                     ? `<div class="prop-hotel-fineprint">
-                        ${r.deposit ? `<p><strong>Deposit</strong><span${E(`hotels.${i}.deposit`)}>${r.deposit}</span></p>` : ''}
-                        ${r.cancellation ? `<p><strong>Cancellation</strong><span${E(`hotels.${i}.cancellation`)}>${r.cancellation}</span></p>` : ''}
+                        ${r.deposit ? `<p><strong>Deposit</strong><span${E(`hotels.${i}.deposit`)}>${String(r.deposit).replace(/\n/g, '<br>')}</span></p>` : ''}
+                        ${r.cancellation ? `<p><strong>Cancellation</strong><span${E(`hotels.${i}.cancellation`)}>${String(r.cancellation).replace(/\n/g, '<br>')}</span></p>` : ''}
                        </div>`
                     : '';
                 // A negotiated group rate sheet: every category, so each couple can
