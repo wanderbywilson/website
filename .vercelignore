@@ -10,3 +10,13 @@ brandmark-studio.html
 # Backups (already gitignored but extra safety)
 *.bak
 *.bak-*
+
+# Unreferenced large files — kept in repo, left out of deploys to save
+# Vercel Deployment Storage (free tier is 10 GB across all kept deploys)
+services-images/00-services-hero-alt.jpg
+blog-images/anguilla-travel-guide/tempimageqt80yn.gif
+blog-images/krabi-thailand-luxury-resort-rayavadee/tempimage4i7jxx.gif
+proposals/ingram-criswell/*.docx
+proposals/ingram-criswell/~$*
+proposals/ingram-criswell/build-pdf.*
+proposals/ingram-criswell/serve.rb
