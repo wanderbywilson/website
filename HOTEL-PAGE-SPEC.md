@@ -77,7 +77,8 @@ there looks like, never a specific quoted room.
 - **Quotes never show a photo as "your room".** They use this gallery plus the note
   "Photos show the property. Your room category may differ." (Wilson, 2026-10-02:
   room-category photos are left out for liability.)
-- **Never:** plated-food shots · night/after-dark shots · bathroom-only room shots ·
+- **Never:** **twin-bed room shots** (Wilson, 2026-10-06: every room shot shows a king or
+  double bed, so the one gallery suits couples and families alike) · plated-food shots · night/after-dark shots · bathroom-only room shots ·
   **people as the subject** — no couples, portraits, models or lifestyle shots where a person is what the photo is about (small figures at human scale in a wide view are fine) · dark or flat interiors · renders when photos exist ·
   near-duplicates · logos or promo text burned in · generic spa treatment rooms.
 - **Sources, in this order (Wilson, 2026-10-02):** the hotel's own site/official media
