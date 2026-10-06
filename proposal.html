@@ -833,6 +833,38 @@
         .rt-icon svg { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; display: block; }
         @media (max-width: 640px) { .rt-stop { font-size: 17px; } .rt-strip li + li::before { width: 14px; margin: 0 7px; } .rt-name { font-size: 30px; } }
         @media print { .prop-route { padding: 6px 0 14px; } .prop-route-map { max-width: 80%; } }
+        /* Photo viewer (overview and Things to do photos) */
+        img.lbx-open { cursor: zoom-in; }
+        html.lbx-lock, html.lbx-lock body { overflow: hidden; }
+        .lbx { position: fixed; inset: 0; z-index: 1000; background: rgba(10, 18, 30, 0.93); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 56px 0 28px; opacity: 0; transition: opacity .22s ease; }
+        .lbx.is-open { opacity: 1; }
+        .lbx[hidden] { display: none; }
+        .lbx-close { position: absolute; top: 14px; right: 18px; width: 44px; height: 44px; border: 0; background: none; color: #FCFAF6; font-size: 34px; line-height: 1; cursor: pointer; opacity: .85; }
+        .lbx-close:hover { opacity: 1; }
+        .lbx-stage { position: relative; width: 100%; height: min(64vh, 680px); flex: none; overflow: hidden; }
+        .lbx-slide { --w: min(64vw, 980px); position: absolute; top: 0; left: 50%; width: var(--w); height: 100%; margin: 0;
+            transform: translateX(calc(-50% + var(--d, 0) * (var(--w) + 3vw))) scale(.84); transition: transform .45s cubic-bezier(.22,.61,.36,1), filter .45s ease, opacity .45s ease;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .lbx-slide.is-on { transform: translateX(-50%) scale(1); cursor: default; }
+        .lbx-frame { position: relative; display: block; max-width: 100%; max-height: 100%; line-height: 0; }
+        .lbx-frame::after { content: ''; position: absolute; inset: 0; background: rgba(8, 15, 26, 0.74); transition: opacity .45s ease; pointer-events: none; }
+        .lbx-slide.is-on .lbx-frame::after { opacity: 0; }
+        .lbx-slide:not(.is-on):hover .lbx-frame::after { background: rgba(8, 15, 26, 0.55); }
+        .lbx-slide.is-far { opacity: 0; pointer-events: none; }
+        .lbx-slide img { max-width: 100%; max-height: min(64vh, 680px); object-fit: contain; display: block; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+        @media (max-width: 640px) { .lbx-slide img { max-height: 52vh; } }
+        .lbx-text { width: min(64vw, 980px); color: #FCFAF6; text-align: left; }
+        .lbx-cap { margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.6; }
+        .lbx.is-shared .lbx-cap { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .lbx.is-shared.is-expanded .lbx-cap { display: block; max-height: 22vh; overflow-y: auto; }
+        .lbx-more { margin-top: 8px; border: 0; background: none; padding: 0; color: var(--gold); font: 500 11px var(--font-sans); letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+        @media (max-width: 640px) {
+            .lbx-slide { --w: 82vw; }
+            .lbx-stage { height: 52vh; }
+            .lbx-text { width: 86vw; }
+            .lbx-cap { font-size: 16px; }
+        }
+        @media print { .lbx { display: none !important; } }
         /* How to get there as a map (mockup 2026-10-03): the map carries the places,
            the key underneath carries the times, grouped by how you travel. */
         .gt-map { position: relative; aspect-ratio: 760 / 520; margin: 14px 0 6px 18px; }
@@ -1456,6 +1488,98 @@
                     if (window.innerWidth > 980 && body) inner.style.height = Math.max(window.innerHeight, body.offsetHeight) + 'px';
                 });
             }
+
+            /* Photo viewer (Wilson, 2026-10-05). Click an overview photo or a Things to
+               do photo: it opens large in the centre over a dark overlay, with the
+               other photos dimmed at the sides; click one to roll it into the middle.
+               Overview photos share the guide's overview text underneath (shortened,
+               with Read more); each Things to do photo carries its own caption.
+               Close with the ×, Esc or a click on the dark background. */
+            let lbx = null;
+            function lbxBuild() {
+                if (lbx) return lbx;
+                const el = document.createElement('div');
+                el.className = 'lbx'; el.hidden = true;
+                el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Photos');
+                el.innerHTML = `<button class="lbx-close" type="button" aria-label="Close">&times;</button>
+                    <div class="lbx-stage"></div>
+                    <div class="lbx-text"><p class="lbx-cap"></p><button class="lbx-more" type="button" hidden>Read more</button></div>`;
+                document.body.appendChild(el);
+                lbx = { el, stage: el.querySelector('.lbx-stage'), cap: el.querySelector('.lbx-cap'), more: el.querySelector('.lbx-more'), items: [], i: 0, shared: null, last: null };
+                el.addEventListener('click', (e) => {
+                    if (e.target.closest('.lbx-close')) return lbxClose();
+                    if (e.target.closest('.lbx-more')) { const open = lbx.el.classList.toggle('is-expanded'); lbx.more.textContent = open ? 'Show less' : 'Read more'; return; }
+                    const sl = e.target.closest('.lbx-slide');
+                    if (sl) { const k = +sl.dataset.k; if (k !== lbx.i) lbxGo(k); return; }
+                    if (!e.target.closest('.lbx-text')) lbxClose();
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (lbx.el.hidden) return;
+                    if (e.key === 'Escape') lbxClose();
+                    else if (e.key === 'ArrowRight') lbxGo(Math.min(lbx.i + 1, lbx.items.length - 1));
+                    else if (e.key === 'ArrowLeft') lbxGo(Math.max(lbx.i - 1, 0));
+                });
+                let x0 = null;
+                el.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+                el.addEventListener('touchend', (e) => {
+                    if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null;
+                    if (Math.abs(dx) > 40) lbxGo(Math.max(0, Math.min(lbx.items.length - 1, lbx.i + (dx < 0 ? 1 : -1))));
+                });
+                return lbx;
+            }
+            function lbxGo(i) {
+                lbx.i = i;
+                [...lbx.stage.children].forEach((sl, k) => {
+                    const d = k - i;
+                    sl.style.setProperty('--d', d);
+                    sl.classList.toggle('is-on', d === 0);
+                    sl.classList.toggle('is-far', Math.abs(d) > 1);
+                    sl.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
+                });
+                const t = lbx.shared != null ? lbx.shared : (lbx.items[i].cap || '');
+                if (lbx.shared == null || lbx.cap.dataset.set !== '1') {
+                    lbx.cap.innerHTML = t; lbx.cap.dataset.set = lbx.shared != null ? '1' : '';
+                    lbx.el.classList.remove('is-expanded'); lbx.more.textContent = 'Read more';
+                    setTimeout(() => { lbx.more.hidden = lbx.cap.scrollHeight <= lbx.cap.clientHeight + 2; }, 30);
+                }
+            }
+            function lbxOpen(img) {
+                lbxBuild();
+                const kind = img.dataset.lbx;
+                const scope = kind === 'ov' ? img.closest('.prop-dest-pair') : img.closest('.prop-todo-rail');
+                const imgs = [...scope.querySelectorAll('img.lbx-open')];
+                lbx.items = imgs.map(im => ({ src: im.currentSrc || im.src, alt: im.alt,
+                    cap: kind === 'todo' ? ((im.closest('.prop-todo-card') || {}).querySelector ? im.closest('.prop-todo-card').querySelector('.prop-todo-cap').innerHTML : '') : '' }));
+                const ov = kind === 'ov' && img.closest('.prop-hotel-body') && img.closest('.prop-hotel-body').querySelector('.prop-dest-overview');
+                lbx.shared = kind === 'ov' ? (ov ? ov.innerHTML : '') : null;
+                lbx.el.classList.toggle('is-shared', kind === 'ov');
+                lbx.cap.dataset.set = '';
+                lbx.stage.innerHTML = lbx.items.map((it, k) => `<figure class="lbx-slide" data-k="${k}"><span class="lbx-frame"><img src="${it.src}" alt="${it.alt}"></span></figure>`).join('');
+                lbx.last = img;
+                lbx.el.hidden = false;
+                document.documentElement.classList.add('lbx-lock');
+                lbxGo(+img.dataset.k || 0);
+                setTimeout(() => lbx.el.classList.add('is-open'), 10);
+                lbx.el.querySelector('.lbx-close').focus({ preventScroll: true });
+            }
+            function lbxClose() {
+                if (!lbx || lbx.el.hidden) return;
+                lbx.el.classList.remove('is-open');
+                document.documentElement.classList.remove('lbx-lock');
+                setTimeout(() => { lbx.el.hidden = true; }, 220);
+                if (lbx.last) lbx.last.focus({ preventScroll: true });
+            }
+            let lbxWired = false;
+            function initViewer() {
+                if (lbxWired) return; lbxWired = true;
+                document.addEventListener('click', (e) => {
+                    const img = e.target.closest && e.target.closest('img.lbx-open');
+                    if (img) { e.preventDefault(); lbxOpen(img); }
+                });
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('img.lbx-open')) { e.preventDefault(); lbxOpen(e.target); }
+                });
+            }
             function initFolds() {
                 sizeFoldPhotos();
                 if (!window.__foldResize) { window.__foldResize = true; window.addEventListener('resize', () => { clearTimeout(window.__frT); window.__frT = setTimeout(sizeFoldPhotos, 150); }); }
@@ -1490,7 +1614,7 @@
                 const shots = (d.gallery || []).filter(u => u && u !== d.heroImage && u !== destCover(d));
                 const pair = shots.slice(0, 2), rest = shots.slice(2);
                 const photoPair = pair.length
-                    ? `<div class="prop-dest-pair${pair.length === 1 ? ' is-single' : ''}">${pair.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 1}" loading="lazy">`).join('')}</div>` : '';
+                    ? `<div class="prop-dest-pair${pair.length === 1 ? ' is-single' : ''}">${pair.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 1}" loading="lazy" class="lbx-open" data-lbx="ov" data-k="${gi}" tabindex="0" role="button" aria-label="Open photo ${gi + 1} of ${pair.length}">`).join('')}</div>` : '';
                 const carousel = rest.length
                     ? `<div class="prop-carousel">
                         ${rest.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 3}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
@@ -1511,7 +1635,7 @@
                                 <button class="prop-stays-btn" data-dir="-1" type="button" aria-label="Previous">&#8592;</button>
                                 <button class="prop-stays-btn" data-dir="1" type="button" aria-label="More">&#8594;</button>
                             </span></div>
-                        <div class="prop-stays-rail prop-todo-rail">${hl.map((x, k) => `<div class="prop-stay prop-todo-card"><div class="prop-todo-shot"><img src="${hlImgs[k]}" alt="" loading="lazy"></div><p class="prop-todo-cap">${x}</p></div>`).join('')}</div>
+                        <div class="prop-stays-rail prop-todo-rail">${hl.map((x, k) => `<div class="prop-stay prop-todo-card"><div class="prop-todo-shot"><img src="${hlImgs[k]}" alt="" loading="lazy" class="lbx-open" data-lbx="todo" data-k="${k}" tabindex="0" role="button" aria-label="Open photo ${k + 1}"></div><p class="prop-todo-cap">${x}</p></div>`).join('')}</div>
                        </div>`
                     : `<div class="prop-hotel-perks prop-dest-highlights"><strong>${d.highlightsLabel || 'Things to do'}</strong><ul>${hl.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
                 // How to get there: By plane, then By train / By car / By ferry lines.
@@ -1565,7 +1689,7 @@
                     <div class="prop-hotel-body">
                         <p class="prop-dest-label">Destination overview</p>
                         ${photoPair}
-                        ${d.overview ? `<p class="prop-hotel-desc">${d.overview}</p>` : ''}
+                        ${d.overview ? `<p class="prop-hotel-desc prop-dest-overview">${d.overview}</p>` : ''}
                         ${carousel}
                         ${fold(d.highlightsLabel || 'Things to do', highlights)}
                         ${fold('Our tip', tip)}
@@ -2051,7 +2175,7 @@
                 initCarousels();
                 initStayRails();
                 drawRoute(); drawGettingMaps();
-                initFolds();
+                initFolds(); initViewer();
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
                     btn.className = 'prop-pdf-btn';
