@@ -65,14 +65,14 @@
          ================================================================ -->
     <section class="property-hero" aria-label="Property hero">
         <div class="property-hero-bg">
-            <img id="propertyHeroImg" src="" alt="" fetchpriority="high">
+            <img id="propertyHeroImg" src="/property-images/cap-rocat/00-hero.webp" alt="Cap Rocat" fetchpriority="high">
             <div class="property-hero-grain" aria-hidden="true"></div>
             <div class="property-hero-gradient"></div>
         </div>
         <div class="container property-hero-inner">
-            <p class="property-location" id="propertyLocation"></p>
+            <p class="property-location" id="propertyLocation">Cala Blava, Mallorca, Spain</p>
             <p class="property-hero-rate" id="propertyHeroRate" hidden></p>
-            <h1 class="property-title" id="propertyName"></h1>
+            <h1 class="property-title" id="propertyName">Cap Rocat</h1>
             <div class="property-hero-perks" id="propertyHeroPerks" hidden></div>
             <a class="property-hero-cta" id="propertyHeroCta" href="/inquire-hotel" hidden>
                 <span id="propertyHeroCtaLabel">Inquire about this stay</span>
@@ -98,7 +98,7 @@
 
             <div class="property-overview-col">
                 <p class="kicker"><span class="kicker-line"></span><span>Property Overview</span></p>
-                <p id="propertyDescription" class="property-prose"></p>
+                <p id="propertyDescription" class="property-prose">Cap Rocat is a 19th-century coastal fortress reborn as an adults-only Relais &amp; Ch&acirc;teaux hideaway, clinging to its own cliff above the Bay of Palma. Its former bunkers and buttresses now hold 30 barrel-vaulted rooms and suites &mdash; some with private plunge pools and gazebos &mdash; while an ethereal hammam-style spa has been carved straight from the rock. Golf carts ferry guests across the sprawling grounds to tennis courts, a private beach, and an infinity pool that seems to spill into the Mediterranean. It&rsquo;s a quiet, cinematic base for sailing, cycling the coast, or slipping into Palma for the day.</p>
 
                 <div class="property-ideal-for" id="propertyIdealFor" hidden>
                     <p class="kicker"><span class="kicker-line"></span><span>Best for</span></p>
@@ -155,10 +155,15 @@
     <!-- ================================================================
          Property gallery — populated from PROPERTIES[slug].gallery
          ================================================================ -->
-    <section class="property-gallery" id="propertyGallery" hidden>
+    <section class="property-gallery" id="propertyGallery">
         <div class="container">
             <p class="kicker"><span class="kicker-line"></span><span>The setting</span></p>
-            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="gallery-grid" id="galleryGrid">
+                <figure class="gallery-tile gallery-tile--wide"><img src="/property-images/cap-rocat/01-accommodation.webp" alt="Cap Rocat" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/cap-rocat/02-pool.webp" alt="Cap Rocat" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/cap-rocat/03-spa.webp" alt="Cap Rocat" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/cap-rocat/04-restaurant.webp" alt="Cap Rocat" loading="lazy"></figure>
+            </div>
         </div>
     </section>
 
@@ -437,6 +442,7 @@
                 // Gallery — first tile is wide (spans both columns), rest are 2×2
                 if (Array.isArray(detail.gallery) && detail.gallery.length) {
                     const grid = document.getElementById('galleryGrid');
+                    grid.innerHTML = ''; // static hotel pages ship pre-rendered tiles
                     detail.gallery.forEach((src, i) => {
                         const fig = document.createElement('figure');
                         fig.className = 'gallery-tile' + (i === 0 ? ' gallery-tile--wide' : '');

@@ -426,6 +426,7 @@
                 // Gallery — first tile is wide (spans both columns), rest are 2×2
                 if (Array.isArray(detail.gallery) && detail.gallery.length) {
                     const grid = document.getElementById('galleryGrid');
+                    grid.innerHTML = ''; // static hotel pages ship pre-rendered tiles
                     detail.gallery.forEach((src, i) => {
                         const fig = document.createElement('figure');
                         fig.className = 'gallery-tile' + (i === 0 ? ' gallery-tile--wide' : '');

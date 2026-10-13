@@ -65,14 +65,14 @@
          ================================================================ -->
     <section class="property-hero" aria-label="Property hero">
         <div class="property-hero-bg">
-            <img id="propertyHeroImg" src="" alt="" fetchpriority="high">
+            <img id="propertyHeroImg" src="/property-images/deplar-farm/00-hero.jpg" alt="Deplar Farm" fetchpriority="high">
             <div class="property-hero-grain" aria-hidden="true"></div>
             <div class="property-hero-gradient"></div>
         </div>
         <div class="container property-hero-inner">
-            <p class="property-location" id="propertyLocation"></p>
+            <p class="property-location" id="propertyLocation">Flj&oacute;t Valley, Iceland</p>
             <p class="property-hero-rate" id="propertyHeroRate" hidden></p>
-            <h1 class="property-title" id="propertyName"></h1>
+            <h1 class="property-title" id="propertyName">Deplar Farm</h1>
             <div class="property-hero-perks" id="propertyHeroPerks" hidden></div>
             <a class="property-hero-cta" id="propertyHeroCta" href="/inquire-hotel" hidden>
                 <span id="propertyHeroCtaLabel">Inquire about this stay</span>
@@ -98,7 +98,7 @@
 
             <div class="property-overview-col">
                 <p class="kicker"><span class="kicker-line"></span><span>Property Overview</span></p>
-                <p id="propertyDescription" class="property-prose"></p>
+                <p id="propertyDescription" class="property-prose">Deplar Farm is an Eleven Experiences lodge tucked into Iceland&rsquo;s remote Troll Peninsula, converted from a 15th-century sheep farm into 13 Scandi-chic suites with floor-to-ceiling views of the Flj&oacute;t Valley. The all-inclusive stay layers in two guided adventures a day &mdash; heli-skiing, surfing the Arctic, fly fishing, sea kayaking, snowmobiling, or horseback riding under the midnight sun. A 5,000-square-foot Eleven Life spa, geothermal indoor-outdoor pool with swim-up bar, Viking sauna, and floatation tanks make recovery as serious as the action. Meals come from Iceland&rsquo;s 2018 Chef of the Year, with island-sourced produce, Arctic char, and frequent visits from the farmers and fishermen behind the menu.</p>
 
                 <div class="property-ideal-for" id="propertyIdealFor" hidden>
                     <p class="kicker"><span class="kicker-line"></span><span>Best for</span></p>
@@ -155,10 +155,16 @@
     <!-- ================================================================
          Property gallery — populated from PROPERTIES[slug].gallery
          ================================================================ -->
-    <section class="property-gallery" id="propertyGallery" hidden>
+    <section class="property-gallery" id="propertyGallery">
         <div class="container">
             <p class="kicker"><span class="kicker-line"></span><span>The setting</span></p>
-            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="gallery-grid" id="galleryGrid">
+                <figure class="gallery-tile gallery-tile--wide"><img src="/property-images/deplar-farm/01-aurora-pool.jpg" alt="Deplar Farm" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/deplar-farm/02-spa.jpg" alt="Deplar Farm" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/deplar-farm/03-bar.jpg" alt="Deplar Farm" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/deplar-farm/04-lounge.jpg" alt="Deplar Farm" loading="lazy"></figure>
+                <figure class="gallery-tile"><img src="/property-images/deplar-farm/05-floki-suite.jpg" alt="Deplar Farm" loading="lazy"></figure>
+            </div>
         </div>
     </section>
 
@@ -437,6 +443,7 @@
                 // Gallery — first tile is wide (spans both columns), rest are 2×2
                 if (Array.isArray(detail.gallery) && detail.gallery.length) {
                     const grid = document.getElementById('galleryGrid');
+                    grid.innerHTML = ''; // static hotel pages ship pre-rendered tiles
                     detail.gallery.forEach((src, i) => {
                         const fig = document.createElement('figure');
                         fig.className = 'gallery-tile' + (i === 0 ? ' gallery-tile--wide' : '');

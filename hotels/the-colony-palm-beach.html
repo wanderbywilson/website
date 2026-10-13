@@ -65,14 +65,14 @@
          ================================================================ -->
     <section class="property-hero" aria-label="Property hero">
         <div class="property-hero-bg">
-            <img id="propertyHeroImg" src="" alt="" fetchpriority="high">
+            <img id="propertyHeroImg" src="/property-images/the-colony-palm-beach/00-hero.jpg" alt="The Colony Hotel, Palm Beach" fetchpriority="high">
             <div class="property-hero-grain" aria-hidden="true"></div>
             <div class="property-hero-gradient"></div>
         </div>
         <div class="container property-hero-inner">
-            <p class="property-location" id="propertyLocation"></p>
+            <p class="property-location" id="propertyLocation">Palm Beach, Florida</p>
             <p class="property-hero-rate" id="propertyHeroRate" hidden></p>
-            <h1 class="property-title" id="propertyName"></h1>
+            <h1 class="property-title" id="propertyName">The Colony Hotel, Palm Beach</h1>
             <div class="property-hero-perks" id="propertyHeroPerks" hidden></div>
             <a class="property-hero-cta" id="propertyHeroCta" href="/inquire-hotel" hidden>
                 <span id="propertyHeroCtaLabel">Inquire about this stay</span>
@@ -98,7 +98,7 @@
 
             <div class="property-overview-col">
                 <p class="kicker"><span class="kicker-line"></span><span>Property Overview</span></p>
-                <p id="propertyDescription" class="property-prose"></p>
+                <p id="propertyDescription" class="property-prose">The pink-washed grande dame of Palm Beach, half a block from Worth Avenue and the Atlantic. Opened in 1947 and recently reimagined, The Colony is all British-colonial brio &mdash; lacquered palm-print walls, a palm-shaded pool courtyard, and a supper club that has drawn the island&rsquo;s regulars for generations. Rooms, suites, and poolside villas read bright and preppy-chic, in the high-spirited pinks and greens that made the hotel a Palm Beach icon. The address is the point: you&rsquo;re in the thick of the island&rsquo;s social swirl.</p>
 
                 <div class="property-ideal-for" id="propertyIdealFor" hidden>
                     <p class="kicker"><span class="kicker-line"></span><span>Best for</span></p>
@@ -437,6 +437,7 @@
                 // Gallery — first tile is wide (spans both columns), rest are 2×2
                 if (Array.isArray(detail.gallery) && detail.gallery.length) {
                     const grid = document.getElementById('galleryGrid');
+                    grid.innerHTML = ''; // static hotel pages ship pre-rendered tiles
                     detail.gallery.forEach((src, i) => {
                         const fig = document.createElement('figure');
                         fig.className = 'gallery-tile' + (i === 0 ? ' gallery-tile--wide' : '');

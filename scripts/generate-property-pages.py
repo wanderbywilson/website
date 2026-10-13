@@ -57,12 +57,19 @@ for m in re.finditer(r"\n    '([a-z0-9-]+)':\s*\{", scope):
                 return mm.group(1)
         return ''
 
+    def grab_list(field):
+        mm = re.search(rf"{field}:\s*\[(.*?)\]", body, re.S)
+        if not mm:
+            return []
+        return [a or b for a, b in re.findall(r"'((?:[^'\\]|\\.)*)'|\"((?:[^\"\\]|\\.)*)\"", mm.group(1))]
+
     properties[slug] = {
         'name':        grab('name'),
         'location':    grab('location'),
         'heroImage':   grab('heroImage'),
         'description': grab('description'),
         'rateFrom':    grab('rateFrom'),
+        'gallery':     grab_list('gallery'),
         # draft:true is always the FIRST field of an entry — anchor with re.match
         # so we don't false-match the "delete the `draft: true` line" hint that
         # sits in the comment inside the preceding entry's parsed body.
@@ -134,6 +141,36 @@ def replace_head(tpl, prop, slug):
     )
     return out
 
+def fill_body(out, prop):
+    """Bake the hero, name, location, description and gallery into the body,
+    so crawlers and AI tools that don't run JS (Tern AI, ChatGPT, Perplexity)
+    can read them. The page JS still runs and sets the same content."""
+    name = prop['name']
+    hero = prop['heroImage']
+    def sub1(pattern, repl, text):
+        new, n = re.subn(pattern, lambda m: repl, text, count=1)
+        if n != 1:
+            raise SystemExit(f'Template slot not found: {pattern}')
+        return new
+    out = sub1(r'<img id="propertyHeroImg" src="" alt=""',
+               f'<img id="propertyHeroImg" src="{html_esc(hero)}" alt="{html_esc(name)}"', out)
+    out = sub1(r'<p class="property-location" id="propertyLocation"></p>',
+               f'<p class="property-location" id="propertyLocation">{prop["location"]}</p>', out)
+    out = sub1(r'<h1 class="property-title" id="propertyName"></h1>',
+               f'<h1 class="property-title" id="propertyName">{name}</h1>', out)
+    out = sub1(r'<p id="propertyDescription" class="property-prose"></p>',
+               f'<p id="propertyDescription" class="property-prose">{prop["description"]}</p>', out)
+    if prop['gallery']:
+        tiles = '\n'.join(
+            f'                <figure class="gallery-tile{" gallery-tile--wide" if i == 0 else ""}">'
+            f'<img src="{html_esc(src)}" alt="{html_esc(name)}" loading="lazy"></figure>'
+            for i, src in enumerate(prop['gallery']))
+        out = sub1(r'<section class="property-gallery" id="propertyGallery" hidden>',
+                   '<section class="property-gallery" id="propertyGallery">', out)
+        out = sub1(r'<div class="gallery-grid" id="galleryGrid"></div>',
+                   f'<div class="gallery-grid" id="galleryGrid">\n{tiles}\n            </div>', out)
+    return out
+
 written = 0
 for slug, prop in properties.items():
     if not prop['name']:
@@ -142,7 +179,7 @@ for slug, prop in properties.items():
     if prop.get('draft'):
         print(f'  ⊘ skipped {slug}: draft (not published — no static page)')
         continue
-    html = replace_head(tpl, prop, slug)
+    html = fill_body(replace_head(tpl, prop, slug), prop)
     (OUT_DIR / f'{slug}.html').write_text(html)
     written += 1
 
