@@ -450,6 +450,8 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 
 **SEO fields:** optional `seoTitle` + `metaDescription` per post (Studio shows Google-length counters: 60 / 155). post.html and every post/*.html prefer them over title/dek for `<title>`, meta description, og/twitter tags; the H1 stays the headline.
 
+**Published only means live (2026-10-13):** the blog editor's Status dropdown let anyone pick "Published" by hand. Only `ready` posts are picked up by the daily run, so those posts showed as Published in the Studio but never reached the site (the Studio had 91 Published vs 46 live). Now a blog post only takes `published` once it has a `liveUrl` (server `publishedOnlyIfLive` on save, setstatus, setstatusMany and saveMany); anything else is saved as `ready`. The blog list flags stuck ones as **Not on the site** (checked against liveUrl and the live BLOG_POSTS) with a filter and a **Mark all ready** button. The publish task now saves `liveUrl` + `status:"published"` in one save. Same day: `best-honeymoon-destinations` (built 2026-07-28, lost in the 2026-08-19 v16/v17 incident) committed with `blog-data-v17.js`; all pages repointed v16 → v17 (v16 kept for cached pages).
+
 **Security note:** the original owner passcode was written in this file and the repo is PUBLIC. Never write a passcode into any file in this repo. The daily publish job must not keep a passcode in git either.
 
 ## 15. Proposal Studio rules overhaul (2026-10-02) — one rules file, library first

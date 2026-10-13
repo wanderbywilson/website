@@ -14,6 +14,9 @@
 //     load    {id}               → full doc
 //     save    {id?, doc, meta}   → create/update; meta is what the index shows
 //     setstatus {id, status}     → doc.status + index status
+//     setstatusMany {ids[], status}
+//                  A blog post only takes "published" once it has a liveUrl;
+//                  otherwise it's saved as "ready" (see publishedOnlyIfLive).
 //     delete  {id}
 //
 // Sign-in: see _auth.js. Team members reach only the kinds for the areas
@@ -49,6 +52,13 @@ function slugify(s) {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '')
         .slice(0, 60);
+}
+// A blog post is only "published" once the daily run has put it on the site
+// and given it a liveUrl. Anything else asking for "published" is queued as
+// "ready" instead, so a post can't sit in the Studio marked Published while
+// it isn't on the site (2026-10-13: ~45 posts had been stuck that way).
+function publishedOnlyIfLive(kind, doc) {
+    if (kind === 'blog' && doc.status === 'published' && !doc.liveUrl && !doc.liveSlug) doc.status = 'ready';
 }
 function randomSuffix() {
     const chars = 'abcdefghjkmnpqrstuvwxyz23456789';
@@ -155,6 +165,7 @@ module.exports = async (req, res) => {
                 doc.liveUrl = existing.liveUrl;
                 LIVE_FIELDS.forEach(f => { if (!(f in doc) && f in existing) doc[f] = existing[f]; });
             }
+            publishedOnlyIfLive(kind, doc);
             doc.createdAt = (existing && existing.createdAt) || now;
             doc.updatedAt = now;
             doc.lastEditedBy = user.name;
@@ -164,9 +175,9 @@ module.exports = async (req, res) => {
                 updatedAt: now,
                 lastEditedBy: user.name,
                 liveUrl: doc.liveUrl || ''
-            });
+            }, kind === 'blog' ? { status: doc.status } : {});
             await blobPutJSON(INDEX, index);
-            return res.status(200).json({ ok: true, id });
+            return res.status(200).json({ ok: true, id, status: doc.status });
         }
 
         if (action === 'setstatus') {
@@ -177,11 +188,37 @@ module.exports = async (req, res) => {
             const doc = await blobGetJSON(path(id));
             if (!doc) return res.status(404).json({ error: 'Not found' });
             doc.status = status;
+            publishedOnlyIfLive(kind, doc);
             doc.updatedAt = new Date().toISOString();
             await blobPutJSON(path(id), doc);
             const index = (await blobGetJSON(INDEX)) || {};
-            if (index[id]) { index[id].status = status; index[id].updatedAt = doc.updatedAt; await blobPutJSON(INDEX, index); }
-            return res.status(200).json({ ok: true, id, status });
+            if (index[id]) { index[id].status = doc.status; index[id].updatedAt = doc.updatedAt; await blobPutJSON(INDEX, index); }
+            return res.status(200).json({ ok: true, id, status: doc.status });
+        }
+
+        // Several at once (the blog list's "Mark these ready"). One index
+        // write at the end, because Blob reads lag writes by up to ~60s.
+        if (action === 'setstatusMany') {
+            const ids = (Array.isArray(body.ids) ? body.ids : []).map(cleanId).filter(Boolean);
+            const status = body.status;
+            if (!ids.length) return res.status(400).json({ error: 'ids[] required' });
+            if (ids.length > 200) return res.status(400).json({ error: 'Too many items in one call (max 200)' });
+            if (!STATUSES.includes(status)) return res.status(400).json({ error: 'Unknown status' });
+            const now = new Date().toISOString();
+            const index = (await blobGetJSON(INDEX)) || {};
+            const changed = [];
+            for (const id of ids) {
+                const doc = await blobGetJSON(path(id));
+                if (!doc) continue;
+                doc.status = status;
+                publishedOnlyIfLive(kind, doc);
+                doc.updatedAt = now;
+                await blobPutJSON(path(id), doc);
+                if (index[id]) { index[id].status = doc.status; index[id].updatedAt = now; }
+                changed.push(id);
+            }
+            await blobPutJSON(INDEX, index);
+            return res.status(200).json({ ok: true, changed: changed.length, ids: changed });
         }
 
         // Bulk import. One index write at the end — writing the index per item
@@ -225,10 +262,11 @@ module.exports = async (req, res) => {
                     id = (kind === 'hoteldraft' || kind === 'destination') ? base : `${base}-${randomSuffix()}`;
                 }
                 const existing = await blobGetJSON(path(id));
+                publishedOnlyIfLive(kind, doc);
                 doc.createdAt = (existing && existing.createdAt) || now;
                 doc.updatedAt = now;
                 await blobPutJSON(path(id), doc);
-                saved.push({ id, meta: Object.assign({}, it.meta || {}, { updatedAt: now }) });
+                saved.push({ id, meta: Object.assign({}, it.meta || {}, { updatedAt: now }, kind === 'blog' ? { status: doc.status } : {}) });
             }
             const index = (await blobGetJSON(INDEX)) || {};
             saved.forEach(s => { index[s.id] = s.meta; });

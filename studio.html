@@ -1409,6 +1409,7 @@
                         <button class="btn btn-small" id="blogListNew" type="button">New post</button>
                     </div>
                     <div class="social-qa" id="blogImportBar" hidden style="margin-bottom:16px"></div>
+                    <div class="social-qa has-issues" id="blogStuckBar" hidden style="margin-bottom:16px"></div>
                     <div id="blogListRows"><p class="dash-empty">Loading…</p></div>
                 </div>
 
@@ -1494,7 +1495,7 @@
                             <option value="draft">Draft — being written</option>
                             <option value="in-review">Needs review</option>
                             <option value="ready">Ready to publish</option>
-                            <option value="published">Published</option>
+                            <option value="published">Published (the daily run sets this)</option>
                         </select>
                     </div>
                     <div class="blog-actions">
@@ -2027,7 +2028,8 @@
             { key: 'ready', label: 'Ready' },
             { key: 'draft', label: 'Drafts' },
             { key: 'idea', label: 'Ideas' },
-            { key: 'published', label: 'Published' }
+            { key: 'published', label: 'Published' },
+            { key: 'notlive', label: 'Not on the site' }
         ];
         let blogItems = [], blogFilter = 'all';
 
@@ -2313,10 +2315,53 @@
         });
 
         /* ── Blog list ────────────────────────────────────────────────── */
+        /* Marked Published in the Studio but not on the site. Only "ready"
+           posts go live (the daily run sets Published once it deploys them),
+           so a post set to Published by hand never went up. Checked against
+           the live blog data too, for posts that went live before liveUrl. */
+        const titleKey = (t) => String(t || '').toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+        function isStuckPublished(b) {
+            if (b.status !== 'published' || b.liveUrl) return false;
+            if (typeof BLOG_POSTS === 'undefined') return true;
+            if (BLOG_POSTS[b.id] || BLOG_POSTS[b.id.replace(/-[a-z0-9]{4}$/, '')]) return false;
+            const t = titleKey(b.title);
+            return !Object.values(BLOG_POSTS).some(p => titleKey(p.title) === t);
+        }
+        function renderBlogStuckBar() {
+            const bar = $('blogStuckBar');
+            const stuck = blogItems.filter(isStuckPublished);
+            bar.hidden = !stuck.length;
+            if (!stuck.length) return;
+            const n = stuck.length, one = n === 1;
+            bar.innerHTML = blogFilter === 'notlive'
+                ? '<strong>These ' + (one ? 'post is' : n + ' posts are') + ' marked Published but ' + (one ? 'isn’t' : 'aren’t') + ' on the site.</strong> ' +
+                  'Open any you’re unsure of first. Marking them ready puts them live with the next daily run (8&nbsp;AM). ' +
+                  '<button class="btn btn-small" id="blogStuckReady" type="button" style="margin-left:8px">Mark ' + (one ? 'it' : 'all ' + n) + ' ready</button>'
+                : '<strong>' + n + ' post' + (one ? ' is' : 's are') + ' marked Published but ' + (one ? 'isn’t' : 'aren’t') + ' on the site.</strong> ' +
+                  '<button class="btn btn-small" data-blogfilter="notlive" type="button" style="margin-left:8px">Show ' + (one ? 'it' : 'them') + '</button>';
+        }
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('#blogStuckReady');
+            if (!btn) return;
+            const ids = blogItems.filter(isStuckPublished).map(b => b.id);
+            if (!ids.length || !confirm('Mark ' + ids.length + ' post' + (ids.length === 1 ? '' : 's') + ' ready? They go live with the next daily run.')) return;
+            btn.disabled = true;
+            btn.textContent = 'Marking ready…';
+            try {
+                const out = await contentApi({ action: 'setstatusMany', kind: 'blog', ids, status: 'ready' });
+                toast(out.changed + ' marked ready. They publish with the next daily run.');
+                blogFilter = 'ready';
+                showBlogList();
+            } catch (err) {
+                toast('Couldn’t mark them ready — ' + err.message);
+                btn.disabled = false; btn.textContent = 'Try again';
+            }
+        });
         function renderBlogRows() {
             const q = $('blogSearch').value.trim().toLowerCase();
+            renderBlogStuckBar();
             const rows = blogItems
-                .filter(b => blogFilter === 'all' || (b.status || 'draft') === blogFilter)
+                .filter(b => blogFilter === 'all' || (blogFilter === 'notlive' ? isStuckPublished(b) : (b.status || 'draft') === blogFilter))
                 .filter(b => !q || (b.title || '').toLowerCase().includes(q));
             $('blogListRows').innerHTML = rows.length ? '<div class="list-rows-wrap">' + rows.map(b => `
                 <button class="dash-row" data-openblog="${esc(b.id)}" type="button">
@@ -2324,7 +2369,7 @@
                         <div class="dash-row-title">${esc(b.title || b.id)}</div>
                         <div class="dash-row-sub">${esc([b.category, b.author].filter(Boolean).join(' · '))}${b.updatedAt ? ' · updated ' + fmtWhen(b.updatedAt) : ''}${b.lastEditedBy ? ' by ' + esc(b.lastEditedBy) : ''}</div>
                     </div>
-                    ${b.liveUrl && b.status !== 'published' ? '<span class="chip chip-live">Live</span> ' : ''}${STATUS_CHIP[b.status] || STATUS_CHIP['draft']}
+                    ${b.liveUrl && b.status !== 'published' ? '<span class="chip chip-live">Live</span> ' : ''}${isStuckPublished(b) ? '<span class="chip chip-ready">Not on the site</span>' : (STATUS_CHIP[b.status] || STATUS_CHIP['draft'])}
                 </button>`).join('') + '</div>'
                 : '<p class="dash-empty">Nothing here yet.</p>';
         }
@@ -3329,6 +3374,9 @@
             const doc = blogDocFromForm();
             if (!doc.title) { toast('Give the post a headline first.'); return; }
             if (status) doc.status = status;
+            // Published is the daily run's to set once the post is on the site;
+            // picking it for a post that isn't live yet queues it instead.
+            if (doc.status === 'published' && !blogDocExtra.liveSlug && !blogDocExtra.liveUrl) doc.status = 'ready';
             // Editing a live post: the site keeps the old version until these
             // changes are marked ready, so the saved copy is a draft of it.
             else if (blogDocExtra.liveSlug && doc.status === 'published') doc.status = 'draft';
