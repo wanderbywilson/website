@@ -9460,3 +9460,422 @@ html, body { overflow-x: clip; max-width: 100%; }
     margin-top: clamp(36px, 3.8vw, 52px);
     text-align: center;
 }
+
+/* Property page booking block (Wilson, 2026-10-13).
+   "Already booked?" callout sits right under the Exclusives list it refers
+   to; below the rate, two equal-width options: Request (solid) or Book
+   instantly via /book (gold outline). */
+.property-booked-callout {
+    margin: 4px 0 36px;
+    padding: 18px 22px 20px;
+    background: var(--ivory);
+    border-left: 2px solid var(--gold);
+    max-width: 440px;
+}
+.property-booked-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 8px;
+}
+.property-booked-text {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 12px;
+}
+.property-booked-link {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+}
+.property-booked-link:hover { color: var(--gold); }
+
+.property-book-options { max-width: 440px; }
+.property-book-options .property-book-cta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--ivory);
+    margin-bottom: 14px;
+}
+.property-book-options .property-book-cta:hover { background: var(--umber); border-color: var(--umber); }
+.property-book-options .property-book-cta:hover::after { color: var(--gold-soft); }
+.property-book-options .property-perks-note { font-size: 15px; margin: 0; }
+.property-book-or {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.5);
+}
+.property-book-or::before,
+.property-book-or::after { content: ''; flex: 1; height: 1px; background: rgba(30, 53, 82, 0.14); }
+.property-portal-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 42px;
+    border: 1px solid var(--gold);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 14px;
+    transition: background 0.45s var(--ease-soft);
+}
+.property-portal-cta::after { content: '\2192'; font-family: var(--font-sans); font-style: normal; font-size: 16px; color: var(--gold); transition: transform 0.45s var(--ease-out); }
+.property-portal-cta:hover { background: rgba(195, 162, 106, 0.1); }
+.property-portal-cta:hover::after { transform: translateX(6px); }
+.property-portal-caption {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.65);
+    margin: 0 0 8px;
+}
+.property-portal-caption strong { color: var(--ink); font-weight: 600; letter-spacing: 0.04em; }
+@media (max-width: 600px) {
+    .property-book-options .property-book-cta,
+    .property-portal-cta { padding: 18px 24px; }
+}
+
+/* Property page refresh (Wilson, 2026-10-13): gallery moved up under the
+   hero, stronger hero rate, Exclusives highlight tiles, darker body text,
+   and on mobile the price + booking options come before the perks list. */
+.property-body { border-top: 1px solid rgba(199, 174, 138, 0.45); }
+
+.property-hero-rate {
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(20px, 2vw, 26px);
+    color: var(--ivory);
+}
+
+.property-prose,
+.property-perks-list li,
+.ideal-for-text { color: var(--ink); font-weight: 400; }
+.property-book-options .property-perks-note,
+.property-portal-caption { color: rgba(30, 53, 82, 0.82); }
+
+.property-perk-highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 0 0 28px;
+    max-width: 520px;
+}
+.property-perk-highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 18px 16px;
+    border: 1px solid rgba(195, 162, 106, 0.55);
+}
+.property-perk-highlight-label {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.25;
+    color: var(--ink);
+}
+.property-perk-highlight-sub {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.property-perks-fulllabel {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.6);
+    margin: 0 0 12px;
+}
+.property-perk-highlights:not([hidden]) ~ .property-perks-list li { font-size: 15px; padding-top: 10px; padding-bottom: 10px; }
+
+.property-book-free {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(195, 162, 106, 0.4);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+}
+
+@media (max-width: 960px) {
+    .property-perks-col { display: flex; flex-direction: column; }
+    .property-perks-col > .property-rate          { order: 1; }
+    .property-perks-col > .property-book-options  { order: 2; margin-bottom: 44px; }
+    .property-perks-col > .kicker                 { order: 3; }
+    .property-perks-col > .property-perk-highlights { order: 4; }
+    .property-perks-col > .property-perks-fulllabel { order: 5; }
+    .property-perks-col > .property-perks-list    { order: 6; }
+    .property-perks-col > .property-perks-footnote { order: 7; }
+    .property-perks-col > .property-booked-callout { order: 8; }
+    .property-perks-col > .property-brand-badge   { order: 9; }
+}
+@media (max-width: 420px) {
+    .property-perk-highlights { grid-template-columns: 1fr; }
+}
+.property-hero-rate,
+.property-hero .property-location { text-shadow: 0 1px 14px rgba(10, 20, 35, 0.55); }
+.property-hero-rate { font-size: clamp(22px, 2.4vw, 30px); }
+.property-hero .property-location { color: var(--ivory); }
+.property-close-alt { margin: 22px auto 0; text-align: center; }
+
+/* Perk highlights, icon-row style (Wilson's reference, 2026-10-13) */
+.property-perk-highlights { gap: 26px 28px; margin-bottom: 36px; max-width: 560px; }
+.property-perk-highlight {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 0;
+    border: none;
+}
+.property-perk-highlight > div { display: flex; flex-direction: column; gap: 4px; }
+.property-perk-highlight-icon { width: 24px; height: 24px; flex: none; color: var(--gold); margin-top: 1px; }
+.property-perk-highlight-label { font-size: 20px; line-height: 1.2; }
+.property-perk-highlight-sub {
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: rgba(30, 53, 82, 0.66);
+}
+.property-perk-highlight-label { font-size: 18px; }
+.property-perk-highlights { gap: 24px 20px; }
+
+/* Booking panel under the hero (Wilson, 2026-10-13): price on the left,
+   Book instantly (solid, leads) + Request this stay (gold outline) right. */
+.property-booking {
+    background: var(--paper);
+    border-bottom: 1px solid rgba(199, 174, 138, 0.45);
+    padding: 40px 0;
+}
+.property-booking-inner {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 2fr;
+    gap: 32px 56px;
+    align-items: center;
+}
+.property-booking .property-rate { margin-bottom: 8px; }
+.property-booking-free {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0;
+}
+.property-booking-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+}
+.property-booking-option { display: flex; flex-direction: column; gap: 10px; }
+.property-book-instant,
+.property-book-request,
+.property-close-actions .cta-primary {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 28px;
+}
+.property-book-instant { background: var(--ink); border-color: var(--ink); color: var(--ivory); }
+.property-book-instant:hover { background: var(--umber); border-color: var(--umber); }
+.property-book-instant:hover::after { color: var(--gold-soft); }
+.property-book-request { border-color: var(--gold); }
+.property-book-request:hover { background: rgba(195, 162, 106, 0.1); border-color: var(--gold); }
+.property-booking-caption {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(30, 53, 82, 0.72);
+    margin: 0;
+}
+.property-booking-caption strong { color: var(--ink); font-weight: 600; letter-spacing: 0.04em; }
+.property-booking-note {
+    grid-column: 1 / -1;
+    margin: 6px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(30, 53, 82, 0.8);
+}
+.property-booking-note em { color: var(--gold); }
+
+.property-close-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+.property-close-code {
+    margin: 16px 0 0;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: rgba(30, 53, 82, 0.72);
+}
+
+@media (max-width: 960px) {
+    .property-booking-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .property-booking { padding: 28px 0; }
+    .property-booking-actions,
+    .property-close-actions { grid-template-columns: 1fr; }
+    .property-book-instant, .property-book-request,
+    .property-close-actions .cta-primary { padding: 18px 22px; }
+}
+.property-booking .cta-primary-label,
+.property-close-actions .cta-primary-label { font-size: 19px; white-space: nowrap; }
+.property-booking .cta-primary,
+.property-close-actions .cta-primary { gap: 12px; padding-left: 22px; padding-right: 22px; }
+@media (max-width: 1100px) and (min-width: 961px) {
+    .property-booking-inner { grid-template-columns: 1fr; }
+}
+
+/* Exclusives as icon rows + collapsible "Full terms" (Wilson, 2026-10-13) */
+.property-perks-terms { margin: 0 0 32px; }
+.property-perks-terms > summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(30, 53, 82, 0.7);
+    border-bottom: 1px solid var(--gold-faint);
+    padding-bottom: 3px;
+}
+.property-perks-terms > summary::-webkit-details-marker { display: none; }
+.property-perks-terms > summary::after { content: '+'; color: var(--gold); font-size: 15px; letter-spacing: 0; }
+.property-perks-terms[open] > summary::after { content: '\2212'; }
+.property-perks-terms[open] > summary { margin-bottom: 18px; }
+.property-perks-terms .property-perks-list { margin-bottom: 0; }
+.property-perks-terms .property-perks-list li { font-size: 15px; padding-top: 10px; padding-bottom: 10px; }
+@media (max-width: 960px) {
+    .property-perks-col > .property-perks-terms { order: 6; }
+}
+/* Body copy weight back to light (Wilson, 2026-10-13: 400 read too bold) */
+.property-prose,
+.ideal-for-text { font-weight: 300; color: rgba(30, 53, 82, 0.88); }
+.property-perks-disclaimer {
+    margin: 0 0 32px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(30, 53, 82, 0.6);
+    max-width: 520px;
+}
+@media (max-width: 960px) {
+    .property-perks-col > .property-perks-disclaimer { order: 6; }
+}
+
+/* Perks: verbatim text with an icon beside each (Wilson, 2026-10-13) */
+.property-perks-list--icons li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding-left: 0;
+}
+.property-perks-list--icons li::before { display: none; }
+.property-perk-icon { width: 22px; height: 22px; flex: none; color: var(--gold); margin-top: 2px; }
+.property-perks-list li { font-weight: 300; color: rgba(30, 53, 82, 0.88); }
+
+/* "Two ways to book" heading + option labels (Wilson, 2026-10-13) */
+.property-booking-head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin-bottom: 6px; }
+.property-booking-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+}
+.property-booking-head .property-booking-note { grid-column: auto; margin: 0; }
+.property-booking-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+.property-booking-label span {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    font-size: 11px;
+    letter-spacing: 0;
+    color: var(--gold);
+}
+@media (max-width: 640px) {
+    .property-booking-actions { gap: 22px; }
+    .property-booking-title { font-size: 22px; }
+}
+
+/* Booking panel, calmer (Wilson, 2026-10-13: "everything is competing").
+   Price + two buttons carry it; kicker, captions and foot stay quiet. */
+.property-booking { padding: 36px 0 32px; }
+.property-booking-inner { align-items: start; }
+.property-booking .property-rate { margin-bottom: 0; }
+.property-booking-actions { gap: 8px 16px; }
+.property-booking-kicker {
+    grid-column: 1 / -1;
+    margin: 0 0 6px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.property-booking-option { gap: 8px; }
+.property-booking-caption { font-size: 12px; color: rgba(30, 53, 82, 0.6); }
+.property-booking-caption strong { font-weight: 500; color: rgba(30, 53, 82, 0.8); }
+.property-booking-foot {
+    grid-column: 1 / -1;
+    margin: 10px 0 0;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: rgba(30, 53, 82, 0.6);
+}
+.property-booking .cta-primary { padding-top: 16px; padding-bottom: 16px; }
+.property-booking .cta-primary-label { font-size: 18px; }
+.property-booking-kicker { margin-bottom: 2px; }
+.property-booking-foot { margin: 0 0 12px; }

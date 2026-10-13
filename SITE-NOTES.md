@@ -31,7 +31,7 @@
 - **Whenever you edit styles.css / data.js / blog-data.js, BUMP `?v=N` across ALL html**, or the browser serves stale cached files.
   - Pattern: `perl -pi -e 's/styles\.css\?v=110/styles.css?v=111/g;' *.html`
 - **HTML files are NOT versioned.** When testing in the browser, append a throwaway `?cb=N` to the URL to force fresh HTML.
-- **Current versions (at this save):** `styles.css?v=269`, `data.js?v=92`, `blog-data-v17.js`.
+- **Current versions (at this save):** `styles.css?v=289`, `data.js?v=94`, `blog-data-v17.js`.
   - **Note:** blog data is now cache-busted by FILENAME (`blog-data-v15.js` → `blog-data-v17.js`), not `?v=N`. Bumping it means `git mv` + a perl sweep across all HTML: `grep -rl "blog-data-v17.js" --include="*.html" . | xargs perl -pi -e 's/blog-data-v17\.js/blog-data-v18.js/g'` (48 files).
 
 ## 🚀 SEO foundation (2026-05-28) — DEPLOY-READY FILES
@@ -154,7 +154,7 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
   gallery: ['property-images/slug/01.jpg', ...],  // optional; hidden if absent
   idealFor: "...",   // optional ("Best for")
   agentTip: "...",   // optional (advisor tip)
-  bookingUrl: ''     // empty → Book button links to /book, our self-booking page (never '#', per HOTEL-PAGE-SPEC); else Virtuoso/Belmond URL → new tab
+  bookingUrl: ''     // Virtuoso advisor URL or empty (never '#'). Not linked on the page since 2026-10-13; drives the Virtuoso chip + Studio
 }
 ```
 - **Currency rule:** USD/EUR/GBP shown native. Any OTHER currency → convert to USD + add `rateInfo` note. **Use literal `€`/`£` chars in data.js** (rates are set via `textContent`, which does NOT decode `&euro;`).
@@ -218,7 +218,7 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 **Beacon logic:** first open of a Studio proposal emails Wilson via Brevo. Suppressed for: browsers that have opened /studio (`localStorage wndr-team=1`), `?preview=1` links, and repeat views in the same session. Views tracked in `views/{id}.json` blobs.
 
-**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=93` / `proposals-data.js?v=94` / `rules.js?v=1` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
+**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=94` / `proposals-data.js?v=94` / `rules.js?v=1` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
 
 ### §12 addendum (2026-07-29, round 2) — compliance + quote screenshots
 - **CONTENT COMPLIANCE (Wilson, non-negotiable):** proposal descriptions/room copy must be VERBATIM from the hotel's site, its Virtuoso page, or our website library — never written or embellished (liability if a client books on an inaccurate claim). Hotel names = official names, plain text. Wilson's personal notes go in her email, not the page. Template auto-renders a photos-are-representative disclaimer.
@@ -491,6 +491,7 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 - **Not changed (Wilson: leave existing pages):** welcome-note perks still in data.js for 7 hotels (Caruso, Mandarin Oriental Lago di Como, Rosewood Little Dix Bay, Southern Ocean Lodge, Cap Juluca, Belmond Hiram Bingham, Casa di Langa); filtered on proposals only. property.html's "Exclusives apply automatically" note (true for Virtuoso-portal bookings) left as is.
 - **Scheduled tasks** `publish-approved-blog-posts` and `research-queued-hotel-drafts` carry a Studio passcode inside their SKILL.md; it is likely the retired shared code (no recorded runs since Sept). Wilson to add an "Automation" team login on the Team card and paste its code into those two tasks herself.
 - **Booking link fallback (Wilson, 2026-10-02):** a hotel page with no Virtuoso link now sends its Book button to `/book` (self-booking page) instead of the inquiry form; property.html changed and all 47 `hotels/*.html` regenerated. Four Seasons Cabo del Sol description replaced with verbatim press-room copy (removed the false "first resort in Los Cabos" claim).
+- **Hotel page template (Wilson, 2026-10-13, approved on Las Ventanas then rolled out to all):** replaces the 2026-10-02 fallback above. Order: hero (location, name, perk chips; no price, no hero button) → **booking panel** (`.property-booking`: "Starting from" price left; right, "Two ways to book" kicker, "Both include your Wander by Wilson Exclusives. No booking fee.", then **Book instantly with perks** → `/book` (solid navy, leads) and **Request this stay** → `/inquire-hotel?hotel={slug}` (gold outline), each with a one-line caption) → Overview / Best for / Advisor tip beside **Exclusives** (each perk VERBATIM with a gold line icon picked by keyword in `perkIcon()`; upgrade footnote as before) → "Already booked?" callout (mailto, subject "Add my perks: {Hotel}") → gallery → closing section with both buttons + access code. The Virtuoso `bookingUrl` is never linked on the page (it still drives the Virtuoso Preferred chip and the Studio). Every booking action has `data-cta-location` / `data-cta-type` and fires GA4 `cta_click`. Body copy weight 300. Why: the old block showed two different "booking portals"; Wilson wants the booking engine to lead.
 - **Hotel pages readable without JS (Wilson, 2026-10-13):** `scripts/generate-property-pages.py` now also bakes the hero image, name, location, description and gallery into each `hotels/*.html` body, not just the head. Why: Tern AI and AI search crawlers (ChatGPT, Perplexity, Claude) do not run JS, so they saw empty hotel pages. property.html clears `#galleryGrid` before rendering so tiles are not doubled. **Rerun the script after any change to a hotel's description, hero or gallery in data.js**, or crawlers keep the old copy (visitors always get the live data.js version).
 
 ## 16. Destination guides in lookbooks (2026-10-03)
@@ -539,3 +540,9 @@ Everything a Claude prompt needs is in `rules.js` (`destinationContent`, `photos
 - Studio: guide editor and proposal editor are folding sections; rule checks run live (em dashes, hr/min, caption/tip length, tourism-board photos, small or strip photos, duplicates).
 
 **Keeping rules in step (2026-10-03):** every rule lives in `rules.js`. The Studio's prompts (lookbook, quote, destination guide, rate document, flights) are generated from it when you click Copy, so a change there reaches all of them; the prompt templates in `studio.html` hold only the JSON shape. `HOTEL-PAGE-SPEC.md` and `.claude/commands/new-hotel-page.md` (read by the hotel-draft scheduled task) keep their own wording: when a hotel rule changes, edit `rules.js` first, then those two. Before recording ANY rule change, search every rules location (rules.js, the studio.html prompt templates, the hotel-page spec and command, these notes, the scheduled tasks) for instructions it conflicts with and resolve them with Wilson first. Changes reach the team only after a deploy.
+
+## 17. Performance tab: Hotel pages report (2026-10-13)
+- Studio → Performance now has two sub-tabs, **Blog** (unchanged) and **Hotel pages**. The hotel tab calls `/api/stats` action `hotels` (`hotelsReport()` in `api/stats.js`), same passcode/`performance` access, same 7/28/90-day picker and 3-hour Blob cache (`stats/cache/hotels-{days}.json`; Refresh skips it).
+- A "hotel page" is any path starting `/hotels/` or `/property` (old `property.html?slug=` links). Slugs come from `landingPagePlusQueryString` / `pagePathPlusQueryString`, so old property.html visits roll up under the right hotel. `/hotels` (the directory) is NOT a hotel page.
+- Shows: visits that **landed** on a hotel page by channel (plain-English labels: Organic Search = "Google search", Direct = "Direct / links you sent") and by source / medium (top 15); a per-hotel table (visits landing, engaged %, top channel, booking clicks, inquiries); hotel views in visits that started elsewhere on the site, grouped by where the visit started (`landingPage`: homepage/Atlas, `/hotels` directory, blog, /book…), plus the page just before (`pageReferrer`); `cta_click` counts per hotel and `generate_lead` in visits that landed on a hotel page.
+- **GA4 Admin step (Wilson, one-time):** to split booking clicks by button and position, register `cta_type`, `cta_location` and `hotel` as **event-scoped custom dimensions** (Admin → Custom definitions → Create custom dimension; parameter names exactly as written). Not retroactive: data starts the day they are registered. Until then the `customEvent:` query returns a 400 and the tab shows the total plus these instructions (`ctaNeedsSetup`).

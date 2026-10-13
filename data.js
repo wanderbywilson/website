@@ -536,10 +536,10 @@ const PROPERTIES = {
         name: 'Las Ventanas al Para&iacute;so, A Rosewood Resort',
         location: 'San Jos&eacute; del Cabo, Mexico',
         rateFrom: '$1,015 / night',
-        heroImage: '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero.jpg',
+        heroImage: '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero-infinity-pool-sunrise.jpg',
         brandBadge: '/logos/rosewood-elite.png',
         brandBadgeAlt: 'Rosewood Elite',
-        description: "Pure romance envelops you the moment a trio of musicians serenade your arrival at Las Ventanas al Para&iacute;so. The resort is beautiful and blissfully private, with a network of underground tunnels keeping staff discreet and making it a favourite of honeymooning couples and celebrities. Mediterranean-Mexican buildings dotted with succulents and cacti blend into the desert landscape, while winding infinity pools seem to disappear into the sea. Every suite has its own twenty-four-hour butler, and the resort&rsquo;s &lsquo;director of romance&rsquo; orchestrates on-the-beach dinners, oceanfront proposals, and over-the-top anniversaries.",
+        description: "Pure romance envelops you the moment you enter Las Ventanas al Para&iacute;so and a trio of musicians serenade you as the host hands you a frozen Margarita. The resort is beautiful and blissfully private, with its network of underground tunnels allowing staff to be discreet and making it a favorite among honeymooning couples and celebrities. Perhaps the most memorable aspect of Las Ventanas is the service, with every suite receiving its own butler who is on call twenty-four hours a day. Dotted with succulents, cacti and other native plants, the San Jose del Cabo hotel&rsquo;s Mediterranean-Mexican-style buildings blend into the desert landscape, and its winding infinity pools seem to disappear into the ocean.",
         perks: [
             'Upgrade on arrival, subject to availability',
             'Daily full breakfast for up to two guests per bedroom, served in the restaurant and via in-room dining',
@@ -549,13 +549,14 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/03-villa-terrace-pool-beach.jpg',
             '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/01-suite.jpg',
-            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-pool.jpg',
-            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/03-beach.jpg',
-            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/04-dining.jpg'
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-suite-terrace-ocean-view.jpg',
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/04-beach-daybeds.jpg',
+            '/property-images/las-ventanas-al-paraiso-a-rosewood-resort/05-garden-entrance.jpg'
         ],
         idealFor: "Honeymooners, anniversary couples, and Cabo regulars who&rsquo;d skip the buzzy beach clubs for serenades, beachside dinners, and a butler on call around the clock.",
-        agentTip: "Don&rsquo;t miss Magic Dinner with the resort&rsquo;s resident magician host &mdash; surrounded by catrinas, candles, and traditional d&eacute;cor in the magical herb gardens, it&rsquo;s a theatrical evening full of intrigue and mystery.",
+        agentTip: "Save a night for La Botica, the resort&rsquo;s speakeasy piano bar, for an after-dinner cocktail and live Cuban, Caribbean and Latin music.",
         bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6164075/las-ventanas-al-paraiso-a-rosewood-resort'
     },
 

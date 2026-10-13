@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css?v=270">
+    <link rel="stylesheet" href="/styles.css?v=289">
 
     <style>
         :root {
@@ -1423,7 +1423,12 @@
                     <h1 class="dash-title">Website <em>performance.</em></h1>
                     <p class="dash-sub">From Google Analytics and Search Console: which posts bring inquiries, what people search to find you, and how every post is doing.</p>
                 </div>
+                <div class="view-tabs" id="perfSections">
+                    <button data-perfsection="blog" class="is-on" type="button">Blog</button>
+                    <button data-perfsection="hotels" type="button">Hotel pages</button>
+                </div>
                 <div id="blogPerfPane"></div>
+                <div id="hotelPerfPane" hidden></div>
             </div>
         </div>
 
@@ -1890,7 +1895,7 @@
 
     <div class="toast" id="toast"></div>
 
-    <script src="/data.js?v=93"></script>
+    <script src="/data.js?v=94"></script>
     <script src="/rules.js?v=1"></script>
     <script src="/destinations-seed.js?v=4"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
@@ -2459,7 +2464,7 @@
            Google Analytics + Search Console via /api/stats. Leads with what
            Wilson asked for: which posts send people to the inquiry pages, and
            what people search on Google to find the site. */
-        const perf = { days: 28, data: null, sort: 'views', dir: -1, loading: false };
+        const perf = { days: 28, data: null, sort: 'views', dir: -1, loading: false, section: 'blog', hotelData: null };
         async function statsApi(payload) {
             const res = await fetch('/api/stats', {
                 method: 'POST',
@@ -2491,6 +2496,7 @@
         }
 
         async function loadPerf(refresh) {
+            if (perf.section === 'hotels') return loadHotelPerf(refresh);
             const pane = $('blogPerfPane');
             if (!perf.data || refresh) pane.innerHTML = '<p class="dash-empty">Loading your numbers from Google…</p>';
             try {
@@ -2559,9 +2565,12 @@
                 try { await statsApi({ action: 'disconnect' }); perf.data = null; renderPerfConnect(false); } catch (err) { toast('Couldn’t disconnect — ' + err.message); }
                 return;
             }
+            const sec = e.target.closest('[data-perfsection]');
+            if (sec) { showPerfSection(sec.dataset.perfsection); return; }
             const r = e.target.closest('[data-perfdays]');
-            if (r) { perf.days = Number(r.dataset.perfdays); perf.data = null; loadPerf(false); return; }
+            if (r) { perf.days = Number(r.dataset.perfdays); perf.data = null; perf.hotelData = null; loadPerf(false); return; }
             if (e.target.closest('#perfRefresh')) { loadPerf(true); return; }
+            if (e.target.closest('#perfHotelRefresh')) { loadHotelPerf(true); return; }
             const th = e.target.closest('.perf-table th[data-sort]');
             if (th && th.closest('#perfAllPosts')) {
                 perf.dir = perf.sort === th.dataset.sort ? -perf.dir : -1;
@@ -2684,6 +2693,144 @@
                     <td>${fmtNum(p.views)}</td><td>${delta(p.views, p.viewsPrev)}</td><td>${fmtNum(p.readers)}</td><td>${fmtDur(p.avgTime)}</td>
                     <td>${fmtNum(p.clicks)}</td><td>${fmtNum(p.impressions)}</td><td>${p.position == null ? '—' : p.position}</td>
                     <td>${fmtNum(p.inquiryVisits || 0)}</td></tr>`).join('')}</tbody></table>`;
+        }
+
+        /* ── Performance → Hotel pages ────────────────────────────────────
+           How visitors land on /hotels/{slug} pages (and old property.html
+           links): channel, source / medium, per hotel, which site pages lead
+           to them, booking-button clicks and inquiries. /api/stats action "hotels". */
+        function showPerfSection(name) {
+            perf.section = name === 'hotels' ? 'hotels' : 'blog';
+            document.querySelectorAll('#perfSections [data-perfsection]').forEach(b => b.classList.toggle('is-on', b.dataset.perfsection === perf.section));
+            $('blogPerfPane').hidden = perf.section !== 'blog';
+            $('hotelPerfPane').hidden = perf.section !== 'hotels';
+            if (perf.section === 'hotels' ? !perf.hotelData : !perf.data) loadPerf(false);
+        }
+        async function loadHotelPerf(refresh) {
+            const pane = $('hotelPerfPane');
+            if (!perf.hotelData || refresh) pane.innerHTML = '<p class="dash-empty">Loading hotel page numbers from Google…</p>';
+            try {
+                const data = await statsApi({ action: 'hotels', days: perf.days, refresh: !!refresh });
+                if (!data.connected) { showPerfSection('blog'); return; }   // the Blog tab shows the connect steps
+                perf.hotelData = data;
+                renderHotelPerf();
+            } catch (err) { pane.innerHTML = '<p class="dash-empty">Couldn’t load stats — ' + esc(err.message) + '</p>'; }
+        }
+        const CHANNEL_LABELS = {
+            'Organic Search': 'Google search', 'Direct': 'Direct / links you sent', 'Referral': 'Links on other websites',
+            'Organic Social': 'Social media', 'Paid Social': 'Paid social ads', 'Paid Search': 'Google ads', 'Email': 'Email',
+            'Organic Video': 'YouTube & video', 'Organic Shopping': 'Google Shopping', 'Display': 'Display ads',
+            'Affiliates': 'Partner links', 'Cross-network': 'Google ads (other)', 'Unassigned': 'Unknown', '(other)': 'Other'
+        };
+        const channelLabel = (c) => CHANNEL_LABELS[c] || c || 'Unknown';
+        const START_LABELS = {
+            home: 'Homepage & Atlas globe', directory: 'Your site’s Atlas & hotel directory', hotel: 'Another hotel page',
+            blog: 'A blog post', book: 'Book With Perks (/book)', journeys: 'A journey page', inspiration: 'Inspiration page',
+            other: 'Another page on your site', external: 'Another website'
+        };
+        function hotelName(slug) {
+            const p = lib[slug];
+            return p && p.name ? decodeEntities(p.name) : String(slug || '').replace(/-/g, ' ');
+        }
+        function pageLabel(page, group) {
+            if (group === 'blog') { const m = String(page).match(/\/post\/([a-z0-9-]+)/); if (m) return 'Blog: ' + postTitle(m[1]); }
+            if (group === 'hotel') { const m = String(page).match(/\/hotels\/([a-z0-9-]+)/); if (m) return 'Hotel: ' + hotelName(m[1]); }
+            if (group === 'home') return 'Homepage';
+            if (group === 'directory') return 'Hotel directory (/hotels)';
+            return page;
+        }
+        function perfBars(rows, labelOf, valueOf) {
+            const max = Math.max(1, ...rows.map(valueOf));
+            return rows.map(x => `<div class="perf-bars-row"><span>${esc(labelOf(x))}</span>
+                <div class="perf-bars-track"><div class="perf-bars-fill" style="width:${Math.max(2, valueOf(x) / max * 100)}%"></div></div>
+                <span>${fmtNum(valueOf(x))}</span></div>`).join('') || '<p class="dash-empty">No data.</p>';
+        }
+        function renderHotelPerf() {
+            const d = perf.hotelData;
+            const t = d.totals || {}, cta = d.cta || {};
+            const hotels = d.hotels || [];
+            const warn = [d.analyticsError, d.internalError, d.ctaError, d.ctaBreakdownError].filter(Boolean)
+                .map(m => `<div class="perf-warn">${esc(m)}</div>`).join('');
+            const range = d.ranges && d.ranges.analytics ? `${fmtDay(d.ranges.analytics.startDate)} – ${fmtDay(d.ranges.analytics.endDate)}` : '';
+            const starts = d.internalStarts || [];
+            const fromInside = starts.reduce((n, x) => n + x.views, 0);
+            const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+            $('hotelPerfPane').innerHTML = `
+                <div class="perf-bar">
+                    <div class="filter-tabs">${[7, 28, 90].map(n => `<button data-perfdays="${n}" class="${perf.days === n ? 'is-on' : ''}" type="button">Last ${n} days</button>`).join('')}</div>
+                    <span class="perf-note">${range}${d.fetchedAt ? ' · updated ' + fmtWhen(d.fetchedAt) : ''}</span>
+                    <button class="btn btn-ghost btn-small" id="perfHotelRefresh" type="button" style="margin-left:auto">Refresh</button>
+                </div>
+                ${warn}
+                <div class="perf-tiles">
+                    ${tile('Visits that start on a hotel page', fmtNum(t.sessions), delta(t.sessions, t.sessionsPrev))}
+                    ${tile('Engaged', pct(t.engaged, t.sessions), '', 'stayed 10s+ or viewed 2+ pages')}
+                    ${tile('Hotel views from inside the site', fmtNum(fromInside), '', 'visit started on another page')}
+                    ${tile('Booking button clicks', fmtNum(cta.clicks), '', 'on hotel pages')}
+                    ${tile('Inquiries sent', fmtNum(cta.leads), '', 'by visitors who landed on a hotel page')}
+                </div>
+
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <h2>How visitors land on hotel pages</h2>
+                        <p class="perf-note">Visits whose first page was a hotel page, by how the visit started.</p>
+                        <div class="perf-bars">${perfBars(d.channels || [], x => channelLabel(x.channel), x => x.sessions)}</div>
+                    </div>
+                    <div class="perf-card">
+                        <h2>Exact sources</h2>
+                        <p class="perf-note">The same visits by site and medium, as Google Analytics names them (“google / organic” is Google search, “(direct) / (none)” is typed, bookmarked or a link you sent).</p>
+                        ${(d.sourceMedium || []).length ? `<div class="perf-table-wrap"><table class="perf-table">
+                            <thead><tr><th>Source / medium</th><th>Visits</th><th>Engaged</th></tr></thead>
+                            <tbody>${d.sourceMedium.map((s, i) => `<tr><td><span class="perf-rank">${i + 1}</span>${esc(s.source)}</td>
+                                <td>${fmtNum(s.sessions)}</td><td>${pct(s.engaged, s.sessions)}</td></tr>`).join('')}</tbody>
+                        </table></div>` : '<p class="dash-empty">No visits landed on a hotel page in this period.</p>'}
+                    </div>
+                </div>
+
+                <div class="perf-card">
+                    <h2>Every hotel page</h2>
+                    <p class="perf-note">Visits that started on each hotel page, how most of them arrived, and what they did.</p>
+                    ${hotels.length ? `<div class="perf-table-wrap"><table class="perf-table">
+                        <thead><tr><th>Hotel</th><th>Visits landing here</th><th>Engaged</th><th>Mostly from</th><th>Booking clicks</th><th>Inquiries sent</th></tr></thead>
+                        <tbody>${hotels.map((h, i) => `<tr><td><span class="perf-rank">${i + 1}</span>${esc(hotelName(h.slug))}</td>
+                            <td>${fmtNum(h.sessions)}</td><td>${pct(h.engaged, h.sessions)}</td>
+                            <td>${h.topChannel ? esc(channelLabel(h.topChannel)) : '—'}</td>
+                            <td>${fmtNum(h.ctaClicks || 0)}</td><td>${fmtNum(h.leads || 0)}</td></tr>`).join('')}</tbody>
+                    </table></div>` : '<p class="dash-empty">No hotel page visits in this period.</p>'}
+                </div>
+
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <h2>Found from inside your site</h2>
+                        <p class="perf-note">Hotel page views in visits that started somewhere else on your site, by where the visit started.</p>
+                        <div class="perf-bars">${perfBars(starts, x => START_LABELS[x.group] || x.group, x => x.views)}</div>
+                        ${(d.internalStartPages || []).length ? `<div class="perf-table-wrap" style="margin-top:14px"><table class="perf-table">
+                            <thead><tr><th>Visit started on</th><th>Hotel views</th></tr></thead>
+                            <tbody>${d.internalStartPages.map((s, i) => `<tr><td><span class="perf-rank">${i + 1}</span>${esc(pageLabel(s.page, s.group))}</td>
+                                <td>${fmtNum(s.views)}</td></tr>`).join('')}</tbody>
+                        </table></div>` : ''}
+                    </div>
+                    <div class="perf-card">
+                        <h2>The page just before</h2>
+                        <p class="perf-note">What visitors were looking at right before a hotel page: your own pages or another website.</p>
+                        ${(d.previousPages || []).length ? `<div class="perf-table-wrap"><table class="perf-table">
+                            <thead><tr><th>Previous page</th><th>Hotel views</th></tr></thead>
+                            <tbody>${d.previousPages.map((p, i) => `<tr><td><span class="perf-rank">${i + 1}</span>${esc(p.internal ? pageLabel(p.page, p.group) : p.page)}${p.internal ? '' : ' <span class="perf-note">(other website)</span>'}</td>
+                                <td>${fmtNum(p.views)}</td></tr>`).join('')}</tbody>
+                        </table></div>` : '<p class="dash-empty">No data.</p>'}
+                    </div>
+                </div>
+
+                <div class="perf-card">
+                    <h2>Booking buttons on hotel pages</h2>
+                    ${d.ctaBreakdown && d.ctaBreakdown.length ? `<p class="perf-note">Clicks by button and where it sits on the page.</p>
+                        <div class="perf-table-wrap"><table class="perf-table">
+                        <thead><tr><th>Button</th><th>Where on the page</th><th>Clicks</th></tr></thead>
+                        <tbody>${d.ctaBreakdown.map(c => `<tr><td>${esc(c.type || '—')}</td><td>${esc(c.location || '—')}</td><td>${fmtNum(c.clicks)}</td></tr>`).join('')}</tbody>
+                    </table></div>`
+                    : d.ctaNeedsSetup ? `<p class="perf-note">${fmtNum(cta.clicks)} clicks in total. To split them by button and position, register <strong>cta_type</strong>, <strong>cta_location</strong> and <strong>hotel</strong> as event-scoped custom dimensions in Google Analytics (Admin → Custom definitions → Create custom dimension). Clicks are counted by button from that day on.</p>`
+                    : '<p class="dash-empty">No booking button clicks in this period.</p>'}
+                </div>`;
         }
 
         // One-series line chart with a hover crosshair. Plain SVG, redrawn on resize.

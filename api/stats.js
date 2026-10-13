@@ -8,6 +8,10 @@
 //                                     site-wide Google searches, and which posts
 //                                     lead to the inquiry pages (and sent inquiries)
 //     post     {slug, days}         → one post: daily views, totals, top searches
+//     hotels   {days}               → hotel pages: how visits that land on them
+//                                     arrive (channel, source / medium, per hotel),
+//                                     which site pages lead to them, booking-button
+//                                     clicks (cta_click) and inquiries (generate_lead)
 //     setclient {clientId, clientSecret}   owner: step 1 of Sign in with Google
 //     authurl                              owner: step 2, returns Google's consent URL
 //     disconnect                           owner
@@ -232,6 +236,207 @@ async function postDetail(settings, slug, days) {
     return out;
 }
 
+// ── Hotel pages ───────────────────────────────────────────────────────────
+// Hotel pages live at /hotels/{slug}; older links used /property.html?slug=…
+// (now redirected, but still in GA history). GA4's landingPage / pagePath are
+// path only, so the per-hotel queries use the …PlusQueryString versions to
+// recover the slug from old property.html URLs.
+function hotelSlugOf(path) {
+    const s = String(path || '');
+    let m = s.match(/^\/hotels\/([a-z0-9-]+)(?:\.html)?\/?(?:[?#]|$)/i);
+    if (m) return m[1].toLowerCase();
+    m = s.match(/^\/property(?:\.html)?\?(?:.*&)?slug=([a-z0-9-]+)/i);
+    return m ? m[1].toLowerCase() : null;
+}
+const isHotelPath = (p) => /^\/hotels\/[^/?#]+/i.test(p || '') || /^\/property(\.html)?(\?|$)/i.test(p || '');
+function hotelPageFilter(field) {
+    return { orGroup: { expressions: [
+        { filter: { fieldName: field, stringFilter: { matchType: 'BEGINS_WITH', value: '/hotels/' } } },
+        { filter: { fieldName: field, stringFilter: { matchType: 'BEGINS_WITH', value: '/property' } } }
+    ] } };
+}
+const eventIs = (name) => ({ filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: name } } });
+
+// Where a visit started, in groups Wilson recognises.
+function startGroup(landing) {
+    const p = String(landing || '').replace(/\/$/, '') || '/';
+    if (p === '/' || p === '/index.html') return 'home';
+    if (p === '/hotels' || p === '/hotels.html') return 'directory';
+    if (isHotelPath(p)) return 'hotel';
+    if (p.startsWith('/post')) return 'blog';
+    if (p === '/book' || p === '/book.html') return 'book';
+    if (p.startsWith('/journey')) return 'journeys';
+    if (p.startsWith('/inspiration')) return 'inspiration';
+    return 'other';
+}
+
+async function hotelsReport(settings, days) {
+    const ga = windows(days, 0);
+    const out = { days, ranges: { analytics: ga.cur } };
+    const LANDED = hotelPageFilter('landingPage');
+    const VIEWED = hotelPageFilter('pagePath');
+
+    // 1. Visits that started on a hotel page: channel, source / medium, per hotel.
+    try {
+        const [channels, sourceMedium, perHotel] = await Promise.all([
+            ga4(settings, {
+                dateRanges: [ga.cur, ga.prev],
+                dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+                metrics: [{ name: 'sessions' }, { name: 'engagedSessions' }],
+                dimensionFilter: LANDED, limit: 50
+            }),
+            ga4(settings, {
+                dateRanges: [ga.cur],
+                dimensions: [{ name: 'sessionSourceMedium' }],
+                metrics: [{ name: 'sessions' }, { name: 'engagedSessions' }],
+                dimensionFilter: LANDED,
+                orderBys: [{ metric: { metricName: 'sessions' }, desc: true }], limit: 15
+            }),
+            ga4(settings, {
+                dateRanges: [ga.cur],
+                dimensions: [{ name: 'landingPagePlusQueryString' }, { name: 'sessionDefaultChannelGroup' }],
+                metrics: [{ name: 'sessions' }, { name: 'engagedSessions' }],
+                dimensionFilter: LANDED, limit: 5000
+            })
+        ]);
+        const totals = { sessions: 0, sessionsPrev: 0, engaged: 0 };
+        const ch = {};
+        for (const r of channels) {
+            if (r.dateRange === 'date_range_1') { totals.sessionsPrev += r.sessions; continue; }
+            totals.sessions += r.sessions; totals.engaged += r.engagedSessions;
+            const c = ch[r.sessionDefaultChannelGroup] || (ch[r.sessionDefaultChannelGroup] = { channel: r.sessionDefaultChannelGroup, sessions: 0, engaged: 0 });
+            c.sessions += r.sessions; c.engaged += r.engagedSessions;
+        }
+        out.totals = totals;
+        out.channels = Object.values(ch).sort((a, b) => b.sessions - a.sessions);
+        out.sourceMedium = sourceMedium.map(r => ({ source: r.sessionSourceMedium, sessions: r.sessions, engaged: r.engagedSessions }));
+
+        const hotels = {};
+        for (const r of perHotel) {
+            const slug = hotelSlugOf(r.landingPagePlusQueryString);
+            if (!slug) continue;
+            const h = hotels[slug] || (hotels[slug] = { slug, sessions: 0, engaged: 0, byChannel: {} });
+            h.sessions += r.sessions; h.engaged += r.engagedSessions;
+            h.byChannel[r.sessionDefaultChannelGroup] = (h.byChannel[r.sessionDefaultChannelGroup] || 0) + r.sessions;
+        }
+        Object.values(hotels).forEach(h => {
+            const top = Object.entries(h.byChannel).sort((a, b) => b[1] - a[1])[0];
+            h.topChannel = top ? top[0] : null;
+            h.topChannelSessions = top ? top[1] : 0;
+            delete h.byChannel;
+        });
+        out.hotels = hotels;
+    } catch (e) {
+        out.analyticsError = explain(e, settings);
+        out.hotels = {};
+    }
+
+    if (!out.analyticsError) {
+        // 2. Reached from inside the site: hotel page views, by where that visit
+        //    started (landingPage) and by the page just before (pageReferrer).
+        try {
+            const [byStart, byReferrer] = await Promise.all([
+                ga4(settings, {
+                    dateRanges: [ga.cur],
+                    dimensions: [{ name: 'landingPage' }, { name: 'pagePath' }],
+                    metrics: [{ name: 'screenPageViews' }],
+                    dimensionFilter: VIEWED, limit: 5000
+                }),
+                ga4(settings, {
+                    dateRanges: [ga.cur],
+                    dimensions: [{ name: 'pageReferrer' }],
+                    metrics: [{ name: 'screenPageViews' }],
+                    dimensionFilter: VIEWED,
+                    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }], limit: 200
+                })
+            ]);
+            const groups = {}, starts = {};
+            for (const r of byStart) {
+                // The landing view itself (and reloads of it) isn't an internal arrival.
+                if (r.landingPage === r.pagePath) continue;
+                const g = startGroup(r.landingPage);
+                groups[g] = (groups[g] || 0) + r.screenPageViews;
+                const s = starts[r.landingPage] || (starts[r.landingPage] = { page: r.landingPage, group: g, views: 0 });
+                s.views += r.screenPageViews;
+            }
+            out.internalStarts = Object.entries(groups).map(([group, views]) => ({ group, views })).sort((a, b) => b.views - a.views);
+            out.internalStartPages = Object.values(starts).sort((a, b) => b.views - a.views).slice(0, 15);
+
+            const prev = {};
+            for (const r of byReferrer) {
+                let page = r.pageReferrer, internal = false;
+                try {
+                    const u = new URL(r.pageReferrer);
+                    internal = /(^|\.)wanderbywilson\.com$/i.test(u.hostname);
+                    page = internal ? (u.pathname.replace(/\/$/, '') || '/') : u.hostname.replace(/^www\./, '');
+                } catch (e) { page = r.pageReferrer && r.pageReferrer !== '(not set)' ? r.pageReferrer : '(none: typed or bookmarked)'; }
+                const k = (internal ? 'i:' : 'x:') + page;
+                const p = prev[k] || (prev[k] = { page, internal, group: internal ? startGroup(page) : 'external', views: 0 });
+                p.views += r.screenPageViews;
+            }
+            out.previousPages = Object.values(prev).sort((a, b) => b.views - a.views).slice(0, 15);
+        } catch (e) { out.internalError = explain(e, settings); }
+
+        // 3. Booking-button clicks (cta_click, sent by every hotel page) and
+        //    inquiries sent (generate_lead) in visits that started on a hotel page.
+        try {
+            const [ctaByPage, leads] = await Promise.all([
+                ga4(settings, {
+                    dateRanges: [ga.cur],
+                    dimensions: [{ name: 'pagePathPlusQueryString' }],
+                    metrics: [{ name: 'eventCount' }],
+                    dimensionFilter: { andGroup: { expressions: [eventIs('cta_click'), VIEWED] } }, limit: 5000
+                }),
+                ga4(settings, {
+                    dateRanges: [ga.cur],
+                    dimensions: [{ name: 'landingPagePlusQueryString' }],
+                    metrics: [{ name: 'eventCount' }],
+                    dimensionFilter: { andGroup: { expressions: [eventIs('generate_lead'), LANDED] } }, limit: 5000
+                })
+            ]);
+            const cta = { clicks: 0, leads: 0 };
+            for (const r of ctaByPage) {
+                cta.clicks += r.eventCount;
+                const slug = hotelSlugOf(r.pagePathPlusQueryString);
+                if (!slug) continue;
+                const h = out.hotels[slug] || (out.hotels[slug] = { slug, sessions: 0, engaged: 0, topChannel: null });
+                h.ctaClicks = (h.ctaClicks || 0) + r.eventCount;
+            }
+            for (const r of leads) {
+                cta.leads += r.eventCount;
+                const slug = hotelSlugOf(r.landingPagePlusQueryString);
+                if (!slug) continue;
+                const h = out.hotels[slug] || (out.hotels[slug] = { slug, sessions: 0, engaged: 0, topChannel: null });
+                h.leads = (h.leads || 0) + r.eventCount;
+            }
+            out.cta = cta;
+        } catch (e) { out.ctaError = explain(e, settings); }
+
+        // Which button and where on the page. cta_type / cta_location are event
+        // parameters; GA4 only reports them once Wilson registers them as
+        // EVENT-scoped custom dimensions (GA4 Admin → Custom definitions →
+        // Create custom dimension, parameter names cta_type, cta_location, hotel).
+        // Until then this query fails with a 400 and the tab says so.
+        try {
+            const rows = await ga4(settings, {
+                dateRanges: [ga.cur],
+                dimensions: [{ name: 'customEvent:cta_type' }, { name: 'customEvent:cta_location' }],
+                metrics: [{ name: 'eventCount' }],
+                dimensionFilter: { andGroup: { expressions: [eventIs('cta_click'), VIEWED] } },
+                orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }], limit: 50
+            });
+            out.ctaBreakdown = rows.map(r => ({ type: r['customEvent:cta_type'], location: r['customEvent:cta_location'], clicks: r.eventCount }));
+        } catch (e) {
+            out.ctaBreakdown = null;
+            out.ctaNeedsSetup = e.status === 400;
+            if (!out.ctaNeedsSetup) out.ctaBreakdownError = explain(e, settings);
+        }
+    }
+
+    out.hotels = Object.values(out.hotels).sort((a, b) => b.sessions - a.sessions || (b.ctaClicks || 0) - (a.ctaClicks || 0));
+    return out;
+}
+
 module.exports = async (req, res) => {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.setHeader('Cache-Control', 'no-store');
@@ -270,6 +475,10 @@ module.exports = async (req, res) => {
         const days = [7, 28, 90].includes(Number(body.days)) ? Number(body.days) : 28;
         if (action === 'overview') {
             const data = await cached(`overview-${days}`, !!body.refresh, () => overview(settings, days));
+            return res.status(200).json(Object.assign({ ok: true, connected: true, account: settings.account || '' }, data));
+        }
+        if (action === 'hotels') {
+            const data = await cached(`hotels-${days}`, !!body.refresh, () => hotelsReport(settings, days));
             return res.status(200).json(Object.assign({ ok: true, connected: true, account: settings.account || '' }, data));
         }
         if (action === 'post') {
