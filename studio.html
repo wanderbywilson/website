@@ -1896,7 +1896,7 @@
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=94"></script>
-    <script src="/rules.js?v=1"></script>
+    <script src="/rules.js?v=2"></script>
     <script src="/destinations-seed.js?v=4"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
@@ -3895,6 +3895,13 @@
             }
             const termLines = (h.termsText || '').split('\n').map(s => s.trim()).filter(Boolean).map(sentenceCap);
             if (termLines.length) out.terms = termLines;
+            // What the rate and room include (meal plan, offer, room features).
+            const incLines = (h.inclusionsText || '').split('\n').map(s => s.trim()).filter(Boolean).map(sentenceCap);
+            if (incLines.length) out.inclusions = incLines;
+            // Photos of the exact room category quoted, from the hotel's own page
+            // for that category. When set, the card shows a separate room section.
+            const roomShots = (h.roomGalleryText || '').split('\n').map(s => s.trim()).filter(u => /^https?:\/\//.test(u));
+            if (h.useRoomPhotos && roomShots.length) out.roomGallery = roomShots;
             if ((h.roomDesc || '').trim()) {
                 out.roomDesc = sentenceCap(h.roomDesc.trim());
                 // Normally derived from the quoted room. A group quote has a whole
@@ -4375,6 +4382,13 @@
                         <textarea class="f-area" data-i="${i}" data-k="rateTableText" style="min-height:130px" placeholder="Junior Suite Garden View | $2,898&#10;Junior Suite Swim Out | $3,617&#10;Preferred Club Junior Suite Ocean View | $4,349">${esc(h.rateTableText)}</textarea></div>
                     <div class="f-row"><label class="f-label">Rate table note <span style="text-transform:none">(what the prices cover)</span></label>
                         <input class="f-input" data-i="${i}" data-k="rateTableNote" value="${esc(h.rateTableNote)}" placeholder="Per couple, two sharing, 5 nights, land only. All taxes and gratuities included."></div>
+                    <div class="f-row"><label class="f-label">Inclusions <span style="text-transform:none">(optional — what the rate and room include, one per line; shows above Good to know)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="inclusionsText" style="min-height:90px" placeholder="Daily breakfast, lunch and dinner.&#10;Private pool and butler service.">${esc(h.inclusionsText || '')}</textarea></div>
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="roomph${i}" data-i="${i}" data-k="useRoomPhotos" ${h.useRoomPhotos ? 'checked' : ''}>
+                        <label for="roomph${i}">Show room photos <span style="text-transform:none">(a separate gallery of the exact room quoted, under the price)</span></label></div>
+                    ${h.useRoomPhotos ? `<div class="f-row"><label class="f-label">Room photos <span style="text-transform:none">(the exact room category quoted, from the hotel's own page for it; one image link per line)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="roomGalleryText" style="min-height:90px" placeholder="https://…/room-1.jpg">${esc(h.roomGalleryText || '')}</textarea></div>` : ''}
                     <div class="f-row"><label class="f-label">Good to know <span style="text-transform:none">(optional — supplier terms in plain English, one per line)</span></label>
                         <textarea class="f-area" data-i="${i}" data-k="termsText" style="min-height:110px" placeholder="Check-in 3:00 PM, check-out 12:00 PM.&#10;A government environmental tax of 82.11 MXN per room per night is paid at the hotel on departure.">${esc(h.termsText)}</textarea></div>
                     </details>
@@ -4460,6 +4474,13 @@
                             <textarea class="f-area adv-grow" rows="2" id="can${i}" data-i="${i}" data-k="cancellation" placeholder="Copy the cancellation terms from the rate document. One line per stage, e.g. a free-cancellation deadline, then each penalty.">${esc(h.cancellation || '')}</textarea></div>
                     </div>
                     <div class="q-sec"><p class="q-sec-head">Good to know <span>check-in and check-out, local taxes and fees; one per line</span></p>
+                    <div class="f-row"><label class="f-label">Inclusions <span style="text-transform:none">(optional — what the rate and room include, one per line; shows above Good to know)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="inclusionsText" style="min-height:90px" placeholder="Daily breakfast, lunch and dinner.&#10;Private pool and butler service.">${esc(h.inclusionsText || '')}</textarea></div>
+                    <div class="f-row check-row">
+                        <input type="checkbox" id="roomph${i}" data-i="${i}" data-k="useRoomPhotos" ${h.useRoomPhotos ? 'checked' : ''}>
+                        <label for="roomph${i}">Show room photos <span style="text-transform:none">(a separate gallery of the exact room quoted, under the price)</span></label></div>
+                    ${h.useRoomPhotos ? `<div class="f-row"><label class="f-label">Room photos <span style="text-transform:none">(the exact room category quoted, from the hotel's own page for it; one image link per line)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="roomGalleryText" style="min-height:90px" placeholder="https://…/room-1.jpg">${esc(h.roomGalleryText || '')}</textarea></div>` : ''}
                     <div class="f-row"><label class="f-label">Good to know <span style="text-transform:none">(optional — supplier terms in plain English, one per line)</span></label>
                         <textarea class="f-area" data-i="${i}" data-k="termsText" style="min-height:110px" placeholder="Check-in 3:00 PM, check-out 12:00 PM.&#10;A government environmental tax of 82.11 MXN per room per night is paid at the hotel on departure.">${esc(h.termsText)}</textarea></div>
                     </div>
@@ -4512,7 +4533,7 @@
             const i = e.target.dataset.i, k = e.target.dataset.k;
             if (i === undefined || !k) return;
             state.hotels[+i][k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-            if (k === 'usePerks' || k === 'considered') { renderHotels(); onChange(); return; }
+            if (k === 'usePerks' || k === 'considered' || k === 'useRoomPhotos') { renderHotels(); onChange(); return; }
             if (['name', 'location', 'heroImage'].includes(k)) {
                 clearTimeout($('hotelList')._metaT);
                 $('hotelList')._metaT = setTimeout(() => { renderHotels(); }, 900);
@@ -4581,6 +4602,8 @@
                 h.deposit = S(f.deposit);
                 h.cancellation = S(f.cancellation);
                 h.termsText = (f.terms || []).map(S).join('\n');
+                h.inclusionsText = (f.inclusions || []).map(S).join('\n');
+                if (Array.isArray(f.roomGallery)) { h.roomGalleryText = f.roomGallery.map(S).join('\n'); h.useRoomPhotos = !!f.roomGallery.length; }
                 h.rateTableText = (f.rateTable || []).map(r => S(r.room) + ' | ' + S(r.price)).join('\n');
                 h.rateTableNote = S(f.rateTableNote);
                 const perks = cleanPerks(f.perks || []);
@@ -4826,6 +4849,8 @@
                 '',
                 B.quoteFacts,
                 '',
+                B.roomPhotos,
+                '',
                 B.flights,
                 '',
                 B.clientFields,
@@ -4860,7 +4885,9 @@
                 '      "perks": ["the amenities of the program this rate is booked through"],',
                 '      "deposit": "the document\u2019s own wording, every condition kept, codes decoded, one line per stage; or empty",',
                 '      "cancellation": "the document\u2019s own wording, every deadline and penalty kept, codes decoded, one line per stage; or empty",',
-                '      "terms": ["other supplier terms, one line each"],',
+                '      "inclusions": ["what the rate and room include, one line each: meal plan and offer from the rate document, then room and service features from the hotel\u2019s own factsheet or site"],',
+                '      "terms": ["logistics and other supplier terms, one line each"],',
+                '      "roomGallery": ["optional: 3 to 6 direct image URLs of THIS room category, per ROOM PHOTOS; or empty"],',
                 '      "rateTable": [{"room": "category", "price": "total"}],',
                 '      "rateTableNote": "only with a rateTable: what the prices cover",',
                 '      "flight": "ONLY if I gave you flights, else omit: one line, e.g. JFK ⇄ Naples · Delta · nonstop · ≈9 hrs · starting from $1,240 / person round-trip",',
@@ -4910,6 +4937,7 @@
                 '  "amenitiesNote": "advisor-only: which program those perks come from",',
                 '  "deposit": "the document\u2019s own deposit wording, every condition kept, codes and dates decoded; one line per stage (\\n between lines)",',
                 '  "cancellation": "the document\u2019s own cancellation wording, every deadline and penalty kept, codes and dates decoded; one line per stage (\\n between lines)",',
+                '  "inclusions": ["what the rate includes as the document lists it (meal plan, offer inclusions), one line each"],',
                 '  "terms": ["other supplier terms the client should see, one line each"],',
                 '  "rateTable": [{"room": "category as written", "price": "total"}],',
                 '  "rateTableNote": "only with a rateTable: what the prices cover",',
@@ -5297,6 +5325,9 @@
                         .map(r => `${String(r.room || '')} | ${String(r.price || '')}`).join('\n'),
                     rateTableNote: String(h.rateTableNote || ''),
                     termsText: (h.terms || []).map(String).join('\n'),
+                    inclusionsText: (h.inclusions || []).map(String).join('\n'),
+                    roomGalleryText: (h.roomGallery || []).map(String).join('\n'),
+                    useRoomPhotos: !!(h.roomGallery || []).length,
                     socialHook: String(h.socialHook || ''),
                     bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
                     amenitiesNote: String(h.amenitiesNote || ''),

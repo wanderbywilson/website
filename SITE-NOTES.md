@@ -466,7 +466,7 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 - "Lock in" is fine as a call to action; banned only when it implies something is already booked or held.
 - No em dashes in anything we write on proposal/lookbook pages (verbatim hotel copy excepted). Date ranges take an en dash.
 - Never mention a traveller's health, mobility or personal details. ("Be authoritative, never 'the hotel let us know'" was Wilson's feedback on Riana's client EMAIL, not a proposal rule; it lives in Claude's email guidance, not rules.js.)
-- Room photos: no "your room" section. Quotes use the property gallery plus "Photos show the property. Your room category may differ." Hotel pages, lookbooks and quotes share ONE gallery (hotel-page photo mix changed to 2–3 room shots).
+- Room photos: no "your room" section. Quotes use the property gallery plus "Photos show the property. Your room category may differ." Hotel pages, lookbooks and quotes share ONE gallery (hotel-page photo mix changed to 2–3 room shots). **Superseded 2026-10-14, see §18:** quotes may add an optional room gallery.
 - Rates in quotes: stay total from the rate document only. Deposit/cancellation/perks only from that hotel's document; perks follow the program the rate is booked through.
 - "Rates valid until" line removed (not replaced). Every quote prints the subject-to-change line from `rules.js` automatically.
 - "Also considered" is internal only: never on the client page, and stripped from the public API.
@@ -546,3 +546,21 @@ Everything a Claude prompt needs is in `rules.js` (`destinationContent`, `photos
 - A "hotel page" is any path starting `/hotels/` or `/property` (old `property.html?slug=` links). Slugs come from `landingPagePlusQueryString` / `pagePathPlusQueryString`, so old property.html visits roll up under the right hotel. `/hotels` (the directory) is NOT a hotel page.
 - Shows: visits that **landed** on a hotel page by channel (plain-English labels: Organic Search = "Google search", Direct = "Direct / links you sent") and by source / medium (top 15); a per-hotel table (visits landing, engaged %, top channel, booking clicks, inquiries); hotel views in visits that started elsewhere on the site, grouped by where the visit started (`landingPage`: homepage/Atlas, `/hotels` directory, blog, /book…), plus the page just before (`pageReferrer`); `cta_click` counts per hotel and `generate_lead` in visits that landed on a hotel page.
 - **GA4 Admin step (Wilson, one-time):** to split booking clicks by button and position, register `cta_type`, `cta_location` and `hotel` as **event-scoped custom dimensions** (Admin → Custom definitions → Create custom dimension; parameter names exactly as written). Not retroactive: data starts the day they are registered. Until then the `customEvent:` query returns a 400 and the tab shows the total plus these instructions (`ctaNeedsSetup`).
+
+## 18. Quote room photos + Inclusions (2026-10-14) — prototyped on Qian Huang's quote
+
+**Why:** Wilson wanted to sell a specific villa (Soneva Secret, qian-wm33) with photos of the exact room quoted, and to separate what the rate includes from logistics.
+
+**Wilson's decisions (rules in `rules.js`: `blocks.roomPhotos`, `quoteFacts` "inclusions"/"terms", `fixed.photoNoteRoom`):**
+1. **Room photos are optional per hotel card**, via a "Show room photos" checkbox in the Studio. Unticked, the card is unchanged.
+2. **The hotel gallery stays the hotel-page gallery** (hero + 5, 2–3 room shots, every HOTEL-PAGE-SPEC rule). Qian's quote shows 7 property-only photos as a one-off exception. Room photos are a separate gallery.
+3. **Bedding:** room photos show the bedding the client is booking (king/double for a couple; twin only when booking twin). The no-twin rule still governs the shared gallery.
+4. **One bathroom photo** is allowed in a room gallery when the tub or its view is a selling point of that room.
+5. **Inclusions** = what the rate and room include: meal plan and offer from the rate document, plus room/service features from the hotel's own factsheet or site. Exclusives stay the partner program's perks; Good to know is logistics and supplier terms (e.g. seaplane time and price).
+
+**Template (proposal.html):** a card with room photos reads name → property photos → description → one room block (room name and price, room photos, room description) → deposit/cancellation → Inclusions → Good to know. The separate "About the …" label is dropped there (it repeated the room name). Every hotel carousel photo now opens the existing photo viewer (full screen, arrows/swipe, Esc). Footer note switches to `photoNoteRoom` when every option has room photos.
+
+**Studio (studio.html):** "Inclusions" textarea and "Show room photos" checkbox + "Room photos" textarea on each hotel card; saved as `inclusions` / `roomGallery`; imported from Claude's reply; the quote prompt includes ROOM PHOTOS and the new JSON fields. `rules.js` bumped to `?v=2`.
+
+**Still open:** the publish check does not yet verify that room photos come from the category's own page (manual check).
+

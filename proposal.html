@@ -335,6 +335,14 @@
             transition: opacity .45s ease;
         }
         .prop-carousel img.is-active { opacity: 1; }
+        /* only the visible photo takes the click that opens the viewer */
+        .prop-carousel img:not(.is-active) { pointer-events: none; }
+        /* Two labelled galleries on a quote card: the property, then the room quoted */
+        .prop-photo-label { font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin: 0 0 10px; }
+        .prop-hotel-ident + .prop-photo-group { margin-top: 22px; }
+        .prop-hotel-pricing { margin: 0 0 18px; }
+        .prop-room-about .prop-carousel { margin: 6px 0 18px; }
+        .prop-room-about > span { display: block; }
         .prop-carousel-btn {
             position: absolute;
             top: 50%;
@@ -1234,7 +1242,7 @@
     <main id="proposalRoot"></main>
 
     <script src="/data.js?v=94"></script>
-    <script src="/rules.js?v=1"></script>
+    <script src="/rules.js?v=2"></script>
     <script src="/proposals-data.js?v=94"></script>
     <script>
         /* ------------------------------------------------------------------
@@ -1334,8 +1342,16 @@
                     rateTableNote: h.rateTableNote || '',
                     terms: h.terms || [],
                     termsLabel: h.termsLabel || 'Good to know',
+                    // What the rate and the room include (meal plan, offer, villa
+                    // features), shown above Good to know. Optional.
+                    inclusions: h.inclusions || [],
+                    inclusionsLabel: h.inclusionsLabel || 'Inclusions',
                     gallery:   dedupeShots(h.heroImage || (base && base.heroImage) || '',
                                    (h.gallery && h.gallery.length ? h.gallery : (base && base.gallery)) || []),
+                    // Optional photos of the exact room category quoted (from the
+                    // hotel's own page for that category). When set, the property
+                    // photos sit under the hotel name and the room gets its own block.
+                    roomGallery: dedupeShots('', h.roomGallery || []),
                     // undefined → inherit the library link; '' (set by the Studio) → no button
                     bookingUrl: h.bookingUrl !== undefined ? h.bookingUrl : libBooking
                 };
@@ -1546,7 +1562,7 @@
             function lbxOpen(img) {
                 lbxBuild();
                 const kind = img.dataset.lbx;
-                const scope = kind === 'ov' ? img.closest('.prop-dest-pair') : img.closest('.prop-todo-rail');
+                const scope = kind === 'ov' ? img.closest('.prop-dest-pair') : kind === 'gal' ? img.closest('.prop-carousel') : img.closest('.prop-todo-rail');
                 const imgs = [...scope.querySelectorAll('img.lbx-open')];
                 lbx.items = imgs.map(im => ({ src: im.currentSrc || im.src, alt: im.alt,
                     cap: kind === 'todo' ? ((im.closest('.prop-todo-card') || {}).querySelector ? im.closest('.prop-todo-card').querySelector('.prop-todo-cap').innerHTML : '') : '' }));
@@ -1708,14 +1724,34 @@
                 const altName = decode(strip(r.name));
                 const num = 'Option ' + (i + 1);   // "Option 1", so it reads as a choice (Wilson, 2026-10-03)
                 const shots = r.gallery || [];
-                const carousel = shots.length
+                // Click any carousel photo to open it full screen (photo viewer).
+                const carouselHTML = (list, alt) => list.length
                     ? `<div class="prop-carousel">
-                        ${shots.map((src, gi) => `<img src="${src}" alt="${altName} — view ${gi + 1}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
+                        ${list.map((src, gi) => `<img src="${src}" alt="${alt} — view ${gi + 1}" loading="lazy" class="lbx-open${gi === 0 ? ' is-active' : ''}" data-lbx="gal" data-k="${gi}" tabindex="0" role="button" aria-label="Open photo ${gi + 1} of ${list.length} full screen">`).join('')}
                         <button class="prop-carousel-btn prev" type="button" aria-label="Previous photo">&#8592;</button>
                         <button class="prop-carousel-btn next" type="button" aria-label="Next photo">&#8594;</button>
-                        <div class="prop-carousel-dots">${shots.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
-                        ${shots.length > 1 ? `<span class="prop-carousel-count">1 / ${shots.length}</span>` : ''}
+                        <div class="prop-carousel-dots">${list.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
+                        ${list.length > 1 ? `<span class="prop-carousel-count">1 / ${list.length}</span>` : ''}
                        </div>`
+                    : '';
+                const roomShots = (!lookbook && r.roomGallery.length) ? r.roomGallery : [];
+                // With room photos the card reads: name → property photos → description
+                // → room block (room name and price, room photos, room description).
+                const split = roomShots.length > 0;
+                const carousel = split
+                    ? (shots.length ? `<div class="prop-photo-group">${carouselHTML(shots, altName)}</div>` : '')
+                    : carouselHTML(shots, altName);
+                // One room block: the room name heads it (no separate "About" label),
+                // then the price, the room's photos and its description.
+                const roomBlock = (pricingHTML) => `<div class="prop-hotel-room-desc prop-room-about">
+                        <div class="prop-hotel-ident prop-hotel-pricing">${pricingHTML}</div>
+                        ${carouselHTML(roomShots, altName + (r.room ? ' — ' + decode(strip(r.room)) : ''))}
+                        ${r.roomDesc ? `<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span>` : ''}
+                       </div>`;
+                const pricing = (!lookbook && (r.room || r.rate || r.rateNote))
+                    ? `${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
+                       ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
+                       ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}`
                     : '';
                 const roomDesc = r.roomDesc
                     ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span></p>`
@@ -1745,6 +1781,11 @@
                       r.terms.map(li => `<li>${li}</li>`).join('') +
                       '</ul></div>'
                     : '';
+                const inclusions = (!lookbook && r.inclusions.length)
+                    ? `<div class="prop-hotel-terms prop-hotel-inclusions"><strong>${r.inclusionsLabel}</strong><ul>` +
+                      r.inclusions.map(li => `<li>${li}</li>`).join('') +
+                      '</ul></div>'
+                    : '';
                 const hotelPerks = (r.perksList && r.perksList.length)
                     ? `<div class="prop-hotel-perks"><strong>${r.perksLabel}</strong><ul>` +
                       r.perksList.map(li => `<li>${li}</li>`).join('') +
@@ -1769,10 +1810,9 @@
                         <p class="prop-hotel-num">${num}</p>
                         <h2 class="prop-hotel-name">${r.name}</h2>
                         <p class="prop-hotel-location">${r.location}</p>
-                        ${!lookbook && r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
-                        ${!lookbook && r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
-                        ${!lookbook && r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}
+                        ${split ? '' : pricing}
                         </div>
+                        ${split ? carousel : ''}
                         ${!lookbook && r.flight ? (r.flightDetails
                             ? `<div class="prop-hotel-flightwrap">
                                 <button class="prop-hotel-flight prop-flight-toggle" type="button" aria-expanded="false"><span${E(`hotels.${i}.flight`)}>${r.flight}</span><span class="prop-flight-open">Flight details <span class="prop-flight-caret">&#9662;</span></span></button>
@@ -1781,14 +1821,15 @@
                             : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
                         ${!lookbook && r.flight && ((window.WBW_RULES || {}).fixed || {}).flightNote ? `<p class="prop-flight-note">${window.WBW_RULES.fixed.flightNote}</p>` : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
-                        ${carousel}
+                        ${split ? '' : carousel}
                         ${rateTable}
-                        ${lookbook ? '' : roomDesc}
+                        ${split ? roomBlock(pricing) : (lookbook ? '' : roomDesc)}
                         ${gettingThere}
                         ${hotelPerks}
                         ${climate}
                         ${stays}
                         ${finePrint}
+                        ${inclusions}
                         ${terms}
                         ${lookbook ? '' : cta}
                     </div>
@@ -2119,7 +2160,9 @@
                 document.body.classList.toggle('is-lookbook', mode === 'lookbook');
                 // Fixed client-facing lines come from rules.js (one source of truth).
                 const FX = (window.WBW_RULES && window.WBW_RULES.fixed) || {};
-                const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || (mode === 'quote' ? FX.photoNoteQuote : FX.photoNoteLookbook) || ''}</p>`;
+                // Every card shows its own room photos: the "room may differ" note no longer applies.
+                const allRoomShots = mode === 'quote' && (P.hotels || []).length && P.hotels.every(h => (h.roomGallery || []).length);
+                const photoNote = `<p class="prop-photo-note">${P.photoDisclaimer || (allRoomShots ? FX.photoNoteRoom : mode === 'quote' ? FX.photoNoteQuote : FX.photoNoteLookbook) || ''}</p>`;
                 // Every quote carries the subject-to-change line, whoever built it.
                 const changeNote = mode === 'quote' && FX.subjectToChange
                     ? `<p class="prop-photo-note prop-change-note">${FX.subjectToChange}</p>` : '';

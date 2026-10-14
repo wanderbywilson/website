@@ -37,6 +37,8 @@
             // Printed under any flight on a proposal (flight-pricing rule).
             flightNote: 'Airfare is per person and a starting point only; it is requoted when the tickets are booked.',
             photoNoteQuote: 'Photos show the property. Your room category may differ.',
+            // Wilson, 2026-10-14: used instead when every option on a quote has its own room photos.
+            photoNoteRoom: 'Room photos show the room category quoted. Property photos show the wider resort.',
             photoNoteLookbook: 'Photography is provided by each property. Actual rooms may differ from the images shown.'
         },
 
@@ -102,7 +104,17 @@
                 '  • The 5: two or three ROOM shots showing the bed and living space, ideally with the view from inside, from different categories where possible. Then a sense-of-place landscape, the pool or waterfront, and a signature space or experience.',
                 '  • Size and shape (Wilson, 2026-10-03): every photo at least 1200px wide (covers and heroes about 2000px), between square and 16:9 (never a thin panorama strip), and under about 3 MB (use a smaller rendition of a huge original). The Studio flags any that fail.',
                 '  • Never: twin-bed room shots (Wilson, 2026-10-06; every room shot shows a king or double bed, so one gallery suits every client) · plated-food shots · night shots (a blue-hour hero is fine) · bathroom-only shots (a bathroom visible in a wider room view is fine) · people as the subject (no couples, portraits, models, wedding or lifestyle shots; small figures in a wide view are fine) · renders when real photos exist · near-duplicates or the hero repeated · logos or promotional text burned into the image · generic spa treatment rooms.',
-                '  • Room photos are there to show the property. Never present a photo of one room category as if it shows the client’s quoted room.'
+                '  • Room shots in this gallery are there to show the property. Never present one as the client’s quoted room; a quote shows the quoted room only through "roomGallery" (see ROOM PHOTOS).'
+            ),
+
+            // Wilson, 2026-10-14: quotes may add an optional gallery of the exact room quoted.
+            roomPhotos: L(
+                'ROOM PHOTOS (quotes only, optional; Wilson, 2026-10-14): "roomGallery" is a SEPARATE gallery of the exact category in "room". The hotel gallery above stays the hotel-page gallery and keeps every hotel-page rule.',
+                '  • Source: ONLY the hotel’s own page for THAT category (or its official media library entry named for it). Never a photo of another category, never a third-party site. If the category has no photos of its own, leave "roomGallery" empty and say so in "advisorNote".',
+                '  • 3 to 6 photos: the room from outside or above, the bedroom, the living space and the view from inside.',
+                '  • Bedding: show the bedding the client is booking (a king or double for a couple; twin only when they are booking twin).',
+                '  • One bathroom photo is allowed when the tub or its view is a selling point of THIS room; otherwise no bathroom-only shots.',
+                '  • Every other photo rule applies (size and shape, daylight, no people as the subject, no renders, no near-duplicates).'
             ),
 
             clientFields: L(
@@ -124,13 +136,14 @@
 
             // Quotes: the rate documents are the only source for anything commercial.
             quoteFacts: L(
-                'QUOTE FACTS come ONLY from the rate screenshot or PDF for THAT hotel. Each hotel’s document is the single source of truth for its room, rate, deposit, cancellation and perks:',
+                'QUOTE FACTS come ONLY from the rate screenshot or PDF for THAT hotel (the one exception: room and service features in "inclusions", below). Each hotel’s document is the single source of truth for its room, rate, deposit, cancellation and perks:',
                 '  • "room": the category exactly as the document names it, marketing name only, max 6 words. "roomDesc": ONE sentence describing THIS category, using only what the document or the hotel\u2019s own description of this category says.',
                 '  • "rate": the TOTAL for the stay as shown in the document, max 30 characters, e.g. €13,024 · 4-night total. Never a nightly figure, never a conversion you worked out.',
                 '  • "rateNote": ONE client-safe line on what the total includes (breakfast, taxes) as the document states it.',
                 '  • "deposit" and "cancellation" (Wilson, 2026-10-05): the document’s OWN wording, with EVERY condition kept: amounts and percentages, each deadline with its time and time zone, each penalty stage, non-refundable parts, per room or per stay. The only changes allowed: decode GDS shorthand (14SEP26 → September 14, 2026; 1800 → 6:00 PM) and spell out abbreviations. Never summarise, merge stages, round, or reword toward an example. No length limit: when the policy has stages, one line per stage. Copy the original policy text into "advisorNote" (starting "Original terms:") so it can be checked. If the document does not state it, leave it EMPTY and say so in "advisorNote". Never fill it from another hotel, another document or general knowledge.',
                 '  • "perks": the amenities of the PROGRAM THE RATE IS BOOKED THROUGH, as the rate document (or that program\u2019s page for this hotel) lists them. A Belmond Bellini Club rate gets the Bellini Club package; a Virtuoso rate gets the Virtuoso amenities. If the document shows no perks, leave "perks" EMPTY and say so in "advisorNote": never fill them from our website or another program. Name the program in "amenitiesNote".',
-                '  • "terms": other supplier terms the client should see, one plain-English line each (payment schedule, taxes or fees payable locally, minimum stay). Never commission or anything trade-only.',
+                '  • "inclusions" (Wilson, 2026-10-14): what the rate and the room include, one line each: the meal plan and offer inclusions from the rate document, then room and service features from the hotel’s own factsheet or website for THIS category. Never partner perks (those are "perks"), never logistics or supplier terms (those are "terms"). Prints as Inclusions, above Good to know.',
+                '  • "terms": logistics and other supplier terms the client should see, one plain-English line each (transfer time and price, payment schedule, taxes or fees payable locally, minimum stay). Never commission or anything trade-only. Prints as Good to know.',
                 '  • Group rate sheets (each couple books off one sheet): fill "rateTable" with EVERY category in the document’s order and leave "room"/"rate" empty.',
                 'Do not add a "rates are subject to change" line; the page prints it automatically.'
             ),

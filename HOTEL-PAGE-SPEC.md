@@ -74,9 +74,14 @@ there looks like, never a specific quoted room.
   view from inside; different categories where possible) · a sense-of-place landscape ·
   the pool/waterfront · a signature space or experience. (Was ONE room shot until
   2026-10-02; changed so the same gallery works in a lookbook.)
-- **Quotes never show a photo as "your room".** They use this gallery plus the note
-  "Photos show the property. Your room category may differ." (Wilson, 2026-10-02:
-  room-category photos are left out for liability.)
+- **Quotes never present a gallery photo as "your room".** The gallery stays the
+  hotel-page gallery, with every rule here. A quote MAY add a separate, optional
+  **room gallery** of the exact category quoted (Wilson, 2026-10-14; "Show room photos"
+  checkbox on the Studio card): 3 to 6 photos taken only from the hotel's own page for
+  that category, showing the bedding the client is booking, with one bathroom photo
+  allowed when the tub or its view is a selling point. When every option has one, the
+  footer note reads "Room photos show the room category quoted. Property photos show the
+  wider resort." instead of "Photos show the property. Your room category may differ."
 - **Never:** **twin-bed room shots** (Wilson, 2026-10-06: every room shot shows a king or
   double bed, so the one gallery suits couples and families alike) · plated-food shots · night/after-dark shots · bathroom-only room shots ·
   **people as the subject** — no couples, portraits, models or lifestyle shots where a person is what the photo is about (small figures at human scale in a wide view are fine) · dark or flat interiors · renders when photos exist ·
