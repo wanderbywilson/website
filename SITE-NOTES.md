@@ -514,7 +514,7 @@ Caught it in the post-deploy checklist (`/blog-data-v16.js` → 404 while a post
 Everything a Claude prompt needs is in `rules.js` (`destinationContent`, `photos`, `hotelContent`) and the Studio prompt templates; this list is the human summary.
 
 **Guide content**
-- Things to do = scrolling photo cards (`highlightImages`, one photo per item, 3 in view). Captions: one sentence, **≤100 characters**, verb first. An item with no good photo from an allowed source is swapped for another signature experience.
+- Things to do = scrolling photo cards (`highlightImages`, one photo per item, 3 in view). Up to 10 items (Wilson, 2026-10-21; was 4 to 6; the Studio check warns outside 4 to 10). Things to do photos may also come from TempoVIP (our partner DMC) for experiences TempoVIP runs, taken from that experience's tempovip.com page (files on utfs.io); never for the cover, overview or hotel photos; Things to do photos may show people (the no-people rule is for the cover and overview only); files over ~3 MB get resized and self-hosted in `destination-images/` (Wilson, 2026-10-21). Captions: one sentence, **≤100 characters**, verb first. An item with no good photo from an allowed source is swapped for another signature experience.
 - Our tip: **≤180 characters**, sits right after Things to do, ivory box in the guide's body type.
 - Region line is always "Region, Country". Overview never names a hotel. No "best time to go".
 - How to get there: full sentences, times written out; only places a client would recognise and add to the trip; trains direct with several departures a day; never metro/airport-train directions (clients use private transfers); "By boat" leads with private boats.

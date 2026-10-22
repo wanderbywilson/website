@@ -1902,7 +1902,7 @@
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=94"></script>
-    <script src="/rules.js?v=2"></script>
+    <script src="/rules.js?v=3"></script>
     <script src="/destinations-seed.js?v=4"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
@@ -5665,7 +5665,7 @@
             photoProblems(e.highlightImages || [], dSoonPhotos).forEach(p => add('todo', 'Photos: ' + p + '.'));
             const allG = [e.heroImage].concat(e.gallery, e.highlightImages || []).filter(Boolean);
             if (new Set(allG).size < allG.length) add('overview', 'The same photo is used twice in this guide.');
-            if (e.highlights.length && (e.highlights.length < 4 || e.highlights.length > 6)) add('todo', e.highlights.length + ' things to do; aim for 4 to 6.');
+            if (e.highlights.length && (e.highlights.length < 4 || e.highlights.length > 10)) add('todo', e.highlights.length + ' things to do; aim for 4 to 10.');
             if (e.tip.length > 180) add('tip', 'Our tip is ' + e.tip.length + ' characters; 180 at most.');
             e.highlights.forEach((h, k) => { if (h.length > 100) add('todo', 'Thing to do ' + (k + 1) + ' is ' + h.length + ' characters; captions are 100 at most.'); });
             const imgs = (e.highlightImages || []).filter(Boolean).length;
@@ -5785,7 +5785,7 @@
                 '{',
                 '  "slug": "lowercase-hyphenated name", "name": "Amalfi Coast", "region": "Campania, Italy",',
                 '  "heroImage": "direct image URL", "gallery": ["2 more direct image URLs"],',
-                '  "overview": "500\u2013900 characters", "highlightsLabel": "Things to do", "highlights": ["4\u20136 full sentences"], "highlightImages": ["one photo URL per highlight, same order"],',
+                '  "overview": "500\u2013900 characters", "highlightsLabel": "Things to do", "highlights": ["4\u201310 full sentences"], "highlightImages": ["one photo URL per highlight, same order"],',
                 '  "byPlane": "Fly into XXX (airport name), about 30 minutes to the centre by car.", "byTrain": ["2 hours 30 minutes to Madrid."], "byCar": ["About 1 hour (45 miles) to Toledo."], "byFerry": [], "tip": "one insider move",\n  "lat": 40.4168, "lng": -3.7038, "mapLabel": "", "places": {"Toledo": [39.8628, -4.0273], "Madrid": [40.4168, -3.7038]},',
                 '  "climate": {"note": "Average daily high and low in \u00b0F.", "months": [{"m": "Jan", "hi": "57", "lo": "45"}]},',
                 '  "stays": {"items": [{"name": "official hotel name", "slug": "our library or review-queue slug, else empty", "note": "town, one short line", "image": "only for hotels we don\u2019t have"}]},',
