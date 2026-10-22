@@ -55,7 +55,9 @@ const ADVISOR_ONLY = ['advisorNote', 'bookingPartners', 'amenitiesNote', 'partne
     'socialHook', 'considered', 'consideredWhy'];
 function publicView(p) {
     if (!p || !Array.isArray(p.hotels)) return p;
-    return Object.assign({}, p, {
+    const pub = Object.assign({}, p);
+    delete pub.guideNotes;   // advisor-only source notes for new guides (2026-10-21)
+    return Object.assign(pub, {
         hotels: p.hotels
             .filter(h => !(h && h.considered))
             .map(h => {

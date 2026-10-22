@@ -2224,7 +2224,19 @@
                     btn.className = 'prop-pdf-btn';
                     btn.type = 'button';
                     btn.innerHTML = 'Save as PDF';
-                    btn.addEventListener('click', () => window.print());
+                    // Photos further down load only when scrolled to, so a PDF made
+                    // straight away could miss them: load every photo first (2026-10-21).
+                    const loadAll = () => Promise.race([
+                        Promise.all([...document.images].map(im => { im.loading = 'eager'; return im.complete ? null : new Promise(ok => { im.addEventListener('load', ok, { once: true }); im.addEventListener('error', ok, { once: true }); }); })),
+                        new Promise(ok => setTimeout(ok, 10000))
+                    ]);
+                    btn.addEventListener('click', async () => {
+                        const label = btn.innerHTML; btn.disabled = true; btn.innerHTML = 'Preparing the PDF\u2026';
+                        await loadAll();
+                        btn.disabled = false; btn.innerHTML = label;
+                        window.print();
+                    });
+                    window.addEventListener('beforeprint', () => { document.querySelectorAll('img[loading="lazy"]').forEach(im => { im.loading = 'eager'; }); });
                     window.addEventListener('beforeprint', () => document.querySelectorAll('.prop-fold:not([open])').forEach(f => { f.dataset.wasClosed = '1'; f.open = true; }));
                     window.addEventListener('afterprint', () => document.querySelectorAll('.prop-fold[data-was-closed]').forEach(f => { f.open = false; delete f.dataset.wasClosed; }));
                     document.body.appendChild(btn);

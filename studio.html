@@ -615,6 +615,11 @@
         .d-slot .ph-tools { left: 3px; justify-content: flex-end; flex-wrap: wrap; }
         .d-slot .ph-tools button { width: auto; min-width: 22px; height: 22px; padding: 0 5px; }
         .d-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--studio-line-soft); }
+        .guide-fix { margin: 0 0 14px; padding: 12px 14px; border: 1px solid rgba(163,90,0,0.4); background: rgba(163,90,0,0.06); }
+        .guide-fix-head { font-size: 13px; font-weight: 600; color: #a35a00; margin: 0 0 6px; }
+        .guide-fix ul { margin: 0 0 10px; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--st-text); }
+        .guide-fix textarea { min-height: 64px; margin-top: 8px; }
+        .live-note { margin-left: 10px; font-size: 11px; font-weight: 600; color: #a35a00; background: rgba(163,90,0,0.09); padding: 3px 8px; }
         .q-sec { margin: 14px 0 4px; padding: 12px 14px 4px; border: 1px solid var(--st-line-2); background: #fff; }
         .q-sec-head { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--st-text); margin: 0 0 10px; }
         .q-sec-head span { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--st-dim-2); margin-left: 6px; }
@@ -1049,7 +1054,7 @@
             <button class="btn btn-ghost btn-small editor-only area-proposals" id="btnNew" type="button">New proposal</button>
             <button class="btn btn-ghost btn-small editor-only area-social" id="btnSocial" type="button">Create social post</button>
             <span class="studio-top-spacer"></span>
-            <span class="studio-status editor-only" id="statusText">New proposal</span>
+            <span class="studio-status editor-only" id="statusText">New proposal</span><span class="live-note" id="liveNote" hidden>Changes not published yet: the client&rsquo;s link shows the last published version</span>
             <button class="btn btn-ghost btn-small mobile-toggle editor-only" id="btnMobilePreview" type="button">Preview</button>
             <button class="btn btn-ghost btn-small editor-only area-proposals" id="btnSaveDraft" type="button">Save as draft</button>
             <button class="btn btn-small editor-only area-proposals" id="btnPublish" type="button">Publish</button>
@@ -1650,6 +1655,7 @@
                 <summary>Destination guides <span class="dsec-meta" id="pMetaDest"></span></summary>
                 <section class="sec dsec-body">
                     <p class="sec-sub">Untick <em>Hotels we love</em> on a guide when the client has already chosen a hotel.</p>
+                    <div class="guide-fix" id="guideFix" hidden></div>
                     <div id="destPicked"></div>
                     <div class="add-row" style="align-items:center">
                         <div class="pick" style="flex:1;max-width:380px"><input class="f-input" id="destAddSel" autocomplete="off" placeholder="+ Add a guide: search by place, region or country"><div class="pick-list" hidden></div></div>
@@ -3943,6 +3949,7 @@
                 // Destination guides (lookbooks): a snapshot of each library entry,
                 // so a published lookbook keeps the version it was built with.
                 destinations: state.destinations || [],
+                guideNotes: state.guideNotes || {},
                 showHotels: state.showHotels !== false,
                 lookbookKind: state.mode === 'lookbook' && state.lbKind === 'destinations' ? 'destinations' : undefined,
                 route: routeForSave(),
@@ -3959,7 +3966,7 @@
         const frame = $('previewFrame');
         function saveDraft() {
             try {
-                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, lbKind: state.lbKind || '', hotels: state.hotels, destinations: state.destinations || [], showHotels: state.showHotels !== false, route: state.route || null, fields: fieldValues() }));
+                localStorage.setItem('wndr-studio-draft', JSON.stringify({ id: state.id, mode: state.mode, lbKind: state.lbKind || '', hotels: state.hotels, destinations: state.destinations || [], guideNotes: state.guideNotes || {}, showHotels: state.showHotels !== false, route: state.route || null, fields: fieldValues() }));
             } catch (e) {}
         }
         const stripTags = (s) => { const t = document.createElement('div'); t.innerHTML = s || ''; return t.textContent.trim(); };
@@ -4036,6 +4043,7 @@
         var tripMode = (() => { try { const g = new URLSearchParams(location.search).get('tripGuide'); return g ? { slug: g } : null; } catch (e) { return null; } })();
         function onChange() {
             if (tripMode) return;   // the trip-guide tab must never overwrite the proposal draft
+            if (state.liveStatus === 'live' && !state.unpublished) { state.unpublished = true; updateLiveNote(); }
             try { renderMetaWarning(); } catch (e) {}
             try { updatePMeta(); } catch (e) {}
             clearTimeout(debounceT);
@@ -5830,8 +5838,6 @@
            research); new ones are saved as drafts for Wilson's review. */
         async function importDestinations(p) {
             const out = [];
-            const destItems = [];
-            let queued = 0;
             await loadDestIndex();
             for (const d of (p.destinations || [])) {
                 const slug = String(d.slug || '');
@@ -5845,16 +5851,12 @@
                     if (e) out.push(e);
                     continue;
                 }
+                // A brand-new place stays inside this lookbook while it is worked on;
+                // publishing saves it to Destinations, approved (Wilson, 2026-10-21).
                 const e = await resolveStays(destFromReply(d));
+                e.isNew = true;
+                state.guideNotes = Object.assign(state.guideNotes || {}, { [e.slug]: String(d.sourceNotes || '') });
                 out.push(e);
-                destItems.push({ id: e.slug, doc: {
-                    slug: e.slug, name: e.name, region: e.region, entry: e, status: 'in-review',
-                    sourceNotes: String(d.sourceNotes || '') + '\n\nStarted automatically from the lookbook "' + stripHtml($('fTitle').value) + '".'
-                }, meta: { name: e.name, region: e.region, status: 'in-review', heroImage: e.heroImage } });
-            }
-            if (destItems.length) {
-                try { const r = await contentApi({ action: 'saveMany', kind: 'destination', items: destItems }); queued = r.saved || 0; }
-                catch (err) { toast('Couldn\u2019t save the new guides for review: ' + err.message); }
             }
             state.destinations = out;
             state.showHotels = p.showHotels !== false && (p.hotels || []).length > 0;
@@ -5863,7 +5865,6 @@
                 renderDestPanel(); setMode('lookbook');
             }
             renderDestPanel(); renderHotels(); syncCloseFields(); onChange();
-            if (queued) toast(queued + ' new destination guide' + (queued === 1 ? '' : 's') + ' saved as a draft for review.');
         }
         /* Route map: arriving/leaving points come from the guide library (any
            guide with a map position), plus one label per leg between stops. */
@@ -5901,7 +5902,101 @@
                 : names.slice(0, -1).map((n, k) => `<div class="f-row"><label class="f-label">${esc(n)} \u2192 ${esc(names[k + 1])}</label>
                     <input class="f-input" data-rleg="${k}" value="${esc(R.legs[k] || '')}" placeholder="e.g. 2hr 40min by train"></div>`).join('');
         }
+        /* Repair new guides (Wilson, 2026-10-21): a guide Claude wrote for this
+           lookbook that came back with gaps gets a short fix prompt; the reply
+           fills only what was missing. */
+        const guideDims = {};
+        function coverShape(u) {
+            if (!u) return null;
+            if (guideDims[u]) return guideDims[u];
+            guideDims[u] = 'loading';
+            const im = new Image();
+            im.onload = () => { guideDims[u] = im.naturalHeight > im.naturalWidth ? 'portrait' : 'ok'; renderGuideFix(); };
+            im.onerror = () => { guideDims[u] = 'broken'; renderGuideFix(); };
+            im.src = u;
+            return 'loading';
+        }
+        function guideGaps(d) {
+            const g = [];
+            const shape = coverShape(d.heroImage);
+            if (!d.heroImage || shape === 'broken') g.push({ k: 'hero', t: 'a cover photo' });
+            else if (shape === 'portrait') g.push({ k: 'hero', t: 'a landscape cover (the current one is portrait)' });
+            const gal = (d.gallery || []).filter(Boolean);
+            if (gal.length < 2) g.push({ k: 'gallery', n: 2 - gal.length, t: (2 - gal.length) + ' overview photo' + (gal.length ? '' : 's') });
+            const hl = d.highlights || [], hi = d.highlightImages || [];
+            const miss = hl.map((x, k) => hi[k] ? -1 : k).filter(k => k >= 0);
+            if (hl.length && miss.length) g.push({ k: 'todo', idx: miss, t: 'photos for ' + miss.length + ' Things to do item' + (miss.length === 1 ? '' : 's') });
+            const months = ((d.climate || {}).months || []).filter(m => String(m.hi).trim() !== '' && String(m.lo).trim() !== '');
+            if (months.length < 12) g.push({ k: 'climate', t: 'all 12 months of temperatures' });
+            if (d.lat == null || d.lng == null) g.push({ k: 'map', t: 'its map position' });
+            return g;
+        }
+        function fixList() {
+            return (state.destinations || []).filter(d => d && d.isNew && !d.off).map(d => ({ d, gaps: guideGaps(d) })).filter(x => x.gaps.length);
+        }
+        function renderGuideFix() {
+            const box = $('guideFix'); if (!box) return;
+            const list = fixList();
+            box.hidden = !list.length;
+            if (!list.length) { box.innerHTML = ''; return; }
+            const keep = ($('guideFixPaste') || {}).value || '';
+            box.innerHTML = `<p class="guide-fix-head">New guides to finish before you send</p>
+                <ul>${list.map(x => `<li><strong>${esc(stripHtml(x.d.name || x.d.slug))}</strong> needs ${esc(x.gaps.map(g => g.t).join(', '))}.</li>`).join('')}</ul>
+                <button class="btn btn-small" type="button" id="guideFixCopy">Copy the fix prompt</button>
+                <span class="f-hint" style="margin-left:8px">Paste it into the same Claude chat, then paste the reply below.</span>
+                <textarea class="f-area" id="guideFixPaste" placeholder="Paste Claude\u2019s reply. It starts with { and ends with }.">${esc(keep)}</textarea>`;
+        }
+        function guideFixPrompt() {
+            const B = R.blocks.destinationContent.split('\n');
+            const pick = (re) => B.filter(l => re.test(l)).join('\n');
+            const list = fixList();
+            return [
+                'You are finishing destination guides for a Wander by Wilson client lookbook. Fill ONLY what is listed for each guide; do not change anything else.',
+                '',
+                list.map(x => {
+                    const d = x.d, used = [d.heroImage].concat(d.gallery || [], d.highlightImages || []).filter(Boolean);
+                    const todo = x.gaps.find(g => g.k === 'todo');
+                    return ['GUIDE: ' + stripHtml(d.name || d.slug) + (d.region ? ' (' + d.region + ')' : '') + ', slug "' + d.slug + '"',
+                        'Needs: ' + x.gaps.map(g => g.t).join('; ') + '.',
+                        todo ? 'Things to do items that need a photo (number: sentence):\n' + todo.idx.map(k => '  ' + (k + 1) + ': ' + stripHtml(d.highlights[k])).join('\n') : '',
+                        used.length ? 'Photos already used (never repeat these):\n' + used.map(u => '  ' + u).join('\n') : ''].filter(Boolean).join('\n');
+                }).join('\n\n'),
+                '',
+                'RULES:',
+                pick(/Cover photo|overview photos|PHOTO SOURCES|PHOTO SET|"highlightImages"|"climate"|MAP \(/),
+                'Every image: a direct URL that opens as an image (check it), landscape or square, never portrait.',
+                '',
+                'Reply with ONLY this JSON block, including only the fields each guide needs:',
+                '{ "guides": [ { "slug": "", "heroImage": "", "gallery": ["only the missing overview photos"], "highlightImages": {"<item number>": "url"}, "climate": {"months": [{"m": "Jan", "hi": "", "lo": ""}]}, "lat": 0, "lng": 0, "places": {} } ] }'
+            ].join('\n');
+        }
+        function applyGuideFix(raw) {
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return false;
+            let r; try { r = JSON.parse(raw.slice(a, b + 1)); } catch (e) { return false; }
+            let filled = 0;
+            (r.guides || []).forEach(f => {
+                const d = (state.destinations || []).find(x => x.slug === String(f.slug || '')); if (!d) return;
+                const gaps = guideGaps(d), need = (k) => gaps.some(g => g.k === k);
+                if (need('hero') && f.heroImage) { d.heroImage = String(f.heroImage); filled++; }
+                if (need('gallery') && Array.isArray(f.gallery)) { const have = (d.gallery || []).filter(Boolean); d.gallery = have.concat(f.gallery.map(String).filter(Boolean)).slice(0, Math.max(2, have.length)); filled++; }
+                if (need('todo') && f.highlightImages && typeof f.highlightImages === 'object') {
+                    const hi = (d.highlightImages || []).slice(); while (hi.length < (d.highlights || []).length) hi.push('');
+                    Object.entries(f.highlightImages).forEach(([n, u]) => { const k = parseInt(n, 10) - 1; if (k >= 0 && k < hi.length && !hi[k] && u) { hi[k] = String(u); filled++; } });
+                    d.highlightImages = hi;
+                }
+                if (need('climate') && f.climate && Array.isArray(f.climate.months)) {
+                    const months = f.climate.months.map(m => ({ m: String(m.m || ''), hi: String(m.hi || ''), lo: String(m.lo || '') })).filter(m => m.m);
+                    if (months.length >= 12) { d.climate = Object.assign({ label: 'Average temperatures', note: 'Average daily high and low in \u00b0F.' }, d.climate || {}, { months }); filled++; }
+                }
+                if (need('map') && isFinite(parseFloat(f.lat)) && isFinite(parseFloat(f.lng))) { d.lat = parseFloat(f.lat); d.lng = parseFloat(f.lng); filled++; }
+                if (f.places && typeof f.places === 'object') { const pl = cleanPlaces(f.places); if (Object.keys(pl).length) d.places = Object.assign({}, d.places || {}, pl); }
+            });
+            renderDestPanel(); onChange();
+            return filled;
+        }
         function renderDestPanel() {
+            setTimeout(renderGuideFix, 0);
             setTimeout(renderRoute, 0);
             const picked = state.destinations || [];
             $('destPicked').innerHTML = picked.length ? picked.map((d, i) => `
@@ -6031,6 +6126,20 @@
             const d = (state.destinations || [])[+cb.dataset.deststays]; if (!d) return;
             if (cb.checked) delete d.hideStays; else d.hideStays = true;
             e.stopPropagation(); onChange();
+        });
+        $('guideFix').addEventListener('click', async (e) => {
+            if (!e.target.closest('#guideFixCopy')) return;
+            const text = guideFixPrompt();
+            try { await navigator.clipboard.writeText(text); toast('Fix prompt copied. Paste it into the same Claude chat.'); }
+            catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+        $('guideFix').addEventListener('input', (e) => {
+            if (e.target.id !== 'guideFixPaste') return;
+            const n = applyGuideFix(e.target.value);
+            if (n === false) return;
+            e.target.value = '';
+            const left = fixList().length;
+            toast(n ? 'Filled ' + n + ' missing piece' + (n === 1 ? '' : 's') + '.' + (left ? ' Some gaps are still open: copy the fix prompt again.' : ' The new guides are complete.') : 'Nothing in that reply matched what was missing.');
         });
         $('destPicked').addEventListener('click', async (e) => {
             const ed = e.target.closest('[data-destedit]'), rs = e.target.closest('[data-destreset]');
@@ -6468,6 +6577,45 @@
             return false;
         }
 
+        /* Publishing a lookbook signs off its destination guides (Wilson, 2026-10-21):
+           a brand-new place is saved to Destinations as approved, in the form the
+           client sees; a library draft it uses is approved as it stands. Approved
+           guides are never overwritten, and built-in guides are left alone. */
+        const TRIP_ONLY = ['hideStays', 'off', 'tripEdits', 'isNew', 'getting'];
+        async function approveGuidesOnPublish() {
+            const guides = (state.destinations || []).filter(d => d && d.slug && !d.off);
+            if (!guides.length) return;
+            await loadDestIndex();
+            const saves = [], approve = [];
+            for (const d of guides) {
+                const idx = destIndex.find(x => x.id === d.slug);
+                if (idx && (idx.seed || idx.status === 'ready')) continue;
+                const entry = Object.assign({}, d.baseEntry || d); TRIP_ONLY.concat(['baseEntry']).forEach(k => delete entry[k]);
+                if (!idx) {
+                    saves.push({ id: d.slug, doc: { slug: d.slug, name: d.name, region: d.region, entry, status: 'ready',
+                        sourceNotes: String((state.guideNotes || {})[d.slug] || '') + '\n\nApproved by publishing the lookbook "' + stripHtml($('fTitle').value) + '".' },
+                        meta: { name: d.name, region: d.region, status: 'ready', heroImage: d.heroImage || '' } });
+                } else if (d.isNew && (!d.tripEdits || d.baseEntry)) {
+                    // Started in this lookbook and fixed here: save the finished version, keep its notes.
+                    let notes = '';
+                    try { const r = await contentApi({ action: 'load', kind: 'destination', id: d.slug }); notes = (r.doc && r.doc.sourceNotes) || ''; } catch (e) {}
+                    saves.push({ id: d.slug, doc: { slug: d.slug, name: d.name, region: d.region, entry, status: 'ready', sourceNotes: notes || String((state.guideNotes || {})[d.slug] || '') },
+                        meta: { name: d.name, region: d.region, status: 'ready', heroImage: d.heroImage || '' } });
+                } else approve.push(d.slug);
+            }
+            let n = 0;
+            try {
+                if (saves.length) n += (await contentApi({ action: 'saveMany', kind: 'destination', items: saves })).saved || 0;
+                for (const id of approve) { await contentApi({ action: 'setstatus', kind: 'destination', id, status: 'ready' }); n++; }
+            } catch (err) { toast('Published, but couldn\u2019t approve the guides: ' + err.message); return; }
+            if (n) { toast(n + ' destination guide' + (n === 1 ? '' : 's') + ' approved and added to Destinations.'); loadDestIndex(); }
+        }
+        // A live lookbook edited in the Studio: the client's link shows the last
+        // published version until it is published again.
+        function updateLiveNote() {
+            const el = $('liveNote'); if (!el) return;
+            el.hidden = !(state.liveStatus === 'live' && state.unpublished);
+        }
         async function publish(status) {
             const guidesOnly = state.mode === 'lookbook' && (state.destinations || []).some(d => !d.off);
             if (!state.hotels.length && !guidesOnly) { toast(state.mode === 'lookbook' ? 'Add at least one hotel or destination guide first.' : 'Add at least one hotel first.'); return; }
@@ -6496,6 +6644,7 @@
                 toast(draft
                     ? 'Draft saved — it’s in Your proposals, and the link isn’t live yet.'
                     : 'Published — the link is live.');
+                if (!draft) { state.liveStatus = 'live'; state.unpublished = false; updateLiveNote(); approveGuidesOnPublish(); }
             } catch (err) {
                 if (err.message !== 'unauthorized') toast((draft ? 'Save' : 'Publish') + ' failed: ' + err.message);
             }
@@ -6516,6 +6665,7 @@
         /* ── New / load / list ────────────────────────────────────────── */
         function resetForm() {
             const keepDest = state.mode === 'lookbook' && state.lbKind === 'destinations';
+            const nl = $('liveNote'); if (nl) nl.hidden = true;
             state = { id: null, mode: state.mode === 'lookbook' ? 'lookbook' : 'quote', lbKind: keepDest ? 'destinations' : 'hotels', hotels: [], destinations: [], showHotels: !keepDest, route: keepDest ? { off: true } : null };
             setFields({});
             applyDefaults();
@@ -6601,6 +6751,7 @@
             state.destinations = Array.isArray(P.destinations) ? P.destinations : [];
             state.showHotels = P.showHotels !== false;
             state.lbKind = P.lookbookKind === 'destinations' ? 'destinations' : 'hotels';
+            state.guideNotes = P.guideNotes || {};
             state.route = P.route || null;
             setMode(state.mode);
             renderHotels();
@@ -6608,6 +6759,8 @@
             $('pSecClaude').open = false;
             $('pubBar').classList.remove('is-open');
             pushPreview();
+            // Opened after the edits above, so loading it doesn't count as a change.
+            state.liveStatus = P.status === 'draft' ? 'draft' : 'live'; state.unpublished = false; updateLiveNote();
         }
 
         /* Your proposals, organised the way we work: client → trip (place · dates)
@@ -8119,7 +8272,10 @@
             const i = (state.destinations || []).findIndex(d => d.slug === slug);
             if (i < 0 || !p || !p.entry) return;
             const old = state.destinations[i];
-            state.destinations[i] = Object.assign({}, p.entry, { slug, tripEdits: true }, old.hideStays ? { hideStays: true } : {}, old.off ? { off: true } : {});
+            // A new place edited for this client keeps its pre-edit version: that
+            // evergreen version is what publishing saves to Destinations (2026-10-21).
+            const base = old.baseEntry || (old.isNew && !old.tripEdits ? (() => { const b = Object.assign({}, old); TRIP_ONLY.concat(['baseEntry']).forEach(k => delete b[k]); return b; })() : null);
+            state.destinations[i] = Object.assign({}, p.entry, { slug, tripEdits: true }, old.isNew ? { isNew: true } : {}, base ? { baseEntry: base } : {}, old.hideStays ? { hideStays: true } : {}, old.off ? { off: true } : {});
             renderDestPanel(); renderHotels(); onChange();
         });
         async function openTripGuide(slug) {
@@ -8148,6 +8304,7 @@
             state.destinations = draft.destinations || [];
             state.showHotels = draft.showHotels !== false;
             state.lbKind = draft.lbKind === 'destinations' ? 'destinations' : 'hotels';
+            state.guideNotes = draft.guideNotes || {};
             state.route = draft.route || null;
             setMode(draft.mode || 'quote');
             if (state.id) $('statusText').textContent = 'Editing: ' + state.id;
