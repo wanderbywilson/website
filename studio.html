@@ -4787,19 +4787,21 @@
         }
         /* Destination lookbook (Wilson, 2026-10-03): for clients who haven't chosen
            where to go. 2–4 places, each a destination guide whose "Hotels we love"
-           is that place's hotel shortlist; no separate hotel list, no route map. */
+           is that place's hotel shortlist; no separate hotel list, no route map.
+           Places Wilson asks for are always all included, past the 4-place cap
+           (Wilson, 2026-11-02). */
         function destLookbookPrompt() {
             const B = R.blocks, F = R.fixed;
             return [
                 'You are helping Wander by Wilson, a luxury travel advisory (wanderbywilson.com), build a DESTINATION LOOKBOOK for a client who has NOT decided where to go.',
                 '',
-                'It shows 2 to 4 places that could suit them. Each place is a destination guide, and its "Hotels we love" section (the "stays") is that place’s hotel shortlist, so the client can compare where to go and where they would stay. It is NOT a quote: no room categories, no prices, no deposits, no cancellation terms.',
+                'It shows 2 to 4 places that could suit them (more if I ask for specific places, see STEP 2). Each place is a destination guide, and its "Hotels we love" section (the "stays") is that place’s hotel shortlist, so the client can compare where to go and where they would stay. It is NOT a quote: no room categories, no prices, no deposits, no cancellation terms.',
                 '',
                 'I will give you ONE thing: a client name. Everything else already exists in our systems. Go and find it yourself; do not ask me to fill in a brief.',
                 '',
                 'STEP 1. ' + B.sources,
                 '',
-                'STEP 2. CHOOSE 2 TO 4 DESTINATIONS that genuinely fit what they told us (season and dates, the kind of trip, travel time, who is going), strongest fit first, with real RANGE between them. Include any place the client or Wilson named. Each place is an ALTERNATIVE, not a stop on one trip, so do not return a route.',
+                'STEP 2. CHOOSE 2 TO 4 DESTINATIONS that genuinely fit what they told us (season and dates, the kind of trip, travel time, who is going), strongest fit first, with real RANGE between them. Include any place the client or Wilson named. If I ask for specific places, include EVERY one of them, even if that is more than 4 (Wilson, 2026-11-02); add places of your own only while the total stays at 4 or fewer. Each place is an ALTERNATIVE, not a stop on one trip, so do not return a route.',
                 'For each place, choose 2 to 3 hotels for THIS client as its "stays", strongest fit first. For a destination we already have a guide for, return {"slug": "…", "stays": {"items": [...]}}: the guide is reused as written and only its hotels are set for this client.',
                 B.luxuryAndBookable,
                 '',
@@ -5002,7 +5004,7 @@
             const b = e.target.closest('[data-mode]');
             if (!b) return;
             // Destination lookbook (Wilson, 2026-10-03): for clients who haven't chosen
-            // where; 2-4 places, each with its own hotel shortlist; no route map.
+            // where; 2-4 places (more if Wilson names them), each with its own hotel shortlist; no route map.
             if (b.dataset.mode === 'destinations') {
                 // Each guide's "Hotels we love" IS the hotel shortlist here, so the
                 // separate hotel list is off (Wilson, 2026-10-03).
