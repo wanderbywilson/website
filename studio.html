@@ -5798,7 +5798,7 @@
                 '}',
                 '',
                 '\u2014\u2014\u2014',
-                'Now write the destination guide for [DESTINATION]'
+                'Now write the destination guide for [DESTINATION] (add any sources you want checked first, e.g. a local DMC)'
             ].join('\n');
         }
         /* Add things to do (Wilson, 2026-11-02): new items for the guide that is
@@ -5828,7 +5828,7 @@
                 '{ "add": [ { "text": "one sentence, 100 characters at most, verb first", "image": "direct image URL" } ], "sourceNotes": "Things to do photos (' + new Date().toISOString().slice(0, 10) + '): the page each new photo came from, plus the source for each fact" }',
                 '',
                 '\u2014\u2014\u2014',
-                'Now tell me which things to do to add, or say "pick for me".'
+                'Now tell me which things to do to add, or say "pick for me". Add any sources you want checked first, e.g. a local DMC.'
             ].filter(l => l !== null).join('\n');
         }
         function applyTodoReply(raw) {
