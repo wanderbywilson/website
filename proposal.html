@@ -882,6 +882,11 @@
         .gt-line.gt-car { stroke-dasharray: 9 6; stroke-width: 1.4; }
         .gt-line.gt-boat { stroke-dasharray: 2 4 9 4; }
         .gt-dot { fill: #FCFAF6; stroke: var(--gold); stroke-width: 2; }
+        .gt-town { fill: #FCFAF6; stroke: rgba(30, 53, 82, 0.6); stroke-width: 1.6; }
+        .gt-lake { fill: #DCE6EA; stroke: rgba(30, 53, 82, 0.28); stroke-width: 0.8; }
+        .gt-lab-town { font-size: 10px; letter-spacing: 0.14em; color: rgba(30, 53, 82, 0.72); }
+        .gt-lab-town.gt-lab-r { transform: translate(8px, -50%); }
+        .gt-lab-town.gt-lab-l { transform: translate(calc(-100% - 8px), -50%); }
         .gt-lab { position: absolute; white-space: nowrap; font-family: var(--font-sans); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(30, 53, 82, 0.78);
             text-shadow: 0 0 3px #FCFAF6, 0 0 3px #FCFAF6, 0 0 6px #FCFAF6; pointer-events: none; }
         .gt-lab-r { transform: translate(12px, -50%); }
@@ -1242,7 +1247,7 @@
     <main id="proposalRoot"></main>
 
     <script src="/data.js?v=94"></script>
-    <script src="/rules.js?v=4"></script>
+    <script src="/rules.js?v=5"></script>
     <script src="/proposals-data.js?v=94"></script>
     <script>
         /* ------------------------------------------------------------------
@@ -1920,9 +1925,17 @@
                (Algarve, Portugal)."; the guide's "places" holds each place's map
                position, keyed by the name as written. Two or more places draw a map. */
             function parseTravel(line) {
-                const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?)\s+to\s+(?:the\s+)?([^.(]+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
+                const m = String(line).replace(/<[^>]+>/g, '').match(/^(.*?(?:minutes?|hours?|hrs?|mins?)(?:\s*\([^)]*\))?)\s+to\s+(?:the\s+)?((?:[^.(]|\.(?=\s*[A-Za-z]))+?)\s*(?:\(([^)]*)\))?\.?\s*$/i);
+                // The time must end in a unit, so "35 to 45 minutes to Lugano" splits at the
+                // right "to", and a plain sentence ("The train runs to mid-October") stays text.
+                if (!m) return null; // "St. Moritz": a full stop followed by a word stays in the name.
+                // "to Lucerne on the Gotthard Panorama Express (change in Lugano)": the
+                // place is Lucerne, the named train joins the bracketed detail.
+                let name = m[2].trim(), detail = (m[3] || '').trim();
+                const via = name.match(/^(.+?)\s+(?:on|aboard|via)\s+(?:the\s+)?(.+)$/i);
+                if (via) { name = via[1].trim(); detail = via[2].trim() + (detail ? ', ' + detail : ''); }
                 // The key shows the time only: distances in brackets and "from Avignon TGV" are dropped.
-                return m ? { name: m[2].trim(), detail: (m[3] || '').trim(), time: shortLeg(m[1].replace(/\s*\([^)]*\)/g, '').replace(/\s+from\s+.*$/i, '')) } : null;
+                return { name, detail, time: shortLeg(m[1].replace(/\s*\([^)]*\)/g, '').replace(/\s+from\s+.*$/i, '')) };
             }
             // Only onward places by train or car are mapped; boat lines stay text
             // (Wilson, 2026-10-03). "mapOff" lists places taken off the map in the
@@ -1939,8 +1952,13 @@
                     const at = pos[t.name.toLowerCase()] || pos[('the ' + t.name).toLowerCase()];
                     if (at && !off.includes(t.name.toLowerCase())) places.push(Object.assign({ mode, lat: +at[0], lng: +at[1] }, t));
                 }));
+                // "townDots" (Wilson, 2026-11-02): grey reference dots with names only, no
+                // lines or times: the lake towns around Como, or Tuscany's hill towns where
+                // drive times depend on the hotel. Two or more of them also draw a map.
+                const towns = Object.keys(d.townDots || {}).filter(k => Array.isArray(d.townDots[k]) && !off.includes(k.toLowerCase()))
+                    .map(k => ({ name: decode(strip(k)), lat: +d.townDots[k][0], lng: +d.townDots[k][1] }));
                 // A region guide (Provence) labels its dot with the town it measures from (Avignon).
-                return places.length >= 2 ? { center: { name: decode(strip(d.mapLabel || d.name || '')), lat: +d.lat, lng: +d.lng }, places, rows } : null;
+                return places.length >= 2 || towns.length >= 2 ? { center: { name: decode(strip(d.mapLabel || d.name || '')), lat: +d.lat, lng: +d.lng }, places, rows, towns } : null;
             }
             // Labels of nearby places can overlap: nudge later ones down (or up) until clear.
             function unclash(box) {
@@ -1971,21 +1989,36 @@
                     await loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js');
                     if (!worldShapes) worldShapes = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then(r => r.json());
                 } catch (e) { return; }
+                if (!mapWater) mapWater = await fetch('/map-water.json').then(r => r.json()).catch(() => ({ lakes: [] }));
                 const d3 = window.d3, tj = window.topojson;
                 const coast = tj.merge(worldShapes, worldShapes.objects.countries.geometries);
                 const borders = tj.mesh(worldShapes, worldShapes.objects.countries, (a, b) => a !== b);
                 boxes.forEach((box, bi) => {
                     let g; try { g = JSON.parse(box.dataset.gt); } catch (e) { return; }
-                    const W = 760, H = 520, all = [g.center].concat(g.places);
+                    const towns = (g.towns || []).filter(t => t.name.toLowerCase() !== g.center.name.toLowerCase());
+                    // A town-dot map (Wilson, 2026-11-02) is a close-up of the place itself:
+                    // the lake shape around Como, or Tuscany's hill towns. No lines or arrows;
+                    // its onward trains and drives stay in the list underneath.
+                    const shown = towns.length ? [] : g.places;
+                    const W = 760, H = 520, all = [g.center].concat(shown, towns);
                     const lats = all.map(p => p.lat), lngs = all.map(p => p.lng);
-                    const span = Math.max(Math.max(...lats) - Math.min(...lats), (Math.max(...lngs) - Math.min(...lngs)) * 0.75, 1.5);
-                    const pad = span * 0.22;
+                    // A town map shows the whole of any lake its towns sit on (Lake Como, top to bottom).
+                    if (towns.length) ((mapWater || {}).lakes || []).forEach(l => {
+                        const [x0, y0, x1, y1] = l.bbox;
+                        if (towns.filter(t => t.lng > x0 && t.lng < x1 && t.lat > y0 && t.lat < y1).length >= 2) { lats.push(y0, y1); lngs.push(x0, x1); }
+                    });
+                    const span = Math.max(Math.max(...lats) - Math.min(...lats), (Math.max(...lngs) - Math.min(...lngs)) * 0.75, towns.length ? 0.3 : 1.5);
+                    const pad = span * (towns.length ? 0.08 : 0.22);
                     const frame = { type: 'MultiPoint', coordinates: [[Math.min(...lngs) - pad * 1.6, Math.min(...lats) - pad], [Math.max(...lngs) + pad * 1.6, Math.max(...lats) + pad]] };
                     const proj = d3.geoMercator().fitExtent([[90, 50], [W - 90, H - 50]], frame), path = d3.geoPath(proj);
                     const [cx, cy] = proj([g.center.lng, g.center.lat]);
+                    // Lakes (OpenStreetMap outlines in map-water.json) drawn where the frame meets them.
+                    const [[fx0, fy0], [fx1, fy1]] = frame.coordinates;
+                    const water = ((mapWater || {}).lakes || []).filter(l => l.bbox[0] < fx1 && l.bbox[2] > fx0 && l.bbox[1] < fy1 && l.bbox[3] > fy0)
+                        .map(l => `<path class="gt-lake" d="${path({ type: 'Polygon', coordinates: l.rings.map(r => r.slice().reverse()) })}"/>`).join('');
                     let lines = '', dots = '', labels = '';
                     const pct = (x, y) => `left:${(x / W * 100).toFixed(2)}%;top:${(y / H * 100).toFixed(2)}%`;
-                    g.places.forEach(p => {
+                    shown.forEach(p => {
                         const [x, y] = proj([p.lng, p.lat]);
                         lines += `<line class="gt-line gt-${p.mode}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
                         dots += `<circle class="gt-dot" cx="${x}" cy="${y}" r="6"/>`;
@@ -1994,11 +2027,19 @@
                         const pos = Math.abs(ux) >= Math.abs(uy) * 0.8 ? (ux > 0 ? 'r' : 'l') : (uy > 0 ? 'b' : 't');
                         labels += `<span class="gt-lab gt-lab-${pos}" style="${pct(x, y)}">${p.name}</span>`;
                     });
+                    // Each town's name sits on its own side of the group (west shore left,
+                    // east shore right), so close neighbours across the water don't collide.
+                    const mid = towns.map(t => t.lng).sort((a, b) => a - b)[Math.floor((towns.length - 1) / 2)];
+                    towns.forEach(p => {
+                        const [x, y] = proj([p.lng, p.lat]);
+                        dots += `<circle class="gt-town" cx="${x}" cy="${y}" r="4"/>`;
+                        labels += `<span class="gt-lab gt-lab-town gt-lab-${p.lng > mid ? 'r' : 'l'}" style="${pct(x, y)}">${p.name}</span>`;
+                    });
                     const id = 'gtM' + bi;
-                    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map: ${g.center.name} and ${g.places.map(p => p.name).join(', ')}">
+                    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map: ${g.center.name} and ${shown.concat(towns).map(p => p.name).join(', ')}">
                         <defs><radialGradient id="${id}f" cx="50%" cy="50%" r="62%"><stop offset="72%" stop-color="#fff"/><stop offset="100%" stop-color="#000"/></radialGradient>
                         <mask id="${id}"><rect width="${W}" height="${H}" fill="url(#${id}f)"/></mask></defs>
-                        <g mask="url(#${id})"><rect width="${W}" height="${H}" class="rt-sea"/><path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/></g>
+                        <g mask="url(#${id})"><rect width="${W}" height="${H}" class="rt-sea"/><path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/>${water}</g>
                         ${lines}${dots}<circle class="rt-pin-ring" cx="${cx}" cy="${cy}" r="15"/><circle class="rt-pin" cx="${cx}" cy="${cy}" r="7.5"/></svg>
                         ${labels}<span class="gt-lab gt-lab-c gt-lab-${cx > W / 2 ? 'r' : 'l'}" style="${pct(cx, cy)}">${g.center.name}</span>`;
                     unclash(box);
@@ -2009,7 +2050,7 @@
                     }
                 });
             }
-            let worldShapes = null;
+            let worldShapes = null, mapWater = null;
             async function drawRoute() {
                 const box = document.getElementById('propRouteMap'); if (!box) return;
                 let data; try { data = JSON.parse(box.dataset.route); } catch (e) { return; }

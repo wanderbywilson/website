@@ -1905,8 +1905,8 @@
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=94"></script>
-    <script src="/rules.js?v=4"></script>
-    <script src="/destinations-seed.js?v=4"></script>
+    <script src="/rules.js?v=5"></script>
+    <script src="/destinations-seed.js?v=5"></script>
     <!-- Live blog posts — the source for "social post from a blog post".
          The filename carries a cache-bust version that other sessions bump,
          so probe downwards until one loads instead of hard-coding it. -->
@@ -5482,6 +5482,7 @@
             const ms = (e.climate || {}).months || [];
             return {
                 lat: e.lat != null ? e.lat : null, lng: e.lng != null ? e.lng : null, places: cleanPlaces(e.places),
+                townDots: cleanPlaces(e.townDots),
                 mapOff: (e.mapOff || []).map(String),
                 heroImage: e.heroImage || '',
                 gallery: (e.gallery || []).slice(),
@@ -5526,6 +5527,7 @@
             // Not edited here, so carried over from the loaded guide (map positions).
             if (dEd.lat != null) { e.lat = dEd.lat; e.lng = dEd.lng; }
             if (dEd.places && Object.keys(dEd.places).length) e.places = dEd.places;
+            if (dEd.townDots && Object.keys(dEd.townDots).length) e.townDots = dEd.townDots;
             if (dEd.mapOff && dEd.mapOff.length) e.mapOff = dEd.mapOff.slice();
             if ($('dMapLabel').value.trim()) e.mapLabel = $('dMapLabel').value.trim();
             return e;
@@ -5536,7 +5538,7 @@
             $('dOverview').value = e.overview || ''; $('dHlLabel').value = e.highlightsLabel || '';
             $('dGetting').value = e.gettingThere || ''; $('dTip').value = e.tip || '';
             $('dPlane').value = e.byPlane || '';
-            $('dMapLabel').value = e.mapLabel || ''; $('dMapLabelRow').hidden = !(e.places && Object.keys(e.places).length);
+            $('dMapLabel').value = e.mapLabel || ''; $('dMapLabelRow').hidden = !((e.places && Object.keys(e.places).length) || (e.townDots && Object.keys(e.townDots).length));
             $('dClimateNote').value = (e.climate || {}).note || '';
             $('dSource').value = sourceNotes || '';
             dEd = edFromEntry(e);
@@ -5676,7 +5678,8 @@
             const imgs = (e.highlightImages || []).filter(Boolean).length;
             if (imgs && imgs < e.highlights.length) add('todo', 'Photo cards show only when every thing to do has a photo (' + imgs + ' of ' + e.highlights.length + ').');
             const st = ((e.stays || {}).items || []).length;
-            if (st && (st < 2 || st > 5)) add('stays', st + ' hotels; aim for 2 to 5.');
+            // Library guides list up to 12 hotels; a lookbook picks 2 to 3 per place (Wilson, 2026-11-02).
+            if (st && (st < 2 || st > 12)) add('stays', st + ' hotels; aim for 2 to 12.');
             const mc = ((e.climate || {}).months || []).length;
             if (mc && mc < 12) add('climate', 'Temperatures for ' + mc + ' of 12 months.');
             return out;
@@ -5883,6 +5886,8 @@
                 lat: isFinite(parseFloat(d.lat)) ? parseFloat(d.lat) : null,
                 lng: isFinite(parseFloat(d.lng)) ? parseFloat(d.lng) : null,
                 places: cleanPlaces(d.places),
+                // Grey reference dots, names only (Lake Como towns, Tuscan hill towns; 2026-11-02).
+                townDots: cleanPlaces(d.townDots),
                 mapLabel: String(d.mapLabel || '')
             };
         }
