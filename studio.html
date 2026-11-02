@@ -1279,6 +1279,9 @@
                             <div id="dTodoRows"></div>
                             <button class="btn btn-ghost d-add" type="button" data-dadd="todo">+ Add a thing to do</button>
                             <p class="f-hint">With a photo on every one, they show as scrolling photo cards.</p>
+                            <div class="claude-build-row" style="margin-top:16px"><button class="btn btn-small" id="dTodoCopy" type="button">Copy the things to do prompt</button>
+                                <span class="f-hint" style="margin-left:8px">Paste it into Claude, say what to add (or let Claude pick), then paste the reply below.</span></div>
+                            <textarea class="f-area" id="dTodoPaste" style="min-height:60px" placeholder="Paste Claude's reply here. It starts with { and ends with }. New items are added below the ones you have."></textarea>
                         </div>
                     </details>
                     <details class="dsec" data-dsec="tip">
@@ -5798,6 +5801,53 @@
                 'Now write the destination guide for [DESTINATION]'
             ].join('\n');
         }
+        /* Add things to do (Wilson, 2026-11-02): new items for the guide that is
+           open, each with its photo; the items already there stay as they are. */
+        const D_TODO_MAX = 10;
+        function todoPrompt() {
+            const B = R.blocks.destinationContent.split('\n');
+            const pick = (re) => B.filter(l => re.test(l)).join('\n');
+            const name = $('dName').value.trim(), region = $('dRegion').value.trim();
+            const have = dEd.todo.filter(t => t.text.trim());
+            const room = D_TODO_MAX - have.length;
+            const used = [dEd.heroImage].concat(dEd.gallery, have.map(t => t.image)).map(u => String(u || '').trim()).filter(Boolean);
+            return [
+                'You are adding THINGS TO DO to a Wander by Wilson destination guide (wanderbywilson.com, a luxury travel advisory). The guide is reused for every client going there.',
+                '',
+                'GUIDE: ' + (name || '[destination]') + (region ? ' (' + region + ')' : '') + (destDocId ? ', slug "' + destDocId + '"' : ''),
+                have.length ? 'Things to do already in the guide (keep them; never repeat or reword them):\n' + have.map((t, k) => '  ' + (k + 1) + ': ' + stripHtml(t.text)).join('\n') : 'The guide has no things to do yet.',
+                used.length ? 'Photos already used in the guide (never repeat these):\n' + used.map(u => '  ' + u).join('\n') : '',
+                '',
+                'Add up to ' + room + ' new item' + (room === 1 ? '' : 's') + ' (a guide has ' + D_TODO_MAX + ' at most). If I name the experiences, add those; otherwise choose the strongest signature experiences the guide is missing, never one that overlaps an item above.',
+                '',
+                'RULES:',
+                pick(/"highlights"|"highlightImages"|PHOTO SOURCES|SEASONS/),
+                'Every item gets exactly one photo: a direct URL that opens as an image (check it), landscape or square, never portrait. If an experience has no good photo from an allowed source, swap it for another one that does.',
+                '',
+                'Reply with ONLY this JSON block:',
+                '{ "add": [ { "text": "one sentence, 100 characters at most, verb first", "image": "direct image URL" } ], "sourceNotes": "Things to do photos (' + new Date().toISOString().slice(0, 10) + '): the page each new photo came from, plus the source for each fact" }',
+                '',
+                '\u2014\u2014\u2014',
+                'Now tell me which things to do to add, or say "pick for me".'
+            ].filter(l => l !== null).join('\n');
+        }
+        function applyTodoReply(raw) {
+            const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+            if (a === -1 || b <= a) return null;
+            let r; try { r = JSON.parse(raw.slice(a, b + 1)); } catch (e) { return null; }
+            const seen = new Set(dEd.todo.map(t => normName(stripHtml(t.text))));
+            dEd.todo = dEd.todo.filter(t => t.text.trim());
+            let added = 0, skipped = 0;
+            (Array.isArray(r.add) ? r.add : []).forEach(it => {
+                const text = String((it && it.text) || '').trim(), key = normName(stripHtml(text));
+                if (!text || seen.has(key)) return;
+                if (dEd.todo.length >= D_TODO_MAX) { skipped++; return; }
+                seen.add(key); dEd.todo.push({ text, image: String(it.image || '').trim() }); added++;
+            });
+            if (added && r.sourceNotes) { const src = $('dSource'); src.value = (src.value.trim() ? src.value.trim() + '\n' : '') + String(r.sourceNotes).trim(); }
+            if (added) dRedraw();
+            return { added, skipped };
+        }
         // Normalise a destination object from a Claude reply into a library entry.
         // Map positions of the places named in How to get there: {"Madrid": [lat, lng]}.
         function cleanPlaces(p) {
@@ -6185,7 +6235,7 @@
             if (t.dataset.dl) { const arr = t.dataset.dl === 'todo' ? null : dEd[t.dataset.dl]; if (arr) arr[+t.dataset.k] = t.value; else dEd.todo[+t.dataset.k].text = t.value; }
             else if (t.dataset.tm) dEd.months[+t.dataset.tm][t.dataset.tk] = t.value.replace(/[^\d.-]/g, '');
             else if (t.dataset.sk) dEd.stays[+t.dataset.sk][t.dataset.sf] = t.value;
-            else if (t.id === 'dPaste' || t.id === 'dFile') return;
+            else if (t.id === 'dPaste' || t.id === 'dFile' || t.id === 'dTodoPaste') return;
             dSoon();
         });
         $('destEditor').addEventListener('click', async (ev) => {
@@ -6281,6 +6331,20 @@
             const text = destinationPrompt();
             try { await navigator.clipboard.writeText(text); toast('Destination prompt copied. Paste it into your Claude and name the place.'); }
             catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+        $('dTodoCopy').addEventListener('click', async () => {
+            if (!dEd) dEd = edFromEntry({});
+            if (dEd.todo.filter(t => t.text.trim()).length >= D_TODO_MAX) { toast('This guide already has ' + D_TODO_MAX + ' things to do. Remove one first.'); return; }
+            const text = todoPrompt();
+            try { await navigator.clipboard.writeText(text); toast('Things to do prompt copied. Paste it into your Claude and say what to add.'); }
+            catch (err) { window.prompt('Copy this prompt:', text); }
+        });
+        $('dTodoPaste').addEventListener('input', (e) => {
+            const res = applyTodoReply(e.target.value);
+            if (!res) return;
+            e.target.value = '';
+            toast(res.added ? 'Added ' + res.added + ' thing' + (res.added === 1 ? '' : 's') + ' to do' + (res.skipped ? ' (' + res.skipped + ' left out: 10 is the most)' : '') + '. Check them, then Save.'
+                : 'Nothing new to add: those are already in the guide.');
         });
         $('dPaste').addEventListener('input', (e) => {
             const raw = e.target.value, a = raw.indexOf('{'), b = raw.lastIndexOf('}');
