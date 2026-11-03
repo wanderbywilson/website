@@ -59,7 +59,7 @@ function outreachMeta(id, doc) {
 function cleanBody(html) {
     let s = String(html || '');
     s = s.replace(/<(script|style|iframe|object|embed)[\s\S]*?<\/\1>/gi, '');
-    s = s.replace(/<(?!\/?(p|br|div|a|b|strong|i|em|u|ul|ol|li|span)\b)[^>]*>/gi, '');
+    s = s.replace(/<(?!\/?(p|br|div|a|b|strong|i|em|u|ul|ol|li|span|font)\b)[^>]*>/gi, '');
     s = s.replace(/\s(on\w+|style|class|id)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
     s = s.replace(/<a\b([^>]*)>/gi, (m, attrs) => {
         const href = (attrs.match(/href\s*=\s*"([^"]*)"/i) || attrs.match(/href\s*=\s*'([^']*)'/i) || [])[1] || '';
