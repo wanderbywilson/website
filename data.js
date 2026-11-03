@@ -691,6 +691,57 @@ const PROPERTIES = {
         bookingUrl: '#'
     },
 
+    'rosewood-mandarina': {
+        name: 'Rosewood Mandarina',
+        location: 'Riviera Nayarit, Mexico',
+        rateFrom: '$950 / night',
+        heroImage: '/property-images/rosewood-mandarina/00-hero-mountain-suites-coast.jpg',
+        brandBadge: '/logos/rosewood-elite.png',
+        brandBadgeAlt: 'Rosewood Elite',
+        description: "Discover a coastal dreamscape at Rosewood Mandarina. Enveloped within a 3,000-acre nature reserve comprising three distinct ecosystems&mdash;mountain, beach, and flatlands&mdash;this sumptuous enclave integrates the art and culture of the local Wix&aacute;rika and Cora Indigenous peoples. Find serenity in one of 134 sun-drenched suites with private plunge pools. Play polo or a round of golf on the dramatic, Greg Norman&ndash;designed course. Explore miles of jungle trails, and embark on a Mara-akame Journey or other spa ritual inspired by ancient healing wisdom. Japanese-Mexican fusion fare is on the menu at Toppu.",
+        perks: [
+            'Upgrade at time of booking, subject to availability',
+            'Daily Full breakfast for up to two guests per bedroom, served in the restaurant',
+            '$100 USD equivalent Resort or Hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early check-in / Late check-out, subject to availability'
+        ],
+        gallery: [
+            '/property-images/rosewood-mandarina/01-beachfront-studio-suite.jpg',
+            '/property-images/rosewood-mandarina/02-ocean-view-mountain-studio-suite.jpg',
+            '/property-images/rosewood-mandarina/03-pools-and-beach-aerial.jpg',
+            '/property-images/rosewood-mandarina/04-canalan-beach.jpg',
+            '/property-images/rosewood-mandarina/05-toppu-ocean-view.jpg'
+        ],
+        idealFor: "Couples, milestone groups and multi-generational families who want a plunge pool in every suite, set in a 3,000-acre reserve of jungle, beach and mountain.",
+        agentTip: "Book the mindful hike to La Abuela, a 500-year-old giant tree, for a meditation and copal cleansing ritual, then a tortilla-making class at La Cocina Mandarina.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/18353330/rosewood-mandarina'
+    },
+    'rosewood-mayakoba': {
+        name: 'Rosewood Mayakoba',
+        location: 'Playa del Carmen, Riviera Maya, Mexico',
+        rateFrom: '$1,000 / night',
+        heroImage: '/property-images/rosewood-mayakoba/00-hero-lagoon-lobby-boats.jpg',
+        brandBadge: '/logos/rosewood-elite.png',
+        brandBadgeAlt: 'Rosewood Elite',
+        description: "A tropical oasis tucked between lush jungle and the white-sand beaches of Mexico&rsquo;s Riviera Maya, Rosewood Mayakoba offers unparalleled luxury and outstanding bespoke service. Nestled within the beauty of Mayakoba&rsquo;s winding lagoons and tropical mangrove jungle, the resort's 129 suites and exclusive collection of Private Residences offer the perfect retreat for those seeking the ultimate getaway. A wide array of curated activities are offered on land and sea, ranging from eco tours to diving and fishing; cooking demonstrations to world-class golf. Savor hours of uninterrupted, toes-in-the-sand tranquility at the adults-only beachfront oasis, Aqu&iacute; Me Quedo, while the little ones explore the engaging Kid's Club.",
+        perks: [
+            'Upgrade on arrival, subject to availability',
+            'Daily Full breakfast for up to two guests per bedroom, served in the restaurant',
+            '$100 USD equivalent Resort or Hotel credit to be utilized during stay (not combinable, not valid on room rate, no cash value if not redeemed in full)',
+            'Early Check-In / Late Check-Out, subject to availability',
+            'Complimentary Wi-Fi'
+        ],
+        gallery: [
+            '/property-images/rosewood-mayakoba/01-beachfront-studio-suite.jpg',
+            '/property-images/rosewood-mayakoba/02-lagoon-studio-suite.jpg',
+            '/property-images/rosewood-mayakoba/03-coral-residence-bedroom-lagoon.jpg',
+            '/property-images/rosewood-mayakoba/04-overwater-lagoon-suites.jpg',
+            '/property-images/rosewood-mayakoba/05-punta-bonita-pool-beach.jpg'
+        ],
+        idealFor: "Couples, families and golfers who want butler-served suites on jungle lagoons, with an adults-only beach club and a Kids Club in the same resort.",
+        agentTip: "Walk over to El Pueblito, Mayakoba&rsquo;s own Mexican town square, for lunch at La Fondita&rsquo;s famed tostadas, then a sweet stop at Pan Dulce.",
+        bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6163757/rosewood-mayakoba'
+    },
     'kona-village-a-rosewood-resort': {
         name: 'Kona Village, A Rosewood Resort',
         location: 'Kona Coast, Hawai&lsquo;i Island',
