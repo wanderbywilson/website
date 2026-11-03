@@ -565,3 +565,16 @@ Everything a Claude prompt needs is in `rules.js` (`destinationContent`, `photos
 
 **Still open:** the publish check does not yet verify that room photos come from the category's own page (manual check).
 
+## 20. Email outreach (2026-11-02) — Studio → Marketing → Email outreach
+
+**What:** a lead tracker for past-client campaigns (first one: 2027 rebook). Funnel (Not drafted → To review → In Gmail drafts → Sent → Replied → Call booked → Booked / Not now), filters (group, lookbook, priority, search), a sortable client table, and a client view: trip, occasion, value, survey, 2027 status, opportunity, follow-up on the left; the email (tabs Email 1/2/3, To/Cc/Subject, editor, live checks for em dashes, placeholders, "held" language, missing link) on the right. **Approve** puts the email in Wilson's Gmail drafts. **Nothing in the Studio ever sends.**
+
+**Owner only** (client emails land in Wilson's Gmail): sidebar item has `owner-only`, `showView` refuses it for others, and `/api/studio-content` returns 403 for kind `outreach` unless `role === 'owner'`.
+
+**Storage:** kind `outreach` in `/api/studio-content`, one doc per client at `content/outreach/{id}.json` (shape in `api/_outreach.js`). `list` reads the docs themselves (not `_index.json`) so index races can't show stale stages; the browser also keeps what it just saved in sessionStorage (`wndr-out-local`) because Blob reads lag writes ~60s. Signature lives at `settings/outreach.json` (Signature button). **Client data is never in this repo** (it's PUBLIC): Wilson imports a JSON file from her Mac with **Import clients**; ids already present are skipped, never overwritten.
+
+**Gmail:** `gmail.compose` was added to the Studio's Google sign-in (`api/_google.js` SCOPES; `hasGmail()` checks the granted `scope` saved at sign-in). Connections made before 2026-11-02 have no Gmail until Wilson clicks **Connect Gmail** on the outreach page (it reuses the Performance OAuth client and returns to outreach via sessionStorage `wndr-return`). Gmail API must be enabled in the same Google Cloud project. `gmaildraft` takes the browser's copy of the doc (what she just approved), builds a multipart message (body + "-- " + signature, like Gmail), and creates or replaces the draft (`drafts.update`, same draft id; a 404 falls back to create). API-made drafts do NOT get the Gmail signature automatically — that's why the Studio adds its own. **Check Gmail** (`gmailcheck`) marks an in-Gmail email as sent when its draft is gone (sent or deleted by hand).
+
+**Click tracking:** on approve, every http(s) link becomes `/api/proposal-viewed?o={id}&e={email}&l={n}` (GET branch in `api/proposal-viewed.js`, no new function — the plan caps function count). It counts the click in `outreach-clicks/{id}.json` and 302s to the link stored on the doc (never a URL from the query: no open redirect). Link scanners (Safe Links, Mimecast, Proofpoint, previews) are skipped by user agent. No open tracking, by Wilson's choice (Apple Mail inflates opens).
+
+**Follow-up timing shown on each client:** Email 2 is due 10 days after Email 1 is sent, Email 3 14 days after Email 2, unless they replied.

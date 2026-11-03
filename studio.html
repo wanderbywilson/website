@@ -1004,6 +1004,89 @@
         .studio-form::-webkit-scrollbar, .blog-form::-webkit-scrollbar, .social-fields::-webkit-scrollbar { width: 9px; }
         .studio-form::-webkit-scrollbar-thumb, .blog-form::-webkit-scrollbar-thumb, .social-fields::-webkit-scrollbar-thumb { background: var(--st-line-2); }
         .studio-form::-webkit-scrollbar-track, .blog-form::-webkit-scrollbar-track, .social-fields::-webkit-scrollbar-track { background: transparent; }
+
+        /* ── Email outreach (2026-11-02) ─────────────────────────────────── */
+        .studio[data-view="outreach"] #viewOutreach { display: block; }
+        .out-gmail { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; margin: 0 0 18px; background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); font-size: 13.5px; }
+        .out-gmail.is-off { background: rgba(150,101,10,0.06); border-color: rgba(150,101,10,0.35); }
+        .out-gmail p { margin: 0; flex: 1 1 320px; color: var(--st-dim); line-height: 1.5; }
+        .out-gmail strong { color: var(--st-text); }
+        .out-funnel { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; margin: 0 0 18px; }
+        .out-stage { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); padding: 12px 12px 10px; text-align: left; cursor: pointer; font-family: var(--font-sans); color: var(--st-text); position: relative; overflow: hidden; }
+        .out-stage:hover { border-color: var(--st-gold); }
+        .out-stage.is-on { border-color: var(--st-text); box-shadow: inset 0 0 0 1px var(--st-text); }
+        .out-stage-n { font-family: var(--font-serif); font-size: 28px; line-height: 1; display: block; }
+        .out-stage-l { font-size: 11px; letter-spacing: .4px; color: var(--st-dim); display: block; margin-top: 6px; }
+        .out-stage-bar { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--st-gold); }
+        .out-stage[data-stage="booked"] .out-stage-bar { background: #1f7a4d; }
+        .out-stage[data-stage="not-now"] .out-stage-bar { background: var(--st-line-2); }
+        .out-tiles { display: flex; gap: 22px; flex-wrap: wrap; margin: -6px 0 18px; font-size: 13px; color: var(--st-dim); }
+        .out-tiles b { color: var(--st-text); font-weight: 600; }
+        .out-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+        .out-filters .f-input { width: auto; min-width: 0; padding: 7px 10px; font-size: 13px; }
+        .out-filters #outSearch { flex: 1 1 200px; }
+        .out-groups { display: flex; gap: 6px; flex-wrap: wrap; }
+        .out-groups button { background: #fff; border: 1px solid var(--st-line-2); color: var(--st-dim); padding: 6px 12px; font-size: 12.5px; cursor: pointer; font-family: var(--font-sans); border-radius: 2px; }
+        .out-groups button.is-on { background: var(--st-text); border-color: var(--st-text); color: #fff; }
+        .out-table-wrap { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); overflow-x: auto; }
+        .out-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .out-table th { text-align: left; font-size: 10.5px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--st-dim); font-weight: 500; padding: 11px 12px; border-bottom: 1px solid var(--st-line); white-space: nowrap; cursor: pointer; user-select: none; }
+        .out-table td { padding: 11px 12px; border-top: 1px solid var(--st-line); vertical-align: top; }
+        .out-table tbody tr { cursor: pointer; }
+        .out-table tbody tr:hover { background: rgba(156,124,66,0.06); }
+        .out-table .o-name { font-weight: 600; color: var(--st-text); }
+        .out-table .o-sub { color: var(--st-dim-2); font-size: 12px; margin-top: 2px; }
+        .out-table .o-num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .o-pri { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; background: var(--st-line-2); }
+        .o-pri.is-high { background: #c0563a; }
+        .o-pri.is-medium { background: var(--st-gold); }
+        .chip-o-not-drafted { color: var(--st-dim-2); border-color: var(--st-line); }
+        .chip-o-review { color: #2a63a8; border-color: rgba(42,99,168,0.32); background: rgba(42,99,168,0.06); }
+        .chip-o-in-gmail { color: #96650a; border-color: rgba(150,101,10,0.35); background: rgba(150,101,10,0.07); }
+        .chip-o-sent { color: var(--st-text); border-color: var(--st-line-2); }
+        .chip-o-replied, .chip-o-call { color: #1f7a4d; border-color: rgba(31,122,77,0.35); background: rgba(31,122,77,0.07); }
+        .chip-o-booked { color: #fff; border-color: #1f7a4d; background: #1f7a4d; }
+        .chip-o-not-now { color: var(--st-dim-2); border-color: var(--st-line); background: rgba(20,38,62,0.03); }
+        .out-detail-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .out-detail-bar .spacer { flex: 1; }
+        .out-split { display: grid; grid-template-columns: minmax(300px, 400px) minmax(0, 1fr); gap: 22px; align-items: start; }
+        .out-client { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); padding: 22px 22px 18px; position: sticky; top: 74px; max-height: calc(100vh - 96px); overflow-y: auto; }
+        .out-client h2 { font-family: var(--font-serif); font-weight: 400; font-size: 26px; margin: 0 0 2px; color: var(--st-text); }
+        .out-client .o-email { font-size: 13px; color: var(--st-dim); margin: 0 0 14px; word-break: break-all; }
+        .out-sec { border-top: 1px solid var(--st-line); padding: 12px 0; }
+        .out-sec-k { font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--st-gold); font-weight: 600; margin: 0 0 6px; }
+        .out-sec p { margin: 0 0 4px; font-size: 13.5px; line-height: 1.5; color: var(--st-text); }
+        .out-sec .o-big { font-size: 15px; font-weight: 600; }
+        .out-sec .o-dim { color: var(--st-dim); font-size: 12.5px; }
+        .out-sec ul { margin: 4px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.5; }
+        .out-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+        .out-kv div span { display: block; font-size: 10.5px; letter-spacing: .6px; text-transform: uppercase; color: var(--st-dim-2); }
+        .out-kv div b { font-size: 13.5px; font-weight: 500; color: var(--st-text); }
+        .out-client textarea.f-area { min-height: 64px; font-size: 13px; }
+        .out-client select.f-input { padding: 7px 10px; font-size: 13px; }
+        .out-next { background: rgba(156,124,66,0.08); border: 1px solid rgba(156,124,66,0.3); padding: 9px 12px; font-size: 13px; margin: 0 0 8px; color: var(--st-text); }
+        .out-mail { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); }
+        .out-mail .view-tabs { margin: 0; padding: 0 22px; }
+        .out-mail-body { padding: 18px 22px 22px; }
+        .out-mail-row { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 10px; border-bottom: 1px solid var(--st-line); padding: 6px 0; }
+        .out-mail-row label { font-size: 12px; color: var(--st-dim); }
+        .out-mail-row input { border: 0; padding: 6px 0; font-size: 14px; font-family: var(--font-sans); color: var(--st-text); background: transparent; outline: none; width: 100%; }
+        .out-mail-row input:focus { box-shadow: 0 1px 0 var(--st-gold); }
+        .out-editor { min-height: 300px; padding: 16px 2px; font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.55; color: #222; outline: none; }
+        .out-editor p { margin: 0 0 14px; }
+        .out-editor a { color: #1a5bc4; }
+        .out-editor:empty::before { content: 'Write this email…'; color: var(--st-dim-2); }
+        .out-sig { font-size: 12px; color: var(--st-dim-2); border-top: 1px dashed var(--st-line-2); padding-top: 8px; margin-top: 4px; }
+        .out-checks { font-size: 12.5px; margin: 12px 0 0; }
+        .out-checks:empty { display: none; }
+        .out-checks p { margin: 0 0 4px; color: #96650a; }
+        .out-checks p.is-ok { color: #1f7a4d; }
+        .out-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+        .out-actions .note { font-size: 12.5px; color: var(--st-dim); flex: 1 1 240px; }
+        .out-mail .blog-toolbar { display: flex; gap: 6px; padding: 10px 0 0; }
+        .out-mail .blog-toolbar button { padding: 4px 10px; font-size: 13px; cursor: pointer; border: 1px solid var(--st-line-2); background: #fff; }
+        @media (max-width: 1100px) { .out-funnel { grid-template-columns: repeat(4, minmax(0, 1fr)); } .out-split { grid-template-columns: 1fr; } .out-client { position: static; max-height: none; } }
+        @media (max-width: 560px) { .out-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     </style>
 </head>
 <body class="studio-page">
@@ -1029,6 +1112,9 @@
             <button class="side-item area-proposals" data-nav="proposals" type="button"><span class="side-icon">✉</span>Proposals</button>
             <button class="side-item side-sub area-proposals" data-nav="newproposal" type="button">+ New proposal</button>
             <button class="side-item area-proposals" data-nav="destinations" type="button"><span class="side-icon">◎</span>Destinations<span class="side-count" id="sideCountDest"></span></button>
+
+            <div class="side-label owner-only">Marketing</div>
+            <button class="side-item owner-only" data-nav="outreach" type="button"><span class="side-icon">✦</span>Email outreach</button>
 
             <div class="side-label" id="sideWebsiteLabel">Website</div>
             <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
@@ -1437,6 +1523,64 @@
                 </div>
                 <div id="blogPerfPane"></div>
                 <div id="hotelPerfPane" hidden></div>
+            </div>
+        </div>
+
+        <!-- ── Email outreach (owner only) ─────────────────────────────── -->
+        <div class="view" id="viewOutreach">
+            <div class="dash" id="outListWrap">
+                <div class="dash-head" style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap">
+                    <div style="flex:1 1 420px">
+                        <h1 class="dash-title">Email <em>outreach.</em></h1>
+                        <p class="dash-sub">Past clients for the 2027 rebook campaign: where they went last, what they were celebrating, and the email ready for them. Click a client to review it, then <strong>Approve</strong> to put it in your Gmail drafts. Nothing sends from here.</p>
+                    </div>
+                    <button class="btn btn-ghost btn-small" id="outSigBtn" type="button">Signature</button>
+                    <label class="btn btn-ghost btn-small" style="cursor:pointer">Import clients<input type="file" id="outImport" accept=".json,application/json" hidden></label>
+                </div>
+                <div id="outGmail"></div>
+                <div class="out-funnel" id="outFunnel"></div>
+                <div class="out-tiles" id="outTiles"></div>
+                <div class="out-filters">
+                    <div class="out-groups" id="outGroups"></div>
+                    <select class="f-input" id="outLookbook"><option value="">Every lookbook</option></select>
+                    <select class="f-input" id="outPriority"><option value="">Any priority</option><option>High</option><option>Medium</option><option>Low</option></select>
+                    <input class="f-input" id="outSearch" placeholder="Search clients, trips, emails…">
+                </div>
+                <div class="out-table-wrap"><div id="outTable"><p class="dash-empty" style="padding:18px">Loading…</p></div></div>
+            </div>
+            <div class="dash" id="outDetail" hidden>
+                <div class="out-detail-bar">
+                    <button class="btn btn-ghost btn-small" id="outBack" type="button">← All clients</button>
+                    <span class="spacer"></span>
+                    <span class="dash-hint" id="outPos"></span>
+                    <button class="btn btn-ghost btn-small" id="outPrev" type="button">‹ Previous</button>
+                    <button class="btn btn-ghost btn-small" id="outNext" type="button">Next ›</button>
+                </div>
+                <div class="out-split">
+                    <aside class="out-client" id="outClient"></aside>
+                    <section class="out-mail">
+                        <div class="view-tabs" id="outTabs"></div>
+                        <div class="out-mail-body">
+                            <div class="out-mail-row"><label for="outTo">To</label><input id="outTo" autocomplete="off"></div>
+                            <div class="out-mail-row"><label for="outCc">Cc</label><input id="outCc" autocomplete="off" placeholder="optional"></div>
+                            <div class="out-mail-row"><label for="outSubject">Subject</label><input id="outSubject" autocomplete="off"></div>
+                            <div class="blog-toolbar">
+                                <button type="button" data-ocmd="bold"><b>B</b></button>
+                                <button type="button" data-ocmd="italic"><i>I</i></button>
+                                <button type="button" data-ocmd="link">Link</button>
+                                <button type="button" data-ocmd="unlink">Remove link</button>
+                            </div>
+                            <div class="out-editor" id="outEditor" contenteditable="true"></div>
+                            <div class="out-sig" id="outSigNote"></div>
+                            <div class="out-checks" id="outChecks"></div>
+                            <div class="out-actions">
+                                <span class="note" id="outMailNote"></span>
+                                <button class="btn btn-ghost btn-small" id="outSave" type="button">Save changes</button>
+                                <button class="btn" id="outApprove" type="button">Approve → Gmail drafts</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
 
@@ -1902,6 +2046,19 @@
         </div>
     </div>
 
+    <!-- ── Email outreach: Gmail signature ───────────────────────────── -->
+    <div class="modal-wrap" id="outSigModal">
+        <div class="modal" style="max-width:760px">
+            <div class="modal-head">
+                <h2 class="modal-title">Email <em>signature.</em></h2>
+                <button class="btn btn-ghost btn-small" data-close="outSigModal" type="button">Close</button>
+            </div>
+            <p class="perf-note" style="margin:0 0 12px">Drafts made through Gmail&rsquo;s API don&rsquo;t get your Gmail signature automatically, so the Studio adds this one under every approved email, the way Gmail would. Edit the text directly.</p>
+            <div class="out-editor" id="outSigEdit" contenteditable="true" style="border:1px solid var(--st-line-2);padding:14px;min-height:160px;overflow:auto"></div>
+            <div class="out-actions"><span class="note"></span><button class="btn" id="outSigSave" type="button">Save signature</button></div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="/data.js?v=94"></script>
@@ -1946,10 +2103,10 @@
         let me = { role: 'owner', name: 'Wilson', areas: ALL_AREAS };   // set by the gate's auth call
         const isOwner = () => me.role === 'owner';
         const canUse = (area) => isOwner() || me.areas.includes(area);
-        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance', destinations: 'proposals' };
+        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance', destinations: 'proposals', outreach: 'proposals' };
         // Which sidebar item lights up, and the top-bar title, for each view.
-        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance', destinations: 'destinations' };
-        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance', destinations: 'Destinations' };
+        const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance', destinations: 'destinations', outreach: 'outreach' };
+        const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance', destinations: 'Destinations', outreach: 'Email outreach' };
         let previewReady = false;
 
         /* ── Tiny helpers ─────────────────────────────────────────────── */
@@ -1996,6 +2153,14 @@
             const q = new URLSearchParams(location.search);
             if (q.get('view') === 'performance') {
                 history.replaceState(null, '', '/studio');
+                // "Connect Gmail" on Email outreach comes back here too.
+                let back = '';
+                try { back = sessionStorage.getItem('wndr-return') || ''; sessionStorage.removeItem('wndr-return'); } catch (e) {}
+                if (back === 'outreach') {
+                    showView('outreach');
+                    toast(q.get('google') === 'connected' ? 'Google reconnected.' : 'Google sign-in didn’t finish: ' + (q.get('msg') || 'unknown error'));
+                    return;
+                }
                 if (q.get('google') === 'connected') perf.justConnected = true;
                 showView('performance');
                 if (q.get('google') === 'connected') { perf.justConnected = true; toast('Google connected — loading your numbers.'); }
@@ -2005,10 +2170,400 @@
             showView('home');
         }
 
+        /* ── Email outreach (2026-11-02, owner only) ─────────────────────
+           One doc per client in kind "outreach" (see api/_outreach.js).
+           Approve saves the email and puts it in Wilson's Gmail drafts; the
+           Studio never sends. Client data comes from an import file kept
+           on Wilson's Mac, never this (public) repo. */
+        const OUT_STAGES = [
+            ['not-drafted', 'Not drafted'], ['review', 'To review'], ['in-gmail', 'In Gmail drafts'], ['sent', 'Sent'],
+            ['replied', 'Replied'], ['call', 'Call booked'], ['booked', 'Booked'], ['not-now', 'Not now']
+        ];
+        const OUT_STAGE_LABEL = Object.fromEntries(OUT_STAGES);
+        const OUT_RESPONSES = [['', 'No reply yet'], ['replied', 'Replied'], ['call', 'Call booked'], ['booked', 'Booked a 2027 trip'], ['not-now', 'Not now']];
+        const out = { items: [], loaded: false, gmail: false, account: '', group: 'all', stage: '', lookbook: '', priority: '', q: '',
+                      sort: 'send', dir: 1, docs: {}, cur: null, step: 0, dirty: false, settings: null, order: [] };
+        const outApi = (payload) => contentApi(Object.assign({ kind: 'outreach' }, payload));
+        const money = (n) => n ? '$' + Math.round(n).toLocaleString('en-US') : '';
+        const outDay = (iso) => iso ? new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+
+        function outStage(doc) {
+            const em = doc.emails || [];
+            if (['booked', 'call', 'replied', 'not-now'].includes(doc.response)) return doc.response;
+            if (em.some(e => e && e.status === 'sent')) return 'sent';
+            if (em.some(e => e && e.status === 'in-gmail')) return 'in-gmail';
+            if (em.some(e => e && e.status === 'draft' && (e.body || '').trim())) return 'review';
+            return 'not-drafted';
+        }
+        function outMeta(id, doc, clicks) {
+            const t = doc.trip || {};
+            return { id, name: doc.name || '', contact: doc.contact || '', email: doc.email || '', campaign: doc.campaign || '',
+                group: doc.group || '', sendWeek: doc.sendWeek || '', sendDate: doc.sendDate || '', priority: doc.priority || '',
+                tripType: doc.tripType || '', lookbook: doc.lookbook || '', tripTitle: t.title || '', destination: t.destination || '',
+                dates: t.dates || '', value: Number(t.value || 0), keyDate: doc.keyDate || '', opportunity: doc.opportunity || '',
+                emails: (doc.emails || []).map(e => ({ status: (e && e.status) || 'empty', sentAt: (e && e.sentAt) || '', approvedAt: (e && e.approvedAt) || '' })),
+                response: doc.response || '', stage: outStage(doc), updatedAt: doc.updatedAt || new Date().toISOString(), clicks: clicks || null };
+        }
+        // Blob reads lag writes by up to a minute, so what this browser just
+        // saved wins over an older copy coming back from the server.
+        function outRemember(id, doc) {
+            out.docs[id] = doc;
+            const prev = out.items.find(i => i.id === id);
+            const meta = outMeta(id, doc, prev && prev.clicks);
+            if (prev) Object.assign(prev, meta); else out.items.push(meta);
+            try { const m = JSON.parse(sessionStorage.getItem('wndr-out-local') || '{}'); m[id] = meta; sessionStorage.setItem('wndr-out-local', JSON.stringify(m)); } catch (e) {}
+        }
+        async function loadOutreach() {
+            if (!isOwner()) return;
+            renderOutGmail();
+            try {
+                const r = await outApi({ action: 'list' });
+                let local = {};
+                try { local = JSON.parse(sessionStorage.getItem('wndr-out-local') || '{}'); } catch (e) {}
+                out.items = (r.items || []).map(it => {
+                    const l = local[it.id];
+                    return (l && (l.updatedAt || '') > (it.updatedAt || '')) ? Object.assign({}, l, { clicks: it.clicks }) : it;
+                });
+                out.gmail = !!r.gmail; out.account = r.account || ''; out.loaded = true;
+            } catch (err) {
+                $('outTable').innerHTML = '<p class="dash-empty" style="padding:18px">Couldn’t load clients: ' + esc(err.message) + '</p>';
+                return;
+            }
+            renderOutGmail(); renderOutList();
+        }
+        function renderOutGmail() {
+            const el = $('outGmail');
+            if (!out.loaded) { el.innerHTML = ''; return; }
+            el.innerHTML = out.gmail
+                ? `<div class="out-gmail"><p><strong>Gmail connected</strong>${out.account ? ' as ' + esc(out.account) : ''}. Approved emails land in your Drafts folder. Once you send one from Gmail, <em>Check Gmail</em> moves it to Sent.</p>
+                   <button class="btn btn-ghost btn-small" id="outCheck" type="button">Check Gmail</button></div>`
+                : `<div class="out-gmail is-off"><p><strong>Connect Gmail to approve emails.</strong> One-time: sign in with Google again and allow the Studio to create drafts in your Gmail. It only ever makes drafts; you send every email yourself. Your Analytics connection stays as it is.</p>
+                   <button class="btn btn-small" id="outConnect" type="button">Connect Gmail</button></div>`;
+        }
+        function outFiltered(ignoreStage) {
+            const q = out.q.trim().toLowerCase();
+            return out.items.filter(i =>
+                (out.group === 'all' || i.group === out.group) &&
+                (ignoreStage || !out.stage || i.stage === out.stage) &&
+                (!out.lookbook || i.lookbook === out.lookbook) &&
+                (!out.priority || i.priority === out.priority) &&
+                (!q || [i.name, i.contact, i.email, i.tripTitle, i.destination, i.tripType, i.keyDate, i.opportunity].join(' ').toLowerCase().includes(q)));
+        }
+        function renderOutList() {
+            const groups = ['all'].concat([...new Set(out.items.map(i => i.group).filter(Boolean))]);
+            $('outGroups').innerHTML = groups.map(g => {
+                const n = g === 'all' ? out.items.length : out.items.filter(i => i.group === g).length;
+                return `<button type="button" data-outgroup="${esc(g)}" class="${out.group === g ? 'is-on' : ''}">${g === 'all' ? 'Everyone' : esc(g)} · ${n}</button>`;
+            }).join('');
+            const lbs = [...new Set(out.items.map(i => i.lookbook).filter(Boolean))].sort();
+            $('outLookbook').innerHTML = '<option value="">Every lookbook</option>' + lbs.map(l => `<option ${l === out.lookbook ? 'selected' : ''}>${esc(l)}</option>`).join('');
+            // Funnel counts follow the group/lookbook/priority/search filters, never the stage filter itself.
+            const pool = outFiltered(true);
+            const max = Math.max(1, pool.length);
+            $('outFunnel').innerHTML = OUT_STAGES.map(([k, label]) => {
+                const n = pool.filter(i => i.stage === k).length;
+                return `<button class="out-stage ${out.stage === k ? 'is-on' : ''}" data-stage="${k}" type="button" title="Show only: ${esc(label)}">
+                    <span class="out-stage-n">${n}</span><span class="out-stage-l">${esc(label)}</span>
+                    <span class="out-stage-bar" style="width:${Math.round(n / max * 100)}%"></span></button>`;
+            }).join('');
+            const clicked = pool.filter(i => i.clicks && i.clicks.count).length;
+            const sent = pool.filter(i => i.emails.some(e => e.status === 'sent')).length;
+            const replied = pool.filter(i => ['replied', 'call', 'booked'].includes(i.stage)).length;
+            const value = pool.reduce((a, i) => a + (i.value || 0), 0);
+            $('outTiles').innerHTML = `<span><b>${pool.length}</b> clients</span><span><b>${sent}</b> emailed</span>
+                <span><b>${clicked}</b> clicked a link</span><span><b>${sent ? Math.round(replied / sent * 100) : 0}%</b> reply rate</span>
+                <span><b>${money(value) || '$0'}</b> in last-trip bookings logged in Tern</span>`;
+            const rows = outFiltered(false);
+            const pri = { High: 0, Medium: 1, Low: 2 };
+            const key = {
+                name: i => i.name.toLowerCase(), trip: i => i.tripTitle.toLowerCase(), type: i => i.tripType.toLowerCase(),
+                value: i => -i.value, lookbook: i => i.lookbook, send: i => (i.sendDate || '9') + (pri[i.priority] ?? 3),
+                stage: i => OUT_STAGES.findIndex(s => s[0] === i.stage), clicks: i => -((i.clicks && i.clicks.count) || 0)
+            }[out.sort] || (i => i.name);
+            rows.sort((a, b) => { const x = key(a), y = key(b); return (x > y ? 1 : x < y ? -1 : 0) * out.dir; });
+            out.order = rows.map(r => r.id);
+            if (!out.items.length) {
+                $('outTable').innerHTML = '<p class="dash-empty" style="padding:18px">No clients yet. Use <strong>Import clients</strong> above with the file Claude made for you.</p>';
+                return;
+            }
+            const th = (k, label, cls) => `<th data-outsort="${k}" class="${cls || ''}">${label}${out.sort === k ? (out.dir > 0 ? ' ↑' : ' ↓') : ''}</th>`;
+            $('outTable').innerHTML = rows.length ? `<table class="out-table"><thead><tr>
+                ${th('name', 'Client')}${th('trip', 'Last trip')}${th('type', 'Occasion')}${th('value', 'Trip value', 'o-num')}${th('lookbook', 'Lookbook')}${th('send', 'Send')}${th('stage', 'Status')}${th('clicks', 'Clicks', 'o-num')}
+                </tr></thead><tbody>${rows.map(i => `<tr data-outid="${esc(i.id)}">
+                    <td><div class="o-name"><span class="o-pri is-${(i.priority || '').toLowerCase()}" title="${esc(i.priority)} priority"></span>${esc(i.name)}</div><div class="o-sub">${esc(i.email || 'no email yet')}</div></td>
+                    <td>${esc(i.tripTitle)}<div class="o-sub">${esc(i.dates)}</div></td>
+                    <td>${esc(i.tripType)}${i.keyDate ? `<div class="o-sub">${esc(i.keyDate)}</div>` : ''}</td>
+                    <td class="o-num">${money(i.value) || '<span class="o-sub">–</span>'}</td>
+                    <td>${esc((i.lookbook || '').replace(/ Edit$/, ''))}</td>
+                    <td>${esc(i.group)}<div class="o-sub">${esc(i.sendWeek)}</div></td>
+                    <td><span class="chip chip-o-${i.stage}">${esc(OUT_STAGE_LABEL[i.stage] || i.stage)}</span></td>
+                    <td class="o-num">${(i.clicks && i.clicks.count) || ''}</td></tr>`).join('')}</tbody></table>`
+                : '<p class="dash-empty" style="padding:18px">No clients match these filters.</p>';
+        }
+        function outShowList() {
+            if (out.dirty) outSave(true);
+            $('outDetail').hidden = true; $('outListWrap').hidden = false;
+            out.cur = null;
+            if (out.loaded) renderOutList();
+            window.scrollTo(0, 0);
+        }
+
+        // ── One client: their trip on the left, the email on the right ──
+        async function outOpen(id) {
+            if (out.dirty) await outSave(true);
+            let doc = out.docs[id];
+            if (!doc) {
+                try { doc = (await outApi({ action: 'load', id })).doc; out.docs[id] = doc; }
+                catch (err) { toast('Couldn’t open: ' + err.message); return; }
+            }
+            out.cur = id;
+            const em = doc.emails || [];
+            const firstOpen = em.findIndex(e => e && e.status !== 'sent' && (e.body || '').trim());
+            out.step = firstOpen >= 0 ? firstOpen : 0;
+            $('outListWrap').hidden = true; $('outDetail').hidden = false;
+            renderOutClient(); renderOutMail();
+            const pos = out.order.indexOf(id);
+            $('outPos').textContent = pos >= 0 ? `${pos + 1} of ${out.order.length}` : '';
+            $('outPrev').disabled = pos <= 0; $('outNext').disabled = pos < 0 || pos >= out.order.length - 1;
+            window.scrollTo(0, 0);
+        }
+        function outNextStep(doc) {
+            if (doc.response === 'booked') return 'Booked. Nothing more to send.';
+            if (doc.response === 'call') return 'Call booked. Prep for the call.';
+            if (doc.response === 'replied') return 'They replied. Answer them in Gmail.';
+            if (doc.response === 'not-now') return 'Not now. No more emails in this campaign.';
+            const em = doc.emails || [];
+            const gaps = [0, 10, 14];
+            for (let n = em.length - 1; n >= 0; n--) {
+                const e = em[n] || {};
+                if (e.status === 'sent') {
+                    if (n === em.length - 1) return `All ${em.length} emails sent, no reply yet.`;
+                    const due = new Date(new Date(e.sentAt).getTime() + gaps[n + 1] * 864e5);
+                    return `${em[n + 1].label || 'Email ' + (n + 2)} due ${outDay(due.toISOString())} if they haven’t replied.`;
+                }
+                if (e.status === 'in-gmail') return `${e.label || 'Email ' + (n + 1)} is in your Gmail drafts, ready to send.`;
+            }
+            if ((em[0] || {}).status === 'draft') return `Email 1 to review and approve${doc.sendWeek ? ' · send ' + doc.sendWeek.toLowerCase() : ''}.`;
+            return 'Email 1 still to be written.';
+        }
+        function renderOutClient() {
+            const doc = out.docs[out.cur]; const t = doc.trip || {};
+            const meta = out.items.find(i => i.id === out.cur) || {};
+            const kv = (k, v) => v ? `<div><span>${k}</span><b>${esc(String(v))}</b></div>` : '';
+            const clicks = meta.clicks && meta.clicks.count ? `${meta.clicks.count} click${meta.clicks.count > 1 ? 's' : ''}, last ${fmtWhen(meta.clicks.lastAt)}` : 'No clicks yet';
+            $('outClient').innerHTML = `
+                <h2>${esc(doc.name)}</h2>
+                <p class="o-email">${esc(doc.contact || '')}${doc.contact ? ' · ' : ''}${esc(doc.email || 'No email address yet')}</p>
+                <div class="out-next">${esc(outNextStep(doc))}</div>
+                <div class="out-sec"><p class="out-sec-k">Last trip</p>
+                    <p class="o-big">${esc(t.title || '')}</p>
+                    <p class="o-dim">${esc([t.destination, t.dates].filter(Boolean).join(' · '))}</p>
+                    ${(t.hotels || []).length ? `<ul>${t.hotels.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
+                    ${(doc.otherTrips || []).length ? `<p class="o-dim" style="margin-top:8px">Also: ${esc(doc.otherTrips.join(' · '))}</p>` : ''}
+                </div>
+                <div class="out-sec"><div class="out-kv">
+                    ${kv('Occasion', doc.tripType)}${kv('Key date', doc.keyDate)}
+                    ${kv('Trip value', money(t.value) || 'Not logged in Tern')}${kv('Priority', doc.priority)}
+                    ${kv('Send', [doc.group, doc.sendWeek].filter(Boolean).join(' · '))}${kv('Lookbook', doc.lookbook)}
+                </div></div>
+                <div class="out-sec"><p class="out-sec-k">Welcome Home survey</p><p>${esc(doc.survey || 'Not on file')}</p></div>
+                <div class="out-sec"><p class="out-sec-k">2027 status</p><p>${esc(doc.status2027 || 'Nothing booked or in planning')}</p></div>
+                <div class="out-sec"><p class="out-sec-k">Suggested 2027 opportunity</p>
+                    <textarea class="f-area" id="outOpp">${esc(doc.opportunity || '')}</textarea></div>
+                <div class="out-sec"><p class="out-sec-k">Follow-up</p>
+                    <select class="f-input" id="outResp">${OUT_RESPONSES.map(([k, l]) => `<option value="${k}" ${k === (doc.response || '') ? 'selected' : ''}>${l}</option>`).join('')}</select>
+                    <textarea class="f-area" id="outRespNote" placeholder="What they said, next step…" style="margin-top:8px">${esc(doc.responseNote || '')}</textarea>
+                    <p class="o-dim" style="margin-top:6px">Link clicks: ${esc(clicks)}</p></div>
+                <div class="out-sec"><p class="out-sec-k">Notes for you (never sent)</p>
+                    <textarea class="f-area" id="outNotes">${esc(doc.notes || '')}</textarea></div>`;
+        }
+        function renderOutMail() {
+            const doc = out.docs[out.cur];
+            const em = doc.emails || [];
+            const statusWord = { empty: 'not written', draft: 'draft', 'in-gmail': 'in Gmail', sent: 'sent' };
+            $('outTabs').innerHTML = em.map((e, n) => `<button type="button" data-outstep="${n}" class="${n === out.step ? 'is-on' : ''}">${esc(e.label || 'Email ' + (n + 1))} <span class="o-sub" style="font-weight:400">· ${statusWord[e.status || 'empty'] || e.status}</span></button>`).join('');
+            const e = em[out.step] || {};
+            $('outTo').value = doc.email || '';
+            $('outCc').value = doc.cc || '';
+            $('outSubject').value = e.subject || '';
+            $('outEditor').innerHTML = e.body || '';
+            $('outSigNote').textContent = (out.settings && out.settings.signature) ? 'Your signature is added below this when it goes to Gmail.' : 'No signature set yet: add it under Signature on the client list.';
+            const ap = $('outApprove');
+            ap.textContent = e.status === 'in-gmail' ? 'Update Gmail draft' : (e.status === 'sent' ? 'Make a new Gmail draft' : 'Approve → Gmail drafts');
+            ap.disabled = !out.gmail;
+            const gm = 'https://mail.google.com/mail/u/0/?authuser=wilson@wanderbywilson.com#drafts';
+            $('outMailNote').innerHTML = !out.gmail ? 'Connect Gmail (top of the client list) to approve.'
+                : e.status === 'in-gmail' ? `In your Gmail drafts since ${esc(fmtWhen(e.approvedAt))}. <a href="${gm}" target="_blank" rel="noopener">Open Gmail drafts</a>`
+                : e.status === 'sent' ? `Sent ${esc(fmtWhen(e.sentAt))}.`
+                : 'Approving saves this and puts it in your Gmail drafts. It does not send.';
+            out.dirty = false;
+            outChecks();
+        }
+        function outChecks() {
+            const text = $('outEditor').innerText || '';
+            const html = $('outEditor').innerHTML || '';
+            const issues = [];
+            if (/—/.test(text + $('outSubject').value)) issues.push('Em dash in the email. Clients read them as AI-written: swap for a comma or period.');
+            if (/CALENDLY_LINK|\[[^\]]{2,40}\]|\bTBD\b|XX/.test(text + html)) issues.push('A placeholder is still in the email.');
+            if (/\bheld\b|\bon hold for you\b/i.test(text)) issues.push('“Held” language: never say rooms are held.');
+            if (!$('outTo').value.trim()) issues.push('No email address for this client yet.');
+            if (!$('outSubject').value.trim()) issues.push('No subject yet.');
+            if (text.trim() && !/<a\s/i.test(html)) issues.push('No link in this email (Calendly or lookbook).');
+            $('outChecks').innerHTML = text.trim()
+                ? (issues.length ? issues.map(i => `<p>⚠ ${esc(i)}</p>`).join('') : '<p class="is-ok">✓ No em dashes, placeholders or missing details.</p>')
+                : '';
+        }
+        // Pull the editor + side fields back into the doc.
+        function outCollect() {
+            const doc = out.docs[out.cur]; if (!doc) return null;
+            const e = (doc.emails || [])[out.step];
+            doc.email = $('outTo').value.trim();
+            doc.cc = $('outCc').value.trim();
+            if (e) {
+                const body = $('outEditor').innerHTML.replace(/<div>/g, '<p>').replace(/<\/div>/g, '</p>').replace(/<p><br><\/p>/g, '');
+                if (body !== (e.body || '') || $('outSubject').value !== (e.subject || '')) {
+                    e.subject = $('outSubject').value;
+                    e.body = body;
+                    if ((!e.status || e.status === 'empty') && body.trim()) e.status = 'draft';
+                }
+            }
+            if ($('outOpp')) doc.opportunity = $('outOpp').value;
+            if ($('outResp')) doc.response = $('outResp').value;
+            if ($('outRespNote')) doc.responseNote = $('outRespNote').value;
+            if ($('outNotes')) doc.notes = $('outNotes').value;
+            return doc;
+        }
+        async function outSave(quiet) {
+            const id = out.cur; const doc = outCollect(); if (!doc) return;
+            out.dirty = false;
+            doc.updatedAt = new Date().toISOString();
+            outRemember(id, doc);
+            try { await outApi({ action: 'save', id, doc, meta: { title: doc.name } }); if (!quiet) toast('Saved.'); }
+            catch (err) { out.dirty = true; toast('Couldn’t save: ' + err.message); }
+        }
+        async function outApprove() {
+            const id = out.cur; const doc = outCollect(); if (!doc) return;
+            const e = doc.emails[out.step];
+            if (e.status === 'in-gmail' && !confirm('This replaces the draft already in Gmail, including any edits you made there. Update it?')) return;
+            if (e.status === 'sent' && !confirm('This email was already sent. Make a new Gmail draft anyway?')) return;
+            if (e.status === 'sent') { delete e.gmailDraftId; }
+            const btn = $('outApprove'); btn.disabled = true; btn.textContent = 'Putting it in Gmail…';
+            try {
+                const r = await outApi({ action: 'gmaildraft', id, step: out.step, doc });
+                outRemember(id, r.doc);
+                renderOutClient(); renderOutMail();
+                toast('In your Gmail drafts. Send it from Gmail when you’re ready.');
+            } catch (err) {
+                toast('Not approved: ' + err.message);
+                renderOutMail();
+            }
+        }
+        async function outImport(file) {
+            let data;
+            try { data = JSON.parse(await file.text()); } catch (e) { toast('That file isn’t valid JSON.'); return; }
+            const clients = Array.isArray(data.clients) ? data.clients : [];
+            if (!clients.length) { toast('No clients in that file.'); return; }
+            const have = new Set(out.items.map(i => i.id));
+            const fresh = clients.filter(c => c && c.id && c.doc && !have.has(c.id));
+            const skipped = clients.length - fresh.length;
+            if (!confirm(`Import ${fresh.length} client${fresh.length === 1 ? '' : 's'}?${skipped ? ` ${skipped} already here will be left exactly as they are.` : ''}`)) return;
+            try {
+                for (let i = 0; i < fresh.length; i += 40) {
+                    const chunk = fresh.slice(i, i + 40);
+                    await outApi({ action: 'saveMany', items: chunk.map(c => ({ id: c.id, doc: c.doc, meta: { title: c.doc.name } })) });
+                    chunk.forEach(c => outRemember(c.id, Object.assign({}, c.doc, { updatedAt: new Date().toISOString() })));
+                }
+                if (data.signature && !(out.settings && out.settings.signature)) {
+                    const r = await outApi({ action: 'setsettings', settings: { signature: data.signature } });
+                    out.settings = r.settings;
+                }
+                toast(`Imported ${fresh.length} client${fresh.length === 1 ? '' : 's'}.`);
+                renderOutList();
+            } catch (err) { toast('Import stopped: ' + err.message); }
+        }
+        async function outLoadSettings() {
+            if (out.settings) return out.settings;
+            try { out.settings = (await outApi({ action: 'getsettings' })).settings || {}; } catch (e) { out.settings = {}; }
+            return out.settings;
+        }
+
+        document.addEventListener('click', async (ev) => {
+            if (!ev.target.closest('#viewOutreach, #outSigModal')) return;
+            const t = ev.target;
+            const g = t.closest('[data-outgroup]'); if (g) { out.group = g.dataset.outgroup; renderOutList(); return; }
+            const st = t.closest('.out-stage'); if (st) { out.stage = out.stage === st.dataset.stage ? '' : st.dataset.stage; renderOutList(); return; }
+            const so = t.closest('[data-outsort]'); if (so) { out.dir = out.sort === so.dataset.outsort ? -out.dir : 1; out.sort = so.dataset.outsort; renderOutList(); return; }
+            const row = t.closest('[data-outid]'); if (row) { await outLoadSettings(); outOpen(row.dataset.outid); return; }
+            const tab = t.closest('[data-outstep]'); if (tab) { if (out.dirty) await outSave(true); out.step = Number(tab.dataset.outstep); renderOutMail(); return; }
+            const cmd = t.closest('[data-ocmd]');
+            if (cmd) {
+                ev.preventDefault();
+                const c = cmd.dataset.ocmd;
+                if (c === 'link') { const url = prompt('Link address (https://…)', 'https://'); if (url && /^https?:\/\//.test(url)) document.execCommand('createLink', false, url); }
+                else document.execCommand(c);
+                out.dirty = true; outChecks(); return;
+            }
+            if (t.closest('#outBack')) { outShowList(); return; }
+            if (t.closest('#outPrev') || t.closest('#outNext')) {
+                const pos = out.order.indexOf(out.cur) + (t.closest('#outNext') ? 1 : -1);
+                if (out.order[pos]) outOpen(out.order[pos]);
+                return;
+            }
+            if (t.closest('#outSave')) { outSave(false); return; }
+            if (t.closest('#outApprove')) { outApprove(); return; }
+            if (t.closest('#outCheck')) {
+                const b = t.closest('#outCheck'); b.disabled = true; b.textContent = 'Checking…';
+                try {
+                    const r = await outApi({ action: 'gmailcheck' });
+                    (r.changed || []).forEach(c => outRemember(c.id, c.doc));
+                    toast(r.changed.length ? `${r.changed.length} client${r.changed.length > 1 ? 's' : ''} moved to Sent.` : 'Nothing new sent since the last check.');
+                    renderOutList();
+                } catch (err) { toast('Couldn’t check Gmail: ' + err.message); }
+                b.disabled = false; b.textContent = 'Check Gmail';
+                return;
+            }
+            if (t.closest('#outConnect')) {
+                try {
+                    const { url } = await statsApi({ action: 'authurl' });
+                    try { sessionStorage.setItem('wndr-return', 'outreach'); } catch (e) {}
+                    location.href = url;
+                } catch (err) { toast('Couldn’t start Google sign-in: ' + err.message + '. If the Studio was never connected to Google, set it up on the Performance page first.'); }
+                return;
+            }
+            if (t.closest('#outSigBtn')) {
+                const st2 = await outLoadSettings();
+                $('outSigEdit').innerHTML = st2.signature || '';
+                $('outSigModal').classList.add('is-open');
+                return;
+            }
+            if (t.closest('#outSigSave')) {
+                try {
+                    const r = await outApi({ action: 'setsettings', settings: { signature: $('outSigEdit').innerHTML } });
+                    out.settings = r.settings; $('outSigModal').classList.remove('is-open'); toast('Signature saved.');
+                } catch (err) { toast('Couldn’t save: ' + err.message); }
+            }
+        });
+        document.addEventListener('input', (ev) => {
+            if (ev.target.closest('#outDetail')) { out.dirty = true; if (ev.target.closest('#outEditor, #outSubject, #outTo')) outChecks(); }
+            if (ev.target.id === 'outSearch') { out.q = ev.target.value; renderOutList(); }
+        });
+        document.addEventListener('change', (ev) => {
+            if (ev.target.id === 'outLookbook') { out.lookbook = ev.target.value; renderOutList(); }
+            if (ev.target.id === 'outPriority') { out.priority = ev.target.value; renderOutList(); }
+            if (ev.target.id === 'outResp') { outSave(true).then(() => { renderOutClient(); toast('Follow-up updated.'); }); }
+            if (ev.target.id === 'outImport' && ev.target.files[0]) { outImport(ev.target.files[0]); ev.target.value = ''; }
+        });
+        // Paste as plain text so Word/Gmail formatting doesn't come along.
+        document.addEventListener('paste', (ev) => {
+            if (!ev.target.closest || !ev.target.closest('#outEditor')) return;
+            ev.preventDefault();
+            document.execCommand('insertText', false, (ev.clipboardData || window.clipboardData).getData('text/plain'));
+        });
+
         /* ── Views & dashboard ────────────────────────────────────────── */
         function showView(v) {
             if (VIEW_AREA[v] && !canUse(VIEW_AREA[v])) v = 'home';
-            if (v === 'team' && !isOwner()) v = 'home';
+            if ((v === 'team' || v === 'outreach') && !isOwner()) v = 'home';
             $('studio').dataset.view = v;
             document.querySelectorAll('.side-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === VIEW_NAV[v]));
             $('topTitle').textContent = VIEW_TITLE[v] || '';
@@ -2017,6 +2572,7 @@
             window.scrollTo(0, 0);
             if (v === 'home') loadDashboard();
             if (v === 'social') loadSocialStudio();
+            if (v === 'outreach') loadOutreach();
         }
         async function contentApi(payload) {
             const res = await fetch('/api/studio-content', {
@@ -2298,6 +2854,7 @@
             else if (n === 'destinations') { showView('destinations'); showDestList(); }
             else if (n === 'social') showView('social');
             else if (n === 'team') showView('team');
+            else if (n === 'outreach') { showView('outreach'); outShowList(); }
             else if (n === 'signout') {
                 try { sessionStorage.removeItem('wndr-studio-pass'); } catch (err) {}
                 passcode = '';
@@ -2537,7 +3094,7 @@
             pane.innerHTML = `
                 <div class="perf-card" style="max-width:760px">
                     <h2>Connect Google</h2>
-                    <p class="perf-note" style="margin:6px 0 16px">One-time setup. You sign in with your own Google account and approve <strong>read-only</strong> access to Analytics and Search Console. Nothing can be changed from here, and you can revoke it anytime in your Google account.</p>
+                    <p class="perf-note" style="margin:6px 0 16px">One-time setup. You sign in with your own Google account and approve <strong>read-only</strong> access to Analytics and Search Console, plus <strong>Gmail drafts</strong> for Email outreach (the Studio only creates drafts; it never sends). You can revoke it anytime in your Google account.</p>
                     <div style="${hasClient ? 'opacity:.55' : ''}">
                         <p style="margin:0 0 8px; font-weight:500">1 · The Studio’s sign-in codes from Google Cloud ${hasClient ? '✓' : ''}</p>
                         <p class="perf-note" style="margin:0 0 8px">When Google asks for an <em>Authorized redirect URI</em>, use exactly:<br><code id="perfRedirect">https://www.wanderbywilson.com/api/google-oauth</code></p>

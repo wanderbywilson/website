@@ -8,6 +8,11 @@
 //     destination — destination guides for lookbooks ({entry, status}); "ready" = approved
 //     blog       — posts drafted in the Studio ({title, dek, heroImage,
 //                  bodyHtml, tags, author, status})
+//     outreach   — Email outreach clients (owner only; see _outreach.js).
+//                  Listed from the docs themselves, not the index, plus:
+//                  gmaildraft {id, step, doc} → save + put email in Gmail drafts
+//                  gmailcheck  → drafts no longer in Gmail are marked sent
+//                  getsettings / setsettings {settings} → signature
 //
 //   POST {passcode, action, kind, ...}:
 //     list                       → index entries, newest first
@@ -34,8 +39,10 @@
 
 const { blobPutJSON, blobGetJSON, blobDelete, blobList } = require('./_blob');
 const { whoIs, can } = require('./_auth');
+const { loadSettings, hasGmail, gmailSaveDraft, gmailDraftExists } = require('./_google');
+const { outreachMeta, buildMessage } = require('./_outreach');
 
-const KINDS = ['social', 'hoteldraft', 'blog', 'destination'];
+const KINDS = ['social', 'hoteldraft', 'blog', 'destination', 'outreach'];
 const STATUSES = ['idea', 'draft', 'in-review', 'ready', 'published'];
 // Fields a live post has that the Studio editor doesn't show (they came over
 // from blog-data): kept on save so the next publish doesn't drop them.
@@ -86,6 +93,101 @@ function metaFromDoc(id, doc) {
     };
 }
 
+// ── Email outreach ────────────────────────────────────────────────────
+const OUTREACH_SETTINGS = 'settings/outreach.json';
+
+async function allOutreach(path) {
+    const blobs = await blobList('content/outreach/');
+    const ids = blobs
+        .map(b => (b.pathname.match(/^content\/outreach\/([^/]+)\.json$/) || [])[1])
+        .filter(id => id && !id.startsWith('_'));
+    const docs = [];
+    for (let i = 0; i < ids.length; i += 25) {
+        const batch = ids.slice(i, i + 25);
+        const got = await Promise.all(batch.map(id => blobGetJSON(path(id)).catch(() => null)));
+        got.forEach((doc, j) => { if (doc) docs.push({ id: batch[j], doc }); });
+    }
+    return docs;
+}
+
+async function allClicks() {
+    const blobs = await blobList('outreach-clicks/');
+    const out = {};
+    await Promise.all(blobs.map(async b => {
+        const id = (b.pathname.match(/^outreach-clicks\/([^/]+)\.json$/) || [])[1];
+        if (!id) return;
+        const c = await blobGetJSON(b.pathname).catch(() => null);
+        if (c) out[id] = c;
+    }));
+    return out;
+}
+
+// Returns a response when it handled the action, otherwise null (the shared
+// load/save/saveMany/delete below then apply as for any kind).
+async function outreachAction(action, body, user, res, path) {
+    if (action === 'list') {
+        const [docs, clicks, g] = await Promise.all([allOutreach(path), allClicks(), loadSettings().catch(() => null)]);
+        const items = docs.map(({ id, doc }) => Object.assign(outreachMeta(id, doc), { clicks: clicks[id] || null }));
+        return res.status(200).json({ ok: true, items, gmail: hasGmail(g), account: (g && g.account) || '' });
+    }
+    if (action === 'getsettings') {
+        return res.status(200).json({ ok: true, settings: (await blobGetJSON(OUTREACH_SETTINGS)) || {} });
+    }
+    if (action === 'setsettings') {
+        const st = body.settings || {};
+        const settings = { signature: String(st.signature || '').slice(0, 20000), updatedAt: new Date().toISOString() };
+        await blobPutJSON(OUTREACH_SETTINGS, settings);
+        return res.status(200).json({ ok: true, settings });
+    }
+    if (action === 'gmaildraft') {
+        const id = cleanId(body.id);
+        const step = Number(body.step);
+        const doc = body.doc;
+        if (!id || !doc || typeof doc !== 'object' || !Array.isArray(doc.emails) || !(step >= 0 && step < doc.emails.length)) {
+            return res.status(400).json({ error: 'Missing client or email' });
+        }
+        const g = await loadSettings();
+        if (!hasGmail(g)) return res.status(409).json({ error: 'Connect Gmail first (button at the top of Email outreach).' });
+        const settings = (await blobGetJSON(OUTREACH_SETTINGS)) || {};
+        // The browser's copy is what Wilson just approved. The stored copy is
+        // only used for the Gmail draft id, in case the browser lacks it.
+        const stored = (await blobGetJSON(path(id))) || {};
+        const e = doc.emails[step];
+        const storedE = (stored.emails || [])[step] || {};
+        let built;
+        try { built = buildMessage(id, doc, step, settings.signature); }
+        catch (err) { return res.status(400).json({ error: err.message }); }
+        let saved;
+        try { saved = await gmailSaveDraft(g, built.raw, e.gmailDraftId || storedE.gmailDraftId || ''); }
+        catch (err) { return res.status(err.status || 502).json({ error: err.message }); }
+        const now = new Date().toISOString();
+        Object.assign(e, { body: built.body, status: 'in-gmail', gmailDraftId: saved.draftId, gmailMessageId: saved.messageId, links: built.links, approvedAt: now });
+        delete e.sentAt;
+        doc.createdAt = stored.createdAt || now;
+        doc.updatedAt = now;
+        doc.lastEditedBy = user.name;
+        await blobPutJSON(path(id), doc);
+        return res.status(200).json({ ok: true, id, doc, meta: outreachMeta(id, doc), account: g.account || '' });
+    }
+    if (action === 'gmailcheck') {
+        const g = await loadSettings();
+        if (!hasGmail(g)) return res.status(409).json({ error: 'Connect Gmail first.' });
+        const docs = await allOutreach(path);
+        const now = new Date().toISOString();
+        const changed = [];
+        for (const { id, doc } of docs) {
+            let dirty = false;
+            for (const e of (doc.emails || [])) {
+                if (!e || e.status !== 'in-gmail' || !e.gmailDraftId) continue;
+                if (!(await gmailDraftExists(g, e.gmailDraftId))) { e.status = 'sent'; e.sentAt = now; dirty = true; }
+            }
+            if (dirty) { doc.updatedAt = now; await blobPutJSON(path(id), doc); changed.push({ id, doc, meta: outreachMeta(id, doc) }); }
+        }
+        return res.status(200).json({ ok: true, changed });
+    }
+    return null;
+}
+
 module.exports = async (req, res) => {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.setHeader('Cache-Control', 'no-store');
@@ -104,11 +206,18 @@ module.exports = async (req, res) => {
         const kind = body.kind;
         if (!KINDS.includes(kind)) return res.status(400).json({ error: 'Unknown kind' });
         // Team members only reach the Studio areas Wilson gave them on the Team card.
-        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social', destination: 'proposals' };
+        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social', destination: 'proposals', outreach: 'proposals' };
         if (!can(user, AREA_OF[kind])) return res.status(403).json({ error: 'You don’t have access to this part of the Studio' });
+        // Client emails go into Wilson's own Gmail, so outreach is hers alone.
+        if (kind === 'outreach' && user.role !== 'owner') return res.status(403).json({ error: 'Email outreach is Wilson’s only' });
         const INDEX = `content/${kind}/_index.json`;
         const path = (id) => `content/${kind}/${id}.json`;
         const action = body.action || '';
+
+        if (kind === 'outreach') {
+            const handled = await outreachAction(action, body, user, res, path);
+            if (handled) return handled;
+        }
 
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX)) || {};

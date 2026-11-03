@@ -1,5 +1,7 @@
-// Read-only Google Analytics 4 + Search Console access for the Studio's
-// Performance page. Raw fetch, no npm deps (the repo has no package.json).
+// Google access for the Studio: read-only Analytics 4 + Search Console for the
+// Performance page, and Gmail drafts for Email outreach (2026-11-02: the
+// Approve button puts a client email in Wilson's Gmail drafts; nothing in the
+// Studio ever sends). Raw fetch, no npm deps (the repo has no package.json).
 //
 // Wilson connects it with "Sign in with Google" on the Performance page:
 //   1. She creates an OAuth client (Web application) in Google Cloud with the
@@ -19,6 +21,7 @@ const SETTINGS = 'settings/google.json';
 const SCOPES = [
     'https://www.googleapis.com/auth/analytics.readonly',
     'https://www.googleapis.com/auth/webmasters.readonly',
+    'https://www.googleapis.com/auth/gmail.compose',
     'openid', 'email'
 ].join(' ');
 const REDIRECT_URI = 'https://www.wanderbywilson.com/api/google-oauth';
@@ -42,6 +45,12 @@ async function clearSettings() {
 
 function isConnected(s) {
     return !!(s && (s.refreshToken || s.privateKey));
+}
+
+// Connections made before Gmail was added (2026-11-02) have no `scope` saved,
+// so they count as not having Gmail until Wilson signs in again.
+function hasGmail(s) {
+    return isConnected(s) && !!s.refreshToken && /gmail\.compose/.test(s.scope || '');
 }
 
 // Step 1: the OAuth client Wilson made in Google Cloud.
@@ -112,7 +121,7 @@ async function finishAuth(code, state) {
     let account = '';
     try { account = JSON.parse(Buffer.from(data.id_token.split('.')[1], 'base64').toString()).email || ''; } catch (e) {}
     delete s.oauthState;   // left over from the first version
-    Object.assign(s, { refreshToken: data.refresh_token, account, connectedAt: new Date().toISOString() });
+    Object.assign(s, { refreshToken: data.refresh_token, scope: data.scope || '', account, connectedAt: new Date().toISOString() });
     await saveSettings(s);
     return s;
 }
@@ -183,4 +192,44 @@ async function gsc(s, body) {
     return data.rows || [];
 }
 
-module.exports = { loadSettings, clearSettings, isConnected, saveClient, authUrl, finishAuth, ga4, gsc, REDIRECT_URI };
+// ── Gmail drafts (Email outreach) ──────────────────────────────────────
+async function gmailFetch(s, method, path, body) {
+    const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/' + path, {
+        method,
+        headers: { 'Authorization': `Bearer ${await accessToken(s)}`, 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await res.json().catch(() => ({}));
+    return { status: res.status, ok: res.ok, data };
+}
+function gmailError(r) {
+    const msg = (r.data.error && r.data.error.message) || ('HTTP ' + r.status);
+    const err = new Error(r.status === 403
+        ? 'Gmail said no: ' + msg + '. Reconnect Google with Gmail access on the Email outreach page.'
+        : 'Gmail: ' + msg);
+    err.status = r.status === 403 ? 403 : 502;
+    return err;
+}
+
+// Create a draft, or replace an existing one (same draft, same Gmail link).
+// If the old draft is gone (sent or deleted), a new one is made.
+async function gmailSaveDraft(s, raw, draftId) {
+    if (draftId) {
+        const r = await gmailFetch(s, 'PUT', 'drafts/' + encodeURIComponent(draftId), { id: draftId, message: { raw } });
+        if (r.ok) return { draftId: r.data.id, messageId: (r.data.message || {}).id || '' };
+        if (r.status !== 404) throw gmailError(r);
+    }
+    const r = await gmailFetch(s, 'POST', 'drafts', { message: { raw } });
+    if (!r.ok) throw gmailError(r);
+    return { draftId: r.data.id, messageId: (r.data.message || {}).id || '' };
+}
+
+// true = still sitting in Drafts; false = gone (sent, or deleted by hand).
+async function gmailDraftExists(s, draftId) {
+    const r = await gmailFetch(s, 'GET', 'drafts/' + encodeURIComponent(draftId) + '?format=minimal');
+    if (r.ok) return true;
+    if (r.status === 404) return false;
+    throw gmailError(r);
+}
+
+module.exports = { loadSettings, clearSettings, isConnected, hasGmail, saveClient, authUrl, finishAuth, ga4, gsc, gmailSaveDraft, gmailDraftExists, REDIRECT_URI };

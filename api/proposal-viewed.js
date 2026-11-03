@@ -5,12 +5,50 @@
 // views/{id}.json. Team browsers are excluded client-side (localStorage flag
 // set by the Studio + ?preview=1 links never fire the beacon).
 
+//
+// GET ?o={client}&e={email}&l={link} — Email outreach link clicks (2026-11-02).
+// Links in outreach emails point here; the click is counted in
+// outreach-clicks/{client}.json and the visitor is sent on to the original
+// link saved on that client's doc (never to a URL taken from the request).
+// Lives in this file because the Vercel plan caps the number of functions.
+
 const { blobPutJSON, blobGetJSON } = require('./_blob');
 const { sendBrevoEmail } = require('./_brevo');
+const { isBot, SITE } = require('./_outreach');
+
+async function outreachClick(req, res) {
+    const q = req.query || {};
+    const id = /^[a-z0-9-]{1,120}$/.test(String(q.o || '')) ? String(q.o) : '';
+    const step = Number(q.e), li = Number(q.l);
+    let target = SITE;
+    try {
+        const doc = id ? await blobGetJSON(`content/outreach/${id}.json`) : null;
+        const e = doc && Array.isArray(doc.emails) ? doc.emails[step] : null;
+        const url = e && Array.isArray(e.links) ? e.links[li] : '';
+        if (/^https?:\/\//i.test(url || '')) target = url;
+        if (doc && url && req.method === 'GET' && !isBot(req.headers['user-agent'])) {
+            const key = `outreach-clicks/${id}.json`;
+            const c = (await blobGetJSON(key)) || { count: 0, links: {} };
+            const now = new Date().toISOString();
+            c.count = (c.count || 0) + 1;
+            c.firstAt = c.firstAt || now;
+            c.lastAt = now;
+            const lk = `${step}:${li}`;
+            c.links = c.links || {};
+            c.links[lk] = { url, count: ((c.links[lk] || {}).count || 0) + 1 };
+            await blobPutJSON(key, c);
+        }
+    } catch (err) {
+        console.error('outreach click error:', err);
+    }
+    res.setHeader('Location', target);
+    return res.status(302).end();
+}
 
 module.exports = async (req, res) => {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.setHeader('Cache-Control', 'no-store');
+    if ((req.method === 'GET' || req.method === 'HEAD') && req.query && req.query.o) return outreachClick(req, res);
     if (req.method !== 'POST') {
         res.setHeader('Allow', 'POST');
         return res.status(405).json({ error: 'Method not allowed' });
