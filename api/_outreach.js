@@ -11,7 +11,8 @@
 //              links[], approvedAt, sentAt}],
 //     response, responseNote }
 //   email status: empty → draft → in-gmail → sent
-//   response (set by hand): '' | replied | call | booked | not-now
+//   response (by hand or the morning routine): '' | replied | planning |
+//            call | booked | not-now | archived  (+ responseNote, revisitDate)
 //
 // Approve builds the message here and Gmail stores it as a draft. Links in the
 // body are rewritten to /api/proposal-viewed?o={id}&e={n}&l={n}, which counts
@@ -25,8 +26,10 @@ function stage(doc) {
     const em = Array.isArray(doc.emails) ? doc.emails : [];
     if (doc.response === 'booked') return 'booked';
     if (doc.response === 'call') return 'call';
+    if (doc.response === 'planning') return 'planning';
     if (doc.response === 'replied') return 'replied';
     if (doc.response === 'not-now') return 'not-now';
+    if (doc.response === 'archived') return 'archived';
     if (em.some(e => e && e.status === 'sent')) return 'sent';
     if (em.some(e => e && e.status === 'in-gmail')) return 'in-gmail';
     if (em.some(e => e && e.status === 'draft' && (e.body || '').trim())) return 'review';
@@ -45,7 +48,7 @@ function outreachMeta(id, doc) {
         dates: (doc.trip && doc.trip.dates) || '', value: Number((doc.trip && doc.trip.value) || 0),
         keyDate: doc.keyDate || '', opportunity: doc.opportunity || '',
         emails: em.map(e => ({ status: (e && e.status) || 'empty', sentAt: (e && e.sentAt) || '', approvedAt: (e && e.approvedAt) || '' })),
-        response: doc.response || '', stage: stage(doc),
+        response: doc.response || '', revisitDate: doc.revisitDate || '', responseNote: String(doc.responseNote || '').slice(0, 160), stage: stage(doc),
         updatedAt: doc.updatedAt || ''
     };
 }

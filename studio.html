@@ -269,6 +269,7 @@
         .studio:not([data-areas~="hotels"]) .area-hotels,
         .studio:not([data-areas~="blog"]) .area-blog,
         .studio:not([data-areas~="performance"]) .area-performance { display: none !important; }
+        .studio:not([data-areas~="marketing"]) .area-marketing { display: none !important; }
         .dash-group { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--st-dim); margin: 26px 0 12px; font-weight: 500; }
         .dash-group:first-of-type { margin-top: 4px; }
         .team-group { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--st-dim); margin-right: 2px; }
@@ -1011,7 +1012,35 @@
         .out-gmail.is-off { background: rgba(150,101,10,0.06); border-color: rgba(150,101,10,0.35); }
         .out-gmail p { margin: 0; flex: 1 1 320px; color: var(--st-dim); line-height: 1.5; }
         .out-gmail strong { color: var(--st-text); }
-        .out-funnel { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; margin: 0 0 18px; }
+        .out-funnel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 0 0 18px; }
+        .out-viewtabs { display: flex; gap: 6px; margin: 0 0 14px; }
+        .out-viewtabs button { background: #fff; border: 1px solid var(--st-line-2); color: var(--st-dim); padding: 7px 16px; font-size: 13px; cursor: pointer; font-family: var(--font-sans); border-radius: 2px; }
+        .out-viewtabs button.is-on { background: var(--st-text); border-color: var(--st-text); color: #fff; }
+        .out-due { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); padding: 14px 18px; margin: 0 0 16px; }
+        .out-due h3 { margin: 0 0 8px; font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--st-gold); font-weight: 600; }
+        .out-due ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px 18px; }
+        .out-due li { font-size: 13px; padding: 4px 0; cursor: pointer; display: flex; gap: 10px; }
+        .out-due li:hover b { color: var(--st-gold); }
+        .out-due .when { flex: 0 0 76px; color: var(--st-dim); font-variant-numeric: tabular-nums; }
+        .out-due .is-late .when { color: #b3453f; font-weight: 600; }
+        .out-board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 10px; align-items: start; }
+        .out-col { background: rgba(20,38,62,0.035); border: 1px solid var(--st-line); min-height: 120px; }
+        .out-col-head { padding: 11px 12px 9px; border-bottom: 1px solid var(--st-line); display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+        .out-col-head b { font-size: 12.5px; color: var(--st-text); font-weight: 600; }
+        .out-col-head span { font-size: 12px; color: var(--st-dim); }
+        .out-col-head small { display: block; font-size: 11px; color: var(--st-dim-2); flex-basis: 100%; }
+        .out-col[data-col="yes"] .out-col-head { border-top: 3px solid #1f7a4d; }
+        .out-col[data-col="no"] .out-col-head, .out-col[data-col="archived"] .out-col-head { border-top: 3px solid var(--st-line-2); }
+        .out-cards { padding: 8px; display: flex; flex-direction: column; gap: 8px; max-height: 72vh; overflow-y: auto; }
+        .out-card { background: #fff; border: 1px solid var(--st-line); padding: 10px 11px; cursor: pointer; box-shadow: 0 1px 2px rgba(20,38,62,0.05); }
+        .out-card:hover { border-color: var(--st-gold); }
+        .out-card-name { font-weight: 600; font-size: 13.5px; color: var(--st-text); }
+        .out-card-trip { font-size: 12px; color: var(--st-dim); margin: 2px 0 7px; }
+        .out-card-next { font-size: 12px; color: var(--st-text); background: rgba(156,124,66,0.08); padding: 5px 7px; }
+        .out-card-next.is-late { background: rgba(179,69,63,0.09); color: #9a3a34; font-weight: 500; }
+        .out-card-foot { display: flex; align-items: center; gap: 6px; margin-top: 7px; }
+        .out-card-foot select { font-size: 11.5px; padding: 3px 4px; border: 1px solid var(--st-line-2); background: #fff; color: var(--st-dim); max-width: 100%; flex: 1; }
+        .out-tag { font-size: 10.5px; letter-spacing: .4px; padding: 2px 6px; border: 1px solid rgba(31,122,77,0.35); color: #1f7a4d; background: rgba(31,122,77,0.07); white-space: nowrap; }
         .out-stage { background: #fff; border: 1px solid var(--st-line); box-shadow: var(--st-shadow); padding: 12px 12px 10px; text-align: left; cursor: pointer; font-family: var(--font-sans); color: var(--st-text); position: relative; overflow: hidden; }
         .out-stage:hover { border-color: var(--st-gold); }
         .out-stage.is-on { border-color: var(--st-text); box-shadow: inset 0 0 0 1px var(--st-text); }
@@ -1046,7 +1075,8 @@
         .chip-o-sent { color: var(--st-text); border-color: var(--st-line-2); }
         .chip-o-replied, .chip-o-call { color: #1f7a4d; border-color: rgba(31,122,77,0.35); background: rgba(31,122,77,0.07); }
         .chip-o-booked { color: #fff; border-color: #1f7a4d; background: #1f7a4d; }
-        .chip-o-not-now { color: var(--st-dim-2); border-color: var(--st-line); background: rgba(20,38,62,0.03); }
+        .chip-o-not-now, .chip-o-archived { color: var(--st-dim-2); border-color: var(--st-line); background: rgba(20,38,62,0.03); }
+        .chip-o-planning { color: #1f7a4d; border-color: rgba(31,122,77,0.35); background: rgba(31,122,77,0.07); }
         .out-detail-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .out-detail-bar .spacer { flex: 1; }
         .out-split { display: grid; grid-template-columns: minmax(300px, 400px) minmax(0, 1fr); gap: 22px; align-items: start; }
@@ -1085,7 +1115,7 @@
         .out-actions .note { font-size: 12.5px; color: var(--st-dim); flex: 1 1 240px; }
         .out-mail .blog-toolbar { display: flex; gap: 6px; padding: 10px 0 0; }
         .out-mail .blog-toolbar button { padding: 4px 10px; font-size: 13px; cursor: pointer; border: 1px solid var(--st-line-2); background: #fff; }
-        @media (max-width: 1100px) { .out-funnel { grid-template-columns: repeat(4, minmax(0, 1fr)); } .out-split { grid-template-columns: 1fr; } .out-client { position: static; max-height: none; } }
+        @media (max-width: 1100px) { .out-funnel { grid-template-columns: repeat(5, minmax(0, 1fr)); } .out-split { grid-template-columns: 1fr; } .out-client { position: static; max-height: none; } }
         @media (max-width: 560px) { .out-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     </style>
 </head>
@@ -1113,8 +1143,8 @@
             <button class="side-item side-sub area-proposals" data-nav="newproposal" type="button">+ New proposal</button>
             <button class="side-item area-proposals" data-nav="destinations" type="button"><span class="side-icon">◎</span>Destinations<span class="side-count" id="sideCountDest"></span></button>
 
-            <div class="side-label owner-only">Marketing</div>
-            <button class="side-item owner-only" data-nav="outreach" type="button"><span class="side-icon">✦</span>Email outreach</button>
+            <div class="side-label area-marketing">Marketing</div>
+            <button class="side-item area-marketing" data-nav="outreach" type="button"><span class="side-icon">✦</span>Email outreach</button>
 
             <div class="side-label" id="sideWebsiteLabel">Website</div>
             <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
@@ -1534,8 +1564,8 @@
                         <h1 class="dash-title">Email <em>outreach.</em></h1>
                         <p class="dash-sub">Past clients for the 2027 rebook campaign: where they went last, what they were celebrating, and the email ready for them. Click a client to review it, then <strong>Approve</strong> to put it in your Gmail drafts. Nothing sends from here.</p>
                     </div>
-                    <button class="btn btn-ghost btn-small" id="outSigBtn" type="button">Signature</button>
-                    <label class="btn btn-ghost btn-small" style="cursor:pointer">Import clients<input type="file" id="outImport" accept=".json,application/json" hidden></label>
+                    <button class="btn btn-ghost btn-small owner-only" id="outSigBtn" type="button">Signature</button>
+                    <label class="btn btn-ghost btn-small owner-only" style="cursor:pointer">Import clients<input type="file" id="outImport" accept=".json,application/json" hidden></label>
                 </div>
                 <div id="outGmail"></div>
                 <div class="out-funnel" id="outFunnel"></div>
@@ -1546,7 +1576,15 @@
                     <select class="f-input" id="outPriority"><option value="">Any priority</option><option>High</option><option>Medium</option><option>Low</option></select>
                     <input class="f-input" id="outSearch" placeholder="Search clients, trips, emails…">
                 </div>
-                <div class="out-table-wrap"><div id="outTable"><p class="dash-empty" style="padding:18px">Loading…</p></div></div>
+                <div class="out-viewtabs" id="outViewTabs">
+                    <button type="button" data-outview="board" class="is-on">Board</button>
+                    <button type="button" data-outview="list">List</button>
+                </div>
+                <div id="outBoardWrap">
+                    <div class="out-due" id="outDue"></div>
+                    <div class="out-board" id="outBoard"></div>
+                </div>
+                <div class="out-table-wrap" id="outTableWrap" hidden><div id="outTable"><p class="dash-empty" style="padding:18px">Loading…</p></div></div>
             </div>
             <div class="dash" id="outDetail" hidden>
                 <div class="out-detail-bar">
@@ -1576,7 +1614,7 @@
                             <div class="out-actions">
                                 <span class="note" id="outMailNote"></span>
                                 <button class="btn btn-ghost btn-small" id="outSave" type="button">Save changes</button>
-                                <button class="btn" id="outApprove" type="button">Approve → Gmail drafts</button>
+                                <button class="btn owner-only" id="outApprove" type="button">Approve → Gmail drafts</button>
                             </div>
                         </div>
                     </section>
@@ -2096,14 +2134,14 @@
            fields) or { custom:true, name, location, heroImage, galleryText }  */
         let state = { id: null, mode: 'quote', hotels: [] };
         let passcode = sessionStorage.getItem('wndr-studio-pass') || '';
-        const ALL_AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social'];
-        const AREA_LABELS = { proposals: 'Proposals', blog: 'Blog posts', hotels: 'Hotel pages', performance: 'Performance', social: 'Social posts' };
+        const ALL_AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social', 'marketing'];
+        const AREA_LABELS = { proposals: 'Proposals', blog: 'Blog posts', hotels: 'Hotel pages', performance: 'Performance', social: 'Social posts', marketing: 'Email outreach' };
         // How the Studio groups them, in the sidebar, on the dashboard and on the Team page.
-        const AREA_GROUPS = [['Clients', ['proposals']], ['Website', ['blog', 'hotels', 'performance']], ['Social', ['social']]];
+        const AREA_GROUPS = [['Clients', ['proposals']], ['Website', ['blog', 'hotels', 'performance']], ['Social', ['social']], ['Marketing', ['marketing']]];
         let me = { role: 'owner', name: 'Wilson', areas: ALL_AREAS };   // set by the gate's auth call
         const isOwner = () => me.role === 'owner';
         const canUse = (area) => isOwner() || me.areas.includes(area);
-        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance', destinations: 'proposals', outreach: 'proposals' };
+        const VIEW_AREA = { bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', editor: 'proposals', performance: 'performance', destinations: 'proposals', outreach: 'marketing' };
         // Which sidebar item lights up, and the top-bar title, for each view.
         const VIEW_NAV = { home: 'home', editor: 'proposals', bloglist: 'blog', blog: 'blog', hotels: 'hotels', social: 'social', team: 'team', performance: 'performance', destinations: 'destinations', outreach: 'outreach' };
         const VIEW_TITLE = { home: 'Dashboard', editor: 'Proposals', bloglist: 'Blog posts', blog: 'Blog posts', hotels: 'Hotel pages', social: 'Social posts', team: 'Team', performance: 'Performance', destinations: 'Destinations', outreach: 'Email outreach' };
@@ -2177,10 +2215,19 @@
            on Wilson's Mac, never this (public) repo. */
         const OUT_STAGES = [
             ['not-drafted', 'Not drafted'], ['review', 'To review'], ['in-gmail', 'In Gmail drafts'], ['sent', 'Sent'],
-            ['replied', 'Replied'], ['call', 'Call booked'], ['booked', 'Booked'], ['not-now', 'Not now']
+            ['replied', 'Replied'], ['call', 'Call booked'], ['planning', 'Planning a trip'], ['booked', 'Booked'], ['not-now', 'Not now'], ['archived', 'Archived']
         ];
         const OUT_STAGE_LABEL = Object.fromEntries(OUT_STAGES);
-        const OUT_RESPONSES = [['', 'No reply yet'], ['replied', 'Replied'], ['call', 'Call booked'], ['booked', 'Booked a 2027 trip'], ['not-now', 'Not now']];
+        const OUT_RESPONSES = [['', 'No reply yet (follows the emails)'], ['replied', 'Replied, interested'], ['call', 'Call booked'], ['planning', 'Planning a trip with us'], ['booked', 'Booked a 2027 trip'], ['not-now', 'Not now / not interested'], ['archived', 'Archived']];
+        // Board columns (Wilson, 2026-11-02). Gaps: Email 2 ten days after Email 1,
+        // Email 3 fourteen days after Email 2, archive fourteen days after Email 3.
+        const OUT_COLS = [
+            ['review', 'To review', 'Email 1 not approved yet'], ['ready', 'Ready to send', 'In your Gmail drafts'],
+            ['e1', 'Email 1 sent', 'Email 2 after 10 days'], ['e2', 'Email 2 sent', 'Email 3 after 14 days'], ['e3', 'Email 3 sent', 'Archive after 14 days'],
+            ['yes', 'Yes, working on it', 'Replied, call, planning, booked'], ['no', 'Not now', 'Said no or not this year'], ['archived', 'Archived', 'No reply to all 3 emails']
+        ];
+        const OUT_GAPS = [10, 14, 14];
+        const outView = { mode: 'board' };
         const out = { items: [], loaded: false, gmail: false, account: '', group: 'all', stage: '', lookbook: '', priority: '', q: '',
                       sort: 'send', dir: 1, docs: {}, cur: null, step: 0, dirty: false, settings: null, order: [] };
         const outApi = (payload) => contentApi(Object.assign({ kind: 'outreach' }, payload));
@@ -2189,7 +2236,7 @@
 
         function outStage(doc) {
             const em = doc.emails || [];
-            if (['booked', 'call', 'replied', 'not-now'].includes(doc.response)) return doc.response;
+            if (['booked', 'call', 'planning', 'replied', 'not-now', 'archived'].includes(doc.response)) return doc.response;
             if (em.some(e => e && e.status === 'sent')) return 'sent';
             if (em.some(e => e && e.status === 'in-gmail')) return 'in-gmail';
             if (em.some(e => e && e.status === 'draft' && (e.body || '').trim())) return 'review';
@@ -2202,7 +2249,7 @@
                 tripType: doc.tripType || '', lookbook: doc.lookbook || '', tripTitle: t.title || '', destination: t.destination || '',
                 dates: t.dates || '', value: Number(t.value || 0), keyDate: doc.keyDate || '', opportunity: doc.opportunity || '',
                 emails: (doc.emails || []).map(e => ({ status: (e && e.status) || 'empty', sentAt: (e && e.sentAt) || '', approvedAt: (e && e.approvedAt) || '' })),
-                response: doc.response || '', stage: outStage(doc), updatedAt: doc.updatedAt || new Date().toISOString(), clicks: clicks || null };
+                response: doc.response || '', revisitDate: doc.revisitDate || '', responseNote: String(doc.responseNote || '').slice(0, 160), stage: outStage(doc), updatedAt: doc.updatedAt || new Date().toISOString(), clicks: clicks || null };
         }
         // Blob reads lag writes by up to a minute, so what this browser just
         // saved wins over an older copy coming back from the server.
@@ -2214,7 +2261,8 @@
             try { const m = JSON.parse(sessionStorage.getItem('wndr-out-local') || '{}'); m[id] = meta; sessionStorage.setItem('wndr-out-local', JSON.stringify(m)); } catch (e) {}
         }
         async function loadOutreach() {
-            if (!isOwner()) return;
+            if (!canUse('marketing')) return;
+            try { const v = localStorage.getItem('wndr-out-view'); if (v === 'list' || v === 'board') { outView.mode = v; document.querySelectorAll('#outViewTabs button').forEach(b => b.classList.toggle('is-on', b.dataset.outview === v)); } } catch (e) {}
             renderOutGmail();
             try {
                 const r = await outApi({ action: 'list' });
@@ -2244,10 +2292,73 @@
             const q = out.q.trim().toLowerCase();
             return out.items.filter(i =>
                 (out.group === 'all' || i.group === out.group) &&
-                (ignoreStage || !out.stage || i.stage === out.stage) &&
+                (ignoreStage || !out.stage || (outCol(i) === 'archived' ? 'archived' : i.stage) === out.stage) &&
                 (!out.lookbook || i.lookbook === out.lookbook) &&
                 (!out.priority || i.priority === out.priority) &&
                 (!q || [i.name, i.contact, i.email, i.tripTitle, i.destination, i.tripType, i.keyDate, i.opportunity].join(' ').toLowerCase().includes(q)));
+        }
+        // Where a client sits on the board, and what's next with a date.
+        const OUT_DAY = 864e5;
+        const addDays = (iso, n) => iso ? new Date(new Date(iso).getTime() + n * OUT_DAY) : null;
+        function outCol(i) {
+            if (['replied', 'planning', 'call', 'booked'].includes(i.response)) return 'yes';
+            if (i.response === 'not-now') return 'no';
+            if (i.response === 'archived') return 'archived';
+            const em = i.emails || [];
+            let last = -1; em.forEach((e, n) => { if (e.status === 'sent') last = n; });
+            if (last >= 2) return addDays(em[last].sentAt, OUT_GAPS[2]) < new Date() ? 'archived' : 'e3';
+            if (last === 1) return 'e2';
+            if (last === 0) return 'e1';
+            if (em.some(e => e.status === 'in-gmail')) return 'ready';
+            return 'review';
+        }
+        function outNext(i) {
+            const em = i.emails || [];
+            const lab = (n) => 'Email ' + (n + 1);
+            const send = i.sendDate ? new Date(i.sendDate + 'T12:00:00') : null;
+            switch (outCol(i)) {
+                case 'review': return { text: em[0] && em[0].status === 'draft' ? 'Review + approve Email 1' : 'Write Email 1', due: send };
+                case 'ready': { const n = em.findIndex(e => e.status === 'in-gmail'); return { text: 'Send ' + lab(n) + ' from Gmail', due: n === 0 ? send : addDays(em[n - 1].sentAt, OUT_GAPS[n - 1]) }; }
+                case 'e1': return { text: em[1] && em[1].status === 'in-gmail' ? 'Send Email 2 from Gmail' : 'Email 2', due: addDays(em[0].sentAt, OUT_GAPS[0]) };
+                case 'e2': return { text: em[2] && em[2].status === 'in-gmail' ? 'Send Email 3 from Gmail' : 'Email 3', due: addDays(em[1].sentAt, OUT_GAPS[1]) };
+                case 'e3': return { text: 'Archive if no reply', due: addDays(em[2].sentAt, OUT_GAPS[2]), quiet: true };
+                case 'yes': return { text: { replied: 'They replied: answer in Gmail', call: 'Call booked', planning: 'Planning their trip', booked: 'Booked' }[i.response] + (i.responseNote ? ' · ' + i.responseNote : '') };
+                case 'no': return { text: i.revisitDate ? 'Check back' : 'Not now' + (i.responseNote ? ' · ' + i.responseNote : ''), due: i.revisitDate ? new Date(i.revisitDate + 'T12:00:00') : null };
+                default: return { text: i.response === 'archived' ? 'Archived' : 'No reply after 3 emails' };
+            }
+        }
+        const dueTxt = (d) => d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        const isLate = (n) => n.due && !n.quiet && n.due < new Date(new Date().toDateString());
+        function renderOutBoard(rows) {
+            const soon = new Date(Date.now() + 7 * OUT_DAY);
+            const due = rows.map(i => ({ i, n: outNext(i) }))
+                .filter(x => x.n.due && !x.n.quiet && x.n.due <= soon && ['review', 'ready', 'e1', 'e2', 'no'].includes(outCol(x.i)))
+                .sort((a, b) => a.n.due - b.n.due);
+            $('outDue').innerHTML = `<h3>Due this week · ${due.length}</h3>` + (due.length
+                ? `<ul>${due.slice(0, 40).map(({ i, n }) => `<li data-outid="${esc(i.id)}" class="${isLate(n) ? 'is-late' : ''}"><span class="when">${isLate(n) ? 'Overdue' : dueTxt(n.due)}</span><span><b>${esc(i.name)}</b> · ${esc(n.text)}</span></li>`).join('')}</ul>${due.length > 40 ? `<p class="o-sub">and ${due.length - 40} more</p>` : ''}`
+                : '<p class="o-sub" style="margin:0">Nothing due in the next 7 days.</p>');
+            const opts = (r) => OUT_RESPONSES.map(([k, l]) => `<option value="${k}" ${k === (r || '') ? 'selected' : ''}>${k ? 'Move: ' + l : 'Move: follow the emails'}</option>`).join('');
+            $('outBoard').innerHTML = OUT_COLS.map(([k, label, sub]) => {
+                const cards = rows.filter(i => outCol(i) === k);
+                return `<div class="out-col" data-col="${k}"><div class="out-col-head"><b>${label}</b><span>${cards.length}</span><small>${sub}</small></div>
+                    <div class="out-cards">${cards.map(i => { const n = outNext(i); return `<div class="out-card" data-outid="${esc(i.id)}">
+                        <div class="out-card-name"><span class="o-pri is-${(i.priority || '').toLowerCase()}"></span>${esc(i.name)}</div>
+                        <div class="out-card-trip">${esc(i.tripTitle)}${i.keyDate ? ' · ' + esc(i.keyDate) : ''}</div>
+                        <div class="out-card-next ${isLate(n) ? 'is-late' : ''}">${esc(n.text)}${n.due ? ` · <b>${isLate(n) ? 'overdue, ' : ''}${dueTxt(n.due)}</b>` : ''}</div>
+                        <div class="out-card-foot">${k === 'yes' ? `<span class="out-tag">${esc(OUT_STAGE_LABEL[i.response] || '')}</span>` : ''}${i.clicks && i.clicks.count ? `<span class="out-tag" style="color:var(--st-gold);border-color:rgba(156,124,66,.4);background:rgba(156,124,66,.07)">${i.clicks.count} click${i.clicks.count > 1 ? 's' : ''}</span>` : ''}
+                            <select data-outmove="${esc(i.id)}" title="Move this client">${opts(i.response)}</select></div>
+                    </div>`; }).join('')}</div></div>`;
+            }).join('');
+        }
+        async function outMove(id, response) {
+            let doc = out.docs[id];
+            try { if (!doc) { doc = (await outApi({ action: 'load', id })).doc; } } catch (err) { toast('Couldn’t move: ' + err.message); return; }
+            doc.response = response;
+            doc.updatedAt = new Date().toISOString();
+            outRemember(id, doc);
+            renderOutList();
+            try { await outApi({ action: 'save', id, doc, meta: { title: doc.name } }); toast('Moved ' + doc.name + '.'); }
+            catch (err) { toast('Couldn’t save the move: ' + err.message); }
         }
         function renderOutList() {
             const groups = ['all'].concat([...new Set(out.items.map(i => i.group).filter(Boolean))]);
@@ -2261,7 +2372,7 @@
             const pool = outFiltered(true);
             const max = Math.max(1, pool.length);
             $('outFunnel').innerHTML = OUT_STAGES.map(([k, label]) => {
-                const n = pool.filter(i => i.stage === k).length;
+                const n = pool.filter(i => (outCol(i) === 'archived' ? 'archived' : i.stage) === k).length;
                 return `<button class="out-stage ${out.stage === k ? 'is-on' : ''}" data-stage="${k}" type="button" title="Show only: ${esc(label)}">
                     <span class="out-stage-n">${n}</span><span class="out-stage-l">${esc(label)}</span>
                     <span class="out-stage-bar" style="width:${Math.round(n / max * 100)}%"></span></button>`;
@@ -2282,8 +2393,12 @@
             }[out.sort] || (i => i.name);
             rows.sort((a, b) => { const x = key(a), y = key(b); return (x > y ? 1 : x < y ? -1 : 0) * out.dir; });
             out.order = rows.map(r => r.id);
+            $('outBoardWrap').hidden = outView.mode !== 'board';
+            $('outTableWrap').hidden = outView.mode !== 'list';
+            if (outView.mode === 'board' && out.items.length) renderOutBoard(rows);
             if (!out.items.length) {
                 $('outTable').innerHTML = '<p class="dash-empty" style="padding:18px">No clients yet. Use <strong>Import clients</strong> above with the file Claude made for you.</p>';
+                $('outTableWrap').hidden = false; $('outBoardWrap').hidden = true;
                 return;
             }
             const th = (k, label, cls) => `<th data-outsort="${k}" class="${cls || ''}">${label}${out.sort === k ? (out.dir > 0 ? ' ↑' : ' ↓') : ''}</th>`;
@@ -2327,25 +2442,6 @@
             $('outPrev').disabled = pos <= 0; $('outNext').disabled = pos < 0 || pos >= out.order.length - 1;
             window.scrollTo(0, 0);
         }
-        function outNextStep(doc) {
-            if (doc.response === 'booked') return 'Booked. Nothing more to send.';
-            if (doc.response === 'call') return 'Call booked. Prep for the call.';
-            if (doc.response === 'replied') return 'They replied. Answer them in Gmail.';
-            if (doc.response === 'not-now') return 'Not now. No more emails in this campaign.';
-            const em = doc.emails || [];
-            const gaps = [0, 10, 14];
-            for (let n = em.length - 1; n >= 0; n--) {
-                const e = em[n] || {};
-                if (e.status === 'sent') {
-                    if (n === em.length - 1) return `All ${em.length} emails sent, no reply yet.`;
-                    const due = new Date(new Date(e.sentAt).getTime() + gaps[n + 1] * 864e5);
-                    return `${em[n + 1].label || 'Email ' + (n + 2)} due ${outDay(due.toISOString())} if they haven’t replied.`;
-                }
-                if (e.status === 'in-gmail') return `${e.label || 'Email ' + (n + 1)} is in your Gmail drafts, ready to send.`;
-            }
-            if ((em[0] || {}).status === 'draft') return `Email 1 to review and approve${doc.sendWeek ? ' · send ' + doc.sendWeek.toLowerCase() : ''}.`;
-            return 'Email 1 still to be written.';
-        }
         function renderOutClient() {
             const doc = out.docs[out.cur]; const t = doc.trip || {};
             const meta = out.items.find(i => i.id === out.cur) || {};
@@ -2354,7 +2450,7 @@
             $('outClient').innerHTML = `
                 <h2>${esc(doc.name)}</h2>
                 <p class="o-email">${esc(doc.contact || '')}${doc.contact ? ' · ' : ''}${esc(doc.email || 'No email address yet')}</p>
-                <div class="out-next">${esc(outNextStep(doc))}</div>
+                <div class="out-next">${(() => { const n = outNext(meta.id ? meta : outMeta(out.cur, doc)); return esc(n.text) + (n.due ? ' · ' + (isLate(n) ? 'overdue, ' : '') + dueTxt(n.due) : ''); })()}</div>
                 <div class="out-sec"><p class="out-sec-k">Last trip</p>
                     <p class="o-big">${esc(t.title || '')}</p>
                     <p class="o-dim">${esc([t.destination, t.dates].filter(Boolean).join(' · '))}</p>
@@ -2373,6 +2469,7 @@
                 <div class="out-sec"><p class="out-sec-k">Follow-up</p>
                     <select class="f-input" id="outResp">${OUT_RESPONSES.map(([k, l]) => `<option value="${k}" ${k === (doc.response || '') ? 'selected' : ''}>${l}</option>`).join('')}</select>
                     <textarea class="f-area" id="outRespNote" placeholder="What they said, next step…" style="margin-top:8px">${esc(doc.responseNote || '')}</textarea>
+                    <label class="o-dim" style="display:block;margin-top:8px">Check back on <input type="date" class="f-input" id="outRevisit" value="${esc(doc.revisitDate || '')}" style="width:auto;display:inline-block;padding:4px 8px;margin-left:6px"></label>
                     <p class="o-dim" style="margin-top:6px">Link clicks: ${esc(clicks)}</p></div>
                 <div class="out-sec"><p class="out-sec-k">Notes for you (never sent)</p>
                     <textarea class="f-area" id="outNotes">${esc(doc.notes || '')}</textarea></div>`;
@@ -2431,6 +2528,7 @@
             if ($('outResp')) doc.response = $('outResp').value;
             if ($('outRespNote')) doc.responseNote = $('outRespNote').value;
             if ($('outNotes')) doc.notes = $('outNotes').value;
+            if ($('outRevisit')) doc.revisitDate = $('outRevisit').value;
             return doc;
         }
         async function outSave(quiet) {
@@ -2458,18 +2556,33 @@
                 renderOutMail();
             }
         }
+        // Import adds new clients, and fills in emails that are still blank on
+        // clients already here (e.g. a later file with Email 3 written). It never
+        // overwrites anything Wilson has written, approved or sent.
         async function outImport(file) {
             let data;
             try { data = JSON.parse(await file.text()); } catch (e) { toast('That file isn’t valid JSON.'); return; }
-            const clients = Array.isArray(data.clients) ? data.clients : [];
+            const clients = Array.isArray(data.clients) ? data.clients.filter(c => c && c.id && c.doc) : [];
             if (!clients.length) { toast('No clients in that file.'); return; }
-            const have = new Set(out.items.map(i => i.id));
-            const fresh = clients.filter(c => c && c.id && c.doc && !have.has(c.id));
-            const skipped = clients.length - fresh.length;
-            if (!confirm(`Import ${fresh.length} client${fresh.length === 1 ? '' : 's'}?${skipped ? ` ${skipped} already here will be left exactly as they are.` : ''}`)) return;
+            const have = new Map(out.items.map(i => [i.id, i]));
+            const fresh = clients.filter(c => !have.has(c.id));
+            const fills = clients.filter(c => have.has(c.id) && (c.doc.emails || []).some((e, n) => e && (e.body || '').trim() && ((have.get(c.id).emails[n] || {}).status || 'empty') === 'empty'));
+            if (!fresh.length && !fills.length) { toast('Nothing new in that file.'); return; }
+            if (!confirm(`Add ${fresh.length} new client${fresh.length === 1 ? '' : 's'} and fill blank emails for ${fills.length} existing client${fills.length === 1 ? '' : 's'}? Nothing you’ve written, approved or sent is changed.`)) return;
             try {
-                for (let i = 0; i < fresh.length; i += 40) {
-                    const chunk = fresh.slice(i, i + 40);
+                const items = fresh.map(c => ({ id: c.id, doc: c.doc }));
+                for (const c of fills) {
+                    const cur = out.docs[c.id] || (await outApi({ action: 'load', id: c.id })).doc;
+                    (c.doc.emails || []).forEach((e, n) => {
+                        const ce = (cur.emails || [])[n];
+                        if (!e || !(e.body || '').trim()) return;
+                        if (!ce) { (cur.emails = cur.emails || [])[n] = e; return; }
+                        if ((ce.status || 'empty') === 'empty' && !(ce.body || '').trim()) Object.assign(ce, { subject: e.subject, body: e.body, status: e.status || 'draft', label: ce.label || e.label });
+                    });
+                    items.push({ id: c.id, doc: cur });
+                }
+                for (let i = 0; i < items.length; i += 40) {
+                    const chunk = items.slice(i, i + 40);
                     await outApi({ action: 'saveMany', items: chunk.map(c => ({ id: c.id, doc: c.doc, meta: { title: c.doc.name } })) });
                     chunk.forEach(c => outRemember(c.id, Object.assign({}, c.doc, { updatedAt: new Date().toISOString() })));
                 }
@@ -2477,7 +2590,7 @@
                     const r = await outApi({ action: 'setsettings', settings: { signature: data.signature } });
                     out.settings = r.settings;
                 }
-                toast(`Imported ${fresh.length} client${fresh.length === 1 ? '' : 's'}.`);
+                toast(`Added ${fresh.length}, updated ${fills.length}.`);
                 renderOutList();
             } catch (err) { toast('Import stopped: ' + err.message); }
         }
@@ -2490,6 +2603,9 @@
         document.addEventListener('click', async (ev) => {
             if (!ev.target.closest('#viewOutreach, #outSigModal')) return;
             const t = ev.target;
+            if (t.closest('[data-outmove]')) return;
+            const vt = t.closest('[data-outview]');
+            if (vt) { outView.mode = vt.dataset.outview; document.querySelectorAll('#outViewTabs button').forEach(b => b.classList.toggle('is-on', b === vt)); try { localStorage.setItem('wndr-out-view', outView.mode); } catch (e) {} renderOutList(); return; }
             const g = t.closest('[data-outgroup]'); if (g) { out.group = g.dataset.outgroup; renderOutList(); return; }
             const st = t.closest('.out-stage'); if (st) { out.stage = out.stage === st.dataset.stage ? '' : st.dataset.stage; renderOutList(); return; }
             const so = t.closest('[data-outsort]'); if (so) { out.dir = out.sort === so.dataset.outsort ? -out.dir : 1; out.sort = so.dataset.outsort; renderOutList(); return; }
@@ -2550,7 +2666,8 @@
         document.addEventListener('change', (ev) => {
             if (ev.target.id === 'outLookbook') { out.lookbook = ev.target.value; renderOutList(); }
             if (ev.target.id === 'outPriority') { out.priority = ev.target.value; renderOutList(); }
-            if (ev.target.id === 'outResp') { outSave(true).then(() => { renderOutClient(); toast('Follow-up updated.'); }); }
+            if (ev.target.id === 'outResp' || ev.target.id === 'outRevisit') { outSave(true).then(() => { renderOutClient(); toast('Follow-up updated.'); }); }
+            if (ev.target.dataset && ev.target.dataset.outmove) outMove(ev.target.dataset.outmove, ev.target.value);
             if (ev.target.id === 'outImport' && ev.target.files[0]) { outImport(ev.target.files[0]); ev.target.value = ''; }
         });
         // Paste as plain text so Word/Gmail formatting doesn't come along.
@@ -2563,7 +2680,7 @@
         /* ── Views & dashboard ────────────────────────────────────────── */
         function showView(v) {
             if (VIEW_AREA[v] && !canUse(VIEW_AREA[v])) v = 'home';
-            if ((v === 'team' || v === 'outreach') && !isOwner()) v = 'home';
+            if (v === 'team' && !isOwner()) v = 'home';
             $('studio').dataset.view = v;
             document.querySelectorAll('.side-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === VIEW_NAV[v]));
             $('topTitle').textContent = VIEW_TITLE[v] || '';

@@ -8,7 +8,7 @@
 //     destination — destination guides for lookbooks ({entry, status}); "ready" = approved
 //     blog       — posts drafted in the Studio ({title, dek, heroImage,
 //                  bodyHtml, tags, author, status})
-//     outreach   — Email outreach clients (owner only; see _outreach.js).
+//     outreach   — Email outreach clients (area "marketing"; see _outreach.js).
 //                  Listed from the docs themselves, not the index, plus:
 //                  gmaildraft {id, step, doc} → save + put email in Gmail drafts
 //                  gmailcheck  → drafts no longer in Gmail are marked sent
@@ -133,6 +133,11 @@ async function outreachAction(action, body, user, res, path) {
     if (action === 'getsettings') {
         return res.status(200).json({ ok: true, settings: (await blobGetJSON(OUTREACH_SETTINGS)) || {} });
     }
+    // Anything that writes to Wilson's Gmail or her signature is hers alone;
+    // the Automation login (area "marketing") can read and move clients.
+    if ((action === 'setsettings' || action === 'gmaildraft') && user.role !== 'owner') {
+        return res.status(403).json({ error: 'Only Wilson can do that' });
+    }
     if (action === 'setsettings') {
         const st = body.settings || {};
         const settings = { signature: String(st.signature || '').slice(0, 20000), updatedAt: new Date().toISOString() };
@@ -206,10 +211,8 @@ module.exports = async (req, res) => {
         const kind = body.kind;
         if (!KINDS.includes(kind)) return res.status(400).json({ error: 'Unknown kind' });
         // Team members only reach the Studio areas Wilson gave them on the Team card.
-        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social', destination: 'proposals', outreach: 'proposals' };
+        const AREA_OF = { blog: 'blog', hoteldraft: 'hotels', social: 'social', destination: 'proposals', outreach: 'marketing' };
         if (!can(user, AREA_OF[kind])) return res.status(403).json({ error: 'You don’t have access to this part of the Studio' });
-        // Client emails go into Wilson's own Gmail, so outreach is hers alone.
-        if (kind === 'outreach' && user.role !== 'owner') return res.status(403).json({ error: 'Email outreach is Wilson’s only' });
         const INDEX = `content/${kind}/_index.json`;
         const path = (id) => `content/${kind}/${id}.json`;
         const action = body.action || '';

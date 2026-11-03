@@ -22,7 +22,8 @@ const MEMBERS = 'team/_members.json';
 // Studio areas a team member can be given. "proposals" covers the proposal
 // builder and its tools (quote-screenshot reader, TravelWits import). The
 // Studio groups blog + hotels + performance as its "Website" section.
-const AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social'];
+// "marketing" = Email outreach (2026-11-02); Gmail drafts + signature stay owner-only.
+const AREAS = ['proposals', 'blog', 'hotels', 'performance', 'social', 'marketing'];
 const DEFAULT_AREAS = ['blog'];
 
 function cleanAreas(list) {
