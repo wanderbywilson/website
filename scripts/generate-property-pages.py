@@ -184,3 +184,14 @@ for slug, prop in properties.items():
     written += 1
 
 print(f'Wrote {written} property pages to /hotels/')
+
+# ─── Keep the /hotels directory's title + search snippet count in step ────
+# hotels.html hardcodes "N Properties" / "Search N hand-picked" in its head
+# tags; it lists every non-draft PROPERTIES entry, i.e. exactly the pages above.
+HOTELS = ROOT / 'hotels.html'
+hotels_src = HOTELS.read_text()
+hotels_new = re.sub(r'\b\d+ Properties\b', f'{written} Properties', hotels_src)
+hotels_new = re.sub(r'\bSearch \d+ hand-picked\b', f'Search {written} hand-picked', hotels_new)
+if hotels_new != hotels_src:
+    HOTELS.write_text(hotels_new)
+    print(f'Updated hotels.html count to {written}')
