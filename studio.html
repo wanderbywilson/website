@@ -2092,6 +2092,13 @@
                 <button class="btn btn-ghost btn-small" data-close="outSigModal" type="button">Close</button>
             </div>
             <p class="perf-note" style="margin:0 0 12px">Drafts made through Gmail&rsquo;s API don&rsquo;t get your Gmail signature automatically, so the Studio adds this one under every approved email, the way Gmail would. Edit the text directly.</p>
+            <div class="out-mail blog-toolbar-wrap" style="border:0;box-shadow:none"><div class="blog-toolbar" style="padding:0 0 8px">
+                <button type="button" data-ocmd="bold"><b>B</b></button>
+                <button type="button" data-ocmd="italic"><i>I</i></button>
+                <button type="button" data-ocmd="link">Link</button>
+                <button type="button" data-ocmd="unlink">Remove link</button>
+                <span class="o-sub" style="align-self:center;margin-left:6px">Select the words first, then click Link.</span>
+            </div></div>
             <div class="out-editor" id="outSigEdit" contenteditable="true" style="border:1px solid var(--st-line-2);padding:14px;min-height:160px;overflow:auto"></div>
             <div class="out-actions"><span class="note"></span><button class="btn" id="outSigSave" type="button">Save signature</button></div>
         </div>
@@ -2615,7 +2622,14 @@
             if (cmd) {
                 ev.preventDefault();
                 const c = cmd.dataset.ocmd;
-                if (c === 'link') { const url = prompt('Link address (https://…)', 'https://'); if (url && /^https?:\/\//.test(url)) document.execCommand('createLink', false, url); }
+                if (c === 'link') {
+                    // Keep the selected words: prompt() can drop the selection.
+                    const sel = window.getSelection();
+                    const range = sel.rangeCount ? sel.getRangeAt(0).cloneRange() : null;
+                    if (!range || range.collapsed) { toast('Select the words to link first.'); return; }
+                    const url = prompt('Link address (https://…)', 'https://');
+                    if (url && /^https?:\/\//.test(url)) { sel.removeAllRanges(); sel.addRange(range); document.execCommand('createLink', false, url); }
+                }
                 else document.execCommand(c);
                 out.dirty = true; outChecks(); return;
             }
@@ -2659,6 +2673,8 @@
                 } catch (err) { toast('Couldn’t save: ' + err.message); }
             }
         });
+        // Toolbar buttons must not steal the editor's selection.
+        document.addEventListener('mousedown', (ev) => { if (ev.target.closest && ev.target.closest('[data-ocmd]')) ev.preventDefault(); });
         document.addEventListener('input', (ev) => {
             if (ev.target.closest('#outDetail')) { out.dirty = true; if (ev.target.closest('#outEditor, #outSubject, #outTo')) outChecks(); }
             if (ev.target.id === 'outSearch') { out.q = ev.target.value; renderOutList(); }
