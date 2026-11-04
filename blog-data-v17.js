@@ -5,6 +5,186 @@
  * Hero images = first inline body photo (cleaner than the old Pinterest collages).
  */
 const BLOG_POSTS = {
+    'rosewood-beyond': {
+        title: "Rosewood Beyond 2026: How to Book Rosewood's 30% Off Sale, and Which Hotels to Pick",
+        seoTitle: "Rosewood Beyond 2026: How to Book 30% Off Rosewood",
+        metaDescription: "Rosewood Beyond takes 30% off participating Rosewood hotels, booked Nov 3–10, 2026 for stays through June 2027. Who can book it, real prices and perks.",
+        dek: "Rosewood's once-a-year sale takes 30% off participating hotels for stays through June 2027. How it works, what I priced, and where I would book.",
+        heroImage: "/property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero-infinity-pool-sunrise.jpg",
+        date: "November 2026",
+        readTime: "8 min read",
+        tags: ["Rosewood", "Hotel Deals", "Travel Tips"],
+        location: "Worldwide",
+        tripTypes: ["Travel Inspiration", "Hotel Review"],
+        bodyHtml: `
+<p>Rosewood almost never discounts. Once a year it does, for one week, and only through a small group of travel advisors. That week is Rosewood Beyond, and in 2026 it runs from November 3 to November 10.</p>
+<p>I just got back from <strong><a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas al Paraíso</a></strong> in Los Cabos, and I have been pricing Rosewoods for clients all week. Here is everything you need to know: what the offer is, who can actually book it, the real prices I pulled, and the hotels I would book first.</p>
+
+<h2>Rosewood Beyond 2026 at a glance</h2>
+<ul>
+<li><strong>The offer:</strong> 30% off the best available flexible rate at participating Rosewood hotels</li>
+<li><strong>Booking window:</strong> reservations confirmed November 3–10, 2026</li>
+<li><strong>Travel window:</strong> stays through June 30, 2027, subject to each hotel's blackout dates</li>
+<li><strong>Minimum stay:</strong> none</li>
+<li><strong>Rooms:</strong> rooms and suites only; houses, penthouses, villas and apartments are excluded</li>
+<li><strong>Who can book it:</strong> Rosewood Elite advisors only. The rate does not appear on Rosewood's website or on any public booking site</li>
+<li><strong>Extras:</strong> booked through a Rosewood Elite advisor, the rate can carry Rosewood Elite amenities such as daily breakfast, a hotel credit and an upgrade on arrival when available</li>
+</ul>
+
+<h2>What is Rosewood Beyond?</h2>
+<p>Rosewood Beyond is Rosewood Hotels &amp; Resorts' annual sale for its advisor partners. It takes 30% off a hotel's best available flexible rate, the price you would normally see with standard cancellation terms. It does not stack on top of advance-purchase rates, third-night-free offers or other promotions, which is exactly why the savings are real: the discount comes off the full, flexible price.</p>
+<p>Most Rosewood properties take part, from the Riviera Maya to Paris to Hong Kong. A handful sit it out, and I have listed them below.</p>
+
+<h2>Can you book Rosewood Beyond directly with Rosewood?</h2>
+<p>No, and this is the question I get most. Rosewood Beyond is only available through advisors in <a href="/post/get-extra-perks-at-any-rosewood-property">Rosewood Elite</a>, Rosewood's preferred-advisor program. Search Rosewood's own site this week and you will see the regular rates.</p>
+<p>Booking through an advisor does not mean booking through a middleman. Your reservation is made directly with the hotel, you pay the hotel, and the hotel knows you came through its Elite program, which is what unlocks the amenities.</p>
+
+<figure><img src="/property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-suite-terrace-ocean-view.jpg" alt="A private suite terrace at Las Ventanas al Paraíso, a Rosewood Resort, looking over the Sea of Cortez in Los Cabos"></figure>
+<h2>How to book the Rosewood Beyond rate</h2>
+<p>There are two ways to book it with me, and both get you the same rate.</p>
+<h3>Book it yourself in a couple of minutes</h3>
+<ol>
+<li>Go to <a href="/book">wanderbywilson.com/book</a> and open the booking portal.</li>
+<li>Search the Rosewood you want, plus your dates and number of guests.</li>
+<li>Choose your room and view the rates.</li>
+<li>Select the rate called <strong>Elite Exclusive Rosewood Beyond</strong>. That is the 30% off rate with the Elite amenities attached.</li>
+</ol>
+<p>If that rate does not appear for your dates, the hotel has blacked them out or the room category is excluded. Try moving a night or two, or send me your dates and I will look.</p>
+<h3>Or let me book it for you</h3>
+<p>Send me the hotel, your dates and the room you have in mind through the <a href="/inquire-hotel">hotel inquiry form</a>, and I will confirm the rate and book it. I will also tell you if a different room or a different week gets you more for the same money.</p>
+
+<h2>What 30% off looks like in real numbers</h2>
+<p>On November 3, 2026, I priced three beach Rosewoods I love, comparing the Elite Exclusive Rosewood Beyond rate with the regular Elite Exclusive rate for the same room and dates. Totals are for two guests and will move as rooms sell.</p>
+<ul>
+<li><strong><a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas al Paraíso</a>, Los Cabos:</strong> Oceanview Rooftop Terrace Junior Suite, February 24–28, 2027. $11,058.70 on Rosewood Beyond vs $15,786.40, about $4,700 less.</li>
+<li><strong><a href="/hotels/rosewood-mandarina">Rosewood Mandarina</a>, Riviera Nayarit:</strong> Oceanfront Mountain Studio Suite, February 12–16, 2027 (Presidents' Day weekend). $6,473.60 vs $9,248.00, about $2,774 less.</li>
+<li><strong><a href="/hotels/rosewood-little-dix-bay">Rosewood Little Dix Bay</a>, Virgin Gorda:</strong> Ocean View Cottage, four nights over MLK weekend 2027. About $6,894 vs $9,846, close to $3,000 less.</li>
+</ul>
+<p>Two of those are holiday weekends. Not every hotel blacks out peak dates, so it is worth checking the weeks you assume will be excluded.</p>
+
+<h2>The perks: Rosewood Beyond plus Rosewood Elite</h2>
+<p>Rosewood Beyond combines with Rosewood Elite amenities, and where a hotel offers a larger Elite credit, the larger credit applies. The package varies by property. On the Elite Exclusive Rosewood Beyond rate it typically includes:</p>
+<ul>
+<li>Daily breakfast for up to two guests per bedroom</li>
+<li>A hotel or resort credit ($125 at <a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas</a> and at <a href="/hotels/rosewood-mandarina">Mandarina</a>, for example)</li>
+<li>An upgrade on arrival, subject to availability</li>
+<li>Early check-in and late check-out, subject to availability</li>
+<li>A welcome amenity, and at some hotels a property-specific extra: a La Botica cocktail experience at <a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas</a>, an airport transfer at <a href="/hotels/rosewood-mandarina">Mandarina</a></li>
+</ul>
+<p>Rosewood also gives Elite bookings priority for upgrades, which matters most in the busy months when the better rooms go first.</p>
+
+<h2>Rosewood Beyond participating hotels</h2>
+<p>These are the participating properties on the 2026 list, rooms and suites only, subject to availability and blackout dates.</p>
+<h3>Americas</h3>
+<ul>
+<li><a href="/hotels/kona-village-a-rosewood-resort">Kona Village, A Rosewood Resort</a> (Hawaiʻi Island)</li>
+<li><a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas al Paraíso, A Rosewood Resort</a> (Los Cabos)</li>
+<li>Rosewood Baha Mar (Nassau, Bahamas)</li>
+<li>Rosewood Bermuda</li>
+<li>Rosewood Hotel Georgia (Vancouver)</li>
+<li>Rosewood Inn of the Anasazi (Santa Fe)</li>
+<li><a href="/hotels/rosewood-little-dix-bay">Rosewood Little Dix Bay</a> (Virgin Gorda, BVI)</li>
+<li><a href="/hotels/rosewood-mandarina">Rosewood Mandarina</a> (Riviera Nayarit, Mexico)</li>
+<li>Rosewood Mansion on Turtle Creek (Dallas)</li>
+<li><a href="/hotels/rosewood-mayakoba">Rosewood Mayakoba</a> (Riviera Maya, Mexico)</li>
+<li>Rosewood Miramar Beach (Montecito, California)</li>
+<li>Rosewood San Miguel de Allende</li>
+<li>Rosewood Sand Hill (Menlo Park, California)</li>
+<li>Rosewood São Paulo</li>
+<li>Rosewood Washington, D.C.</li>
+<li>The Carlyle, A Rosewood Hotel (New York)</li>
+</ul>
+<h3>Europe and the Middle East</h3>
+<ul>
+<li>Castiglion del Bosco (Tuscany)</li>
+<li>Hôtel de Crillon, A Rosewood Hotel (Paris)</li>
+<li>Rosewood Abu Dhabi</li>
+<li>Rosewood AMAALA (Saudi Arabia)</li>
+<li>Rosewood Amsterdam</li>
+<li>Rosewood Doha</li>
+<li>Rosewood Jeddah</li>
+<li>Rosewood London</li>
+<li>Rosewood Munich</li>
+<li>Rosewood Schloss Fuschl (Salzburg)</li>
+<li>Rosewood Vienna</li>
+<li>Rosewood Villa Magna (Madrid)</li>
+</ul>
+<h3>Asia</h3>
+<ul>
+<li>Rosewood Bangkok</li>
+<li>Rosewood Beijing</li>
+<li>Rosewood Guangzhou</li>
+<li>Rosewood Hong Kong</li>
+<li>Rosewood Luang Prabang</li>
+<li>Rosewood Miyakojima</li>
+<li>Rosewood Phnom Penh</li>
+<li>Rosewood Phuket</li>
+<li>Rosewood Sanya</li>
+</ul>
+<h3>Which Rosewood hotels are excluded?</h3>
+<p>Rosewood Courchevel Le Jardin Alpin, Rosewood Calistoga, The Chancery Rosewood in London, and Rosewood's three New Zealand lodges (Cape Kidnappers, Kauri Cliffs and Matakauri) are not part of the 2026 sale. Across every hotel, houses, penthouses, villas and apartments are excluded.</p>
+
+<h2>Where I would use Rosewood Beyond</h2>
+<p>The sale covers winter and spring, which is the best season for most of the beach Rosewoods. These are the ones I would book first, and who each one suits.</p>
+<figure><img src="/blog-images/rosewood-beyond/wilson-las-ventanas-al-paraiso-pools.jpg" alt="Wilson Schubert of Wander by Wilson in front of the pools at Las Ventanas al Paraíso, a Rosewood Resort, in Los Cabos"></figure>
+<h3><a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas al Paraíso</a>, Los Cabos: for a honeymoon</h3>
+<p>This is the one I just came back from, and it is at the top of my list. We stayed in a Rooftop Terrace Suite with its own jacuzzi, and dinner under the lantern trees was my favorite night of the trip. Order the homemade tortillas at breakfast, find the little grotto pool, and watch for the staff walking the beach with popsicles in the afternoon.</p>
+
+<figure><img src="/blog-images/rosewood-beyond/rosewood-mandarina-oceanfront-suite-private-pool.jpg" alt="A suite terrace with its own private infinity plunge pool overlooking the Pacific at Rosewood Mandarina, Riviera Nayarit"></figure>
+<h3><a href="/hotels/rosewood-mandarina">Rosewood Mandarina</a>, Riviera Nayarit: for the adventurous couple</h3>
+<p><a href="/hotels/rosewood-mandarina">Mandarina</a> sits where the jungle meets the Pacific, about 50 minutes from Puerto Vallarta, and every suite has its own plunge pool. Go for sunset cocktails at Barra Peñasco, ride horses down to the beach, try the jungle ziplines, and save a night for sushi at Toppu.</p>
+
+<figure><img src="/property-images/rosewood-little-dix-bay/04-bay-view.jpg" alt="The calm, reef-protected bay at Rosewood Little Dix Bay on Virgin Gorda in the British Virgin Islands"></figure>
+<h3><a href="/hotels/rosewood-little-dix-bay">Rosewood Little Dix Bay</a>, Virgin Gorda: for old-school Caribbean charm</h3>
+<p>Fewer than 100 rooms on 500 acres, with a bay protected by a reef, so the water stays calm and clear for snorkeling. Do not leave without a beach drop: the resort takes you by boat to a secluded beach of your own with a picnic.</p>
+
+<figure><img src="/property-images/rosewood-mayakoba/04-overwater-lagoon-suites.jpg" alt="Overwater suites on the lagoons at Rosewood Mayakoba in the Riviera Maya, Mexico"></figure>
+<h3><a href="/hotels/rosewood-mayakoba">Rosewood Mayakoba</a>, Riviera Maya: for a family beach trip</h3>
+<p>Suites set along freshwater lagoons and the beach, with boats to get around the property and an easy transfer from Cancún. It is the Rosewood I suggest most often for families who want space and a real beach.</p>
+
+<figure><img src="/property-images/kona-village-a-rosewood-resort/00-hero.jpg" alt="The pool, palms and black-sand coastline at Kona Village, A Rosewood Resort, on Hawaiʻi Island"></figure>
+<h3><a href="/hotels/kona-village-a-rosewood-resort">Kona Village</a>, Hawaiʻi Island: for a slow, barefoot escape</h3>
+<p>Individual hale bungalows on the Kona coast, built around the resort's Hawaiian heritage. It is the right pick if you want Hawaiʻi to feel quiet.</p>
+<h3>Beyond the beach</h3>
+<ul>
+<li><strong>Rosewood Baha Mar, Nassau:</strong> a long weekend in the sun, a short flight from the East Coast</li>
+<li><strong>Rosewood Miramar Beach, Montecito:</strong> a California coast weekend</li>
+<li><strong>Hôtel de Crillon, Paris:</strong> Paris in the spring, on Place de la Concorde</li>
+<li><strong>Rosewood London:</strong> a city break with theatre nights</li>
+<li><strong>Castiglion del Bosco, Tuscany:</strong> a Brunello estate for wine lovers</li>
+<li><strong>Rosewood Schloss Fuschl, near Salzburg:</strong> a lakeside castle for an Alpine spring</li>
+</ul>
+
+<h2>Rosewood Beyond vs Amex Fine Hotels + Resorts</h2>
+<p>Many Rosewoods are also bookable through Amex Fine Hotels + Resorts, so it is fair to ask which is better this week. FHR adds its own amenities, but it books at the regular rate and needs an eligible card. The Rosewood Beyond rate is 30% lower than the regular flexible rate and needs no card at all. The two do not stack, but you can still pay with any card you like and earn its points as usual. For most stays booked between November 3 and 10, Rosewood Beyond wins on price alone.</p>
+
+<h2>Is Rosewood Beyond worth it?</h2>
+<p>If a Rosewood is anywhere on your list for the first half of 2027, yes. A few things I tell clients before they book:</p>
+<ul>
+<li><strong>Book now, plan later.</strong> The discount applies to the flexible rate, so you are not locked into an advance-purchase rate. Check your hotel's cancellation window before you book, since it varies by property.</li>
+<li><strong>Look at the room one category up.</strong> At 30% off, the next category often costs about the same as the room you were going to book at full price.</li>
+<li><strong>Check holiday dates anyway.</strong> Some hotels black out peak weeks, but not all of them.</li>
+<li><strong>Do not wait for the last day.</strong> The best rooms at the popular resorts go early in the week.</li>
+</ul>
+
+<h2>Rosewood Beyond FAQs</h2>
+<h3>When is the Rosewood Beyond sale in 2026?</h3>
+<p>Reservations must be confirmed between November 3 and November 10, 2026, for stays through June 30, 2027.</p>
+<h3>Can I book Rosewood Beyond on Rosewood's website?</h3>
+<p>No. It is only available through Rosewood Elite advisors. You can book it yourself on my <a href="/book">booking portal</a> or I can book it for you.</p>
+<h3>Is there a minimum stay?</h3>
+<p>No. A single night qualifies.</p>
+<h3>Which rooms are excluded?</h3>
+<p>Houses, penthouses, villas and apartments. Regular rooms and suites are eligible, subject to availability and blackout dates.</p>
+<h3>Do I still get breakfast and the hotel credit?</h3>
+<p>On the Elite Exclusive Rosewood Beyond rate, yes, the hotel's Rosewood Elite amenities are included. The exact credit and extras vary by hotel.</p>
+<h3>When is the next Rosewood sale?</h3>
+<p>Rosewood runs its sale once a year, around November. I update this guide each year as soon as the dates are announced.</p>
+
+<p>Rosewood Beyond only runs until November 10. If you already know which Rosewood you want, <a href="/book">book the rate here</a>. If you are still deciding, send me your dates through the <a href="/inquire-hotel">hotel inquiry form</a> and I will tell you where the rate goes furthest.</p>
+
+`
+    },
     'best-honeymoon-destinations': {
         title: "The 17 Best Honeymoon Destinations for 2026/27, by Travel Style",
         dek: "The best honeymoon destinations for 2026/27 by travel style: tropical escapes, European itineraries, adventure trips, and mini-moons — and exactly where to stay.",

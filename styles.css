@@ -6162,6 +6162,18 @@ select.inquire-input {
     transform: rotate(45deg);
 }
 
+/* Numbered lists keep their numbers only; the gold diamond is for bullet lists. */
+.article-body ol {
+    margin: 0 0 24px;
+    padding-left: 1.3em;
+}
+.article-body ol li {
+    padding-left: 6px;
+}
+.article-body ol li::before {
+    display: none;
+}
+
 .article-body strong { font-weight: 600; color: var(--ink); }
 .article-body em { font-style: italic; }
 
