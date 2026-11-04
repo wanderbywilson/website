@@ -881,14 +881,17 @@
         .gt-line.gt-train { stroke-dasharray: 1 6; }
         .gt-line.gt-car { stroke-dasharray: 9 6; stroke-width: 1.4; }
         .gt-line.gt-boat { stroke-dasharray: 2 4 9 4; }
-        .gt-dot { fill: #FCFAF6; stroke: var(--gold); stroke-width: 2; }
+        .gt-dot { fill: #FCFAF6; stroke: var(--gold); stroke-width: 1.8; }
+        .gt-lab-edge { transform: translate(-50%, -50%); color: var(--gold); }
         .gt-town { fill: #FCFAF6; stroke: rgba(30, 53, 82, 0.6); stroke-width: 1.6; }
         .gt-lake { fill: #DCE6EA; stroke: rgba(30, 53, 82, 0.28); stroke-width: 0.8; }
         .gt-lab-town { font-size: 10px; letter-spacing: 0.14em; color: rgba(30, 53, 82, 0.72); }
         .gt-lab-town.gt-lab-r { transform: translate(8px, -50%); }
         .gt-lab-town.gt-lab-l { transform: translate(calc(-100% - 8px), -50%); }
-        .gt-lab { position: absolute; white-space: nowrap; font-family: var(--font-sans); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(30, 53, 82, 0.78);
-            text-shadow: 0 0 3px #FCFAF6, 0 0 3px #FCFAF6, 0 0 6px #FCFAF6; pointer-events: none; }
+        .gt-lab { position: absolute; white-space: nowrap; font-family: var(--font-sans); font-size: 9.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(30, 53, 82, 0.78);
+            text-shadow: 0 0 3px #FCFAF6, 0 0 3px #FCFAF6, 0 0 6px #FCFAF6; pointer-events: none;
+            /* A soft paper chip behind each name, so border and coast lines never run through the text (Wilson, 2026-11-02). */
+            background: rgba(252, 250, 246, 0.94); padding: 1px 5px; border-radius: 2px; }
         .gt-lab-r { transform: translate(12px, -50%); }
         .gt-lab-l { transform: translate(calc(-100% - 12px), -50%); }
         .gt-lab-t { transform: translate(-50%, calc(-100% - 10px)); }
@@ -1685,7 +1688,7 @@
                       `<div class="gt-map" data-gt='${JSON.stringify(gt).replace(/'/g, '&#39;')}'></div>` +
                       ['train', 'car'].map(mode => {
                           const rows = gt.rows.filter(x => x.mode === mode);
-                          return rows.length ? `<p class="prop-dest-train-head gt-head">${MODE_LABEL[mode]}<span class="gt-swatch gt-sw-${mode}"></span></p>` +
+                          return rows.length ? `<p class="prop-dest-train-head gt-head">${MODE_LABEL[mode]}</p>` +
                               `<ul class="prop-dest-trains gt-rows">${rows.map(x => x.raw ? `<li>${x.raw}</li>` : `<li>${x.name}${x.detail ? `<span class="gt-d">${x.detail}</span>` : ''}<span class="gt-t">${x.time}</span></li>`).join('')}</ul>` : '';
                       }).join('') +
                       block('By boat', list('byFerry'))
@@ -1999,7 +2002,14 @@
                     // A town-dot map (Wilson, 2026-11-02) is a close-up of the place itself:
                     // the lake shape around Como, or Tuscany's hill towns. No lines or arrows;
                     // its onward trains and drives stay in the list underneath.
-                    const shown = towns.length ? [] : g.places;
+                    // Onward places (Wilson, 2026-11-02): no lines, names only. The map frames the
+                    // day trips; a place well beyond them (Milan, Rome from Florence) is named at
+                    // the map's edge in its direction. Times stay in the list underneath.
+                    const dist = (p) => Math.hypot(p.lat - g.center.lat, (p.lng - g.center.lng) * 0.75);
+                    const cars = g.places.filter(p => p.mode === 'car');
+                    const reach = cars.length ? Math.max(0.5, 1.4 * Math.max(...cars.map(dist))) : Infinity;
+                    const shown = towns.length ? [] : g.places.filter(p => dist(p) <= reach);
+                    const edge = towns.length ? [] : g.places.filter(p => dist(p) > reach);
                     const W = 760, H = 520, all = [g.center].concat(shown, towns);
                     const lats = all.map(p => p.lat), lngs = all.map(p => p.lng);
                     // A town map shows the whole of any lake its towns sit on (Lake Como, top to bottom).
@@ -2020,12 +2030,18 @@
                     const pct = (x, y) => `left:${(x / W * 100).toFixed(2)}%;top:${(y / H * 100).toFixed(2)}%`;
                     shown.forEach(p => {
                         const [x, y] = proj([p.lng, p.lat]);
-                        lines += `<line class="gt-line gt-${p.mode}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`;
-                        dots += `<circle class="gt-dot" cx="${x}" cy="${y}" r="6"/>`;
+                        dots += `<circle class="gt-dot" cx="${x}" cy="${y}" r="4.5"/>`;
                         // Name on the far side of the place, away from the centre.
                         const dx = x - cx, dy = y - cy, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
                         const pos = Math.abs(ux) >= Math.abs(uy) * 0.8 ? (ux > 0 ? 'r' : 'l') : (uy > 0 ? 'b' : 't');
                         labels += `<span class="gt-lab gt-lab-${pos}" style="${pct(x, y)}">${p.name}</span>`;
+                    });
+                    edge.forEach(p => {
+                        let [x, y] = proj([p.lng, p.lat]);
+                        const m = 56, k = Math.min(1, ...[x < m ? (m - cx) / (x - cx) : 1, x > W - m ? (W - m - cx) / (x - cx) : 1,
+                            y < m ? (m - cy) / (y - cy) : 1, y > H - m ? (H - m - cy) / (y - cy) : 1]);
+                        x = cx + (x - cx) * k; y = cy + (y - cy) * k;
+                        labels += `<span class="gt-lab gt-lab-edge" style="${pct(x, y)}">${p.name}</span>`;
                     });
                     // Each town's name sits on its own side of the group (west shore left,
                     // east shore right), so close neighbours across the water don't collide.
@@ -2036,7 +2052,7 @@
                         labels += `<span class="gt-lab gt-lab-town gt-lab-${p.lng > mid ? 'r' : 'l'}" style="${pct(x, y)}">${p.name}</span>`;
                     });
                     const id = 'gtM' + bi;
-                    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map: ${g.center.name} and ${shown.concat(towns).map(p => p.name).join(', ')}">
+                    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map: ${g.center.name} and ${shown.concat(edge, towns).map(p => p.name).join(', ')}">
                         <defs><radialGradient id="${id}f" cx="50%" cy="50%" r="62%"><stop offset="72%" stop-color="#fff"/><stop offset="100%" stop-color="#000"/></radialGradient>
                         <mask id="${id}"><rect width="${W}" height="${H}" fill="url(#${id}f)"/></mask></defs>
                         <g mask="url(#${id})"><rect width="${W}" height="${H}" class="rt-sea"/><path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/>${water}</g>
