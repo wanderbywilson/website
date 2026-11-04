@@ -1743,26 +1743,24 @@
                        </div>`
                     : '';
                 const roomShots = (!lookbook && r.roomGallery.length) ? r.roomGallery : [];
-                // With room photos the card reads: name → property photos → description
-                // → room block (room name and price, room photos, room description).
-                const split = roomShots.length > 0;
-                const carousel = split
-                    ? (shots.length ? `<div class="prop-photo-group">${carouselHTML(shots, altName)}</div>` : '')
-                    : carouselHTML(shots, altName);
+                // Every card reads: name → property photos → description → (quote)
+                // room block (room name and price, room photos if any, room
+                // description). Property photos always sit under the header so they
+                // never read as photos of the quoted room (Wilson, 2026-11-04).
+                const carousel = shots.length ? `<div class="prop-photo-group">${carouselHTML(shots, altName)}</div>` : '';
                 // One room block: the room name heads it (no separate "About" label),
                 // then the price, the room's photos and its description.
-                const roomBlock = (pricingHTML) => `<div class="prop-hotel-room-desc prop-room-about">
+                const roomBlock = (pricingHTML) => (pricingHTML || roomShots.length || r.roomDesc)
+                    ? `<div class="prop-hotel-room-desc prop-room-about">
                         <div class="prop-hotel-ident prop-hotel-pricing">${pricingHTML}</div>
                         ${carouselHTML(roomShots, altName + (r.room ? ' — ' + decode(strip(r.room)) : ''))}
                         ${r.roomDesc ? `<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span>` : ''}
-                       </div>`;
+                       </div>`
+                    : '';
                 const pricing = (!lookbook && (r.room || r.rate || r.rateNote))
                     ? `${r.room ? `<p class="prop-hotel-room"${E(`hotels.${i}.room`)}>${r.room}</p>` : ''}
                        ${r.rate ? `<p class="prop-hotel-rate"${E(`hotels.${i}.rate`)}>${r.rate}</p>` : ''}
                        ${r.rateNote ? `<p class="prop-hotel-rate-note"${E(`hotels.${i}.rateNote`)}>${r.rateNote}</p>` : ''}`
-                    : '';
-                const roomDesc = r.roomDesc
-                    ? `<p class="prop-hotel-room-desc">${r.roomDescLabel ? `<strong>${r.roomDescLabel}</strong>` : ''}<span${E(`hotels.${i}.roomDesc`)}>${r.roomDesc}</span></p>`
                     : '';
                 // How to get there — a lookbook's answer to "is this even reachable?".
                 // In a quote the real flight detail takes its place.
@@ -1818,9 +1816,8 @@
                         <p class="prop-hotel-num">${num}</p>
                         <h2 class="prop-hotel-name">${r.name}</h2>
                         <p class="prop-hotel-location">${r.location}</p>
-                        ${split ? '' : pricing}
                         </div>
-                        ${split ? carousel : ''}
+                        ${carousel}
                         ${!lookbook && r.flight ? (r.flightDetails
                             ? `<div class="prop-hotel-flightwrap">
                                 <button class="prop-hotel-flight prop-flight-toggle" type="button" aria-expanded="false"><span${E(`hotels.${i}.flight`)}>${r.flight}</span><span class="prop-flight-open">Flight details <span class="prop-flight-caret">&#9662;</span></span></button>
@@ -1829,9 +1826,8 @@
                             : `<p class="prop-hotel-flight"${E(`hotels.${i}.flight`)}>${r.flight}</p>`) : ''}
                         ${!lookbook && r.flight && ((window.WBW_RULES || {}).fixed || {}).flightNote ? `<p class="prop-flight-note">${window.WBW_RULES.fixed.flightNote}</p>` : ''}
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
-                        ${split ? '' : carousel}
                         ${rateTable}
-                        ${split ? roomBlock(pricing) : (lookbook ? '' : roomDesc)}
+                        ${lookbook ? '' : roomBlock(pricing)}
                         ${gettingThere}
                         ${hotelPerks}
                         ${climate}
