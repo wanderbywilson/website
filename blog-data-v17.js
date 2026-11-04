@@ -12,6 +12,7 @@ const BLOG_POSTS = {
         dek: "Rosewood's once-a-year sale takes 30% off participating hotels for stays through June 2027. How it works, what I priced, and where I would book.",
         heroImage: "/property-images/las-ventanas-al-paraiso-a-rosewood-resort/00-hero-infinity-pool-sunrise.jpg",
         date: "November 2026",
+        datePublished: "2026-11-04",
         readTime: "8 min read",
         tags: ["Rosewood", "Hotel Deals", "Travel Tips"],
         location: "Worldwide",
@@ -39,7 +40,7 @@ const BLOG_POSTS = {
 <p>No, and this is the question I get most. Rosewood Beyond is only available through advisors in <a href="/post/get-extra-perks-at-any-rosewood-property">Rosewood Elite</a>, Rosewood's preferred-advisor program. Search Rosewood's own site this week and you will see the regular rates.</p>
 <p>Booking through an advisor does not mean booking through a middleman. Your reservation is made directly with the hotel, you pay the hotel, and the hotel knows you came through its Elite program, which is what unlocks the amenities.</p>
 
-<figure><img src="/property-images/las-ventanas-al-paraiso-a-rosewood-resort/02-suite-terrace-ocean-view.jpg" alt="A private suite terrace at Las Ventanas al Paraíso, a Rosewood Resort, looking over the Sea of Cortez in Los Cabos"></figure>
+<figure><img src="/blog-images/rosewood-beyond/las-ventanas-suite-terrace.jpg" alt="A private suite terrace at Las Ventanas al Paraíso, a Rosewood Resort, looking over the Sea of Cortez in Los Cabos" width="1600" height="933" loading="lazy"></figure>
 <h2>How to book the Rosewood Beyond rate</h2>
 <p>There are two ways to book it with me, and both get you the same rate.</p>
 <h3>Book it yourself in a couple of minutes</h3>
@@ -126,23 +127,23 @@ const BLOG_POSTS = {
 
 <h2>Where I would use Rosewood Beyond</h2>
 <p>The sale covers winter and spring, which is the best season for most of the beach Rosewoods. These are the ones I would book first, and who each one suits.</p>
-<figure><img src="/blog-images/rosewood-beyond/wilson-las-ventanas-al-paraiso-pools.jpg" alt="Wilson Schubert of Wander by Wilson in front of the pools at Las Ventanas al Paraíso, a Rosewood Resort, in Los Cabos"></figure>
+<figure><img src="/blog-images/rosewood-beyond/wilson-las-ventanas-al-paraiso-pools.jpg" alt="Wilson Schubert of Wander by Wilson in front of the pools at Las Ventanas al Paraíso, a Rosewood Resort, in Los Cabos" width="1400" height="1400" loading="lazy"></figure>
 <h3><a href="/hotels/las-ventanas-al-paraiso-a-rosewood-resort">Las Ventanas al Paraíso</a>, Los Cabos: for a honeymoon</h3>
 <p>This is the one I just came back from, and it is at the top of my list. We stayed in a Rooftop Terrace Suite with its own jacuzzi, and dinner under the lantern trees was my favorite night of the trip. Order the homemade tortillas at breakfast, find the little grotto pool, and watch for the staff walking the beach with popsicles in the afternoon.</p>
 
-<figure><img src="/blog-images/rosewood-beyond/rosewood-mandarina-oceanfront-suite-private-pool.jpg" alt="A suite terrace with its own private infinity plunge pool overlooking the Pacific at Rosewood Mandarina, Riviera Nayarit"></figure>
+<figure><img src="/blog-images/rosewood-beyond/rosewood-mandarina-oceanfront-suite-private-pool.jpg" alt="A suite terrace with its own private infinity plunge pool overlooking the Pacific at Rosewood Mandarina, Riviera Nayarit" width="1800" height="1350" loading="lazy"></figure>
 <h3><a href="/hotels/rosewood-mandarina">Rosewood Mandarina</a>, Riviera Nayarit: for the adventurous couple</h3>
 <p><a href="/hotels/rosewood-mandarina">Mandarina</a> sits where the jungle meets the Pacific, about 50 minutes from Puerto Vallarta, and every suite has its own plunge pool. Go for sunset cocktails at Barra Peñasco, ride horses down to the beach, try the jungle ziplines, and save a night for sushi at Toppu.</p>
 
-<figure><img src="/property-images/rosewood-little-dix-bay/04-bay-view.jpg" alt="The calm, reef-protected bay at Rosewood Little Dix Bay on Virgin Gorda in the British Virgin Islands"></figure>
+<figure><img src="/blog-images/rosewood-beyond/rosewood-little-dix-bay-reef-bay.jpg" alt="The calm, reef-protected bay at Rosewood Little Dix Bay on Virgin Gorda in the British Virgin Islands" width="1600" height="1200" loading="lazy"></figure>
 <h3><a href="/hotels/rosewood-little-dix-bay">Rosewood Little Dix Bay</a>, Virgin Gorda: for old-school Caribbean charm</h3>
 <p>Fewer than 100 rooms on 500 acres, with a bay protected by a reef, so the water stays calm and clear for snorkeling. Do not leave without a beach drop: the resort takes you by boat to a secluded beach of your own with a picnic.</p>
 
-<figure><img src="/property-images/rosewood-mayakoba/04-overwater-lagoon-suites.jpg" alt="Overwater suites on the lagoons at Rosewood Mayakoba in the Riviera Maya, Mexico"></figure>
+<figure><img src="/blog-images/rosewood-beyond/rosewood-mayakoba-lagoon-suites.jpg" alt="Overwater suites on the lagoons at Rosewood Mayakoba in the Riviera Maya, Mexico" width="1600" height="1035" loading="lazy"></figure>
 <h3><a href="/hotels/rosewood-mayakoba">Rosewood Mayakoba</a>, Riviera Maya: for a family beach trip</h3>
 <p>Suites set along freshwater lagoons and the beach, with boats to get around the property and an easy transfer from Cancún. It is the Rosewood I suggest most often for families who want space and a real beach.</p>
 
-<figure><img src="/property-images/kona-village-a-rosewood-resort/00-hero.jpg" alt="The pool, palms and black-sand coastline at Kona Village, A Rosewood Resort, on Hawaiʻi Island"></figure>
+<figure><img src="/blog-images/rosewood-beyond/kona-village-pool-coast.jpg" alt="The pool, palms and black-sand coastline at Kona Village, A Rosewood Resort, on Hawaiʻi Island" width="1400" height="1048" loading="lazy"></figure>
 <h3><a href="/hotels/kona-village-a-rosewood-resort">Kona Village</a>, Hawaiʻi Island: for a slow, barefoot escape</h3>
 <p>Individual hale bungalows on the Kona coast, built around the resort's Hawaiian heritage. It is the right pick if you want Hawaiʻi to feel quiet.</p>
 <h3>Beyond the beach</h3>
