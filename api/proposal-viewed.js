@@ -70,13 +70,29 @@ module.exports = async (req, res) => {
         const views = await blobGetJSON(`views/${id}.json`);
         const isFirst = !views;
 
+        // Who opened it (2026-11-12): an Instagram handle when the link came from a ManyChat DM
+        // (?ig=), plus an anonymous browser id so we can count different people.
+        const ig = typeof body.ig === 'string' && /^[a-z0-9._]{1,30}$/.test(body.ig) ? body.ig : '';
+        const vid = typeof body.vid === 'string' && /^[a-z0-9]{6,40}$/.test(body.vid) ? body.vid : '';
+        const people = (views && views.people) || {};
+        if (ig) {
+            const p = people[ig] || { count: 0, firstAt: now };
+            people[ig] = { count: p.count + 1, firstAt: p.firstAt, lastAt: now };
+        }
+        const vids = (views && views.vids) || {};
+        if (vid && Object.keys(vids).length < 5000) vids[vid] = 1;
+
         await blobPutJSON(`views/${id}.json`, {
             count: (views ? views.count : 0) + 1,
             firstViewedAt: views ? views.firstViewedAt : now,
-            lastViewedAt: now
+            lastViewedAt: now,
+            people,
+            vids
         });
 
-        if (isFirst && process.env.BREVO_API_KEY) {
+        // Roundups (public lookbooks) go to many people, so no "opened for the first time" email.
+        const isPublic = doc.proposal && doc.proposal.audience === 'public';
+        if (isFirst && !isPublic && process.env.BREVO_API_KEY) {
             const title = ((doc.proposal && doc.proposal.title) || id).replace(/<[^>]+>/g, '');
             const preparedFor = (doc.proposal && doc.proposal.preparedFor) || '';
             const url = `https://www.wanderbywilson.com/proposals/${id}`;

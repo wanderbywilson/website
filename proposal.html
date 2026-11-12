@@ -1080,6 +1080,7 @@
             max-width: 560px;
             margin: 0 auto 30px;
         }
+        .prop-close-cta { margin: 34px 0 6px; }
         .prop-close-signature {
             margin-top: 24px;
         }
@@ -1730,7 +1731,8 @@
                 const r = resolveHotel(h);
                 const lookbook = mode === 'lookbook';
                 const altName = decode(strip(r.name));
-                const num = 'Option ' + (i + 1);   // "Option 1", so it reads as a choice (Wilson, 2026-10-03)
+                // Public lookbooks (Instagram shortlists) label each hotel by its region, not "Option N" (Wilson, 2026-11-09).
+                const num = (window.__publicLookbook && h.region) ? h.region : 'Option ' + (i + 1);   // "Option 1", so it reads as a choice (Wilson, 2026-10-03)
                 const shots = r.gallery || [];
                 // Click any carousel photo to open it full screen (photo viewer).
                 const carouselHTML = (list, alt) => list.length
@@ -2132,6 +2134,7 @@
                     <div class="prop-container">
                         <h2 class="prop-close-title"${E('closeTitle')}>${P.closeTitle || (((window.WBW_RULES || {}).fixed || {}).closeTitleQuote || '').replace(/\*([^*]+)\*/g, '<em>$1</em>')}</h2>
                         ${(() => { const cl = P.closeLede || ((window.WBW_RULES || {}).fixed || {}).closeLede || ''; return cl ? `<p class="prop-close-lede"${E('closeLede')}>${cl}</p>` : ''; })()}
+                        ${P.closeCta && P.closeCta.url ? `<p class="prop-close-cta"><a href="${P.closeCta.url}" class="cta-primary"><span class="cta-primary-label">${P.closeCta.label || 'Begin planning'}</span></a></p>` : ''}
                         <div class="prop-close-signature">
                             <p class="prop-close-signature-name">${P.signatureName || 'Wilson'}</p>
                             <p class="prop-close-signature-role">${P.signatureRole || 'Founder &middot; Wander by Wilson'}</p>
@@ -2210,6 +2213,7 @@
                     return;
                 }
                 const mode = P.mode === 'lookbook' ? 'lookbook' : 'quote';
+                window.__publicLookbook = mode === 'lookbook' && P.audience === 'public';
                 document.body.classList.toggle('is-lookbook', mode === 'lookbook');
                 // Fixed client-facing lines come from rules.js (one source of truth).
                 const FX = (window.WBW_RULES && window.WBW_RULES.fixed) || {};
@@ -2346,12 +2350,25 @@
                 if (isPreview) localStorage.setItem('wndr-team', '1');
                 isTeam = localStorage.getItem('wndr-team') === '1' || !!sessionStorage.getItem('wndr-viewed-' + id);
             } catch (e) {}
+            // Who opened it (2026-11-12): ManyChat DMs the link with ?ig={{username}}, so roundup
+            // opens can be tied to an Instagram handle. The handle is remembered in this browser
+            // and taken off the address bar. vid is an anonymous browser id for counting people.
+            let ig = '', vid = '';
+            try {
+                const q = new URLSearchParams(location.search);
+                const raw = (q.get('ig') || '').trim().replace(/^@/, '');
+                if (/^[A-Za-z0-9._]{1,30}$/.test(raw)) { ig = raw.toLowerCase(); localStorage.setItem('wndr-ig', ig); }
+                else ig = localStorage.getItem('wndr-ig') || '';
+                if (q.has('ig')) { q.delete('ig'); history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash); }
+                vid = localStorage.getItem('wndr-vid') || '';
+                if (!vid) { vid = Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('wndr-vid', vid); }
+            } catch (e) {}
             if (fromApi && !isPreview && !isTeam) {
                 try { sessionStorage.setItem('wndr-viewed-' + id, '1'); } catch (e) {}
                 fetch('/api/proposal-viewed', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id })
+                    body: JSON.stringify({ id, ig, vid })
                 }).catch(() => {});
             }
         })();

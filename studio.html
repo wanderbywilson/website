@@ -1151,6 +1151,8 @@
 
             <div class="side-label area-marketing">Marketing</div>
             <button class="side-item area-marketing" data-nav="outreach" type="button"><span class="side-icon">✦</span>Email outreach</button>
+            <button class="side-item area-marketing" data-nav="roundups" type="button"><span class="side-icon">❖</span>Roundups</button>
+            <button class="side-item side-sub area-marketing" data-nav="newroundup" type="button">+ New roundup</button>
 
             <div class="side-label" id="sideWebsiteLabel">Website</div>
             <button class="side-item area-blog" data-nav="blog" type="button"><span class="side-icon">✎</span>Blog posts<span class="side-count" id="sideCountBlog"></span></button>
@@ -1823,6 +1825,10 @@
                         <input class="f-input" id="fPrepared" placeholder="Jeff &amp; family">
                     </div>
                     <div class="f-row">
+                        <!-- Public lookbooks (Instagram shortlists): no client name, region labels, own close + inquiry button (Wilson, 2026-11-09). -->
+                        <label class="f-label" style="display:flex; gap:8px; align-items:center; text-transform:none"><input type="checkbox" id="fPublic"> Public lookbook (Instagram shortlist, not for one client)</label>
+                    </div>
+                    <div class="f-row">
                         <label class="f-label" for="fTitle">Proposal title</label>
                         <input class="f-input" id="fTitle" placeholder="Your Italian *summer.*">
                     </div>
@@ -1896,6 +1902,26 @@
                         <label class="f-label" for="fCloseLede">Closing line <span style="text-transform:none">(fixed)</span></label>
                         <textarea class="f-area" id="fCloseLede" readonly style="opacity:.75"></textarea>
                     </div>
+                    <div id="pubCloseRows" hidden>
+                        <div class="f-row">
+                            <label class="f-label" for="fPubKicker">Top line <span style="text-transform:none">(public lookbook)</span></label>
+                            <input class="f-input" id="fPubKicker" placeholder="The Southern Italy shortlist">
+                        </div>
+                        <div class="f-row">
+                            <label class="f-label" for="fPubCloseLede">Closing line <span style="text-transform:none">(public lookbook)</span></label>
+                            <textarea class="f-area" id="fPubCloseLede"></textarea>
+                        </div>
+                        <div class="f-grid2">
+                            <div class="f-row">
+                                <label class="f-label" for="fPubCtaLabel">Button</label>
+                                <input class="f-input" id="fPubCtaLabel" placeholder="Begin planning">
+                            </div>
+                            <div class="f-row">
+                                <label class="f-label" for="fPubCtaUrl">Button link</label>
+                                <input class="f-input" id="fPubCtaUrl" placeholder="/inquire-trip">
+                            </div>
+                        </div>
+                    </div>
                     <div class="f-grid2">
                         <div class="f-row">
                             <label class="f-label" for="fSigName">Signed by</label>
@@ -1950,7 +1976,7 @@
     <div class="modal-wrap" id="listModal">
         <div class="modal">
             <div class="modal-head">
-                <h2 class="modal-title">Your <em>proposals.</em></h2>
+                <h2 class="modal-title" id="listModalTitle">Your <em>proposals.</em></h2>
                 <button class="btn btn-ghost btn-small" data-close="listModal" type="button">Close</button>
             </div>
             <div class="plist-tools">
@@ -2880,7 +2906,7 @@
             } catch (err) { $('dashPerf').innerHTML = '<p class="dash-empty">Couldn’t load stats.</p>'; }
         }
         function loadDashProposals() {
-            api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals; renderDashProposals(); })
+            api({ action: 'list' }).then(({ proposals }) => { dashData.proposals = proposals.filter(p => p.audience !== 'public'); renderDashProposals(); })
                 .catch(() => { $('dashProposals').innerHTML = '<p class="dash-empty">Couldn’t load proposals.</p>'; });
         }
         function loadDashSocial() {
@@ -3036,8 +3062,10 @@
             // Leaving a page closes any pop-up that was open on it.
             document.querySelectorAll('.modal-wrap.is-open').forEach(m => m.classList.remove('is-open'));
             if (n === 'home') showView('home');
-            else if (n === 'proposals') { showView('editor'); $('btnList').click(); }
+            else if (n === 'proposals') { plistScope = 'clients'; showView('editor'); $('btnList').click(); }
             else if (n === 'newproposal') { showView('editor'); $('btnNew').click(); }
+            else if (n === 'roundups') { plistScope = 'roundups'; showView('editor'); markNav('roundups'); openList(); }
+            else if (n === 'newroundup') { showView('editor'); markNav('roundups'); newRoundup(); }
             else if (n === 'blog') { blogFilter = 'all'; showBlogList(); }
             else if (n === 'performance') showView('performance');
             else if (n === 'newblog') openBlogEditor(null);
@@ -4591,6 +4619,7 @@
                 }
             }
             if ((h.socialHook || '').trim()) out.socialHook = h.socialHook.trim();
+            if ((h.region || '').trim()) out.region = h.region.trim(); // public lookbooks label hotels by region
             // Advisor-only: where we can book this and whose amenities apply.
             // Never rendered on the client page.
             if ((h.bookingPartners || '').trim()) out.bookingPartners = h.bookingPartners.trim();
@@ -4687,9 +4716,13 @@
         }
         function serialize() {
             const title = sentenceCap(mdEm($('fTitle').value)) || 'Your next <em>escape.</em>';
+            const pub = isPublicLb();
+            const ctaUrl = $('fPubCtaUrl').value.trim();
             return {
                 metaTitle: stripHtml(title).replace(/\.$/, '') + ' · Wander by Wilson',
-                kicker: 'A private proposal',
+                kicker: pub ? ($('fPubKicker').value.trim() || 'A first look') : 'A private proposal',
+                audience: pub ? 'public' : undefined,
+                closeCta: pub && ctaUrl ? { label: $('fPubCtaLabel').value.trim() || 'Begin planning', url: ctaUrl } : undefined,
                 preparedFor: titleWords($('fPrepared').value.trim()),
                 title: title,
                 lede: sentenceCap($('fLede').value.trim()),
@@ -4706,7 +4739,8 @@
                 route: routeForSave(),
                 // no global perks band — amenities live on each hotel card
                 closeTitle: sentenceCap(mdEm($('fCloseTitle').value)) || mdEm(state.mode === 'lookbook' ? window.WBW_RULES.fixed.closeTitleLookbook : window.WBW_RULES.fixed.closeTitleQuote),
-                closeLede: window.WBW_RULES.fixed.closeLede, // fixed copy, never reworded
+                // fixed copy, never reworded, except on a public lookbook, which has no "your trip" yet
+                closeLede: (pub && $('fPubCloseLede').value.trim()) ? $('fPubCloseLede').value.trim() : window.WBW_RULES.fixed.closeLede,
                 signatureName: titleWords($('fSigName').value.trim()) || 'Wilson',
                 signatureRole: sentenceCap($('fSigRole').value.trim()) || 'Founder · Wander by Wilson',
                 slugBase: $('fPrepared').value.trim() || stripHtml(title)
@@ -4803,15 +4837,27 @@
         document.addEventListener('input', onChange);
         document.addEventListener('change', onChange);
 
-        const FIELD_IDS = ['fPrepared', 'fTitle', 'fLede', 'fDates', 'fValid', 'fCloseTitle', 'fCloseLede', 'fSigName', 'fSigRole'];
+        const FIELD_IDS = ['fPrepared', 'fTitle', 'fLede', 'fDates', 'fValid', 'fCloseTitle', 'fCloseLede', 'fSigName', 'fSigRole', 'fPublic', 'fPubKicker', 'fPubCloseLede', 'fPubCtaLabel', 'fPubCtaUrl'];
         function fieldValues() {
             const out = {};
-            FIELD_IDS.forEach(id => { out[id] = $(id).value; });
+            FIELD_IDS.forEach(id => { const el = $(id); out[id] = el.type === 'checkbox' ? (el.checked ? '1' : '') : el.value; });
             return out;
         }
         function setFields(vals) {
-            FIELD_IDS.forEach(id => { $(id).value = (vals && vals[id] !== undefined) ? vals[id] : ''; });
+            FIELD_IDS.forEach(id => {
+                const el = $(id), v = (vals && vals[id] !== undefined) ? vals[id] : '';
+                if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+            });
+            syncPublicRows();
         }
+        function isPublicLb() { return state.mode === 'lookbook' && $('fPublic').checked; }
+        // Public lookbook: show its own top line, closing line and button; hide the fixed client closing line.
+        function syncPublicRows() {
+            const pub = isPublicLb();
+            $('pubCloseRows').hidden = !pub;
+            $('fCloseLede').closest('.f-row').hidden = pub;
+        }
+        document.addEventListener('change', (ev) => { if (ev.target.id === 'fPublic') syncPublicRows(); });
         function applyDefaults() {
             $('fCloseTitle').value = DEFAULTS.closeTitle;
             $('fCloseLede').value = DEFAULTS.closeLede;
@@ -5723,6 +5769,7 @@
         function setMode(mode) {
             state.mode = mode === 'lookbook' ? 'lookbook' : 'quote';
             const lb = state.mode === 'lookbook';
+            try { syncPublicRows(); } catch (e) {}
             const dl = lb && state.lbKind === 'destinations';
             const card = !lb ? 'quote' : dl ? 'destinations' : 'lookbook';
             document.querySelectorAll('#modeSwitch [data-mode]').forEach(b =>
@@ -6067,6 +6114,14 @@
             if (p.closeTitle) $('fCloseTitle').value = String(p.closeTitle);
             $('fCloseLede').value = window.WBW_RULES.fixed.closeLede; // fixed copy: ignore any other closing line
             if (p.mode === 'lookbook' || p.mode === 'quote') setMode(p.mode);
+            // Public lookbook: its own top line, closing line and inquiry button.
+            const pubIn = p.audience === 'public';
+            $('fPublic').checked = pubIn;
+            $('fPubKicker').value = pubIn ? String(p.kicker || '') : '';
+            $('fPubCloseLede').value = pubIn ? String(p.closeLede || '') : '';
+            $('fPubCtaLabel').value = pubIn ? String((p.closeCta || {}).label || '') : '';
+            $('fPubCtaUrl').value = pubIn ? String((p.closeCta || {}).url || '') : '';
+            syncPublicRows();
 
             const libEntries = libEntriesForMatching();
             const fromLibrary = [], custom = [], customSource = [], notes = [], partners = [];
@@ -6090,6 +6145,7 @@
                     roomGalleryText: (h.roomGallery || []).map(String).join('\n'),
                     useRoomPhotos: !!(h.roomGallery || []).length,
                     socialHook: String(h.socialHook || ''),
+                    region: String(h.region || ''),
                     bookingPartners: (h.bookingPartners || []).map(String).join(' · '),
                     amenitiesNote: String(h.amenitiesNote || ''),
                     partnerPerksText: partnerPerksToText(h.partnerPerks),
@@ -7309,7 +7365,8 @@
         const CLIENT_FIELDS = {
             fTitle: 'Proposal title', fLede: 'Intro line', fDates: 'Travel dates',
             fCloseTitle: 'Closing headline', fCloseLede: 'Closing line',
-            fPrepared: 'Prepared for'
+            fPrepared: 'Prepared for',
+            fPubKicker: 'Top line', fPubCloseLede: 'Public closing line', fPubCtaLabel: 'Button'
         };
         const HOTEL_CLIENT_FIELDS = {
             name: 'hotel name', location: 'location', desc: 'description', room: 'room category',
@@ -7322,7 +7379,7 @@
         // Text WE write. Verbatim hotel copy (description, room description,
         // amenities) keeps the hotel's own punctuation, so em dashes are only
         // checked here.
-        const OUR_WORDS_TRIP = ['fTitle', 'fLede', 'fDates', 'fCloseTitle', 'fCloseLede', 'fPrepared'];
+        const OUR_WORDS_TRIP = ['fTitle', 'fLede', 'fDates', 'fCloseTitle', 'fCloseLede', 'fPrepared', 'fPubKicker', 'fPubCloseLede', 'fPubCtaLabel'];
         const OUR_WORDS_HOTEL = ['rateNote', 'deposit', 'cancellation', 'termsText', 'rateTableNote', 'gettingThere', 'flight', 'flightDetails', 'perksLabel', 'roomDescLabel'];
 
         function findMetaText() {
@@ -7519,6 +7576,7 @@
                         photosEdited: !!(isLib && h.photosEdited),
                         desc: h.desc || '',
                         socialHook: h.socialHook || '',
+                        region: h.region || '',
                         bookingPartners: h.bookingPartners || '',
                         amenitiesNote: h.amenitiesNote || '',
                         partnerPerksText: partnerPerksToText(h.partnerPerks),
@@ -7565,7 +7623,12 @@
                 fCloseTitle: unEm(P.closeTitle || DEFAULTS.closeTitle),
                 fCloseLede: window.WBW_RULES.fixed.closeLede,
                 fSigName: P.signatureName || DEFAULTS.sigName,
-                fSigRole: P.signatureRole || DEFAULTS.sigRole
+                fSigRole: P.signatureRole || DEFAULTS.sigRole,
+                fPublic: P.audience === 'public' ? '1' : '',
+                fPubKicker: P.audience === 'public' ? (P.kicker || '') : '',
+                fPubCloseLede: P.audience === 'public' ? (P.closeLede || '') : '',
+                fPubCtaLabel: (P.closeCta || {}).label || '',
+                fPubCtaUrl: (P.closeCta || {}).url || ''
             });
             state.destinations = Array.isArray(P.destinations) ? P.destinations : [];
             state.showHotels = P.showHotels !== false;
@@ -7585,6 +7648,32 @@
         /* Your proposals, organised the way we work: client → trip (place · dates)
            → numbered versions, newest first. Older saves fold away. */
         let plistData = [], plistFilter = 'all';
+        /* Roundups (2026-11-12): public lookbooks (Instagram shortlists, blog roundups) live under
+           Marketing → Roundups. Client proposals never show them, and Roundups shows nothing else. */
+        let plistScope = 'clients';
+        const isRoundup = (p) => p.audience === 'public';
+        const markNav = (nav) => { document.querySelectorAll('.side-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === nav)); if (nav === 'roundups') $('topTitle').textContent = 'Roundups'; };
+        /* Who opened a roundup: total opens, different people (browsers), and the Instagram
+           handles ManyChat put on the link (?ig=), with how many times each opened it. */
+        function roundupWho(p) {
+            if (!isRoundup(p) || !p.views) return '';
+            const ppl = p.people || [];
+            const head = p.views + ' open' + (p.views === 1 ? '' : 's') + (p.uniques ? ' \u00b7 ' + p.uniques + ' ' + (p.uniques === 1 ? 'person' : 'people') : '') +
+                (ppl.length ? ' \u00b7 ' + ppl.length + ' from Instagram DMs' : '');
+            if (!ppl.length) return '<p class="pv-sub">' + head + '</p>';
+            return '<details class="pv-sub" style="margin-top:4px"><summary style="cursor:pointer">' + head + '</summary>' +
+                '<ul style="margin:6px 0 0; padding-left:18px">' + ppl.map(x => '<li><a href="https://instagram.com/' + encodeURIComponent(x.handle) + '" target="_blank" rel="noopener">@' + esc(x.handle) + '</a> \u00b7 ' +
+                x.count + ' open' + (x.count === 1 ? '' : 's') + ' \u00b7 last ' + esc(pWhen(x.lastAt)) + '</li>').join('') + '</ul></details>';
+        }
+        function newRoundup() {
+            if (state.hotels.length && !confirm('Start a fresh roundup? Unpublished changes will be lost.')) return;
+            state.mode = 'lookbook';
+            resetForm();
+            $('fPublic').checked = true;
+            $('fPublic').dispatchEvent(new Event('change', { bubbles: true }));
+            $('statusText').textContent = 'New roundup';
+            pushPreview();
+        }
         const plistOpen = new Set();
         const pClientKey = (p) => (p.preparedFor || 'No client name').toLowerCase().replace(/^for\s+/, '').replace(/\band\b/g, '&').replace(/\bthe\s+/g, '').replace(/[^a-z0-9&]+/g, ' ').trim();
         const pPlace = (p) => (p.destination || stripHtml(p.title || '')).replace(/\*/g, '').replace(/[.\s]+$/, '').replace(/,?\s+then\s+/i, ' & ').trim() || 'Untitled trip';
@@ -7592,18 +7681,20 @@
         const pWhen = (d) => new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
         function plistStatus(p) {
             if (p.status === 'draft') return '<span class="pv-status draft">Draft</span>';
+            if (isRoundup(p)) return '<span class="pv-status live">Live' + (p.views ? ' \u00b7 ' + p.views + ' view' + (p.views === 1 ? '' : 's') : '') + '</span>';
             if (p.viewed) return '<span class="pv-status opened" title="Last viewed ' + esc(p.lastViewedAt ? pWhen(p.lastViewedAt) : '') + '">\u2713 Opened' + (p.views > 1 ? ' \u00b7 ' + p.views : '') + '</span>';
             return '<span class="pv-status live">Sent \u00b7 not opened</span>';
         }
         function renderPlist() {
             const q = ($('plistSearch').value || '').toLowerCase().trim();
-            const rows = plistData.filter(p => (plistFilter === 'all' || (plistFilter === 'draft' ? p.status === 'draft' : p.status !== 'draft'))
+            const rows = plistData.filter(p => (plistScope === 'roundups' ? isRoundup(p) : !isRoundup(p)) && (plistFilter === 'all' || (plistFilter === 'draft' ? p.status === 'draft' : p.status !== 'draft'))
                 && (!q || [p.preparedFor, p.title, p.destination, p.dates].join(' ').toLowerCase().includes(q)));
-            if (!rows.length) { $('plist').innerHTML = '<p class="sec-sub">' + (plistData.length ? 'Nothing matches.' : 'Nothing saved yet. Your proposals will appear here.') + '</p>'; return; }
+            if (!rows.length) { $('plist').innerHTML = '<p class="sec-sub">' + (plistScope === 'roundups' ? 'No roundups yet. Use + New roundup, or tick Public lookbook on a lookbook.' : plistData.length ? 'Nothing matches.' : 'Nothing saved yet. Your proposals will appear here.') + '</p>'; return; }
             const clients = new Map();
             rows.forEach(p => {
-                const ck = pClientKey(p);
-                if (!clients.has(ck)) clients.set(ck, { name: (p.preparedFor || 'No client name').replace(/^for\s+/i, ''), trips: new Map(), latest: '' });
+                const rName = stripHtml(p.title || '').replace(/\*/g, '').replace(/[.\s]+$/, '') || 'Untitled roundup';
+                const ck = plistScope === 'roundups' ? 'r:' + rName.toLowerCase() : pClientKey(p);
+                if (!clients.has(ck)) clients.set(ck, { name: plistScope === 'roundups' ? rName : (p.preparedFor || 'No client name').replace(/^for\s+/i, ''), trips: new Map(), latest: '' });
                 const c = clients.get(ck);
                 const tk = pPlace(p).toLowerCase() + '|' + (p.dates || '').toLowerCase();
                 if (!c.trips.has(tk)) c.trips.set(tk, { place: pPlace(p), dates: p.dates || '', items: [] });
@@ -7628,7 +7719,7 @@
                             shown.map((p, i) => '<div class="pv' + (i && p !== liveTop ? ' is-old' : '') + '">' +
                                 '<span class="pv-n">V' + p.__v + '</span>' +
                                 '<div class="pv-main"><p class="pv-line"><span class="pv-kind">' + (p.mode === 'lookbook' ? 'Lookbook' : p.mode === 'quote' ? 'Quote' : 'Proposal') + '</span> \u00b7 ' + p.hotelCount + ' hotel' + (p.hotelCount === 1 ? '' : 's') + '</p>' +
-                                '<p class="pv-sub">' + esc(stripHtml(p.title || '').replace(/\*/g, '')) + ' \u00b7 saved ' + pShort(p.updatedAt) + (p.lastViewedAt ? ' \u00b7 last opened ' + esc(pWhen(p.lastViewedAt)) : '') + '</p></div>' +
+                                '<p class="pv-sub">' + esc(stripHtml(p.title || '').replace(/\*/g, '')) + ' \u00b7 saved ' + pShort(p.updatedAt) + (p.lastViewedAt ? ' \u00b7 last opened ' + esc(pWhen(p.lastViewedAt)) : '') + '</p>' + roundupWho(p) + '</div>' +
                                 plistStatus(p) +
                                 '<div class="pv-actions">' +
                                     '<button class="btn btn-small" data-edit="' + p.id + '" type="button">Edit</button>' +
@@ -7651,6 +7742,8 @@
         });
 
         async function openList() {
+            $('listModalTitle').innerHTML = plistScope === 'roundups' ? 'Your <em>roundups.</em>' : 'Your <em>proposals.</em>';
+            $('plistSearch').placeholder = plistScope === 'roundups' ? 'Search by title or place' : 'Search by client, place or date';
             $('listModal').classList.add('is-open');
             $('plist').innerHTML = '<p class="sec-sub">Loading…</p>';
             try {

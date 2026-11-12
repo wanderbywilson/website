@@ -125,6 +125,15 @@ module.exports = async (req, res) => {
 
         if (action === 'list') {
             const index = (await blobGetJSON(INDEX_PATH)) || {};
+            // One-time backfill: entries saved before 2026-11-12 have no audience flag.
+            const missing = Object.keys(index).filter(id => index[id].audience === undefined);
+            if (missing.length) {
+                await Promise.all(missing.map(async (id) => {
+                    const doc = await blobGetJSON(`proposals/${id}.json`).catch(() => null);
+                    index[id].audience = doc && doc.proposal && doc.proposal.audience === 'public' ? 'public' : '';
+                }));
+                await blobPutJSON(INDEX_PATH, index);
+            }
             const viewBlobs = await blobList('views/');
             const viewIds = viewBlobs
                 .map(b => (b.pathname.match(/^views\/(.+)\.json$/) || [])[1])
@@ -140,6 +149,11 @@ module.exports = async (req, res) => {
                     views: views[id] ? views[id].count || 0 : 0,
                     firstViewedAt: views[id] ? views[id].firstViewedAt || null : null,
                     lastViewedAt: views[id] ? views[id].lastViewedAt || null : null,
+                    // Who opened it (roundups): Instagram handles from ManyChat links + distinct browsers.
+                    people: views[id] && views[id].people ? Object.entries(views[id].people)
+                        .map(([handle, v]) => ({ handle, count: v.count, lastAt: v.lastAt }))
+                        .sort((a, b) => (b.lastAt || '').localeCompare(a.lastAt || '')) : [],
+                    uniques: views[id] && views[id].vids ? Object.keys(views[id].vids).length : 0,
                     url: `${SITE}/proposals/${id}`
                 }))
                 .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
@@ -198,6 +212,8 @@ module.exports = async (req, res) => {
                 destination: (Array.isArray(proposal.destinations) ? proposal.destinations : [])
                     .map(d => d && !d.off && d.name ? String(d.name) : '').filter(Boolean).join(' & '),
                 hotelCount: proposal.hotels.length,
+                // Public lookbooks (Instagram shortlists) list under Marketing → Roundups, not with client proposals.
+                audience: proposal.audience === 'public' ? 'public' : '',
                 createdAt: (existing && existing.createdAt) || now,
                 updatedAt: now
             };
