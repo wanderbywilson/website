@@ -31,7 +31,7 @@
 - **Whenever you edit styles.css / data.js / blog-data.js, BUMP `?v=N` across ALL html**, or the browser serves stale cached files.
   - Pattern: `perl -pi -e 's/styles\.css\?v=110/styles.css?v=111/g;' *.html`
 - **HTML files are NOT versioned.** When testing in the browser, append a throwaway `?cb=N` to the URL to force fresh HTML.
-- **Current versions (at this save):** `styles.css?v=289`, `data.js?v=96` (v96 shipped 2026-11-12 with only the Casa Angelina and Caruso Best-for em-dash fixes; the other local data.js edits need v97 when they go live), `blog-data-v17.js`.
+- **Current versions (at this save):** `styles.css?v=289`, `data.js?v=97` (v97 shipped 2026-11-12 with the Casa Angelina gallery swap and the new Caruso gallery), `blog-data-v17.js`.
   - **Note:** blog data is now cache-busted by FILENAME (`blog-data-v15.js` → `blog-data-v17.js`), not `?v=N`. Bumping it means `git mv` + a perl sweep across all HTML: `grep -rl "blog-data-v17.js" --include="*.html" . | xargs perl -pi -e 's/blog-data-v17\.js/blog-data-v18.js/g'` (48 files).
 
 ## 🚀 SEO foundation (2026-05-28) — DEPLOY-READY FILES
@@ -218,7 +218,7 @@ Critical-tier SEO work done. Four new files at the project root + canonical tags
 
 **Beacon logic:** first open of a Studio proposal emails Wilson via Brevo. Suppressed for: browsers that have opened /studio (`localStorage wndr-team=1`), `?preview=1` links, and repeat views in the same session. Views tracked in `views/{id}.json` blobs.
 
-**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=96` (v96 shipped 2026-11-12 with only the Casa Angelina and Caruso Best-for em-dash fixes; the other local data.js edits need v97 when they go live) / `proposals-data.js?v=94` / `rules.js?v=1` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
+**Gotchas:** vercel dev doesn't apply vercel.json headers locally (verify on prod). Studio and proposal.html reference `data.js?v=97` (v97 shipped 2026-11-12 with the Casa Angelina gallery swap and the new Caruso gallery) / `proposals-data.js?v=94` / `rules.js?v=1` — bump on edits like everything else. Legacy Charleston/Caribbean entries in proposals-data.js are commented out (retired; kept as data-shape reference).
 
 ### §12 addendum (2026-07-29, round 2) — compliance + quote screenshots
 - **CONTENT COMPLIANCE (Wilson, non-negotiable):** proposal descriptions/room copy must be VERBATIM from the hotel's site, its Virtuoso page, or our website library — never written or embellished (liability if a client books on an inaccurate claim). Hotel names = official names, plain text. Wilson's personal notes go in her email, not the page. Template auto-renders a photos-are-representative disclaimer.

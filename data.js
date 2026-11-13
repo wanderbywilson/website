@@ -629,6 +629,13 @@ const PROPERTIES = {
             'Early check-in / late check-out, subject to availability',
             'Complimentary Wi-Fi'
         ],
+        gallery: [
+            '/property-images/caruso/01-wisteria-pergola-pool.jpg',
+            '/property-images/caruso/02-infinity-pool-sunset.jpg',
+            '/property-images/caruso/03-arch-coast-view.jpg',
+            '/property-images/caruso/04-vaulted-suite.jpg',
+            '/property-images/caruso/05-palazzo-gardens.jpg'
+        ],
         idealFor: "Honeymooners and couples chasing the Amalfi Coast&rsquo;s most iconic view without the crush below, and anyone happy to trade a beachfront address for a garden terrace floating high above the sea.",
         agentTip: "Ravello sits high above the coast, so you trade easy beach access for cooler air, quiet evenings, and that unforgettable pool. Have us arrange the hotel&rsquo;s boat for your days down on the water &mdash; it&rsquo;s the best of both.",
         bookingUrl: 'https://www.virtuoso.com/advisor/wilsschu27955/hotels/6164317/caruso-a-belmond-hotel-amalfi-coast'
@@ -1128,11 +1135,11 @@ const PROPERTIES = {
             'Complimentary Wi-Fi'
         ],
         gallery: [
-            '/property-images/casa-angelina/01-angelina-suite.jpg',
             '/property-images/casa-angelina/02-pool-sea-view.jpg',
             '/property-images/casa-angelina/03-lemon-pergola-terrace.jpg',
-            '/property-images/casa-angelina/04-spa-treatment-room.jpg',
-            '/property-images/casa-angelina/05-al-fresco-dining.jpg'
+            '/property-images/casa-angelina/06-rooftop-terrace-positano-view.jpg',
+            '/property-images/casa-angelina/07-coastline-view.jpg',
+            '/property-images/casa-angelina/08-beach-club-la-gavitella.jpg'
         ],
         idealFor: "Design lovers and couples drawn to clean, contemporary lines over gilded Amalfi opulence, and travelers who&rsquo;d happily trade Positano&rsquo;s bustle for a serene, grown-up perch just up the coast.",
         agentTip: "A complimentary shuttle bus service is available all day long to reach Positano and back &ndash; it&rsquo;s just a ten-minute ride each way. Water taxi services can also be arranged, and they leave directly from the little pier below the hotel.",
