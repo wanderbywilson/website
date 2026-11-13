@@ -553,6 +553,11 @@
         }
 
         /* Per-hotel preferred-partner amenities (renders when perksList set) */
+        .prop-hotel-request-wrap { margin: 34px 0 0; }
+        .prop-hotel-request { background: var(--ink); border-color: var(--ink); color: var(--ivory); padding: 16px 30px; }
+        .prop-hotel-request .cta-primary-label { font-size: 19px; }
+        .prop-hotel-request:hover { background: var(--umber); border-color: var(--umber); }
+        .prop-hotel-request:hover::after { color: var(--gold-soft); }
         .prop-hotel-perks {
             margin: 28px 0 0;
             padding-top: 28px;
@@ -1336,6 +1341,8 @@
                     deposit:   h.deposit   || '',
                     cancellation: h.cancellation || '',
                     gettingThere: h.gettingThere || '',
+                    // "What we love": the hotel's signature features (beach club, shuttle, dock), lookbooks only (Wilson, 2026-11-13).
+                    whatWeLove: (h.whatWeLove || []).map(String).filter(s => s.trim()),
                     climate:   h.climate   || null,
                     stays:     h.stays     || null,
                     considered: !!h.considered,
@@ -1769,6 +1776,15 @@
                 const gettingThere = (lookbook && r.gettingThere)
                     ? `<div class="prop-hotel-getting"><strong>How to get there</strong><span${E(`hotels.${i}.gettingThere`)}>${r.gettingThere}</span></div>`
                     : '';
+                const love = (lookbook && r.whatWeLove.length)
+                    ? `<div class="prop-hotel-perks prop-hotel-love"><strong>What we love</strong><ul>` +
+                      r.whatWeLove.map(li => `<li>${li}</li>`).join('') + '</ul></div>'
+                    : '';
+                // Public lookbooks: a request button on every hotel, so a reader who stops
+                // scrolling still books through us, not the hotel's own website.
+                const requestStay = (lookbook && window.__publicLookbook)
+                    ? `<p class="prop-hotel-request-wrap"><a class="cta-primary prop-hotel-request" href="/inquire-hotel?hotel=${encodeURIComponent(h.slug || decode(strip(r.name)))}" data-cta-location="lookbook_hotel" data-cta-type="inquire"><span class="cta-primary-label">Request to stay here</span></a></p>`
+                    : '';
                 const finePrint = (!lookbook && (r.deposit || r.cancellation))
                     ? `<div class="prop-hotel-fineprint">
                         ${r.deposit ? `<p><strong>Deposit</strong><span${E(`hotels.${i}.deposit`)}>${String(r.deposit).replace(/\n/g, '<br>')}</span></p>` : ''}
@@ -1830,6 +1846,7 @@
                         ${r.desc ? `<p class="prop-hotel-desc"${E(`hotels.${i}.desc`)}>${r.desc}</p>` : ''}
                         ${rateTable}
                         ${lookbook ? '' : roomBlock(pricing)}
+                        ${love}
                         ${gettingThere}
                         ${hotelPerks}
                         ${climate}
@@ -1838,6 +1855,7 @@
                         ${inclusions}
                         ${terms}
                         ${lookbook ? '' : cta}
+                        ${requestStay}
                     </div>
                 </section>`;
             }

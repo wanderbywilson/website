@@ -4628,6 +4628,8 @@
             if (pp.length) out.partnerPerks = pp;
             if ((h.advisorNote || '').trim()) out.advisorNote = h.advisorNote.trim();
             if ((h.gettingThere || '').trim()) out.gettingThere = sentenceCap(h.gettingThere.trim());
+            const love = String(h.whatWeLoveText || '').split('\n').map(x => x.trim()).filter(Boolean);
+            if (love.length) out.whatWeLove = love.map(sentenceCap);
             // Twelve-month temperature strip. Typed as "Jan 50 37" per line so the
             // box stays paste-able from any climate table; degree signs are tolerated.
             const climateMonths = (h.climateText || '').split('\n')
@@ -5117,6 +5119,8 @@
                     ${lb ? `
                     <div class="f-row"><label class="f-label">How to get there</label>
                         <textarea class="f-area" data-i="${i}" data-k="gettingThere" placeholder="Fly into Marseille Provence Airport (MRS), about 45 minutes by car.">${esc(h.gettingThere || '')}</textarea></div>
+                    <div class="f-row"><label class="f-label">What we love <span style="text-transform:none">(one per line: beach club, free shuttle, own dock, walk to town)</span></label>
+                        <textarea class="f-area" data-i="${i}" data-k="whatWeLoveText" placeholder="Its own beach club right below the hotel, reached by elevator.">${esc(h.whatWeLoveText || '')}</textarea></div>
                     ${(h.climateText || h.staysText) ? `<details class="manual-fields">
                     <summary>Older lookbook extras (temperatures and nearby hotels; destination guides replace these)</summary>
                     <div class="f-row"><label class="f-label">Average temperatures <span style="text-transform:none">(one month per line &mdash; month, high, low)</span></label>
@@ -5478,6 +5482,7 @@
             '      "gallery": ["5 more direct image URLs, per PHOTOS"],',
             '      "perks": ["each documented amenity as a short bullet, with its fine print"],',
             '      "gettingThere": "ONE or two sentences a client can act on: nearest airport, roughly how long, how the transfer works (car, boat, island flight).",',
+            '      "whatWeLove": ["2 to 4 signature features, one plain sentence each, verified on the hotel site: its own beach club, a free shuttle to town, its own dock or boat, walking distance to town, a thermal spa"],',
             '      "idealFor": "BEST FOR, one sentence, max 160 characters (for the hotel page)",',
             '      "agentTip": "one concrete insider move, sourced, 66\u2013220 characters (for the hotel page)",',
             '      "rateFrom": "entry-level nightly rate, e.g. €850 / night (for the hotel page; never prints on a proposal)",'
@@ -6151,6 +6156,7 @@
                     partnerPerksText: partnerPerksToText(h.partnerPerks),
                     advisorNote: String(h.advisorNote || ''),
                     gettingThere: String(h.gettingThere || ''),
+                    whatWeLoveText: (h.whatWeLove || []).map(String).join('\n'),
                     climateText: (((h.climate || {}).months) || []).map(function (m) { return m.m + ' ' + m.hi + ' ' + m.lo; }).join('\n'),
                     climateLabel: String((h.climate || {}).label || ''),
                     climateNote: String((h.climate || {}).note || ''),
@@ -7374,13 +7380,13 @@
             perksText: 'amenities', perksLabel: 'amenities heading', deposit: 'deposit', cancellation: 'cancellation',
             termsText: 'supplier terms', rateTableText: 'rate table', rateTableNote: 'rate table note',
             roomDescLabel: 'room heading', flight: 'flight note', flightDetails: 'flight details',
-            gettingThere: 'how to get there'
+            gettingThere: 'how to get there', whatWeLoveText: 'what we love'
         };
         // Text WE write. Verbatim hotel copy (description, room description,
         // amenities) keeps the hotel's own punctuation, so em dashes are only
         // checked here.
         const OUR_WORDS_TRIP = ['fTitle', 'fLede', 'fDates', 'fCloseTitle', 'fCloseLede', 'fPrepared', 'fPubKicker', 'fPubCloseLede', 'fPubCtaLabel'];
-        const OUR_WORDS_HOTEL = ['rateNote', 'deposit', 'cancellation', 'termsText', 'rateTableNote', 'gettingThere', 'flight', 'flightDetails', 'perksLabel', 'roomDescLabel'];
+        const OUR_WORDS_HOTEL = ['rateNote', 'deposit', 'cancellation', 'termsText', 'rateTableNote', 'gettingThere', 'whatWeLoveText', 'flight', 'flightDetails', 'perksLabel', 'roomDescLabel'];
 
         function findMetaText() {
             const hits = [];
@@ -7582,6 +7588,7 @@
                         partnerPerksText: partnerPerksToText(h.partnerPerks),
                         advisorNote: h.advisorNote || '',
                         gettingThere: h.gettingThere || '',
+                        whatWeLoveText: (h.whatWeLove || []).join('\n'),
                         climateText: (((h.climate || {}).months) || []).map(function (m) { return m.m + ' ' + m.hi + ' ' + m.lo; }).join('\n'),
                         climateLabel: String((h.climate || {}).label || ''),
                         climateNote: String((h.climate || {}).note || ''),
