@@ -130,6 +130,11 @@
             .bf-list { padding: 52px 0 64px; }
             .bf-card { padding: 22px 20px 20px; }
             .bf-booked { padding: 64px 0; }
+            .bf-code { padding: 20px 18px; gap: 16px; }
+            .bf-code-box { width: 100%; flex-wrap: wrap; gap: 10px; }
+            .bf-code-label { width: 100%; }
+            .bf-code-value { flex: 1 1 auto; min-width: 0; text-align: center; font-size: 26px; }
+            .bf-code-copy { flex: 0 0 auto; align-self: stretch; }
         }
     </style>
 </head>
@@ -222,7 +227,7 @@
             </div>
             <div class="bf-search" id="bfSearchWrap">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-                <input type="search" id="bfSearch" placeholder="Search a hotel, brand or destination" aria-label="Search deals" autocomplete="off">
+                <input type="search" id="bfSearch" placeholder="Search a hotel or place" aria-label="Search deals" autocomplete="off">
                 <button type="button" class="bf-search-clear" id="bfSearchClear" aria-label="Clear search">&times;</button>
             </div>
             <div class="bf-chips" id="bfChips" role="group" aria-label="Filter by region"></div>
