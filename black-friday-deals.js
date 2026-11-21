@@ -83,6 +83,15 @@ window.BF_DEALS = [
     bookBy: '2026-12-03', travel: 'Now through Dec 17, 2027'
   },
 
+  {
+    // Source: nobuhotels.com/los-cabos/offers/black-friday-exclusive (read 2026-11-21). No book-by date published; set to Cyber Monday.
+    id: 'nobu-hotel-los-cabos',
+    name: 'Nobu Hotel Los Cabos', place: 'Los Cabos, Mexico', region: 'mexico',
+    offer: 'Up to 35% off + breakfast + a guaranteed upgrade',
+    details: ['Continental breakfast for two', '$1,000 spa credit on stays of 3+ nights', 'Unlimited spa access in select suites', 'Free cancellation until 3pm on arrival day'],
+    bookBy: '2026-12-01', travel: 'Now through Dec 18, 2027'
+  },
+
   // ---------------- Caribbean + Bermuda ----------------
   {
     id: 'round-hill-hotel-and-villas',
@@ -222,6 +231,14 @@ window.BF_DEALS = [
     offer: '25% off every room and suite',
     details: [],
     bookBy: '2026-12-31', travel: 'Now through Mar 31, 2027'
+  },
+  {
+    // Source: hoteldel.com/packages/cyber-sale (read 2026-11-21) + Hotel del Cyber Sale email
+    id: 'hotel-del-coronado',
+    name: 'Hotel del Coronado', place: 'Coronado, California', region: 'usa-west',
+    offer: 'Cyber Sale: up to 20% off',
+    details: ['The Del, Shore House or Beach Village', 'Holiday stays through spring'],
+    bookBy: '2026-12-22', travel: 'Nov 29, 2026 to May 27, 2027'
   },
 
   // ---------------- Added 2026-11-21 (Wilson): Sanctuary + Salt Hotels ----------------
@@ -496,6 +513,14 @@ window.BF_DEALS = [
     offer: 'Up to 40% off 28 sailings',
     details: [],
     bookBy: '2026-11-30', travel: 'Jan 1 to Aug 31, 2027'
+  },
+  {
+    // Source: RCYC advisor email "Give Your Clients a Gift of $500 Onboard Credit" (2026-11-20)
+    id: 'ritz-carlton-yacht-collection', brand: 'The Ritz-Carlton Yacht Collection',
+    name: 'Ritz-Carlton Yachts', place: 'Mediterranean, Caribbean, Alaska, Asia + South Pacific', region: 'cruise',
+    offer: '$500 onboard credit per suite',
+    details: ['Every voyage, every suite category', 'Stacks with other current offers'],
+    bookFrom: '2026-11-24', bookBy: '2026-12-01', travel: 'Any future voyage'
   }
 ];
 
