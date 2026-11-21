@@ -249,6 +249,11 @@
         (function prefillHotel() {
             const slug = new URLSearchParams(window.location.search).get('hotel');
             const field = document.getElementById('hotelName');
+            // ?booked=1 (from /black-friday "Already booked?") preselects that answer.
+            if (new URLSearchParams(window.location.search).get('booked') === '1' && alreadyBooked) {
+                alreadyBooked.value = 'already_booked';
+                alreadyBooked.dispatchEvent(new Event('change'));
+            }
             if (!slug || !field) return;
             let name = '';
             if (typeof PROPERTIES !== 'undefined' && PROPERTIES[slug]) {

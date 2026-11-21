@@ -887,6 +887,10 @@
       "destination": "/book.html"
     },
     {
+      "source": "/black-friday",
+      "destination": "/black-friday.html"
+    },
+    {
       "source": "/hotels",
       "destination": "/hotels.html"
     },
