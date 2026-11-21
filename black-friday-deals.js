@@ -224,6 +224,36 @@ window.BF_DEALS = [
     bookBy: '2026-12-31', travel: 'Now through Mar 31, 2027'
   },
 
+  // ---------------- Added 2026-11-21 (Wilson): Sanctuary + Salt Hotels ----------------
+  {
+    id: 'sanctuary-camelback-mountain',
+    name: 'Sanctuary Camelback Mountain', place: 'Scottsdale, Arizona', region: 'usa-west',
+    offer: '20% off + $100 resort credit',
+    details: ['Credit toward the spa and dining', 'Casitas + suites'],
+    bookBy: '2026-11-30', travel: 'Now through Apr 30, 2027'
+  },
+  {
+    id: 'salt-house-inn', brand: 'Salt Hotels',
+    name: 'Salt House Inn', place: 'Provincetown, Massachusetts', region: 'usa-east',
+    offer: 'Up to 30% off',
+    details: ['2 nights: 20% off', '3 nights: 30% off', 'Blackout dates apply'],
+    bookFrom: '2026-11-20', bookBy: '2026-12-01', travel: 'Dec 4, 2026 to Oct 23, 2027'
+  },
+  {
+    id: 'the-abner', brand: 'Salt Hotels',
+    name: 'The Abner', place: 'Litchfield, Connecticut', region: 'usa-east',
+    offer: 'Up to 30% off',
+    details: ['1 night: 25% off', '2 nights: 30% off', 'Blackout dates apply'],
+    bookFrom: '2026-11-20', bookBy: '2026-12-01', travel: 'Now through Aug 31, 2027'
+  },
+  {
+    id: 'the-brant-nantucket', brand: 'Salt Hotels',
+    name: 'The Brant', place: 'Nantucket, Massachusetts', region: 'usa-east',
+    offer: 'Up to 30% off summer 2027',
+    details: ['2 nights: 20% off', '3 nights: 30% off', 'Blackout dates apply'],
+    bookFrom: '2026-11-20', bookBy: '2026-12-01', travel: 'Apr 1 to Dec 2, 2027'
+  },
+
   // ---------------- Auberge Collection (sheet: More Discovery, More Auberge, read 2026-11-21) ----------------
   {
     id: 'esperanza-an-auberge-resort', brand: 'Auberge Collection',
