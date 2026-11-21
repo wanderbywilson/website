@@ -262,6 +262,14 @@ window.BF_DEALS = [
     bookBy: '2026-12-03', travel: 'Now through Dec 19, 2027'
   },
   {
+    // Source: UJV newsletter "Grace Bay Before Christmas..." (2026-11-21)
+    id: 'the-palms-turks-caicos',
+    name: 'The Palms', place: 'Grace Bay, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 50% off every room category',
+    details: ['On Grace Bay Beach', '25,000 sq ft spa', 'Free kids club, ages 4 to 12', 'Five-day booking window only'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Nov 27, 2026 to Dec 19, 2027'
+  },
+  {
     id: 'hyatt-prive', brand: 'Hyatt Privé',
     name: 'Park Hyatt, Alila + more', place: 'Hyatt luxury hotels worldwide', region: 'worldwide',
     offer: 'Up to 20% off (25% for World of Hyatt members)',
