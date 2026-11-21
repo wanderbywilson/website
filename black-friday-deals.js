@@ -254,6 +254,21 @@ window.BF_DEALS = [
     bookFrom: '2026-11-20', bookBy: '2026-12-01', travel: 'Apr 1 to Dec 2, 2027'
   },
 
+  {
+    id: 'the-strand-turks-caicos',
+    name: 'The Strand', place: 'Turks + Caicos', region: 'caribbean',
+    offer: '20% off + $100 dining credit + transfers',
+    details: ['Oceanfront suites, villas + residences', 'Round-trip airport transfers', '4-night minimum'],
+    bookBy: '2026-12-03', travel: 'Now through Dec 19, 2027'
+  },
+  {
+    id: 'hyatt-prive', brand: 'Hyatt Privé',
+    name: 'Park Hyatt, Alila + more', place: 'Hyatt luxury hotels worldwide', region: 'worldwide',
+    offer: 'Up to 20% off (25% for World of Hyatt members)',
+    details: ['Participating Hyatt Privé hotels', 'New: Park Hyatt Cabo del Sol + Alila Mayakoba', 'You still earn Hyatt points'],
+    bookBy: '2026-12-08', travel: 'Now through Apr 30, 2027'
+  },
+
   // ---------------- Auberge Collection (sheet: More Discovery, More Auberge, read 2026-11-21) ----------------
   {
     id: 'esperanza-an-auberge-resort', brand: 'Auberge Collection',
@@ -483,5 +498,6 @@ window.BF_REGIONS = [
   { key: 'asia',      label: 'Asia + Maldives' },
   { key: 'usa-west',  label: 'USA: West + Hawaii' },
   { key: 'usa-east',  label: 'USA: South + East' },
+  { key: 'worldwide', label: 'Hotel Collections' },
   { key: 'cruise',    label: 'Cruises + Expeditions' }
 ];
