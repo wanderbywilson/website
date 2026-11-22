@@ -967,6 +967,14 @@
         /* Month roundups (CALENDAR, PROTOTYPE 2026-11-22): inside a month's section, in
            the overview column, a tabbed panel of mini destination guides, one per pick
            (Easy to reach, Exotic escape, Culture + city, Adventure). Tabs and arrows. */
+        .month-jump { background: var(--ivory); padding: 0 0 56px; margin-top: -1px; }
+        .month-jump-label { font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); text-align: center; margin: 0 0 14px; }
+        .month-jump-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; max-width: 900px; margin: 0 auto; }
+        .month-jump-btn { display: block; text-align: center; background: #fff; border: 1px solid rgba(195,162,106,.45); padding: 11px 8px; font-family: var(--font-serif); font-size: 17px; line-height: 1.1; color: var(--ink); text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+        .month-jump-btn:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+        @media (max-width: 640px) { .month-jump-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } .month-jump-btn { font-size: 15px; padding: 10px 4px; } }
+        .prop-dest[id^="dest-"] { scroll-margin-top: 0; }
+        @media print { .month-jump { display: none; } }
         .pick-panel { margin-top: 0; }
         .prop-dest--month .prop-hotel-body { padding-top: 56px; }
         @media (max-width: 980px) { .prop-dest--month .prop-hotel-body { padding-top: 32px; } }
@@ -975,7 +983,7 @@
         .pick-tabs-label { font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 0; }
         .pick-nav { display: flex; align-items: center; gap: 10px; }
         .pick-count { font-family: var(--font-sans); font-size: 12px; letter-spacing: .14em; color: var(--ink); min-width: 52px; text-align: center; white-space: nowrap; }
-        .pick-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 22px; }
+        .pick-tabs { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; margin: 0 0 22px; }
         .pick-tab { appearance: none; cursor: pointer; text-align: left; background: #fff; border: 1px solid rgba(195,162,106,.45); padding: 10px 12px 11px; font: inherit; color: var(--ink); transition: background .2s, color .2s, border-color .2s; }
         .pick-tab small { display: block; font-family: var(--font-sans); font-size: 9.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
         .pick-tab span { display: block; font-family: var(--font-serif); font-size: 17px; line-height: 1.15; }
@@ -1746,7 +1754,7 @@
                     ? `<aside class="property-agent-tip prop-dest-tip"><p class="agent-tip-eyebrow">Our tip</p><blockquote class="agent-tip-quote">${d.tip}</blockquote></aside>` : '';
                 const pin = '<svg width="12" height="15" viewBox="0 0 12 15" fill="none" aria-hidden="true"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14Z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="5.8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>';
                 return `
-                <section class="prop-hotel prop-dest${isMonth ? ' prop-dest--month' : ''}${di % 2 ? ' prop-hotel--cream' : ''}${window.__guidesOpen ? '' : ' is-folding'}" data-dslug="${d.slug || ''}">
+                <section id="dest-${di}" class="prop-hotel prop-dest${isMonth ? ' prop-dest--month' : ''}${di % 2 ? ' prop-hotel--cream' : ''}${window.__guidesOpen ? '' : ' is-folding'}" data-dslug="${d.slug || ''}">
                     <div class="prop-hotel-visual">
                         <div class="prop-hotel-visual-inner">
                             ${cover ? `<img src="${cover}" alt="${alt}">` : ''}
@@ -1813,7 +1821,7 @@
                             <button class="prop-stays-btn" data-dir="1" type="button" aria-label="Next destination">&#8594;</button>
                         </div>
                     </div>
-                    <div class="pick-tabs" role="tablist">${picks.map((p, k) => `<button class="pick-tab${k ? '' : ' is-on'}" type="button" role="tab" data-go="${k}"><small>${p.slot || ''}</small><span>${p.name}</span></button>`).join('')}</div>
+                    <div class="pick-tabs" role="tablist" style="--n:${Math.max(picks.length, 1)}">${picks.map((p, k) => `<button class="pick-tab${k ? '' : ' is-on'}" type="button" role="tab" data-go="${k}"><small>${p.slot || ''}</small><span>${p.name}</span></button>`).join('')}</div>
                     <div class="pick-rail">${slides}</div>
                 </div>`;
             }
@@ -2238,6 +2246,26 @@
                     <path class="rt-land" d="${path(coast)}"/><path class="rt-border" d="${path(borders)}"/>${names}</g>
                     ${legs}${marks}</svg>`;
             }
+            // Month roundups: a row of month buttons under the header that jump to
+            // each month's section. Shows when any guide carries picks.
+            function monthJump(dests) {
+                if (!dests.some(d => (d.picks || []).some(p => p && p.name))) return '';
+                return `
+                <nav class="month-jump" aria-label="Jump to a month">
+                    <div class="prop-container">
+                        <p class="month-jump-label">Jump to a month</p>
+                        <div class="month-jump-row">${dests.map((d, i) => `<a href="#dest-${i}" class="month-jump-btn">${d.name}</a>`).join('')}</div>
+                    </div>
+                </nav>`;
+            }
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest && e.target.closest('.month-jump-btn');
+                if (!a) return;
+                const t = document.querySelector(a.getAttribute('href'));
+                if (!t) return;
+                e.preventDefault();
+                t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
             function heroSection(P) {
                 return `
                 <section class="prop-hero">
@@ -2388,7 +2416,7 @@
                 // A guide on its own is just the guide: no site bar over its photo.
                 document.body.classList.toggle('is-solo-guide', solo);
                 document.getElementById('proposalRoot').innerHTML =
-                    (solo ? '' : heroSection(P) + routeSection(P, dests)) +
+                    (solo ? '' : heroSection(P) + monthJump(dests) + routeSection(P, dests)) +
                     body +
                     (solo ? '' : perksSection(P.perks) + changeNote + (hasHotels ? photoNote : '') +
                         // Guides with no hotels close on "where would you like to go?"
