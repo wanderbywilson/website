@@ -964,6 +964,43 @@
         .prop-dest .prop-hotel-desc + .prop-carousel { margin-top: 22px; }
         .prop-dest .prop-carousel { margin-bottom: 0; }
 
+        /* Month roundups (CALENDAR, PROTOTYPE 2026-11-22): inside a month's section, in
+           the overview column, a tabbed panel of mini destination guides, one per pick
+           (Easy to reach, Exotic escape, Culture + city, Adventure). Tabs and arrows. */
+        .pick-panel { margin-top: 0; }
+        .prop-dest--month .prop-hotel-body { padding-top: 56px; }
+        @media (max-width: 980px) { .prop-dest--month .prop-hotel-body { padding-top: 32px; } }
+        .prop-dest-sub { font-family: var(--font-serif); font-weight: 300; font-size: clamp(17px, 1.5vw, 21px); line-height: 1.5; color: #fff; max-width: 30ch; margin: 18px 0 0; text-shadow: 0 1px 14px rgba(0,0,0,.28); }
+        .pick-tabs-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+        .pick-tabs-label { font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 0; }
+        .pick-nav { display: flex; align-items: center; gap: 10px; }
+        .pick-count { font-family: var(--font-sans); font-size: 12px; letter-spacing: .14em; color: var(--ink); min-width: 52px; text-align: center; white-space: nowrap; }
+        .pick-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 22px; }
+        .pick-tab { appearance: none; cursor: pointer; text-align: left; background: #fff; border: 1px solid rgba(195,162,106,.45); padding: 10px 12px 11px; font: inherit; color: var(--ink); transition: background .2s, color .2s, border-color .2s; }
+        .pick-tab small { display: block; font-family: var(--font-sans); font-size: 9.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+        .pick-tab span { display: block; font-family: var(--font-serif); font-size: 17px; line-height: 1.15; }
+        .pick-tab:hover { border-color: var(--gold); }
+        .pick-tab.is-on { background: var(--ink); border-color: var(--ink); color: #fff; }
+        .pick-tab.is-on small { color: #e0c796; }
+        .pick-rail { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; align-items: start; overflow-x: auto; overflow-y: hidden; transition: height .35s ease; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .pick-rail::-webkit-scrollbar { display: none; }
+        .pick-slide { scroll-snap-align: start; min-width: 0; }
+        .pick-slide .prop-carousel { margin: 0 0 22px; aspect-ratio: 3 / 2; }
+        .pick-name { font-family: var(--font-serif); font-weight: 300; font-size: clamp(32px, 3vw, 44px); line-height: 1; margin: 0 0 14px; color: var(--ink); }
+        .prop-dest .pick-slide .pick-why { margin: 0 0 28px; }
+        .pick-month { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--ink); background: rgba(195,162,106,.12); border-left: 2px solid var(--gold); padding: 12px 16px; margin: 0 0 8px; }
+        .pick-month strong { font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 11px; color: var(--gold); margin-right: 8px; }
+        .pick-book { margin: 26px 0 0; padding: 22px 22px 24px; background: #f7f2eb; border: 1px solid rgba(195,162,106,.4); text-align: center; }
+        .pick-book p { font-family: var(--font-serif); font-weight: 300; font-size: 22px; line-height: 1.25; color: var(--ink); margin: 0 0 6px; }
+        .pick-book small { display: block; font-family: var(--font-sans); font-size: 13px; line-height: 1.55; color: var(--ink); opacity: .8; margin: 0 0 16px; }
+        .pick-book a { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; padding: 15px 26px; }
+        .pick-book a:hover { background: var(--gold); }
+        .pick-more { display: block; width: 100%; margin: 22px 0 0; cursor: pointer; appearance: none; background: none; border: 1px solid var(--ink); color: var(--ink); font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; padding: 14px; }
+        .pick-more:hover { background: var(--ink); color: #fff; }
+        @media (max-width: 640px) {
+            .pick-tabs { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 980px) {
             .prop-dest-overlay { padding: 84px 24px 22px; }
             .prop-dest-kicker { font-size: 10px; }
@@ -1641,6 +1678,8 @@
             }
             function destinationSection(d, di, kicker) {
                 const name = d.name || '';
+                // Month roundups: no "Option N", the month's one-liner sits under its name.
+                const isMonth = (d.picks || []).some(p => p && p.name);
                 const cover = destCover(d);
                 const alt = decode(strip(name));
                 const shots = (d.gallery || []).filter(u => u && u !== d.heroImage && u !== destCover(d));
@@ -1707,22 +1746,24 @@
                     ? `<aside class="property-agent-tip prop-dest-tip"><p class="agent-tip-eyebrow">Our tip</p><blockquote class="agent-tip-quote">${d.tip}</blockquote></aside>` : '';
                 const pin = '<svg width="12" height="15" viewBox="0 0 12 15" fill="none" aria-hidden="true"><path d="M6 14s5-4.6 5-8.2A5 5 0 0 0 1 5.8C1 9.4 6 14 6 14Z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="5.8" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg>';
                 return `
-                <section class="prop-hotel prop-dest${di % 2 ? ' prop-hotel--cream' : ''}${window.__guidesOpen ? '' : ' is-folding'}" data-dslug="${d.slug || ''}">
+                <section class="prop-hotel prop-dest${isMonth ? ' prop-dest--month' : ''}${di % 2 ? ' prop-hotel--cream' : ''}${window.__guidesOpen ? '' : ' is-folding'}" data-dslug="${d.slug || ''}">
                     <div class="prop-hotel-visual">
                         <div class="prop-hotel-visual-inner">
                             ${cover ? `<img src="${cover}" alt="${alt}">` : ''}
                             <div class="prop-dest-overlay">
-                                <p class="prop-dest-kicker"><span></span>${kicker || 'The destination'}</p>
+                                ${isMonth ? '' : `<p class="prop-dest-kicker"><span></span>${kicker || 'The destination'}</p>`}
                                 <h2 class="prop-dest-title">${name}</h2>
-                                ${d.region ? `<p class="prop-dest-pin">${pin}${d.region}</p>` : ''}
+                                ${isMonth && d.overview ? `<p class="prop-dest-sub">${d.overview}</p>` : ''}
+                                ${d.region && !isMonth ? `<p class="prop-dest-pin">${pin}${d.region}</p>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="prop-hotel-body">
-                        <p class="prop-dest-label">Destination overview</p>
+                        ${isMonth ? '' : `<p class="prop-dest-label">Destination overview</p>`}
                         ${photoPair}
-                        ${d.overview ? `<p class="prop-hotel-desc prop-dest-overview">${d.overview}</p>` : ''}
+                        ${d.overview && !isMonth ? `<p class="prop-hotel-desc prop-dest-overview">${d.overview}</p>` : ''}
                         ${carousel}
+                        ${picksSection(d)}
                         ${fold(d.highlightsLabel || 'Things to do', highlights)}
                         ${fold('Our tip', tip)}
                         ${fold('How to get there', getting)}
@@ -1733,6 +1774,70 @@
                             label: (!d.stays.label || d.stays.label === 'Where to stay') ? 'Hotels we love' : d.stays.label })))}
                     </div>
                 </section>`;
+            }
+            // Month roundups (PROTOTYPE 2026-11-22): d.picks = [{slot, name, why, month,
+            // photos[], todo[], climate, stays}] → tabs + a rail of mini guides in the month's panel.
+            function picksSection(d) {
+                const picks = (d.picks || []).filter(p => p && p.name);
+                if (!picks.length) return '';
+                const slides = picks.map((p, k) => {
+                    const alt = decode(strip(p.name));
+                    const shots = (p.photos || []).filter(Boolean);
+                    const car = shots.length ? `<div class="prop-carousel">
+                        ${shots.map((src, gi) => `<img src="${src}" alt="${alt} \u2014 view ${gi + 1}" loading="lazy" class="${gi === 0 ? 'is-active' : ''}">`).join('')}
+                        <button class="prop-carousel-btn prev" type="button" aria-label="Previous photo">&#8592;</button>
+                        <button class="prop-carousel-btn next" type="button" aria-label="Next photo">&#8594;</button>
+                        <div class="prop-carousel-dots">${shots.map((_, gi) => `<span class="${gi === 0 ? 'is-active' : ''}"></span>`).join('')}</div>
+                        ${shots.length > 1 ? `<span class="prop-carousel-count">1 / ${shots.length}</span>` : ''}
+                       </div>` : '';
+                    const todo = (p.todo || []).filter(Boolean);
+                    const nextP = picks[k + 1];
+                    return `<article class="pick-slide" aria-label="${k + 1} of ${picks.length}: ${alt}">
+                        ${car}
+                        <h3 class="pick-name">${p.name}</h3>
+                        ${p.why ? `<p class="prop-hotel-desc pick-why">${p.why}</p>` : ''}
+                        ${p.month ? `<p class="pick-month"><strong>In ${d.name}</strong>${p.month}</p>` : ''}
+                        ${fold('Things to do', todo.length ? `<div class="prop-hotel-perks prop-dest-highlights"><ul>${todo.map(x => `<li>${x}</li>`).join('')}</ul></div>` : '')}
+                        ${fold('Average temperatures (\u00b0F)', climateHTML(p.climate, true))}
+                        ${fold('Hotels we love', staysHTML(p.stays && Object.assign({}, p.stays, { label: p.stays.label || 'Hotels we love' })))}
+                        <div class="pick-book"><p>Ready to book ${p.name}?</p><small>Tell me your dates and the hotel you love, and I&rsquo;ll confirm rates and your perks.</small><a href="${(window.__pickBookUrl || 'https://www.wanderbywilson.com/inquire-hotel')}" target="_blank" rel="noopener">Submit a booking request</a></div>
+                        ${nextP ? `<button class="pick-more" type="button" data-go="${k + 1}">Next: ${nextP.slot ? nextP.slot + ' \u00b7 ' : ''}${nextP.name} &#8594;</button>` : ''}
+                    </article>`;
+                }).join('');
+                return `<div class="pick-panel">
+                    <div class="pick-tabs-head">
+                        <p class="pick-tabs-label">Where I&rsquo;d go &middot; tap to explore</p>
+                        <div class="pick-nav">
+                            <button class="prop-stays-btn" data-dir="-1" type="button" aria-label="Previous destination">&#8592;</button>
+                            <span class="pick-count">1 of ${picks.length}</span>
+                            <button class="prop-stays-btn" data-dir="1" type="button" aria-label="Next destination">&#8594;</button>
+                        </div>
+                    </div>
+                    <div class="pick-tabs" role="tablist">${picks.map((p, k) => `<button class="pick-tab${k ? '' : ' is-on'}" type="button" role="tab" data-go="${k}"><small>${p.slot || ''}</small><span>${p.name}</span></button>`).join('')}</div>
+                    <div class="pick-rail">${slides}</div>
+                </div>`;
+            }
+            function initPicks() {
+                document.querySelectorAll('.pick-panel').forEach(panel => {
+                    const rail = panel.querySelector('.pick-rail');
+                    const n = rail.children.length;
+                    const [prev, next] = panel.querySelectorAll('.pick-nav .prop-stays-btn');
+                    const count = panel.querySelector('.pick-count');
+                    const tabs = [...panel.querySelectorAll('.pick-tab')];
+                    const at = () => Math.round(rail.scrollLeft / Math.max(1, rail.clientWidth));
+                    const go = (i, scrollUp) => {
+                        i = Math.max(0, Math.min(n - 1, i));
+                        rail.scrollTo({ left: i * rail.clientWidth, behavior: 'smooth' });
+                        if (scrollUp) { const top = panel.getBoundingClientRect().top + window.scrollY - 90; if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' }); }
+                    };
+                    const fit = () => { const el = rail.children[at()]; if (el) rail.style.height = el.offsetHeight + 'px'; };
+                    if (window.ResizeObserver) { const ro = new ResizeObserver(fit); [...rail.children].forEach(el => ro.observe(el)); }
+                    const update = () => { fit(); const i = at(); count.textContent = (i + 1) + ' of ' + n; prev.disabled = i <= 0; next.disabled = i >= n - 1; tabs.forEach((t, k) => { t.classList.toggle('is-on', k === i); t.setAttribute('aria-selected', String(k === i)); }); };
+                    [prev, next].forEach(b => b.addEventListener('click', () => go(at() + (+b.dataset.dir))));
+                    panel.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => go(+b.dataset.go, b.classList.contains('pick-more'))));
+                    rail.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+                    update();
+                });
             }
             function hotelSection(h, i, mode) {
                 const r = resolveHotel(h);
@@ -2293,7 +2398,7 @@
                 initCarousels();
                 initStayRails();
                 drawRoute(); drawGettingMaps();
-                initFolds(); initViewer();
+                initFolds(); initViewer(); initPicks();
                 if (!document.querySelector('.prop-pdf-btn') && !isDraft) {
                     const btn = document.createElement('button');
                     btn.className = 'prop-pdf-btn';
