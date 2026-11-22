@@ -91,6 +91,13 @@ window.BF_DEALS = [
     details: ['Continental breakfast for two', '$1,000 spa credit on stays of 3+ nights', 'Unlimited spa access in select suites', 'Free cancellation until 3pm on arrival day'],
     bookBy: '2026-12-01', travel: 'Now through Dec 18, 2027'
   },
+  {
+    id: 'unico-2087-riviera-maya',
+    name: 'UNICO 20°87°', place: 'Riviera Maya, Mexico', region: 'mexico',
+    offer: 'Up to 35% off + $200 daily resort credit',
+    details: ['Adults only, all-inclusive', 'Unlimited credit on stays of 7+ nights', 'Room upgrade on stays of 4+ nights', 'Credit covers spa, golf + salon'],
+    bookBy: '2026-12-01', travel: 'Now through Dec 31, 2027'
+  },
 
   // ---------------- Caribbean + Bermuda ----------------
   {
@@ -498,6 +505,20 @@ window.BF_DEALS = [
     details: ['$150 rooms', '$200 cottages + houseboats', 'Blackout dates apply'],
     bookBy: '2026-12-07', travel: 'Now through Apr 2027'
   },
+  {
+    id: 'cliff-house-maine',
+    name: 'Cliff House', place: 'Cape Neddick, Maine', region: 'usa-east',
+    offer: 'Up to 25% off + up to $300 resort credit',
+    details: ['Winter + spring: 25% off + $100 credit', 'Summer + fall, 4+ nights: 20% off + $150 credit', 'Summer + fall, 5+ nights: 25% off + $300 credit'],
+    bookBy: '2026-12-04', travel: 'Now through Nov 30, 2027'
+  },
+  {
+    id: 'mayfair-house-miami',
+    name: 'Mayfair House Hotel & Garden', place: 'Coconut Grove, Miami', region: 'usa-east',
+    offer: '35% off the best available rate',
+    details: ['Garden hideaway in Coconut Grove', 'Blackout dates apply, including Art Basel + the holidays'],
+    bookBy: '2026-12-03', travel: 'Now through Dec 30, 2027'
+  },
 
   // ---------------- Cruises + expeditions ----------------
   {
@@ -521,6 +542,20 @@ window.BF_DEALS = [
     offer: '$500 onboard credit per suite',
     details: ['Every voyage, every suite category', 'Stacks with other current offers'],
     bookFrom: '2026-11-24', bookBy: '2026-12-01', travel: 'Any future voyage'
+  },
+  {
+    id: 'cunard',
+    name: 'Cunard', place: 'Transatlantic, Europe + world voyages', region: 'cruise',
+    offer: 'Up to 40% off + onboard credit',
+    details: ['10% refundable deposit', 'Hotel charge included in Grill Suites', 'Up to $200 onboard credit per person'],
+    bookBy: '2026-12-07', travel: 'Select voyages'
+  },
+  {
+    id: 'riverside-luxury-cruises',
+    name: 'Riverside Luxury Cruises', place: 'European rivers', region: 'cruise',
+    offer: '50% off the second guest',
+    details: ['All-suite river ships with butler service', 'Every suite category, 5+ nights', 'Christmas sailings excluded'],
+    bookBy: '2026-12-04', travel: '2026, 2027 + 2028 sailings'
   }
 ];
 
