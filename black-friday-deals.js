@@ -125,7 +125,7 @@ window.BF_DEALS = [
     id: 'oil-nut-bay',
     name: 'Oil Nut Bay', place: 'Virgin Gorda, BVI', region: 'caribbean',
     offer: 'Stay 5 nights, pay for 3',
-    details: ['Spring and early summer travel'],
+    details: ['Spring and early summer travel', '5-night minimum', 'Prepaid + non-refundable'],
     bookBy: '2026-12-04', travel: 'Apr 6 to Jul 31, 2027'
   },
   {
@@ -292,6 +292,13 @@ window.BF_DEALS = [
     offer: 'Up to 50% off every room category',
     details: ['On Grace Bay Beach', '25,000 sq ft spa', 'Free kids club, ages 4 to 12', 'Five-day booking window only'],
     bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Nov 27, 2026 to Dec 19, 2027'
+  },
+  {
+    id: 'le-toiny-st-barths',
+    name: 'Hotel Le Toiny', place: 'St. Barths', region: 'caribbean',
+    offer: 'A free 5th night + $300 food and beverage credit',
+    details: ['5th night free: Nov 29 to Dec 18, 2026 + May 1 to Aug 22, 2027', 'Summer 2027: stay 7 nights, pay for 5', '$300 credit on new bookings through Dec 1'],
+    bookBy: '2026-12-01', travel: 'Nov 29 to Dec 18, 2026 + May 1 to Aug 22, 2027'
   },
   {
     id: 'sailrock-south-caicos',
@@ -591,6 +598,41 @@ window.BF_DEALS = [
     offer: 'Up to 30% off',
     details: ['Includes the new Pavilion Mews', 'Prepaid + non-refundable', 'Blackout dates apply'],
     bookBy: '2026-12-03', travel: 'Now through Dec 30, 2027'
+  },
+  {
+    id: 'white-elephant-nantucket', brand: 'White Elephant',
+    name: 'White Elephant Nantucket', place: 'Nantucket, Massachusetts', region: 'usa-east',
+    offer: 'Up to 15% off',
+    details: ['Spring + fall, 3+ nights: 15% off', 'July + August, 4+ nights: 10% off', 'Also The Wauwinet, Jared Coffin House + The Cottages', 'Past guests: extra 5% off by Nov 29'],
+    bookFrom: '2026-11-25', bookBy: '2026-12-05', travel: 'Apr to Nov 2027'
+  },
+  {
+    id: 'white-elephant-palm-beach', brand: 'White Elephant',
+    name: 'White Elephant Palm Beach', place: 'Palm Beach, Florida', region: 'usa-east',
+    offer: 'Up to 20% off',
+    details: ['Dec 1 to 20, 2026: 15% off', 'Jan to Mar 2027, 3+ nights: 15% off', 'Apr to Nov 2027, 2+ nights: 20% off', 'Past guests: extra 5% off by Nov 29'],
+    bookFrom: '2026-11-25', bookBy: '2026-12-05', travel: 'Dec 1, 2026 to Nov 2027'
+  },
+  {
+    id: 'white-elephant-aspen', brand: 'White Elephant',
+    name: 'White Elephant Aspen', place: 'Aspen, Colorado', region: 'usa-west',
+    offer: 'Up to 20% off',
+    details: ['Dec 1 to 18, 2026: up to 20% off', 'Jan to Mar 2027, 4+ nights: 15% off', 'Apr to Nov 2027, 3+ nights: 15% off', 'Past guests: extra 5% off by Nov 29'],
+    bookFrom: '2026-11-25', bookBy: '2026-12-05', travel: 'Dec 1, 2026 to Nov 2027'
+  },
+  {
+    id: 'lodge-lorien-elysium',
+    name: 'Lodge Lorien + Elysium Lodge', place: 'Glenorchy, New Zealand', region: 'pacific',
+    offer: 'A free private chef for every 3 nights',
+    details: ['Private chef services worth NZD $3,450 per 3 nights booked', 'A 6-night stay includes NZD $6,900 in chef services', 'Booking must be confirmed by Nov 30'],
+    bookBy: '2026-11-30', travel: 'Ask us for dates'
+  },
+  {
+    id: 'refugia-chiloe',
+    name: 'Refugia Chiloé', place: 'Chiloé Island, Chile', region: 'south-america',
+    offer: 'Stay 4 nights, pay for 3',
+    details: ['Full Experience program', 'One free night on 4+ consecutive nights'],
+    bookBy: '2026-11-30', travel: 'Ask us for dates'
   }
 ];
 
@@ -599,6 +641,8 @@ window.BF_REGIONS = [
   { key: 'caribbean', label: 'Caribbean + Bermuda' },
   { key: 'europe',    label: 'Europe' },
   { key: 'asia',      label: 'Asia + Maldives' },
+  { key: 'pacific',   label: 'New Zealand' },
+  { key: 'south-america', label: 'South America' },
   { key: 'usa-west',  label: 'USA: West + Hawaii' },
   { key: 'usa-east',  label: 'USA: South + East' },
   { key: 'worldwide', label: 'Hotel Collections' },
