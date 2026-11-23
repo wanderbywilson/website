@@ -294,6 +294,34 @@ window.BF_DEALS = [
     bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Nov 27, 2026 to Dec 19, 2027'
   },
   {
+    id: 'sailrock-south-caicos',
+    name: 'Sailrock South Caicos', place: 'South Caicos, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 40% off + up to $2,027 in resort credits',
+    details: ['Every suite and villa', 'Daily breakfast included'],
+    bookBy: '2026-12-03', travel: 'Now through Jan 3, 2028'
+  },
+  {
+    id: 'ladera-st-lucia',
+    name: 'Ladera', place: 'Soufrière, St Lucia', region: 'caribbean',
+    offer: '40% off + up to $250 resort credit',
+    details: ['5+ nights: 40% off + $150 credit', '8+ nights: 40% off + $250 credit', 'Suites from Petit Piton to Paradise Ridge'],
+    bookFrom: '2026-11-17', bookBy: '2026-12-03', travel: 'Apr 1 to Dec 19, 2027'
+  },
+  {
+    id: 'sugar-beach-st-lucia', slug: 'sugar-beach-a-viceroy-resort',
+    name: 'Sugar Beach, A Viceroy Resort', place: 'Soufrière, St Lucia', region: 'caribbean',
+    offer: 'Up to 35% off + $100 credit + daily breakfast',
+    details: ['3-night minimum', '3-night deposit at booking', 'Blackout dates apply, including the holidays + Presidents\' Day week'],
+    bookBy: '2026-12-03', travel: 'Select 2026 + 2027 dates'
+  },
+  {
+    id: 'silversands-grenada',
+    name: 'Silversands Grand Anse', place: 'Grand Anse, Grenada', region: 'caribbean',
+    offer: 'A free night on stays of 2 to 4 nights',
+    details: ['Rooms: 4th night free', 'Suites + bungalows: 3rd night free', 'Villas: 2nd night free', 'Blackout dates apply'],
+    bookBy: '2026-12-03', travel: 'Now through Oct 31, 2027'
+  },
+  {
     id: 'hyatt-prive', brand: 'Hyatt Privé',
     name: 'Park Hyatt, Alila + more', place: 'Hyatt luxury hotels worldwide', region: 'worldwide',
     offer: 'Up to 20% off (25% for World of Hyatt members)',
@@ -556,6 +584,13 @@ window.BF_DEALS = [
     offer: '50% off the second guest',
     details: ['All-suite river ships with butler service', 'Every suite category, 5+ nights', 'Christmas sailings excluded'],
     bookBy: '2026-12-04', travel: '2026, 2027 + 2028 sailings'
+  },
+  {
+    id: '11-cadogan-gardens-london',
+    name: '11 Cadogan Gardens', place: 'Chelsea, London', region: 'europe',
+    offer: 'Up to 30% off',
+    details: ['Includes the new Pavilion Mews', 'Prepaid + non-refundable', 'Blackout dates apply'],
+    bookBy: '2026-12-03', travel: 'Now through Dec 30, 2027'
   }
 ];
 
