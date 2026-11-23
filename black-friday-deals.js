@@ -436,13 +436,6 @@ window.BF_DEALS = [
     bookBy: '2026-12-07', travel: 'Now through Dec 17, 2027'
   },
   {
-    id: 'kahala-honolulu',
-    name: 'The Kahala Hotel & Resort', place: 'Honolulu, Oahu', region: 'usa-west',
-    offer: '30% off + up to $500 resort credit',
-    details: ['$100 credit rooms, $300 suites, $500 Signature Suites', '3-night minimum', 'Holiday blackouts apply'],
-    bookFrom: '2026-11-10', bookBy: '2026-12-03', travel: 'Now through Dec 20, 2027'
-  },
-  {
     id: 'hotel-jerome', brand: 'Auberge Collection',
     name: 'Hotel Jerome', place: 'Aspen, Colorado', region: 'usa-west',
     offer: 'Up to $300 nightly resort credit',
