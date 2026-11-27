@@ -294,6 +294,48 @@ window.BF_DEALS = [
     bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Nov 27, 2026 to Dec 19, 2027'
   },
   {
+    id: 'grace-bay-club', brand: 'Grace Bay Resorts',
+    name: 'Grace Bay Club', place: 'Grace Bay, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 25% off + up to $400 dining credit',
+    details: ['Suites: $100 food and beverage credit', 'Estate Residences: $400 food and beverage credit', '4-night minimum', 'Blackout dates apply'],
+    bookBy: '2026-12-01', travel: 'Mar 28 to Dec 15, 2027'
+  },
+  {
+    id: 'rock-house', slug: 'rock-house', brand: 'Grace Bay Resorts',
+    name: 'Rock House', place: 'Providenciales, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 25% off + up to $500 dining credit',
+    details: ['Suites: $100 food and beverage credit', 'Reserve Villas: $500 food and beverage credit', '3-night minimum', 'Blackout dates apply'],
+    bookBy: '2026-12-01', travel: 'Dec 1, 2026 to Dec 15, 2027'
+  },
+  {
+    id: 'south-bank-turks-caicos', brand: 'Grace Bay Resorts',
+    name: 'South Bank', place: 'Providenciales, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 30% off + up to $500 dining credit',
+    details: ['Arc + The Boathouses: $100 food and beverage credit', 'Lagoon Villas + Ocean Estates: $500 food and beverage credit', '3-night minimum', 'Excludes Arc Studios + the 5-bedroom Penthouse'],
+    bookBy: '2026-12-01', travel: 'Dec 1, 2026 to Dec 15, 2027'
+  },
+  {
+    id: 'west-bay-club', brand: 'Grace Bay Resorts',
+    name: 'West Bay Club', place: 'Grace Bay, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 30% off + $100 dining credit',
+    details: ['On the widest stretch of Grace Bay Beach', '3-night minimum', 'Excludes Studios + Premier Oceanfront 3-bedroom suites', 'Blackout dates apply'],
+    bookBy: '2026-12-01', travel: 'Dec 1, 2026 to Dec 15, 2027'
+  },
+  {
+    id: 'point-grace', brand: 'Grace Bay Resorts',
+    name: 'Point Grace', place: 'Grace Bay, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 30% off + $100 dining credit',
+    details: ['Cottage village on Grace Bay', '3-night minimum', 'Blackout dates apply'],
+    bookBy: '2026-12-01', travel: 'Dec 1, 2026 to Dec 15, 2027'
+  },
+  {
+    id: 'grace-bay-private-villa-collection', brand: 'Grace Bay Resorts',
+    name: 'Private Villa Collection', place: 'Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 25% off + $500 dining credit',
+    details: ['Private villas with pools', '3-night minimum', 'Blackout dates apply'],
+    bookBy: '2026-12-01', travel: 'Mar 28 to Dec 15, 2027'
+  },
+  {
     id: 'le-toiny-st-barths',
     name: 'Hotel Le Toiny', place: 'St. Barths', region: 'caribbean',
     offer: 'A free 5th night + $300 food and beverage credit',
