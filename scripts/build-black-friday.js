@@ -46,7 +46,7 @@ function card(d) {
         : '<div class="bf-actions">' +
             '<a class="bf-btn bf-btn-portal" data-bf="portal" data-deal="' + d.id + '" href="' + PORTAL + '" target="_blank" rel="noopener">Book on my portal</a>' +
             '<a class="bf-btn bf-btn-us" data-bf="us" data-deal="' + d.id + '" href="' + usHref + '">Have us book it</a>' +
-          '</div><p class="bf-code-note">Portal access code: <strong>WANDER</strong></p>';
+          '</div><p class="bf-code-note">Portal password: <strong>WANDER</strong></p>';
     return '<article class="bf-card">' +
         '<p class="bf-place">' + esc(d.place) + '</p>' +
         (d.brand ? '<p class="bf-brand">' + esc(d.brand) + '</p>' : '') +
