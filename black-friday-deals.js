@@ -703,6 +703,62 @@ window.BF_DEALS = [
     offer: 'Up to 25% off 2027 stays',
     details: ['20% off, or 25% off 7+ nights', 'Prepaid + non-refundable'],
     bookFrom: '2026-11-27', bookBy: '2026-12-03', travel: '2027'
+  },
+  {
+    id: 'salamander-collection', brand: 'Salamander Collection',
+    name: 'Salamander Collection', place: 'Middleburg, Charleston, Florida + Antigua', region: 'worldwide',
+    offer: 'Up to 40% off',
+    details: ['Across the collection'],
+    bookBy: '2026-12-02', travel: 'Now through Dec 20, 2027'
+  },
+  {
+    id: 'pier-sixty-six',
+    name: 'Pier Sixty-Six', place: 'Fort Lauderdale, Florida', region: 'usa-east',
+    offer: '30% off suites',
+    details: [],
+    bookBy: '2027-04-27', travel: 'Now through Apr 30, 2027'
+  },
+  {
+    id: 'southall-farm-inn',
+    name: 'Southall Farm & Inn', place: 'Franklin, Tennessee', region: 'usa-east',
+    offer: '30% off',
+    details: ['2-night minimum'],
+    bookBy: '2026-12-01', travel: 'Now through Mar 14, 2027'
+  },
+  {
+    id: 'experimental-porto', brand: 'Experimental Group',
+    name: 'Experimental Porto', place: 'Porto, Portugal', region: 'europe',
+    offer: 'Up to 15% off',
+    details: [],
+    bookBy: '2026-12-05', travel: 'Now through Mar 2027'
+  },
+  {
+    id: 'experimental-roma', brand: 'Experimental Group',
+    name: 'Experimental Roma', place: 'Rome, Italy', region: 'europe',
+    offer: 'Up to 15% off',
+    details: [],
+    bookBy: '2026-12-05', travel: 'Now through Mar 2027'
+  },
+  {
+    id: 'palmaia-house-of-aia',
+    name: 'Palma\u00efa, The House of A\u00efa', place: 'Riviera Maya, Mexico', region: 'mexico',
+    offer: '$200 resort credit + round-trip airport transfers',
+    details: ['5-night minimum', 'Holiday travel'],
+    bookBy: '2026-12-20', travel: 'Dec 21, 2026 to Jan 3, 2027'
+  },
+  {
+    id: 'aqua-expeditions',
+    name: 'Aqua Expeditions', place: 'Gal\u00e1pagos, Amazon, Indonesia + Mekong', region: 'cruise',
+    offer: 'Up to 30% off + no single supplement',
+    details: ['Single supplement waived'],
+    bookBy: '2026-12-31', travel: 'Ask us for dates'
+  },
+  {
+    id: 'scenic-emerald',
+    name: 'Scenic + Emerald Cruises', place: 'River + ocean cruises', region: 'cruise',
+    offer: 'Up to 40% off',
+    details: [],
+    bookBy: '2026-11-29', travel: '2027 + 2028 sailings'
   }
 ];
 
