@@ -633,6 +633,76 @@ window.BF_DEALS = [
     offer: 'Stay 4 nights, pay for 3',
     details: ['Full Experience program', 'One free night on 4+ consecutive nights'],
     bookBy: '2026-11-30', travel: 'Ask us for dates'
+  },
+  {
+    id: 'explora-lodges',
+    name: 'Explora Lodges', place: 'Patagonia, Atacama, Sacred Valley + Rapa Nui', region: 'south-america',
+    offer: 'Up to 50% off all-inclusive lodge stays',
+    details: ['50% Sacred Valley, 40% Torres del Paine + Patagonia NP, 30% Atacama', '3-night minimum', 'No savings Dec 19 to Jan 1'],
+    bookFrom: '2026-11-25', bookBy: '2026-11-29', travel: 'Dec 2026 to Dec 2027'
+  },
+  {
+    id: 'domes-resorts', brand: 'Domes Resorts',
+    name: 'Domes Resorts', place: 'Crete, Corfu, Santorini, Halkidiki, Algarve + Tenerife', region: 'europe',
+    offer: 'Up to 45% off + a \u20ac120 resort credit',
+    details: ['30% off in Greece, up to 45% in Portugal + Spain', '3-night minimum', 'All room types'],
+    bookFrom: '2026-11-19', bookBy: '2026-12-02', travel: 'The 2027 season'
+  },
+  {
+    id: 'avaton-halkidiki',
+    name: 'Avaton Luxury Beach Resort', place: 'Halkidiki, Greece', region: 'europe',
+    offer: 'Up to 30% off flexible rates',
+    details: ['Sea view + private pool suites', 'Flexible rate, not prepaid'],
+    bookBy: '2026-12-02', travel: 'The 2027 season'
+  },
+  {
+    id: 'ambergris-cay', slug: 'ambergris-cay',
+    name: 'Ambergris Cay', place: 'Turks + Caicos', region: 'caribbean',
+    offer: 'A free 6th night + up to $750 resort credit',
+    details: ['Private island, all-inclusive'],
+    bookBy: '2026-12-01', travel: 'Ask us for dates'
+  },
+  {
+    id: 'azura-bermuda',
+    name: 'AZURA Bermuda', place: 'Bermuda', region: 'caribbean',
+    offer: '50% off 2027 stays',
+    details: ['Prepaid + non-refundable', 'Blackout dates apply'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: '2027'
+  },
+  {
+    id: 'fauchon-paris',
+    name: "Fauchon L'H\u00f4tel Paris", place: 'Paris, France', region: 'europe',
+    offer: 'Stay 4 nights, pay for 3',
+    details: ['Winter in Paris'],
+    bookFrom: '2026-11-27', bookBy: '2026-11-30', travel: 'Nov 29, 2026 to Mar 25, 2027'
+  },
+  {
+    id: 'villa-santa-cruz',
+    name: 'Villa Santa Cruz', place: 'Todos Santos, Mexico', region: 'mexico',
+    offer: 'A free 4th night + $100 resort credit',
+    details: ['4-night minimum', 'One-night deposit, refundable to 30 days out'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Jan 5 to Oct 31, 2027'
+  },
+  {
+    id: 'grand-resort-lagonissi',
+    name: 'Grand Resort Lagonissi', place: 'Athens Riviera, Greece', region: 'europe',
+    offer: 'Up to 35% off',
+    details: ['Semi-flexible terms'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-01', travel: 'Feb 4 to Oct 24, 2027'
+  },
+  {
+    id: 'santo-mine-oia',
+    name: 'Santo Mine Oia Suites', place: 'Santorini, Greece', region: 'europe',
+    offer: '30% off',
+    details: ['Non-refundable rate'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-02', travel: 'Apr 20 to Oct 30, 2027'
+  },
+  {
+    id: 'villa-cosy-saint-tropez',
+    name: 'Villa Cosy', place: 'Saint-Tropez, France', region: 'europe',
+    offer: 'Up to 25% off 2027 stays',
+    details: ['20% off, or 25% off 7+ nights', 'Prepaid + non-refundable'],
+    bookFrom: '2026-11-27', bookBy: '2026-12-03', travel: '2027'
   }
 ];
 
