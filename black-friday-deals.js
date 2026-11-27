@@ -350,6 +350,13 @@ window.BF_DEALS = [
     bookBy: '2026-12-03', travel: 'Now through Jan 3, 2028'
   },
   {
+    id: 'salterra-south-caicos', brand: 'The Luxury Collection',
+    name: 'Salterra, a Luxury Collection Resort & Spa', place: 'South Caicos, Turks + Caicos', region: 'caribbean',
+    offer: 'Up to 35% off + daily breakfast + up to $500 island credit',
+    details: ['$200 credit for 4 nights, $300 for 5, $500 for 7+', '3-night minimum', 'One-night deposit, refundable to 30 days out'],
+    bookFrom: '2026-11-23', bookBy: '2026-12-01', travel: 'Dec 1, 2026 to Aug 31, 2027'
+  },
+  {
     id: 'ladera-st-lucia',
     name: 'Ladera', place: 'Soufrière, St Lucia', region: 'caribbean',
     offer: '40% off + up to $250 resort credit',
